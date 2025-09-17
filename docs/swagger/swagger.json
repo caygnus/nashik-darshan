@@ -1,0 +1,114 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "API for CodeGeeky",
+        "title": "CodeGeeky API",
+        "termsOfService": "http://example.com/terms/",
+        "contact": {
+            "name": "API Support",
+            "email": "support@example.com"
+        },
+        "version": "1.0"
+    },
+    "host": "localhost:8080",
+    "basePath": "/api/v1",
+    "paths": {
+        "/auth/signup": {
+            "post": {
+                "description": "Signup",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Signup",
+                "parameters": [
+                    {
+                        "description": "Signup request",
+                        "name": "signupRequest",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.SignupRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/dto.SignupResponse"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "dto.SignupRequest": {
+            "type": "object",
+            "required": [
+                "access_token",
+                "email",
+                "full_name",
+                "role"
+            ],
+            "properties": {
+                "access_token": {
+                    "description": "access token",
+                    "type": "string"
+                },
+                "email": {
+                    "description": "basic info",
+                    "type": "string"
+                },
+                "full_name": {
+                    "type": "string"
+                },
+                "phone": {
+                    "type": "string"
+                },
+                "role": {
+                    "description": "role",
+                    "$ref": "#/definitions/types.UserRole"
+                }
+            }
+        },
+        "dto.SignupResponse": {
+            "type": "object",
+            "properties": {
+                "access_token": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                }
+            }
+        },
+        "types.UserRole": {
+            "type": "string",
+            "enum": [
+                "STUDENT",
+                "INSTRUCTOR",
+                "ADMIN"
+            ],
+            "x-enum-varnames": [
+                "UserRoleStudent",
+                "UserRoleInstructor",
+                "UserRoleAdmin"
+            ]
+        }
+    },
+    "securityDefinitions": {
+        "Authorization": {
+            "description": "Enter the token with the `Bearer ` prefix, e.g. `Bearer \u003ctoken\u003e`.",
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        }
+    }
+}
