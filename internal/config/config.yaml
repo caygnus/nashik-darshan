@@ -23,9 +23,10 @@ postgres:
 # supabase
 supabase:
   url: "https://dummy.supabase.co"
-  key: "dummy_key"
-  jwt_secret: "dummy_jwt_secret"
-  service_key: "dummy_service_key"
+  publishable_key: "pk_dummy_publishable_key" # For client-side use
+  secret_key: "sk_dummy_secret_key" # For server-side use
+  jwks_url: "https://dummy.supabase.co/auth/v1/.well-known/jwks.json"
+  jwt_secret: "dummy_jwt_secret" # Optional: only used for HMAC fallback
 
 # secrets
 secrets:

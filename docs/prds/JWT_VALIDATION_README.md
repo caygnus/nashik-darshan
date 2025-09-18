@@ -1,13 +1,15 @@
 # Supabase JWT Token Validation
 
-This document describes the implementation of local JWT token validation for Supabase authentication, replacing the previous HTTP-based token validation.
+This document describes the implementation of JWKS-based JWT token validation for Supabase authentication, replacing the previous HMAC-based validation.
 
 ## Overview
 
-The `ValidateToken` method in the Supabase authentication provider has been modified to validate Supabase access tokens locally by decoding and verifying JWT tokens instead of making HTTP calls to Supabase's API.
+The `ValidateToken` method in the Supabase authentication provider has been modified to validate Supabase access tokens using JWKS (JSON Web Key Set) instead of requiring a symmetric JWT secret. This approach supports both ES256 and RS256 signing algorithms used by Supabase.
 
 ## Benefits
 
+- **Security**: Uses asymmetric key validation instead of shared secrets
+- **Algorithm Support**: Supports ES256/RS256 algorithms used by Supabase
 - **Performance**: Eliminates HTTP calls for token validation, reducing latency
 - **Reliability**: Removes dependency on Supabase API availability
 - **Scalability**: Local validation scales better under high load
@@ -18,34 +20,48 @@ The `ValidateToken` method in the Supabase authentication provider has been modi
 ### JWT Validation Process
 
 1. **Parse JWT Token**: Uses the `github.com/golang-jwt/jwt/v5` library to parse the token
-2. **Verify Signature**: Validates the token signature using the Supabase JWT secret
+2. **JWKS Validation**: Validates the token signature using keys from Supabase's JWKS endpoint
 3. **Check Expiration**: Automatically validates token expiration
 4. **Validate Claims**: Ensures required claims are present and valid
 5. **Extract User Info**: Extracts user ID, email, and phone from token claims
 
 ### Required Configuration
 
-Add the JWT secret to your configuration:
+Add the publishable and secret keys to your configuration:
 
 ```yaml
 supabase:
   url: "https://your-project.supabase.co"
-  key: "your-supabase-key"
-  jwt_secret: "your-supabase-jwt-secret"
+  publishable_key: "pk_your_publishable_key"  # For client-side use
+  secret_key: "sk_your_secret_key"            # For server-side use
+  jwks_url: "https://your-project.supabase.co/auth/v1/.well-known/jwks.json"  # Optional, auto-derived
+  jwt_secret: "your-supabase-jwt-secret"  # Optional, for HMAC fallback
 ```
 
-Or via environment variable:
+Or via environment variables:
 
 ```bash
-export CAYGNUS_SUPABASE_JWT_SECRET="your-supabase-jwt-secret"
+export CAYGNUS_SUPABASE_URL="https://your-project.supabase.co"
+export CAYGNUS_SUPABASE_PUBLISHABLE_KEY="pk_your_publishable_key"
+export CAYGNUS_SUPABASE_SECRET_KEY="sk_your_secret_key"
+export CAYGNUS_SUPABASE_JWKS_URL="https://your-project.supabase.co/auth/v1/.well-known/jwks.json"  # Optional
+export CAYGNUS_SUPABASE_JWT_SECRET="your-supabase-jwt-secret"  # Optional
 ```
 
-### Finding Your JWT Secret
+### JWKS URL Derivation
+
+If `jwks_url` is not provided, it will be automatically derived from the Supabase URL by appending `/auth/v1/.well-known/jwks.json`.
+
+### Finding Your Configuration Values
 
 1. Go to your Supabase Dashboard
 2. Navigate to Settings > API
-3. Copy the "JWT Secret" value
-4. Add it to your configuration
+3. Copy the following values:
+   - **Project URL**: Use as `supabase.url`
+   - **Publishable Key**: Use as `supabase.publishable_key` (for client-side use)
+   - **Secret Key**: Use as `supabase.secret_key` (for server-side use)
+   - **JWT Secret**: Use as `supabase.jwt_secret` (optional, for HMAC fallback)
+4. The JWKS URL will be automatically derived as `{supabase.url}/auth/v1/.well-known/jwks.json`
 
 ## Token Validation Rules
 
@@ -66,7 +82,9 @@ The implementation validates the following:
 
 ### Supported Algorithms
 
-- **HS256**: HMAC SHA-256 (Supabase default)
+- **ES256**: ECDSA using P-256 and SHA-256 (Supabase default)
+- **RS256**: RSA using SHA-256
+- **HS256**: HMAC SHA-256 (fallback only, requires JWT secret)
 
 ## Usage Example
 

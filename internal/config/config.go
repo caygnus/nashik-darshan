@@ -55,10 +55,11 @@ type SecretsConfig struct {
 }
 
 type SupabaseConfig struct {
-	URL        string `mapstructure:"url" validate:"required"`
-	Key        string `mapstructure:"key" validate:"required"`
-	JWTSecret  string `mapstructure:"jwt_secret" validate:"required"`
-	ServiceKey string `mapstructure:"service_key" validate:"required"`
+	URL            string `mapstructure:"url" validate:"required"`
+	PublishableKey string `mapstructure:"publishable_key" validate:"required"` // For client-side use
+	SecretKey      string `mapstructure:"secret_key" validate:"required"`      // For server-side use
+	JWKSUrl        string `mapstructure:"jwks_url"`                            // Optional, will be derived from URL if not provided
+	JWTSecret      string `mapstructure:"jwt_secret"`                          // Optional, used only for HMAC fallback
 }
 
 func NewConfig() (*Configuration, error) {
@@ -105,7 +106,7 @@ func NewConfig() (*Configuration, error) {
 
 	// Step 7: Validate the configuration
 	if err := cfg.Validate(); err != nil {
-		return nil, fmt.Errorf("configuration validation failed: %v\n\nPlease ensure you have either:\n1. A valid config.yaml file in ./internal/config/ or ./config/\n2. A .env file with required variables\n3. Environment variables with CAYGNUS_ prefix\n\nRequired fields: server.address, logging.level, postgres.host, postgres.port, postgres.user, postgres.password, postgres.dbname, postgres.sslmode, supabase.url, supabase.key, supabase.jwt_secret, secrets.encryption_key", err)
+		return nil, fmt.Errorf("configuration validation failed: %v\n\nPlease ensure you have either:\n1. A valid config.yaml file in ./internal/config/ or ./config/\n2. A .env file with required variables\n3. Environment variables with CAYGNUS_ prefix\n\nRequired fields: server.address, logging.level, postgres.host, postgres.port, postgres.user, postgres.password, postgres.dbname, postgres.sslmode, supabase.url, supabase.publishable_key, supabase.secret_key, secrets.encryption_key", err)
 	}
 
 	// print the config in json format for debugging during development

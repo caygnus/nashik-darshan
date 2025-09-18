@@ -2,8 +2,12 @@ package auth
 
 import (
 	"context"
+	"fmt"
 	"log"
+	"strings"
+	"time"
 
+	"github.com/MicahParks/keyfunc/v2"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/nedpals/supabase-go"
 	"github.com/omkar273/codegeeky/internal/api/dto"
@@ -20,17 +24,36 @@ type supabaseProvider struct {
 	supabase          *supabase.Client
 	logger            *logger.Logger
 	encryptionService security.EncryptionService
+	jwks              *keyfunc.JWKS
 }
 
 func NewSupabaseProvider(cfg *config.Configuration, logger *logger.Logger, encryptionService security.EncryptionService) Provider {
 
 	supabaseUrl := cfg.Supabase.URL
-	adminApiKey := cfg.Supabase.Key
+	secretKey := cfg.Supabase.SecretKey
 
-	client := supabase.CreateClient(supabaseUrl, adminApiKey)
+	client := supabase.CreateClient(supabaseUrl, secretKey)
 
 	if client == nil {
 		log.Fatal("failed to create supabase client")
+	}
+
+	// Initialize JWKS client for JWT validation
+	jwksUrl := cfg.Supabase.JWKSUrl
+	if jwksUrl == "" {
+		// Derive JWKS URL from Supabase URL if not provided
+		jwksUrl = deriveJWKSUrl(supabaseUrl)
+	}
+
+	jwks, err := keyfunc.Get(jwksUrl, keyfunc.Options{
+		RefreshTimeout:  time.Hour,
+		RefreshInterval: time.Hour,
+		RefreshErrorHandler: func(err error) {
+			logger.Error("Failed to refresh JWKS", "error", err)
+		},
+	})
+	if err != nil {
+		log.Fatalf("failed to initialize JWKS client: %v", err)
 	}
 
 	return &supabaseProvider{
@@ -38,6 +61,7 @@ func NewSupabaseProvider(cfg *config.Configuration, logger *logger.Logger, encry
 		supabase:          client,
 		logger:            logger,
 		encryptionService: encryptionService,
+		jwks:              jwks,
 	}
 }
 
@@ -46,17 +70,8 @@ func (p *supabaseProvider) GetProvider() types.AuthProvider {
 }
 
 func (p *supabaseProvider) ValidateToken(ctx context.Context, token string) (*auth.Claims, error) {
-	// Parse and validate the JWT token
-	parsedToken, err := jwt.Parse(token, func(token *jwt.Token) (interface{}, error) {
-		// Verify the signing method is HMAC
-		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-			return nil, ierr.NewErrorf("unexpected signing method: %v", token.Header["alg"]).
-				WithHint("Please use the correct signing method").
-				Mark(ierr.ErrValidation)
-		}
-		// Return the JWT secret as the key for validation
-		return []byte(p.cfg.Supabase.JWTSecret), nil
-	})
+	// Parse and validate the JWT token using JWKS
+	parsedToken, err := jwt.Parse(token, p.jwks.Keyfunc)
 
 	if err != nil {
 		p.logger.Error("Failed to parse JWT token", "error", err)
@@ -155,4 +170,62 @@ func (p *supabaseProvider) SignUp(ctx context.Context, req *dto.SignupRequest) (
 	}
 
 	return resp, nil
+}
+
+// GetUser gets user information by token
+func (p *supabaseProvider) GetUser(ctx context.Context, userToken string) (*User, error) {
+	supabaseUser, err := p.supabase.Auth.User(ctx, userToken)
+	if err != nil {
+		p.logger.Error("Failed to get user", "error", err)
+		return nil, fmt.Errorf("failed to get user: %w", err)
+	}
+
+	// Convert Supabase user to generic user
+	user := &User{
+		ID:        supabaseUser.ID,
+		Email:     supabaseUser.Email,
+		Phone:     "", // Phone is not available in Supabase User struct
+		Metadata:  supabaseUser.UserMetadata,
+		CreatedAt: supabaseUser.CreatedAt.Format(time.RFC3339),
+		UpdatedAt: supabaseUser.UpdatedAt.Format(time.RFC3339),
+	}
+
+	return user, nil
+}
+
+// UpdateUser updates user information using the latest SDK method
+func (p *supabaseProvider) UpdateUser(ctx context.Context, userToken string, updateData map[string]interface{}) (*User, error) {
+	supabaseUser, err := p.supabase.Auth.UpdateUser(ctx, userToken, updateData)
+	if err != nil {
+		p.logger.Error("Failed to update user", "error", err)
+		return nil, fmt.Errorf("failed to update user: %w", err)
+	}
+
+	// Convert Supabase user to generic user
+	user := &User{
+		ID:        supabaseUser.ID,
+		Email:     supabaseUser.Email,
+		Phone:     "", // Phone is not available in Supabase User struct
+		Metadata:  supabaseUser.UserMetadata,
+		CreatedAt: supabaseUser.CreatedAt.Format(time.RFC3339),
+		UpdatedAt: supabaseUser.UpdatedAt.Format(time.RFC3339),
+	}
+
+	return user, nil
+}
+
+// deriveJWKSUrl derives the JWKS URL from a Supabase URL
+func deriveJWKSUrl(supabaseUrl string) string {
+	// Remove trailing slash if present
+	url := strings.TrimSuffix(supabaseUrl, "/")
+	// Append the JWKS endpoint (Supabase uses .well-known/jwks.json)
+	return url + "/auth/v1/.well-known/jwks.json"
+}
+
+// Close cleans up resources used by the provider
+func (p *supabaseProvider) Close() error {
+	if p.jwks != nil {
+		p.jwks.EndBackground()
+	}
+	return nil
 }
