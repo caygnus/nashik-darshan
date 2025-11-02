@@ -3,10 +3,10 @@ package service
 import (
 	"context"
 
-	"github.com/omkar273/codegeeky/internal/api/dto"
-	"github.com/omkar273/codegeeky/internal/domain/user"
-	ierr "github.com/omkar273/codegeeky/internal/errors"
-	"github.com/omkar273/codegeeky/internal/types"
+	"github.com/omkar273/nashikdarshan/internal/api/dto"
+	"github.com/omkar273/nashikdarshan/internal/domain/user"
+	ierr "github.com/omkar273/nashikdarshan/internal/errors"
+	"github.com/omkar273/nashikdarshan/internal/types"
 )
 
 type UserService interface {

@@ -1,10 +1,10 @@
 package service
 
 import (
-	"github.com/omkar273/codegeeky/internal/config"
-	"github.com/omkar273/codegeeky/internal/domain/user"
-	"github.com/omkar273/codegeeky/internal/logger"
-	"github.com/omkar273/codegeeky/internal/postgres"
+	"github.com/omkar273/nashikdarshan/internal/config"
+	"github.com/omkar273/nashikdarshan/internal/domain/user"
+	"github.com/omkar273/nashikdarshan/internal/logger"
+	"github.com/omkar273/nashikdarshan/internal/postgres"
 	"go.uber.org/fx"
 )
 

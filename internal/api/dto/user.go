@@ -1,6 +1,6 @@
 package dto
 
-import "github.com/omkar273/codegeeky/internal/domain/user"
+import "github.com/omkar273/nashikdarshan/internal/domain/user"
 
 type MeResponse struct {
 	*user.User

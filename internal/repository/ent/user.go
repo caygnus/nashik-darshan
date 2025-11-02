@@ -4,13 +4,13 @@ import (
 	"context"
 	"time"
 
-	"github.com/omkar273/codegeeky/ent"
-	"github.com/omkar273/codegeeky/ent/user"
-	domainUser "github.com/omkar273/codegeeky/internal/domain/user"
-	ierr "github.com/omkar273/codegeeky/internal/errors"
-	"github.com/omkar273/codegeeky/internal/logger"
-	"github.com/omkar273/codegeeky/internal/postgres"
-	"github.com/omkar273/codegeeky/internal/types"
+	"github.com/omkar273/nashikdarshan/ent"
+	"github.com/omkar273/nashikdarshan/ent/user"
+	domainUser "github.com/omkar273/nashikdarshan/internal/domain/user"
+	ierr "github.com/omkar273/nashikdarshan/internal/errors"
+	"github.com/omkar273/nashikdarshan/internal/logger"
+	"github.com/omkar273/nashikdarshan/internal/postgres"
+	"github.com/omkar273/nashikdarshan/internal/types"
 )
 
 type UserRepository struct {

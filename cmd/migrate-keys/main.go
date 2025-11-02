@@ -6,7 +6,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/omkar273/codegeeky/internal/config"
+	"github.com/omkar273/nashikdarshan/internal/config"
 )
 
 // KeyMigration represents the migration from old to new key structure

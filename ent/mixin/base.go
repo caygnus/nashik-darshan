@@ -6,7 +6,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/mixin"
-	"github.com/omkar273/codegeeky/internal/types"
+	"github.com/omkar273/nashikdarshan/internal/types"
 )
 
 // BaseMixin implements the ent.Mixin for sharing base fields with package schemas.

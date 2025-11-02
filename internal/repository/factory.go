@@ -1,11 +1,11 @@
 package repository
 
 import (
-	"github.com/omkar273/codegeeky/internal/config"
-	"github.com/omkar273/codegeeky/internal/domain/user"
-	"github.com/omkar273/codegeeky/internal/logger"
-	"github.com/omkar273/codegeeky/internal/postgres"
-	"github.com/omkar273/codegeeky/internal/repository/ent"
+	"github.com/omkar273/nashikdarshan/internal/config"
+	"github.com/omkar273/nashikdarshan/internal/domain/user"
+	"github.com/omkar273/nashikdarshan/internal/logger"
+	"github.com/omkar273/nashikdarshan/internal/postgres"
+	"github.com/omkar273/nashikdarshan/internal/repository/ent"
 	"go.uber.org/fx"
 )
 

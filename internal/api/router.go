@@ -2,10 +2,10 @@ package api
 
 import (
 	"github.com/gin-gonic/gin"
-	v1 "github.com/omkar273/codegeeky/internal/api/v1"
-	"github.com/omkar273/codegeeky/internal/config"
-	"github.com/omkar273/codegeeky/internal/logger"
-	"github.com/omkar273/codegeeky/internal/rest/middleware"
+	v1 "github.com/omkar273/nashikdarshan/internal/api/v1"
+	"github.com/omkar273/nashikdarshan/internal/config"
+	"github.com/omkar273/nashikdarshan/internal/logger"
+	"github.com/omkar273/nashikdarshan/internal/rest/middleware"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 )

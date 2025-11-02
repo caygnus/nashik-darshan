@@ -3,10 +3,10 @@ package auth
 import (
 	"context"
 
-	"github.com/omkar273/codegeeky/internal/api/dto"
-	"github.com/omkar273/codegeeky/internal/domain/auth"
-	"github.com/omkar273/codegeeky/internal/domain/user"
-	"github.com/omkar273/codegeeky/internal/types"
+	"github.com/omkar273/nashikdarshan/internal/api/dto"
+	"github.com/omkar273/nashikdarshan/internal/domain/auth"
+	"github.com/omkar273/nashikdarshan/internal/domain/user"
+	"github.com/omkar273/nashikdarshan/internal/types"
 )
 
 type Provider interface {

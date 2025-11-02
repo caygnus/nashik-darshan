@@ -7,8 +7,8 @@ import (
 	"strings"
 
 	"github.com/joho/godotenv"
-	"github.com/omkar273/codegeeky/internal/types"
-	"github.com/omkar273/codegeeky/internal/validator"
+	"github.com/omkar273/nashikdarshan/internal/types"
+	"github.com/omkar273/nashikdarshan/internal/validator"
 	"github.com/spf13/viper"
 )
 

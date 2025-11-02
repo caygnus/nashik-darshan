@@ -11,8 +11,11 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/omkar273/codegeeky/ent/predicate"
-	"github.com/omkar273/codegeeky/ent/user"
+	"github.com/omkar273/nashikdarshan/ent/category"
+	"github.com/omkar273/nashikdarshan/ent/place"
+	"github.com/omkar273/nashikdarshan/ent/placeimage"
+	"github.com/omkar273/nashikdarshan/ent/predicate"
+	"github.com/omkar273/nashikdarshan/ent/user"
 )
 
 const (
@@ -24,8 +27,3376 @@ const (
 	OpUpdateOne = ent.OpUpdateOne
 
 	// Node types.
-	TypeUser = "User"
+	TypeCategory   = "Category"
+	TypePlace      = "Place"
+	TypePlaceImage = "PlaceImage"
+	TypeUser       = "User"
 )
+
+// CategoryMutation represents an operation that mutates the Category nodes in the graph.
+type CategoryMutation struct {
+	config
+	op            Op
+	typ           string
+	id            *string
+	status        *string
+	created_at    *time.Time
+	updated_at    *time.Time
+	created_by    *string
+	updated_by    *string
+	metadata      *map[string]string
+	name          *string
+	description   *string
+	clearedFields map[string]struct{}
+	done          bool
+	oldValue      func(context.Context) (*Category, error)
+	predicates    []predicate.Category
+}
+
+var _ ent.Mutation = (*CategoryMutation)(nil)
+
+// categoryOption allows management of the mutation configuration using functional options.
+type categoryOption func(*CategoryMutation)
+
+// newCategoryMutation creates new mutation for the Category entity.
+func newCategoryMutation(c config, op Op, opts ...categoryOption) *CategoryMutation {
+	m := &CategoryMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeCategory,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withCategoryID sets the ID field of the mutation.
+func withCategoryID(id string) categoryOption {
+	return func(m *CategoryMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *Category
+		)
+		m.oldValue = func(ctx context.Context) (*Category, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().Category.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withCategory sets the old Category of the mutation.
+func withCategory(node *Category) categoryOption {
+	return func(m *CategoryMutation) {
+		m.oldValue = func(context.Context) (*Category, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m CategoryMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m CategoryMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of Category entities.
+func (m *CategoryMutation) SetID(id string) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *CategoryMutation) ID() (id string, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *CategoryMutation) IDs(ctx context.Context) ([]string, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []string{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().Category.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetStatus sets the "status" field.
+func (m *CategoryMutation) SetStatus(s string) {
+	m.status = &s
+}
+
+// Status returns the value of the "status" field in the mutation.
+func (m *CategoryMutation) Status() (r string, exists bool) {
+	v := m.status
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldStatus returns the old "status" field's value of the Category entity.
+// If the Category object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CategoryMutation) OldStatus(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldStatus is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldStatus requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldStatus: %w", err)
+	}
+	return oldValue.Status, nil
+}
+
+// ResetStatus resets all changes to the "status" field.
+func (m *CategoryMutation) ResetStatus() {
+	m.status = nil
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (m *CategoryMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *CategoryMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the Category entity.
+// If the Category object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CategoryMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *CategoryMutation) ResetCreatedAt() {
+	m.created_at = nil
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *CategoryMutation) SetUpdatedAt(t time.Time) {
+	m.updated_at = &t
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *CategoryMutation) UpdatedAt() (r time.Time, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the Category entity.
+// If the Category object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CategoryMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *CategoryMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (m *CategoryMutation) SetCreatedBy(s string) {
+	m.created_by = &s
+}
+
+// CreatedBy returns the value of the "created_by" field in the mutation.
+func (m *CategoryMutation) CreatedBy() (r string, exists bool) {
+	v := m.created_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedBy returns the old "created_by" field's value of the Category entity.
+// If the Category object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CategoryMutation) OldCreatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedBy: %w", err)
+	}
+	return oldValue.CreatedBy, nil
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (m *CategoryMutation) ClearCreatedBy() {
+	m.created_by = nil
+	m.clearedFields[category.FieldCreatedBy] = struct{}{}
+}
+
+// CreatedByCleared returns if the "created_by" field was cleared in this mutation.
+func (m *CategoryMutation) CreatedByCleared() bool {
+	_, ok := m.clearedFields[category.FieldCreatedBy]
+	return ok
+}
+
+// ResetCreatedBy resets all changes to the "created_by" field.
+func (m *CategoryMutation) ResetCreatedBy() {
+	m.created_by = nil
+	delete(m.clearedFields, category.FieldCreatedBy)
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (m *CategoryMutation) SetUpdatedBy(s string) {
+	m.updated_by = &s
+}
+
+// UpdatedBy returns the value of the "updated_by" field in the mutation.
+func (m *CategoryMutation) UpdatedBy() (r string, exists bool) {
+	v := m.updated_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedBy returns the old "updated_by" field's value of the Category entity.
+// If the Category object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CategoryMutation) OldUpdatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedBy: %w", err)
+	}
+	return oldValue.UpdatedBy, nil
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (m *CategoryMutation) ClearUpdatedBy() {
+	m.updated_by = nil
+	m.clearedFields[category.FieldUpdatedBy] = struct{}{}
+}
+
+// UpdatedByCleared returns if the "updated_by" field was cleared in this mutation.
+func (m *CategoryMutation) UpdatedByCleared() bool {
+	_, ok := m.clearedFields[category.FieldUpdatedBy]
+	return ok
+}
+
+// ResetUpdatedBy resets all changes to the "updated_by" field.
+func (m *CategoryMutation) ResetUpdatedBy() {
+	m.updated_by = nil
+	delete(m.clearedFields, category.FieldUpdatedBy)
+}
+
+// SetMetadata sets the "metadata" field.
+func (m *CategoryMutation) SetMetadata(value map[string]string) {
+	m.metadata = &value
+}
+
+// Metadata returns the value of the "metadata" field in the mutation.
+func (m *CategoryMutation) Metadata() (r map[string]string, exists bool) {
+	v := m.metadata
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldMetadata returns the old "metadata" field's value of the Category entity.
+// If the Category object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CategoryMutation) OldMetadata(ctx context.Context) (v map[string]string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldMetadata is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldMetadata requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldMetadata: %w", err)
+	}
+	return oldValue.Metadata, nil
+}
+
+// ClearMetadata clears the value of the "metadata" field.
+func (m *CategoryMutation) ClearMetadata() {
+	m.metadata = nil
+	m.clearedFields[category.FieldMetadata] = struct{}{}
+}
+
+// MetadataCleared returns if the "metadata" field was cleared in this mutation.
+func (m *CategoryMutation) MetadataCleared() bool {
+	_, ok := m.clearedFields[category.FieldMetadata]
+	return ok
+}
+
+// ResetMetadata resets all changes to the "metadata" field.
+func (m *CategoryMutation) ResetMetadata() {
+	m.metadata = nil
+	delete(m.clearedFields, category.FieldMetadata)
+}
+
+// SetName sets the "name" field.
+func (m *CategoryMutation) SetName(s string) {
+	m.name = &s
+}
+
+// Name returns the value of the "name" field in the mutation.
+func (m *CategoryMutation) Name() (r string, exists bool) {
+	v := m.name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldName returns the old "name" field's value of the Category entity.
+// If the Category object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CategoryMutation) OldName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldName: %w", err)
+	}
+	return oldValue.Name, nil
+}
+
+// ResetName resets all changes to the "name" field.
+func (m *CategoryMutation) ResetName() {
+	m.name = nil
+}
+
+// SetDescription sets the "description" field.
+func (m *CategoryMutation) SetDescription(s string) {
+	m.description = &s
+}
+
+// Description returns the value of the "description" field in the mutation.
+func (m *CategoryMutation) Description() (r string, exists bool) {
+	v := m.description
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDescription returns the old "description" field's value of the Category entity.
+// If the Category object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CategoryMutation) OldDescription(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDescription is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDescription requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDescription: %w", err)
+	}
+	return oldValue.Description, nil
+}
+
+// ClearDescription clears the value of the "description" field.
+func (m *CategoryMutation) ClearDescription() {
+	m.description = nil
+	m.clearedFields[category.FieldDescription] = struct{}{}
+}
+
+// DescriptionCleared returns if the "description" field was cleared in this mutation.
+func (m *CategoryMutation) DescriptionCleared() bool {
+	_, ok := m.clearedFields[category.FieldDescription]
+	return ok
+}
+
+// ResetDescription resets all changes to the "description" field.
+func (m *CategoryMutation) ResetDescription() {
+	m.description = nil
+	delete(m.clearedFields, category.FieldDescription)
+}
+
+// Where appends a list predicates to the CategoryMutation builder.
+func (m *CategoryMutation) Where(ps ...predicate.Category) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the CategoryMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *CategoryMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.Category, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *CategoryMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *CategoryMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (Category).
+func (m *CategoryMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *CategoryMutation) Fields() []string {
+	fields := make([]string, 0, 8)
+	if m.status != nil {
+		fields = append(fields, category.FieldStatus)
+	}
+	if m.created_at != nil {
+		fields = append(fields, category.FieldCreatedAt)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, category.FieldUpdatedAt)
+	}
+	if m.created_by != nil {
+		fields = append(fields, category.FieldCreatedBy)
+	}
+	if m.updated_by != nil {
+		fields = append(fields, category.FieldUpdatedBy)
+	}
+	if m.metadata != nil {
+		fields = append(fields, category.FieldMetadata)
+	}
+	if m.name != nil {
+		fields = append(fields, category.FieldName)
+	}
+	if m.description != nil {
+		fields = append(fields, category.FieldDescription)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *CategoryMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case category.FieldStatus:
+		return m.Status()
+	case category.FieldCreatedAt:
+		return m.CreatedAt()
+	case category.FieldUpdatedAt:
+		return m.UpdatedAt()
+	case category.FieldCreatedBy:
+		return m.CreatedBy()
+	case category.FieldUpdatedBy:
+		return m.UpdatedBy()
+	case category.FieldMetadata:
+		return m.Metadata()
+	case category.FieldName:
+		return m.Name()
+	case category.FieldDescription:
+		return m.Description()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *CategoryMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case category.FieldStatus:
+		return m.OldStatus(ctx)
+	case category.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case category.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	case category.FieldCreatedBy:
+		return m.OldCreatedBy(ctx)
+	case category.FieldUpdatedBy:
+		return m.OldUpdatedBy(ctx)
+	case category.FieldMetadata:
+		return m.OldMetadata(ctx)
+	case category.FieldName:
+		return m.OldName(ctx)
+	case category.FieldDescription:
+		return m.OldDescription(ctx)
+	}
+	return nil, fmt.Errorf("unknown Category field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *CategoryMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case category.FieldStatus:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetStatus(v)
+		return nil
+	case category.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case category.FieldUpdatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
+	case category.FieldCreatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedBy(v)
+		return nil
+	case category.FieldUpdatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedBy(v)
+		return nil
+	case category.FieldMetadata:
+		v, ok := value.(map[string]string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetMetadata(v)
+		return nil
+	case category.FieldName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetName(v)
+		return nil
+	case category.FieldDescription:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDescription(v)
+		return nil
+	}
+	return fmt.Errorf("unknown Category field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *CategoryMutation) AddedFields() []string {
+	return nil
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *CategoryMutation) AddedField(name string) (ent.Value, bool) {
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *CategoryMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown Category numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *CategoryMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(category.FieldCreatedBy) {
+		fields = append(fields, category.FieldCreatedBy)
+	}
+	if m.FieldCleared(category.FieldUpdatedBy) {
+		fields = append(fields, category.FieldUpdatedBy)
+	}
+	if m.FieldCleared(category.FieldMetadata) {
+		fields = append(fields, category.FieldMetadata)
+	}
+	if m.FieldCleared(category.FieldDescription) {
+		fields = append(fields, category.FieldDescription)
+	}
+	return fields
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *CategoryMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *CategoryMutation) ClearField(name string) error {
+	switch name {
+	case category.FieldCreatedBy:
+		m.ClearCreatedBy()
+		return nil
+	case category.FieldUpdatedBy:
+		m.ClearUpdatedBy()
+		return nil
+	case category.FieldMetadata:
+		m.ClearMetadata()
+		return nil
+	case category.FieldDescription:
+		m.ClearDescription()
+		return nil
+	}
+	return fmt.Errorf("unknown Category nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *CategoryMutation) ResetField(name string) error {
+	switch name {
+	case category.FieldStatus:
+		m.ResetStatus()
+		return nil
+	case category.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case category.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	case category.FieldCreatedBy:
+		m.ResetCreatedBy()
+		return nil
+	case category.FieldUpdatedBy:
+		m.ResetUpdatedBy()
+		return nil
+	case category.FieldMetadata:
+		m.ResetMetadata()
+		return nil
+	case category.FieldName:
+		m.ResetName()
+		return nil
+	case category.FieldDescription:
+		m.ResetDescription()
+		return nil
+	}
+	return fmt.Errorf("unknown Category field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *CategoryMutation) AddedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *CategoryMutation) AddedIDs(name string) []ent.Value {
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *CategoryMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *CategoryMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *CategoryMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *CategoryMutation) EdgeCleared(name string) bool {
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *CategoryMutation) ClearEdge(name string) error {
+	return fmt.Errorf("unknown Category unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *CategoryMutation) ResetEdge(name string) error {
+	return fmt.Errorf("unknown Category edge %s", name)
+}
+
+// PlaceMutation represents an operation that mutates the Place nodes in the graph.
+type PlaceMutation struct {
+	config
+	op                Op
+	typ               string
+	id                *string
+	status            *string
+	created_at        *time.Time
+	updated_at        *time.Time
+	created_by        *string
+	updated_by        *string
+	metadata          *map[string]string
+	slug              *string
+	title             *string
+	subtitle          *string
+	short_description *string
+	long_description  *string
+	place_type        *string
+	categories        *[]string
+	appendcategories  []string
+	address           *map[string]interface{}
+	location          *string
+	primary_image_url *string
+	thumbnail_url     *string
+	amenities         *[]string
+	appendamenities   []string
+	clearedFields     map[string]struct{}
+	images            map[string]struct{}
+	removedimages     map[string]struct{}
+	clearedimages     bool
+	done              bool
+	oldValue          func(context.Context) (*Place, error)
+	predicates        []predicate.Place
+}
+
+var _ ent.Mutation = (*PlaceMutation)(nil)
+
+// placeOption allows management of the mutation configuration using functional options.
+type placeOption func(*PlaceMutation)
+
+// newPlaceMutation creates new mutation for the Place entity.
+func newPlaceMutation(c config, op Op, opts ...placeOption) *PlaceMutation {
+	m := &PlaceMutation{
+		config:        c,
+		op:            op,
+		typ:           TypePlace,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withPlaceID sets the ID field of the mutation.
+func withPlaceID(id string) placeOption {
+	return func(m *PlaceMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *Place
+		)
+		m.oldValue = func(ctx context.Context) (*Place, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().Place.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withPlace sets the old Place of the mutation.
+func withPlace(node *Place) placeOption {
+	return func(m *PlaceMutation) {
+		m.oldValue = func(context.Context) (*Place, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m PlaceMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m PlaceMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of Place entities.
+func (m *PlaceMutation) SetID(id string) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *PlaceMutation) ID() (id string, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *PlaceMutation) IDs(ctx context.Context) ([]string, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []string{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().Place.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetStatus sets the "status" field.
+func (m *PlaceMutation) SetStatus(s string) {
+	m.status = &s
+}
+
+// Status returns the value of the "status" field in the mutation.
+func (m *PlaceMutation) Status() (r string, exists bool) {
+	v := m.status
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldStatus returns the old "status" field's value of the Place entity.
+// If the Place object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PlaceMutation) OldStatus(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldStatus is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldStatus requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldStatus: %w", err)
+	}
+	return oldValue.Status, nil
+}
+
+// ResetStatus resets all changes to the "status" field.
+func (m *PlaceMutation) ResetStatus() {
+	m.status = nil
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (m *PlaceMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *PlaceMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the Place entity.
+// If the Place object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PlaceMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *PlaceMutation) ResetCreatedAt() {
+	m.created_at = nil
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *PlaceMutation) SetUpdatedAt(t time.Time) {
+	m.updated_at = &t
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *PlaceMutation) UpdatedAt() (r time.Time, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the Place entity.
+// If the Place object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PlaceMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *PlaceMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (m *PlaceMutation) SetCreatedBy(s string) {
+	m.created_by = &s
+}
+
+// CreatedBy returns the value of the "created_by" field in the mutation.
+func (m *PlaceMutation) CreatedBy() (r string, exists bool) {
+	v := m.created_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedBy returns the old "created_by" field's value of the Place entity.
+// If the Place object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PlaceMutation) OldCreatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedBy: %w", err)
+	}
+	return oldValue.CreatedBy, nil
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (m *PlaceMutation) ClearCreatedBy() {
+	m.created_by = nil
+	m.clearedFields[place.FieldCreatedBy] = struct{}{}
+}
+
+// CreatedByCleared returns if the "created_by" field was cleared in this mutation.
+func (m *PlaceMutation) CreatedByCleared() bool {
+	_, ok := m.clearedFields[place.FieldCreatedBy]
+	return ok
+}
+
+// ResetCreatedBy resets all changes to the "created_by" field.
+func (m *PlaceMutation) ResetCreatedBy() {
+	m.created_by = nil
+	delete(m.clearedFields, place.FieldCreatedBy)
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (m *PlaceMutation) SetUpdatedBy(s string) {
+	m.updated_by = &s
+}
+
+// UpdatedBy returns the value of the "updated_by" field in the mutation.
+func (m *PlaceMutation) UpdatedBy() (r string, exists bool) {
+	v := m.updated_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedBy returns the old "updated_by" field's value of the Place entity.
+// If the Place object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PlaceMutation) OldUpdatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedBy: %w", err)
+	}
+	return oldValue.UpdatedBy, nil
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (m *PlaceMutation) ClearUpdatedBy() {
+	m.updated_by = nil
+	m.clearedFields[place.FieldUpdatedBy] = struct{}{}
+}
+
+// UpdatedByCleared returns if the "updated_by" field was cleared in this mutation.
+func (m *PlaceMutation) UpdatedByCleared() bool {
+	_, ok := m.clearedFields[place.FieldUpdatedBy]
+	return ok
+}
+
+// ResetUpdatedBy resets all changes to the "updated_by" field.
+func (m *PlaceMutation) ResetUpdatedBy() {
+	m.updated_by = nil
+	delete(m.clearedFields, place.FieldUpdatedBy)
+}
+
+// SetMetadata sets the "metadata" field.
+func (m *PlaceMutation) SetMetadata(value map[string]string) {
+	m.metadata = &value
+}
+
+// Metadata returns the value of the "metadata" field in the mutation.
+func (m *PlaceMutation) Metadata() (r map[string]string, exists bool) {
+	v := m.metadata
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldMetadata returns the old "metadata" field's value of the Place entity.
+// If the Place object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PlaceMutation) OldMetadata(ctx context.Context) (v map[string]string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldMetadata is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldMetadata requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldMetadata: %w", err)
+	}
+	return oldValue.Metadata, nil
+}
+
+// ClearMetadata clears the value of the "metadata" field.
+func (m *PlaceMutation) ClearMetadata() {
+	m.metadata = nil
+	m.clearedFields[place.FieldMetadata] = struct{}{}
+}
+
+// MetadataCleared returns if the "metadata" field was cleared in this mutation.
+func (m *PlaceMutation) MetadataCleared() bool {
+	_, ok := m.clearedFields[place.FieldMetadata]
+	return ok
+}
+
+// ResetMetadata resets all changes to the "metadata" field.
+func (m *PlaceMutation) ResetMetadata() {
+	m.metadata = nil
+	delete(m.clearedFields, place.FieldMetadata)
+}
+
+// SetSlug sets the "slug" field.
+func (m *PlaceMutation) SetSlug(s string) {
+	m.slug = &s
+}
+
+// Slug returns the value of the "slug" field in the mutation.
+func (m *PlaceMutation) Slug() (r string, exists bool) {
+	v := m.slug
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSlug returns the old "slug" field's value of the Place entity.
+// If the Place object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PlaceMutation) OldSlug(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSlug is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSlug requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSlug: %w", err)
+	}
+	return oldValue.Slug, nil
+}
+
+// ResetSlug resets all changes to the "slug" field.
+func (m *PlaceMutation) ResetSlug() {
+	m.slug = nil
+}
+
+// SetTitle sets the "title" field.
+func (m *PlaceMutation) SetTitle(s string) {
+	m.title = &s
+}
+
+// Title returns the value of the "title" field in the mutation.
+func (m *PlaceMutation) Title() (r string, exists bool) {
+	v := m.title
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTitle returns the old "title" field's value of the Place entity.
+// If the Place object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PlaceMutation) OldTitle(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTitle is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTitle requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTitle: %w", err)
+	}
+	return oldValue.Title, nil
+}
+
+// ResetTitle resets all changes to the "title" field.
+func (m *PlaceMutation) ResetTitle() {
+	m.title = nil
+}
+
+// SetSubtitle sets the "subtitle" field.
+func (m *PlaceMutation) SetSubtitle(s string) {
+	m.subtitle = &s
+}
+
+// Subtitle returns the value of the "subtitle" field in the mutation.
+func (m *PlaceMutation) Subtitle() (r string, exists bool) {
+	v := m.subtitle
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSubtitle returns the old "subtitle" field's value of the Place entity.
+// If the Place object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PlaceMutation) OldSubtitle(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSubtitle is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSubtitle requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSubtitle: %w", err)
+	}
+	return oldValue.Subtitle, nil
+}
+
+// ClearSubtitle clears the value of the "subtitle" field.
+func (m *PlaceMutation) ClearSubtitle() {
+	m.subtitle = nil
+	m.clearedFields[place.FieldSubtitle] = struct{}{}
+}
+
+// SubtitleCleared returns if the "subtitle" field was cleared in this mutation.
+func (m *PlaceMutation) SubtitleCleared() bool {
+	_, ok := m.clearedFields[place.FieldSubtitle]
+	return ok
+}
+
+// ResetSubtitle resets all changes to the "subtitle" field.
+func (m *PlaceMutation) ResetSubtitle() {
+	m.subtitle = nil
+	delete(m.clearedFields, place.FieldSubtitle)
+}
+
+// SetShortDescription sets the "short_description" field.
+func (m *PlaceMutation) SetShortDescription(s string) {
+	m.short_description = &s
+}
+
+// ShortDescription returns the value of the "short_description" field in the mutation.
+func (m *PlaceMutation) ShortDescription() (r string, exists bool) {
+	v := m.short_description
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldShortDescription returns the old "short_description" field's value of the Place entity.
+// If the Place object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PlaceMutation) OldShortDescription(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldShortDescription is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldShortDescription requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldShortDescription: %w", err)
+	}
+	return oldValue.ShortDescription, nil
+}
+
+// ClearShortDescription clears the value of the "short_description" field.
+func (m *PlaceMutation) ClearShortDescription() {
+	m.short_description = nil
+	m.clearedFields[place.FieldShortDescription] = struct{}{}
+}
+
+// ShortDescriptionCleared returns if the "short_description" field was cleared in this mutation.
+func (m *PlaceMutation) ShortDescriptionCleared() bool {
+	_, ok := m.clearedFields[place.FieldShortDescription]
+	return ok
+}
+
+// ResetShortDescription resets all changes to the "short_description" field.
+func (m *PlaceMutation) ResetShortDescription() {
+	m.short_description = nil
+	delete(m.clearedFields, place.FieldShortDescription)
+}
+
+// SetLongDescription sets the "long_description" field.
+func (m *PlaceMutation) SetLongDescription(s string) {
+	m.long_description = &s
+}
+
+// LongDescription returns the value of the "long_description" field in the mutation.
+func (m *PlaceMutation) LongDescription() (r string, exists bool) {
+	v := m.long_description
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldLongDescription returns the old "long_description" field's value of the Place entity.
+// If the Place object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PlaceMutation) OldLongDescription(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldLongDescription is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldLongDescription requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldLongDescription: %w", err)
+	}
+	return oldValue.LongDescription, nil
+}
+
+// ClearLongDescription clears the value of the "long_description" field.
+func (m *PlaceMutation) ClearLongDescription() {
+	m.long_description = nil
+	m.clearedFields[place.FieldLongDescription] = struct{}{}
+}
+
+// LongDescriptionCleared returns if the "long_description" field was cleared in this mutation.
+func (m *PlaceMutation) LongDescriptionCleared() bool {
+	_, ok := m.clearedFields[place.FieldLongDescription]
+	return ok
+}
+
+// ResetLongDescription resets all changes to the "long_description" field.
+func (m *PlaceMutation) ResetLongDescription() {
+	m.long_description = nil
+	delete(m.clearedFields, place.FieldLongDescription)
+}
+
+// SetPlaceType sets the "place_type" field.
+func (m *PlaceMutation) SetPlaceType(s string) {
+	m.place_type = &s
+}
+
+// PlaceType returns the value of the "place_type" field in the mutation.
+func (m *PlaceMutation) PlaceType() (r string, exists bool) {
+	v := m.place_type
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPlaceType returns the old "place_type" field's value of the Place entity.
+// If the Place object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PlaceMutation) OldPlaceType(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPlaceType is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPlaceType requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPlaceType: %w", err)
+	}
+	return oldValue.PlaceType, nil
+}
+
+// ResetPlaceType resets all changes to the "place_type" field.
+func (m *PlaceMutation) ResetPlaceType() {
+	m.place_type = nil
+}
+
+// SetCategories sets the "categories" field.
+func (m *PlaceMutation) SetCategories(s []string) {
+	m.categories = &s
+	m.appendcategories = nil
+}
+
+// Categories returns the value of the "categories" field in the mutation.
+func (m *PlaceMutation) Categories() (r []string, exists bool) {
+	v := m.categories
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCategories returns the old "categories" field's value of the Place entity.
+// If the Place object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PlaceMutation) OldCategories(ctx context.Context) (v []string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCategories is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCategories requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCategories: %w", err)
+	}
+	return oldValue.Categories, nil
+}
+
+// AppendCategories adds s to the "categories" field.
+func (m *PlaceMutation) AppendCategories(s []string) {
+	m.appendcategories = append(m.appendcategories, s...)
+}
+
+// AppendedCategories returns the list of values that were appended to the "categories" field in this mutation.
+func (m *PlaceMutation) AppendedCategories() ([]string, bool) {
+	if len(m.appendcategories) == 0 {
+		return nil, false
+	}
+	return m.appendcategories, true
+}
+
+// ClearCategories clears the value of the "categories" field.
+func (m *PlaceMutation) ClearCategories() {
+	m.categories = nil
+	m.appendcategories = nil
+	m.clearedFields[place.FieldCategories] = struct{}{}
+}
+
+// CategoriesCleared returns if the "categories" field was cleared in this mutation.
+func (m *PlaceMutation) CategoriesCleared() bool {
+	_, ok := m.clearedFields[place.FieldCategories]
+	return ok
+}
+
+// ResetCategories resets all changes to the "categories" field.
+func (m *PlaceMutation) ResetCategories() {
+	m.categories = nil
+	m.appendcategories = nil
+	delete(m.clearedFields, place.FieldCategories)
+}
+
+// SetAddress sets the "address" field.
+func (m *PlaceMutation) SetAddress(value map[string]interface{}) {
+	m.address = &value
+}
+
+// Address returns the value of the "address" field in the mutation.
+func (m *PlaceMutation) Address() (r map[string]interface{}, exists bool) {
+	v := m.address
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAddress returns the old "address" field's value of the Place entity.
+// If the Place object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PlaceMutation) OldAddress(ctx context.Context) (v map[string]interface{}, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAddress is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAddress requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAddress: %w", err)
+	}
+	return oldValue.Address, nil
+}
+
+// ClearAddress clears the value of the "address" field.
+func (m *PlaceMutation) ClearAddress() {
+	m.address = nil
+	m.clearedFields[place.FieldAddress] = struct{}{}
+}
+
+// AddressCleared returns if the "address" field was cleared in this mutation.
+func (m *PlaceMutation) AddressCleared() bool {
+	_, ok := m.clearedFields[place.FieldAddress]
+	return ok
+}
+
+// ResetAddress resets all changes to the "address" field.
+func (m *PlaceMutation) ResetAddress() {
+	m.address = nil
+	delete(m.clearedFields, place.FieldAddress)
+}
+
+// SetLocation sets the "location" field.
+func (m *PlaceMutation) SetLocation(s string) {
+	m.location = &s
+}
+
+// Location returns the value of the "location" field in the mutation.
+func (m *PlaceMutation) Location() (r string, exists bool) {
+	v := m.location
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldLocation returns the old "location" field's value of the Place entity.
+// If the Place object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PlaceMutation) OldLocation(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldLocation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldLocation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldLocation: %w", err)
+	}
+	return oldValue.Location, nil
+}
+
+// ResetLocation resets all changes to the "location" field.
+func (m *PlaceMutation) ResetLocation() {
+	m.location = nil
+}
+
+// SetPrimaryImageURL sets the "primary_image_url" field.
+func (m *PlaceMutation) SetPrimaryImageURL(s string) {
+	m.primary_image_url = &s
+}
+
+// PrimaryImageURL returns the value of the "primary_image_url" field in the mutation.
+func (m *PlaceMutation) PrimaryImageURL() (r string, exists bool) {
+	v := m.primary_image_url
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPrimaryImageURL returns the old "primary_image_url" field's value of the Place entity.
+// If the Place object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PlaceMutation) OldPrimaryImageURL(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPrimaryImageURL is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPrimaryImageURL requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPrimaryImageURL: %w", err)
+	}
+	return oldValue.PrimaryImageURL, nil
+}
+
+// ClearPrimaryImageURL clears the value of the "primary_image_url" field.
+func (m *PlaceMutation) ClearPrimaryImageURL() {
+	m.primary_image_url = nil
+	m.clearedFields[place.FieldPrimaryImageURL] = struct{}{}
+}
+
+// PrimaryImageURLCleared returns if the "primary_image_url" field was cleared in this mutation.
+func (m *PlaceMutation) PrimaryImageURLCleared() bool {
+	_, ok := m.clearedFields[place.FieldPrimaryImageURL]
+	return ok
+}
+
+// ResetPrimaryImageURL resets all changes to the "primary_image_url" field.
+func (m *PlaceMutation) ResetPrimaryImageURL() {
+	m.primary_image_url = nil
+	delete(m.clearedFields, place.FieldPrimaryImageURL)
+}
+
+// SetThumbnailURL sets the "thumbnail_url" field.
+func (m *PlaceMutation) SetThumbnailURL(s string) {
+	m.thumbnail_url = &s
+}
+
+// ThumbnailURL returns the value of the "thumbnail_url" field in the mutation.
+func (m *PlaceMutation) ThumbnailURL() (r string, exists bool) {
+	v := m.thumbnail_url
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldThumbnailURL returns the old "thumbnail_url" field's value of the Place entity.
+// If the Place object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PlaceMutation) OldThumbnailURL(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldThumbnailURL is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldThumbnailURL requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldThumbnailURL: %w", err)
+	}
+	return oldValue.ThumbnailURL, nil
+}
+
+// ClearThumbnailURL clears the value of the "thumbnail_url" field.
+func (m *PlaceMutation) ClearThumbnailURL() {
+	m.thumbnail_url = nil
+	m.clearedFields[place.FieldThumbnailURL] = struct{}{}
+}
+
+// ThumbnailURLCleared returns if the "thumbnail_url" field was cleared in this mutation.
+func (m *PlaceMutation) ThumbnailURLCleared() bool {
+	_, ok := m.clearedFields[place.FieldThumbnailURL]
+	return ok
+}
+
+// ResetThumbnailURL resets all changes to the "thumbnail_url" field.
+func (m *PlaceMutation) ResetThumbnailURL() {
+	m.thumbnail_url = nil
+	delete(m.clearedFields, place.FieldThumbnailURL)
+}
+
+// SetAmenities sets the "amenities" field.
+func (m *PlaceMutation) SetAmenities(s []string) {
+	m.amenities = &s
+	m.appendamenities = nil
+}
+
+// Amenities returns the value of the "amenities" field in the mutation.
+func (m *PlaceMutation) Amenities() (r []string, exists bool) {
+	v := m.amenities
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAmenities returns the old "amenities" field's value of the Place entity.
+// If the Place object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PlaceMutation) OldAmenities(ctx context.Context) (v []string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAmenities is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAmenities requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAmenities: %w", err)
+	}
+	return oldValue.Amenities, nil
+}
+
+// AppendAmenities adds s to the "amenities" field.
+func (m *PlaceMutation) AppendAmenities(s []string) {
+	m.appendamenities = append(m.appendamenities, s...)
+}
+
+// AppendedAmenities returns the list of values that were appended to the "amenities" field in this mutation.
+func (m *PlaceMutation) AppendedAmenities() ([]string, bool) {
+	if len(m.appendamenities) == 0 {
+		return nil, false
+	}
+	return m.appendamenities, true
+}
+
+// ClearAmenities clears the value of the "amenities" field.
+func (m *PlaceMutation) ClearAmenities() {
+	m.amenities = nil
+	m.appendamenities = nil
+	m.clearedFields[place.FieldAmenities] = struct{}{}
+}
+
+// AmenitiesCleared returns if the "amenities" field was cleared in this mutation.
+func (m *PlaceMutation) AmenitiesCleared() bool {
+	_, ok := m.clearedFields[place.FieldAmenities]
+	return ok
+}
+
+// ResetAmenities resets all changes to the "amenities" field.
+func (m *PlaceMutation) ResetAmenities() {
+	m.amenities = nil
+	m.appendamenities = nil
+	delete(m.clearedFields, place.FieldAmenities)
+}
+
+// AddImageIDs adds the "images" edge to the PlaceImage entity by ids.
+func (m *PlaceMutation) AddImageIDs(ids ...string) {
+	if m.images == nil {
+		m.images = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.images[ids[i]] = struct{}{}
+	}
+}
+
+// ClearImages clears the "images" edge to the PlaceImage entity.
+func (m *PlaceMutation) ClearImages() {
+	m.clearedimages = true
+}
+
+// ImagesCleared reports if the "images" edge to the PlaceImage entity was cleared.
+func (m *PlaceMutation) ImagesCleared() bool {
+	return m.clearedimages
+}
+
+// RemoveImageIDs removes the "images" edge to the PlaceImage entity by IDs.
+func (m *PlaceMutation) RemoveImageIDs(ids ...string) {
+	if m.removedimages == nil {
+		m.removedimages = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.images, ids[i])
+		m.removedimages[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedImages returns the removed IDs of the "images" edge to the PlaceImage entity.
+func (m *PlaceMutation) RemovedImagesIDs() (ids []string) {
+	for id := range m.removedimages {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ImagesIDs returns the "images" edge IDs in the mutation.
+func (m *PlaceMutation) ImagesIDs() (ids []string) {
+	for id := range m.images {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetImages resets all changes to the "images" edge.
+func (m *PlaceMutation) ResetImages() {
+	m.images = nil
+	m.clearedimages = false
+	m.removedimages = nil
+}
+
+// Where appends a list predicates to the PlaceMutation builder.
+func (m *PlaceMutation) Where(ps ...predicate.Place) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the PlaceMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *PlaceMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.Place, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *PlaceMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *PlaceMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (Place).
+func (m *PlaceMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *PlaceMutation) Fields() []string {
+	fields := make([]string, 0, 18)
+	if m.status != nil {
+		fields = append(fields, place.FieldStatus)
+	}
+	if m.created_at != nil {
+		fields = append(fields, place.FieldCreatedAt)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, place.FieldUpdatedAt)
+	}
+	if m.created_by != nil {
+		fields = append(fields, place.FieldCreatedBy)
+	}
+	if m.updated_by != nil {
+		fields = append(fields, place.FieldUpdatedBy)
+	}
+	if m.metadata != nil {
+		fields = append(fields, place.FieldMetadata)
+	}
+	if m.slug != nil {
+		fields = append(fields, place.FieldSlug)
+	}
+	if m.title != nil {
+		fields = append(fields, place.FieldTitle)
+	}
+	if m.subtitle != nil {
+		fields = append(fields, place.FieldSubtitle)
+	}
+	if m.short_description != nil {
+		fields = append(fields, place.FieldShortDescription)
+	}
+	if m.long_description != nil {
+		fields = append(fields, place.FieldLongDescription)
+	}
+	if m.place_type != nil {
+		fields = append(fields, place.FieldPlaceType)
+	}
+	if m.categories != nil {
+		fields = append(fields, place.FieldCategories)
+	}
+	if m.address != nil {
+		fields = append(fields, place.FieldAddress)
+	}
+	if m.location != nil {
+		fields = append(fields, place.FieldLocation)
+	}
+	if m.primary_image_url != nil {
+		fields = append(fields, place.FieldPrimaryImageURL)
+	}
+	if m.thumbnail_url != nil {
+		fields = append(fields, place.FieldThumbnailURL)
+	}
+	if m.amenities != nil {
+		fields = append(fields, place.FieldAmenities)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *PlaceMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case place.FieldStatus:
+		return m.Status()
+	case place.FieldCreatedAt:
+		return m.CreatedAt()
+	case place.FieldUpdatedAt:
+		return m.UpdatedAt()
+	case place.FieldCreatedBy:
+		return m.CreatedBy()
+	case place.FieldUpdatedBy:
+		return m.UpdatedBy()
+	case place.FieldMetadata:
+		return m.Metadata()
+	case place.FieldSlug:
+		return m.Slug()
+	case place.FieldTitle:
+		return m.Title()
+	case place.FieldSubtitle:
+		return m.Subtitle()
+	case place.FieldShortDescription:
+		return m.ShortDescription()
+	case place.FieldLongDescription:
+		return m.LongDescription()
+	case place.FieldPlaceType:
+		return m.PlaceType()
+	case place.FieldCategories:
+		return m.Categories()
+	case place.FieldAddress:
+		return m.Address()
+	case place.FieldLocation:
+		return m.Location()
+	case place.FieldPrimaryImageURL:
+		return m.PrimaryImageURL()
+	case place.FieldThumbnailURL:
+		return m.ThumbnailURL()
+	case place.FieldAmenities:
+		return m.Amenities()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *PlaceMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case place.FieldStatus:
+		return m.OldStatus(ctx)
+	case place.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case place.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	case place.FieldCreatedBy:
+		return m.OldCreatedBy(ctx)
+	case place.FieldUpdatedBy:
+		return m.OldUpdatedBy(ctx)
+	case place.FieldMetadata:
+		return m.OldMetadata(ctx)
+	case place.FieldSlug:
+		return m.OldSlug(ctx)
+	case place.FieldTitle:
+		return m.OldTitle(ctx)
+	case place.FieldSubtitle:
+		return m.OldSubtitle(ctx)
+	case place.FieldShortDescription:
+		return m.OldShortDescription(ctx)
+	case place.FieldLongDescription:
+		return m.OldLongDescription(ctx)
+	case place.FieldPlaceType:
+		return m.OldPlaceType(ctx)
+	case place.FieldCategories:
+		return m.OldCategories(ctx)
+	case place.FieldAddress:
+		return m.OldAddress(ctx)
+	case place.FieldLocation:
+		return m.OldLocation(ctx)
+	case place.FieldPrimaryImageURL:
+		return m.OldPrimaryImageURL(ctx)
+	case place.FieldThumbnailURL:
+		return m.OldThumbnailURL(ctx)
+	case place.FieldAmenities:
+		return m.OldAmenities(ctx)
+	}
+	return nil, fmt.Errorf("unknown Place field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *PlaceMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case place.FieldStatus:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetStatus(v)
+		return nil
+	case place.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case place.FieldUpdatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
+	case place.FieldCreatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedBy(v)
+		return nil
+	case place.FieldUpdatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedBy(v)
+		return nil
+	case place.FieldMetadata:
+		v, ok := value.(map[string]string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetMetadata(v)
+		return nil
+	case place.FieldSlug:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSlug(v)
+		return nil
+	case place.FieldTitle:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTitle(v)
+		return nil
+	case place.FieldSubtitle:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSubtitle(v)
+		return nil
+	case place.FieldShortDescription:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetShortDescription(v)
+		return nil
+	case place.FieldLongDescription:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetLongDescription(v)
+		return nil
+	case place.FieldPlaceType:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPlaceType(v)
+		return nil
+	case place.FieldCategories:
+		v, ok := value.([]string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCategories(v)
+		return nil
+	case place.FieldAddress:
+		v, ok := value.(map[string]interface{})
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAddress(v)
+		return nil
+	case place.FieldLocation:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetLocation(v)
+		return nil
+	case place.FieldPrimaryImageURL:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPrimaryImageURL(v)
+		return nil
+	case place.FieldThumbnailURL:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetThumbnailURL(v)
+		return nil
+	case place.FieldAmenities:
+		v, ok := value.([]string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAmenities(v)
+		return nil
+	}
+	return fmt.Errorf("unknown Place field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *PlaceMutation) AddedFields() []string {
+	return nil
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *PlaceMutation) AddedField(name string) (ent.Value, bool) {
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *PlaceMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown Place numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *PlaceMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(place.FieldCreatedBy) {
+		fields = append(fields, place.FieldCreatedBy)
+	}
+	if m.FieldCleared(place.FieldUpdatedBy) {
+		fields = append(fields, place.FieldUpdatedBy)
+	}
+	if m.FieldCleared(place.FieldMetadata) {
+		fields = append(fields, place.FieldMetadata)
+	}
+	if m.FieldCleared(place.FieldSubtitle) {
+		fields = append(fields, place.FieldSubtitle)
+	}
+	if m.FieldCleared(place.FieldShortDescription) {
+		fields = append(fields, place.FieldShortDescription)
+	}
+	if m.FieldCleared(place.FieldLongDescription) {
+		fields = append(fields, place.FieldLongDescription)
+	}
+	if m.FieldCleared(place.FieldCategories) {
+		fields = append(fields, place.FieldCategories)
+	}
+	if m.FieldCleared(place.FieldAddress) {
+		fields = append(fields, place.FieldAddress)
+	}
+	if m.FieldCleared(place.FieldPrimaryImageURL) {
+		fields = append(fields, place.FieldPrimaryImageURL)
+	}
+	if m.FieldCleared(place.FieldThumbnailURL) {
+		fields = append(fields, place.FieldThumbnailURL)
+	}
+	if m.FieldCleared(place.FieldAmenities) {
+		fields = append(fields, place.FieldAmenities)
+	}
+	return fields
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *PlaceMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *PlaceMutation) ClearField(name string) error {
+	switch name {
+	case place.FieldCreatedBy:
+		m.ClearCreatedBy()
+		return nil
+	case place.FieldUpdatedBy:
+		m.ClearUpdatedBy()
+		return nil
+	case place.FieldMetadata:
+		m.ClearMetadata()
+		return nil
+	case place.FieldSubtitle:
+		m.ClearSubtitle()
+		return nil
+	case place.FieldShortDescription:
+		m.ClearShortDescription()
+		return nil
+	case place.FieldLongDescription:
+		m.ClearLongDescription()
+		return nil
+	case place.FieldCategories:
+		m.ClearCategories()
+		return nil
+	case place.FieldAddress:
+		m.ClearAddress()
+		return nil
+	case place.FieldPrimaryImageURL:
+		m.ClearPrimaryImageURL()
+		return nil
+	case place.FieldThumbnailURL:
+		m.ClearThumbnailURL()
+		return nil
+	case place.FieldAmenities:
+		m.ClearAmenities()
+		return nil
+	}
+	return fmt.Errorf("unknown Place nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *PlaceMutation) ResetField(name string) error {
+	switch name {
+	case place.FieldStatus:
+		m.ResetStatus()
+		return nil
+	case place.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case place.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	case place.FieldCreatedBy:
+		m.ResetCreatedBy()
+		return nil
+	case place.FieldUpdatedBy:
+		m.ResetUpdatedBy()
+		return nil
+	case place.FieldMetadata:
+		m.ResetMetadata()
+		return nil
+	case place.FieldSlug:
+		m.ResetSlug()
+		return nil
+	case place.FieldTitle:
+		m.ResetTitle()
+		return nil
+	case place.FieldSubtitle:
+		m.ResetSubtitle()
+		return nil
+	case place.FieldShortDescription:
+		m.ResetShortDescription()
+		return nil
+	case place.FieldLongDescription:
+		m.ResetLongDescription()
+		return nil
+	case place.FieldPlaceType:
+		m.ResetPlaceType()
+		return nil
+	case place.FieldCategories:
+		m.ResetCategories()
+		return nil
+	case place.FieldAddress:
+		m.ResetAddress()
+		return nil
+	case place.FieldLocation:
+		m.ResetLocation()
+		return nil
+	case place.FieldPrimaryImageURL:
+		m.ResetPrimaryImageURL()
+		return nil
+	case place.FieldThumbnailURL:
+		m.ResetThumbnailURL()
+		return nil
+	case place.FieldAmenities:
+		m.ResetAmenities()
+		return nil
+	}
+	return fmt.Errorf("unknown Place field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *PlaceMutation) AddedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.images != nil {
+		edges = append(edges, place.EdgeImages)
+	}
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *PlaceMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case place.EdgeImages:
+		ids := make([]ent.Value, 0, len(m.images))
+		for id := range m.images {
+			ids = append(ids, id)
+		}
+		return ids
+	}
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *PlaceMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.removedimages != nil {
+		edges = append(edges, place.EdgeImages)
+	}
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *PlaceMutation) RemovedIDs(name string) []ent.Value {
+	switch name {
+	case place.EdgeImages:
+		ids := make([]ent.Value, 0, len(m.removedimages))
+		for id := range m.removedimages {
+			ids = append(ids, id)
+		}
+		return ids
+	}
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *PlaceMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.clearedimages {
+		edges = append(edges, place.EdgeImages)
+	}
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *PlaceMutation) EdgeCleared(name string) bool {
+	switch name {
+	case place.EdgeImages:
+		return m.clearedimages
+	}
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *PlaceMutation) ClearEdge(name string) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown Place unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *PlaceMutation) ResetEdge(name string) error {
+	switch name {
+	case place.EdgeImages:
+		m.ResetImages()
+		return nil
+	}
+	return fmt.Errorf("unknown Place edge %s", name)
+}
+
+// PlaceImageMutation represents an operation that mutates the PlaceImage nodes in the graph.
+type PlaceImageMutation struct {
+	config
+	op            Op
+	typ           string
+	id            *string
+	status        *string
+	created_at    *time.Time
+	updated_at    *time.Time
+	created_by    *string
+	updated_by    *string
+	metadata      *map[string]string
+	url           *string
+	alt           *string
+	pos           *int
+	addpos        *int
+	clearedFields map[string]struct{}
+	place         *string
+	clearedplace  bool
+	done          bool
+	oldValue      func(context.Context) (*PlaceImage, error)
+	predicates    []predicate.PlaceImage
+}
+
+var _ ent.Mutation = (*PlaceImageMutation)(nil)
+
+// placeimageOption allows management of the mutation configuration using functional options.
+type placeimageOption func(*PlaceImageMutation)
+
+// newPlaceImageMutation creates new mutation for the PlaceImage entity.
+func newPlaceImageMutation(c config, op Op, opts ...placeimageOption) *PlaceImageMutation {
+	m := &PlaceImageMutation{
+		config:        c,
+		op:            op,
+		typ:           TypePlaceImage,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withPlaceImageID sets the ID field of the mutation.
+func withPlaceImageID(id string) placeimageOption {
+	return func(m *PlaceImageMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *PlaceImage
+		)
+		m.oldValue = func(ctx context.Context) (*PlaceImage, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().PlaceImage.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withPlaceImage sets the old PlaceImage of the mutation.
+func withPlaceImage(node *PlaceImage) placeimageOption {
+	return func(m *PlaceImageMutation) {
+		m.oldValue = func(context.Context) (*PlaceImage, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m PlaceImageMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m PlaceImageMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of PlaceImage entities.
+func (m *PlaceImageMutation) SetID(id string) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *PlaceImageMutation) ID() (id string, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *PlaceImageMutation) IDs(ctx context.Context) ([]string, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []string{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().PlaceImage.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetStatus sets the "status" field.
+func (m *PlaceImageMutation) SetStatus(s string) {
+	m.status = &s
+}
+
+// Status returns the value of the "status" field in the mutation.
+func (m *PlaceImageMutation) Status() (r string, exists bool) {
+	v := m.status
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldStatus returns the old "status" field's value of the PlaceImage entity.
+// If the PlaceImage object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PlaceImageMutation) OldStatus(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldStatus is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldStatus requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldStatus: %w", err)
+	}
+	return oldValue.Status, nil
+}
+
+// ResetStatus resets all changes to the "status" field.
+func (m *PlaceImageMutation) ResetStatus() {
+	m.status = nil
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (m *PlaceImageMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *PlaceImageMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the PlaceImage entity.
+// If the PlaceImage object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PlaceImageMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *PlaceImageMutation) ResetCreatedAt() {
+	m.created_at = nil
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *PlaceImageMutation) SetUpdatedAt(t time.Time) {
+	m.updated_at = &t
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *PlaceImageMutation) UpdatedAt() (r time.Time, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the PlaceImage entity.
+// If the PlaceImage object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PlaceImageMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *PlaceImageMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (m *PlaceImageMutation) SetCreatedBy(s string) {
+	m.created_by = &s
+}
+
+// CreatedBy returns the value of the "created_by" field in the mutation.
+func (m *PlaceImageMutation) CreatedBy() (r string, exists bool) {
+	v := m.created_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedBy returns the old "created_by" field's value of the PlaceImage entity.
+// If the PlaceImage object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PlaceImageMutation) OldCreatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedBy: %w", err)
+	}
+	return oldValue.CreatedBy, nil
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (m *PlaceImageMutation) ClearCreatedBy() {
+	m.created_by = nil
+	m.clearedFields[placeimage.FieldCreatedBy] = struct{}{}
+}
+
+// CreatedByCleared returns if the "created_by" field was cleared in this mutation.
+func (m *PlaceImageMutation) CreatedByCleared() bool {
+	_, ok := m.clearedFields[placeimage.FieldCreatedBy]
+	return ok
+}
+
+// ResetCreatedBy resets all changes to the "created_by" field.
+func (m *PlaceImageMutation) ResetCreatedBy() {
+	m.created_by = nil
+	delete(m.clearedFields, placeimage.FieldCreatedBy)
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (m *PlaceImageMutation) SetUpdatedBy(s string) {
+	m.updated_by = &s
+}
+
+// UpdatedBy returns the value of the "updated_by" field in the mutation.
+func (m *PlaceImageMutation) UpdatedBy() (r string, exists bool) {
+	v := m.updated_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedBy returns the old "updated_by" field's value of the PlaceImage entity.
+// If the PlaceImage object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PlaceImageMutation) OldUpdatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedBy: %w", err)
+	}
+	return oldValue.UpdatedBy, nil
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (m *PlaceImageMutation) ClearUpdatedBy() {
+	m.updated_by = nil
+	m.clearedFields[placeimage.FieldUpdatedBy] = struct{}{}
+}
+
+// UpdatedByCleared returns if the "updated_by" field was cleared in this mutation.
+func (m *PlaceImageMutation) UpdatedByCleared() bool {
+	_, ok := m.clearedFields[placeimage.FieldUpdatedBy]
+	return ok
+}
+
+// ResetUpdatedBy resets all changes to the "updated_by" field.
+func (m *PlaceImageMutation) ResetUpdatedBy() {
+	m.updated_by = nil
+	delete(m.clearedFields, placeimage.FieldUpdatedBy)
+}
+
+// SetMetadata sets the "metadata" field.
+func (m *PlaceImageMutation) SetMetadata(value map[string]string) {
+	m.metadata = &value
+}
+
+// Metadata returns the value of the "metadata" field in the mutation.
+func (m *PlaceImageMutation) Metadata() (r map[string]string, exists bool) {
+	v := m.metadata
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldMetadata returns the old "metadata" field's value of the PlaceImage entity.
+// If the PlaceImage object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PlaceImageMutation) OldMetadata(ctx context.Context) (v map[string]string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldMetadata is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldMetadata requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldMetadata: %w", err)
+	}
+	return oldValue.Metadata, nil
+}
+
+// ClearMetadata clears the value of the "metadata" field.
+func (m *PlaceImageMutation) ClearMetadata() {
+	m.metadata = nil
+	m.clearedFields[placeimage.FieldMetadata] = struct{}{}
+}
+
+// MetadataCleared returns if the "metadata" field was cleared in this mutation.
+func (m *PlaceImageMutation) MetadataCleared() bool {
+	_, ok := m.clearedFields[placeimage.FieldMetadata]
+	return ok
+}
+
+// ResetMetadata resets all changes to the "metadata" field.
+func (m *PlaceImageMutation) ResetMetadata() {
+	m.metadata = nil
+	delete(m.clearedFields, placeimage.FieldMetadata)
+}
+
+// SetPlaceID sets the "place_id" field.
+func (m *PlaceImageMutation) SetPlaceID(s string) {
+	m.place = &s
+}
+
+// PlaceID returns the value of the "place_id" field in the mutation.
+func (m *PlaceImageMutation) PlaceID() (r string, exists bool) {
+	v := m.place
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPlaceID returns the old "place_id" field's value of the PlaceImage entity.
+// If the PlaceImage object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PlaceImageMutation) OldPlaceID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPlaceID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPlaceID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPlaceID: %w", err)
+	}
+	return oldValue.PlaceID, nil
+}
+
+// ResetPlaceID resets all changes to the "place_id" field.
+func (m *PlaceImageMutation) ResetPlaceID() {
+	m.place = nil
+}
+
+// SetURL sets the "url" field.
+func (m *PlaceImageMutation) SetURL(s string) {
+	m.url = &s
+}
+
+// URL returns the value of the "url" field in the mutation.
+func (m *PlaceImageMutation) URL() (r string, exists bool) {
+	v := m.url
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldURL returns the old "url" field's value of the PlaceImage entity.
+// If the PlaceImage object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PlaceImageMutation) OldURL(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldURL is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldURL requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldURL: %w", err)
+	}
+	return oldValue.URL, nil
+}
+
+// ResetURL resets all changes to the "url" field.
+func (m *PlaceImageMutation) ResetURL() {
+	m.url = nil
+}
+
+// SetAlt sets the "alt" field.
+func (m *PlaceImageMutation) SetAlt(s string) {
+	m.alt = &s
+}
+
+// Alt returns the value of the "alt" field in the mutation.
+func (m *PlaceImageMutation) Alt() (r string, exists bool) {
+	v := m.alt
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAlt returns the old "alt" field's value of the PlaceImage entity.
+// If the PlaceImage object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PlaceImageMutation) OldAlt(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAlt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAlt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAlt: %w", err)
+	}
+	return oldValue.Alt, nil
+}
+
+// ClearAlt clears the value of the "alt" field.
+func (m *PlaceImageMutation) ClearAlt() {
+	m.alt = nil
+	m.clearedFields[placeimage.FieldAlt] = struct{}{}
+}
+
+// AltCleared returns if the "alt" field was cleared in this mutation.
+func (m *PlaceImageMutation) AltCleared() bool {
+	_, ok := m.clearedFields[placeimage.FieldAlt]
+	return ok
+}
+
+// ResetAlt resets all changes to the "alt" field.
+func (m *PlaceImageMutation) ResetAlt() {
+	m.alt = nil
+	delete(m.clearedFields, placeimage.FieldAlt)
+}
+
+// SetPos sets the "pos" field.
+func (m *PlaceImageMutation) SetPos(i int) {
+	m.pos = &i
+	m.addpos = nil
+}
+
+// Pos returns the value of the "pos" field in the mutation.
+func (m *PlaceImageMutation) Pos() (r int, exists bool) {
+	v := m.pos
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPos returns the old "pos" field's value of the PlaceImage entity.
+// If the PlaceImage object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PlaceImageMutation) OldPos(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPos is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPos requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPos: %w", err)
+	}
+	return oldValue.Pos, nil
+}
+
+// AddPos adds i to the "pos" field.
+func (m *PlaceImageMutation) AddPos(i int) {
+	if m.addpos != nil {
+		*m.addpos += i
+	} else {
+		m.addpos = &i
+	}
+}
+
+// AddedPos returns the value that was added to the "pos" field in this mutation.
+func (m *PlaceImageMutation) AddedPos() (r int, exists bool) {
+	v := m.addpos
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetPos resets all changes to the "pos" field.
+func (m *PlaceImageMutation) ResetPos() {
+	m.pos = nil
+	m.addpos = nil
+}
+
+// ClearPlace clears the "place" edge to the Place entity.
+func (m *PlaceImageMutation) ClearPlace() {
+	m.clearedplace = true
+	m.clearedFields[placeimage.FieldPlaceID] = struct{}{}
+}
+
+// PlaceCleared reports if the "place" edge to the Place entity was cleared.
+func (m *PlaceImageMutation) PlaceCleared() bool {
+	return m.clearedplace
+}
+
+// PlaceIDs returns the "place" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// PlaceID instead. It exists only for internal usage by the builders.
+func (m *PlaceImageMutation) PlaceIDs() (ids []string) {
+	if id := m.place; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetPlace resets all changes to the "place" edge.
+func (m *PlaceImageMutation) ResetPlace() {
+	m.place = nil
+	m.clearedplace = false
+}
+
+// Where appends a list predicates to the PlaceImageMutation builder.
+func (m *PlaceImageMutation) Where(ps ...predicate.PlaceImage) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the PlaceImageMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *PlaceImageMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.PlaceImage, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *PlaceImageMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *PlaceImageMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (PlaceImage).
+func (m *PlaceImageMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *PlaceImageMutation) Fields() []string {
+	fields := make([]string, 0, 10)
+	if m.status != nil {
+		fields = append(fields, placeimage.FieldStatus)
+	}
+	if m.created_at != nil {
+		fields = append(fields, placeimage.FieldCreatedAt)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, placeimage.FieldUpdatedAt)
+	}
+	if m.created_by != nil {
+		fields = append(fields, placeimage.FieldCreatedBy)
+	}
+	if m.updated_by != nil {
+		fields = append(fields, placeimage.FieldUpdatedBy)
+	}
+	if m.metadata != nil {
+		fields = append(fields, placeimage.FieldMetadata)
+	}
+	if m.place != nil {
+		fields = append(fields, placeimage.FieldPlaceID)
+	}
+	if m.url != nil {
+		fields = append(fields, placeimage.FieldURL)
+	}
+	if m.alt != nil {
+		fields = append(fields, placeimage.FieldAlt)
+	}
+	if m.pos != nil {
+		fields = append(fields, placeimage.FieldPos)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *PlaceImageMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case placeimage.FieldStatus:
+		return m.Status()
+	case placeimage.FieldCreatedAt:
+		return m.CreatedAt()
+	case placeimage.FieldUpdatedAt:
+		return m.UpdatedAt()
+	case placeimage.FieldCreatedBy:
+		return m.CreatedBy()
+	case placeimage.FieldUpdatedBy:
+		return m.UpdatedBy()
+	case placeimage.FieldMetadata:
+		return m.Metadata()
+	case placeimage.FieldPlaceID:
+		return m.PlaceID()
+	case placeimage.FieldURL:
+		return m.URL()
+	case placeimage.FieldAlt:
+		return m.Alt()
+	case placeimage.FieldPos:
+		return m.Pos()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *PlaceImageMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case placeimage.FieldStatus:
+		return m.OldStatus(ctx)
+	case placeimage.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case placeimage.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	case placeimage.FieldCreatedBy:
+		return m.OldCreatedBy(ctx)
+	case placeimage.FieldUpdatedBy:
+		return m.OldUpdatedBy(ctx)
+	case placeimage.FieldMetadata:
+		return m.OldMetadata(ctx)
+	case placeimage.FieldPlaceID:
+		return m.OldPlaceID(ctx)
+	case placeimage.FieldURL:
+		return m.OldURL(ctx)
+	case placeimage.FieldAlt:
+		return m.OldAlt(ctx)
+	case placeimage.FieldPos:
+		return m.OldPos(ctx)
+	}
+	return nil, fmt.Errorf("unknown PlaceImage field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *PlaceImageMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case placeimage.FieldStatus:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetStatus(v)
+		return nil
+	case placeimage.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case placeimage.FieldUpdatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
+	case placeimage.FieldCreatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedBy(v)
+		return nil
+	case placeimage.FieldUpdatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedBy(v)
+		return nil
+	case placeimage.FieldMetadata:
+		v, ok := value.(map[string]string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetMetadata(v)
+		return nil
+	case placeimage.FieldPlaceID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPlaceID(v)
+		return nil
+	case placeimage.FieldURL:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetURL(v)
+		return nil
+	case placeimage.FieldAlt:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAlt(v)
+		return nil
+	case placeimage.FieldPos:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPos(v)
+		return nil
+	}
+	return fmt.Errorf("unknown PlaceImage field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *PlaceImageMutation) AddedFields() []string {
+	var fields []string
+	if m.addpos != nil {
+		fields = append(fields, placeimage.FieldPos)
+	}
+	return fields
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *PlaceImageMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case placeimage.FieldPos:
+		return m.AddedPos()
+	}
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *PlaceImageMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	case placeimage.FieldPos:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddPos(v)
+		return nil
+	}
+	return fmt.Errorf("unknown PlaceImage numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *PlaceImageMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(placeimage.FieldCreatedBy) {
+		fields = append(fields, placeimage.FieldCreatedBy)
+	}
+	if m.FieldCleared(placeimage.FieldUpdatedBy) {
+		fields = append(fields, placeimage.FieldUpdatedBy)
+	}
+	if m.FieldCleared(placeimage.FieldMetadata) {
+		fields = append(fields, placeimage.FieldMetadata)
+	}
+	if m.FieldCleared(placeimage.FieldAlt) {
+		fields = append(fields, placeimage.FieldAlt)
+	}
+	return fields
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *PlaceImageMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *PlaceImageMutation) ClearField(name string) error {
+	switch name {
+	case placeimage.FieldCreatedBy:
+		m.ClearCreatedBy()
+		return nil
+	case placeimage.FieldUpdatedBy:
+		m.ClearUpdatedBy()
+		return nil
+	case placeimage.FieldMetadata:
+		m.ClearMetadata()
+		return nil
+	case placeimage.FieldAlt:
+		m.ClearAlt()
+		return nil
+	}
+	return fmt.Errorf("unknown PlaceImage nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *PlaceImageMutation) ResetField(name string) error {
+	switch name {
+	case placeimage.FieldStatus:
+		m.ResetStatus()
+		return nil
+	case placeimage.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case placeimage.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	case placeimage.FieldCreatedBy:
+		m.ResetCreatedBy()
+		return nil
+	case placeimage.FieldUpdatedBy:
+		m.ResetUpdatedBy()
+		return nil
+	case placeimage.FieldMetadata:
+		m.ResetMetadata()
+		return nil
+	case placeimage.FieldPlaceID:
+		m.ResetPlaceID()
+		return nil
+	case placeimage.FieldURL:
+		m.ResetURL()
+		return nil
+	case placeimage.FieldAlt:
+		m.ResetAlt()
+		return nil
+	case placeimage.FieldPos:
+		m.ResetPos()
+		return nil
+	}
+	return fmt.Errorf("unknown PlaceImage field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *PlaceImageMutation) AddedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.place != nil {
+		edges = append(edges, placeimage.EdgePlace)
+	}
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *PlaceImageMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case placeimage.EdgePlace:
+		if id := m.place; id != nil {
+			return []ent.Value{*id}
+		}
+	}
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *PlaceImageMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 1)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *PlaceImageMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *PlaceImageMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.clearedplace {
+		edges = append(edges, placeimage.EdgePlace)
+	}
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *PlaceImageMutation) EdgeCleared(name string) bool {
+	switch name {
+	case placeimage.EdgePlace:
+		return m.clearedplace
+	}
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *PlaceImageMutation) ClearEdge(name string) error {
+	switch name {
+	case placeimage.EdgePlace:
+		m.ClearPlace()
+		return nil
+	}
+	return fmt.Errorf("unknown PlaceImage unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *PlaceImageMutation) ResetEdge(name string) error {
+	switch name {
+	case placeimage.EdgePlace:
+		m.ResetPlace()
+		return nil
+	}
+	return fmt.Errorf("unknown PlaceImage edge %s", name)
+}
 
 // UserMutation represents an operation that mutates the User nodes in the graph.
 type UserMutation struct {
@@ -38,6 +3409,7 @@ type UserMutation struct {
 	updated_at    *time.Time
 	created_by    *string
 	updated_by    *string
+	metadata      *map[string]string
 	name          *string
 	email         *string
 	phone         *string
@@ -358,6 +3730,55 @@ func (m *UserMutation) ResetUpdatedBy() {
 	delete(m.clearedFields, user.FieldUpdatedBy)
 }
 
+// SetMetadata sets the "metadata" field.
+func (m *UserMutation) SetMetadata(value map[string]string) {
+	m.metadata = &value
+}
+
+// Metadata returns the value of the "metadata" field in the mutation.
+func (m *UserMutation) Metadata() (r map[string]string, exists bool) {
+	v := m.metadata
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldMetadata returns the old "metadata" field's value of the User entity.
+// If the User object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *UserMutation) OldMetadata(ctx context.Context) (v map[string]string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldMetadata is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldMetadata requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldMetadata: %w", err)
+	}
+	return oldValue.Metadata, nil
+}
+
+// ClearMetadata clears the value of the "metadata" field.
+func (m *UserMutation) ClearMetadata() {
+	m.metadata = nil
+	m.clearedFields[user.FieldMetadata] = struct{}{}
+}
+
+// MetadataCleared returns if the "metadata" field was cleared in this mutation.
+func (m *UserMutation) MetadataCleared() bool {
+	_, ok := m.clearedFields[user.FieldMetadata]
+	return ok
+}
+
+// ResetMetadata resets all changes to the "metadata" field.
+func (m *UserMutation) ResetMetadata() {
+	m.metadata = nil
+	delete(m.clearedFields, user.FieldMetadata)
+}
+
 // SetName sets the "name" field.
 func (m *UserMutation) SetName(s string) {
 	m.name = &s
@@ -536,7 +3957,7 @@ func (m *UserMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *UserMutation) Fields() []string {
-	fields := make([]string, 0, 9)
+	fields := make([]string, 0, 10)
 	if m.status != nil {
 		fields = append(fields, user.FieldStatus)
 	}
@@ -551,6 +3972,9 @@ func (m *UserMutation) Fields() []string {
 	}
 	if m.updated_by != nil {
 		fields = append(fields, user.FieldUpdatedBy)
+	}
+	if m.metadata != nil {
+		fields = append(fields, user.FieldMetadata)
 	}
 	if m.name != nil {
 		fields = append(fields, user.FieldName)
@@ -582,6 +4006,8 @@ func (m *UserMutation) Field(name string) (ent.Value, bool) {
 		return m.CreatedBy()
 	case user.FieldUpdatedBy:
 		return m.UpdatedBy()
+	case user.FieldMetadata:
+		return m.Metadata()
 	case user.FieldName:
 		return m.Name()
 	case user.FieldEmail:
@@ -609,6 +4035,8 @@ func (m *UserMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldCreatedBy(ctx)
 	case user.FieldUpdatedBy:
 		return m.OldUpdatedBy(ctx)
+	case user.FieldMetadata:
+		return m.OldMetadata(ctx)
 	case user.FieldName:
 		return m.OldName(ctx)
 	case user.FieldEmail:
@@ -660,6 +4088,13 @@ func (m *UserMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetUpdatedBy(v)
+		return nil
+	case user.FieldMetadata:
+		v, ok := value.(map[string]string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetMetadata(v)
 		return nil
 	case user.FieldName:
 		v, ok := value.(string)
@@ -725,6 +4160,9 @@ func (m *UserMutation) ClearedFields() []string {
 	if m.FieldCleared(user.FieldUpdatedBy) {
 		fields = append(fields, user.FieldUpdatedBy)
 	}
+	if m.FieldCleared(user.FieldMetadata) {
+		fields = append(fields, user.FieldMetadata)
+	}
 	return fields
 }
 
@@ -744,6 +4182,9 @@ func (m *UserMutation) ClearField(name string) error {
 		return nil
 	case user.FieldUpdatedBy:
 		m.ClearUpdatedBy()
+		return nil
+	case user.FieldMetadata:
+		m.ClearMetadata()
 		return nil
 	}
 	return fmt.Errorf("unknown User nullable field %s", name)
@@ -767,6 +4208,9 @@ func (m *UserMutation) ResetField(name string) error {
 		return nil
 	case user.FieldUpdatedBy:
 		m.ResetUpdatedBy()
+		return nil
+	case user.FieldMetadata:
+		m.ResetMetadata()
 		return nil
 	case user.FieldName:
 		m.ResetName()

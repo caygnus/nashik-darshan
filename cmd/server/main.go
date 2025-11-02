@@ -5,27 +5,28 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	_ "github.com/omkar273/codegeeky/docs/swagger"
-	"github.com/omkar273/codegeeky/internal/api"
-	v1 "github.com/omkar273/codegeeky/internal/api/v1"
-	"github.com/omkar273/codegeeky/internal/auth"
-	"github.com/omkar273/codegeeky/internal/config"
-	"github.com/omkar273/codegeeky/internal/logger"
-	"github.com/omkar273/codegeeky/internal/postgres"
-	"github.com/omkar273/codegeeky/internal/repository"
-	"github.com/omkar273/codegeeky/internal/security"
-	"github.com/omkar273/codegeeky/internal/service"
-	"github.com/omkar273/codegeeky/internal/validator"
+	_ "github.com/omkar273/nashikdarshan/docs/swagger"
+	"github.com/omkar273/nashikdarshan/internal/api"
+	v1 "github.com/omkar273/nashikdarshan/internal/api/v1"
+	"github.com/omkar273/nashikdarshan/internal/auth"
+	"github.com/omkar273/nashikdarshan/internal/config"
+	"github.com/omkar273/nashikdarshan/internal/logger"
+	"github.com/omkar273/nashikdarshan/internal/postgres"
+	"github.com/omkar273/nashikdarshan/internal/repository"
+	"github.com/omkar273/nashikdarshan/internal/security"
+	"github.com/omkar273/nashikdarshan/internal/service"
+	"github.com/omkar273/nashikdarshan/internal/validator"
+
 	"go.uber.org/fx"
 )
 
-// @title           CodeGeeky API
+// @title           Nashik Darshan API
 // @version         1.0
-// @description     API for CodeGeeky
-// @termsOfService  http://example.com/terms/
+// @description     API for Nashik Darshan
+// @termsOfService  http://nashikdarshan.com/terms/
 
 // @contact.name   API Support
-// @contact.email  support@example.com
+// @contact.email  support@nashikdarshan.com
 
 // @host      localhost:8080
 // @BasePath  /api/v1

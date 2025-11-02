@@ -1,27 +1,30 @@
 package user
 
 import (
-	"github.com/omkar273/codegeeky/ent"
-	"github.com/omkar273/codegeeky/internal/types"
+	"github.com/omkar273/nashikdarshan/ent"
+	"github.com/omkar273/nashikdarshan/internal/types"
 	"github.com/samber/lo"
 )
 
 type User struct {
-	ID    string         `json:"id" db:"id"`
-	Email string         `json:"email" db:"email"`
-	Phone string         `json:"phone" db:"phone"`
-	Name  string         `json:"name" db:"name"`
-	Role  types.UserRole `json:"role" db:"role"`
+	ID       string          `json:"id" db:"id"`
+	Email    string          `json:"email" db:"email"`
+	Phone    string          `json:"phone" db:"phone"`
+	Name     string          `json:"name" db:"name"`
+	Role     types.UserRole  `json:"role" db:"role"`
+	Metadata *types.Metadata `json:"metadata,omitempty" db:"metadata"`
 	types.BaseModel
 }
 
 func FromEnt(user *ent.User) *User {
+	metadata := types.NewMetadataFromMap(user.Metadata)
 	return &User{
-		ID:    user.ID,
-		Email: user.Email,
-		Phone: *user.Phone,
-		Name:  user.Name,
-		Role:  types.UserRole(user.Role),
+		ID:       user.ID,
+		Email:    user.Email,
+		Phone:    *user.Phone,
+		Name:     user.Name,
+		Role:     types.UserRole(user.Role),
+		Metadata: metadata,
 		BaseModel: types.BaseModel{
 			Status:    types.Status(user.Status),
 			CreatedAt: user.CreatedAt,

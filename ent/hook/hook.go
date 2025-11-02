@@ -6,8 +6,44 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/omkar273/codegeeky/ent"
+	"github.com/omkar273/nashikdarshan/ent"
 )
+
+// The CategoryFunc type is an adapter to allow the use of ordinary
+// function as Category mutator.
+type CategoryFunc func(context.Context, *ent.CategoryMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f CategoryFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.CategoryMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.CategoryMutation", m)
+}
+
+// The PlaceFunc type is an adapter to allow the use of ordinary
+// function as Place mutator.
+type PlaceFunc func(context.Context, *ent.PlaceMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f PlaceFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.PlaceMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.PlaceMutation", m)
+}
+
+// The PlaceImageFunc type is an adapter to allow the use of ordinary
+// function as PlaceImage mutator.
+type PlaceImageFunc func(context.Context, *ent.PlaceImageMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f PlaceImageFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.PlaceImageMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.PlaceImageMutation", m)
+}
 
 // The UserFunc type is an adapter to allow the use of ordinary
 // function as User mutator.

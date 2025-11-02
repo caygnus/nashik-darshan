@@ -5,7 +5,7 @@ import (
 	"sync"
 
 	"github.com/go-playground/validator/v10"
-	ierr "github.com/omkar273/codegeeky/internal/errors"
+	ierr "github.com/omkar273/nashikdarshan/internal/errors"
 )
 
 var (

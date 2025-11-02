@@ -5,17 +5,141 @@ package ent
 import (
 	"time"
 
-	"github.com/omkar273/codegeeky/ent/schema"
-	"github.com/omkar273/codegeeky/ent/user"
+	"github.com/omkar273/nashikdarshan/ent/category"
+	"github.com/omkar273/nashikdarshan/ent/place"
+	"github.com/omkar273/nashikdarshan/ent/placeimage"
+	"github.com/omkar273/nashikdarshan/ent/schema"
+	"github.com/omkar273/nashikdarshan/ent/user"
 )
 
 // The init function reads all schema descriptors with runtime code
 // (default values, validators, hooks and policies) and stitches it
 // to their package variables.
 func init() {
+	categoryMixin := schema.Category{}.Mixin()
+	categoryMixinFields0 := categoryMixin[0].Fields()
+	_ = categoryMixinFields0
+	categoryMixinFields1 := categoryMixin[1].Fields()
+	_ = categoryMixinFields1
+	categoryFields := schema.Category{}.Fields()
+	_ = categoryFields
+	// categoryDescStatus is the schema descriptor for status field.
+	categoryDescStatus := categoryMixinFields0[0].Descriptor()
+	// category.DefaultStatus holds the default value on creation for the status field.
+	category.DefaultStatus = categoryDescStatus.Default.(string)
+	// categoryDescCreatedAt is the schema descriptor for created_at field.
+	categoryDescCreatedAt := categoryMixinFields0[1].Descriptor()
+	// category.DefaultCreatedAt holds the default value on creation for the created_at field.
+	category.DefaultCreatedAt = categoryDescCreatedAt.Default.(func() time.Time)
+	// categoryDescUpdatedAt is the schema descriptor for updated_at field.
+	categoryDescUpdatedAt := categoryMixinFields0[2].Descriptor()
+	// category.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	category.DefaultUpdatedAt = categoryDescUpdatedAt.Default.(func() time.Time)
+	// category.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	category.UpdateDefaultUpdatedAt = categoryDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// categoryDescMetadata is the schema descriptor for metadata field.
+	categoryDescMetadata := categoryMixinFields1[0].Descriptor()
+	// category.DefaultMetadata holds the default value on creation for the metadata field.
+	category.DefaultMetadata = categoryDescMetadata.Default.(map[string]string)
+	// categoryDescName is the schema descriptor for name field.
+	categoryDescName := categoryFields[1].Descriptor()
+	// category.NameValidator is a validator for the "name" field. It is called by the builders before save.
+	category.NameValidator = categoryDescName.Validators[0].(func(string) error)
+	// categoryDescID is the schema descriptor for id field.
+	categoryDescID := categoryFields[0].Descriptor()
+	// category.DefaultID holds the default value on creation for the id field.
+	category.DefaultID = categoryDescID.Default.(func() string)
+	placeMixin := schema.Place{}.Mixin()
+	placeMixinFields0 := placeMixin[0].Fields()
+	_ = placeMixinFields0
+	placeMixinFields1 := placeMixin[1].Fields()
+	_ = placeMixinFields1
+	placeFields := schema.Place{}.Fields()
+	_ = placeFields
+	// placeDescStatus is the schema descriptor for status field.
+	placeDescStatus := placeMixinFields0[0].Descriptor()
+	// place.DefaultStatus holds the default value on creation for the status field.
+	place.DefaultStatus = placeDescStatus.Default.(string)
+	// placeDescCreatedAt is the schema descriptor for created_at field.
+	placeDescCreatedAt := placeMixinFields0[1].Descriptor()
+	// place.DefaultCreatedAt holds the default value on creation for the created_at field.
+	place.DefaultCreatedAt = placeDescCreatedAt.Default.(func() time.Time)
+	// placeDescUpdatedAt is the schema descriptor for updated_at field.
+	placeDescUpdatedAt := placeMixinFields0[2].Descriptor()
+	// place.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	place.DefaultUpdatedAt = placeDescUpdatedAt.Default.(func() time.Time)
+	// place.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	place.UpdateDefaultUpdatedAt = placeDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// placeDescMetadata is the schema descriptor for metadata field.
+	placeDescMetadata := placeMixinFields1[0].Descriptor()
+	// place.DefaultMetadata holds the default value on creation for the metadata field.
+	place.DefaultMetadata = placeDescMetadata.Default.(map[string]string)
+	// placeDescSlug is the schema descriptor for slug field.
+	placeDescSlug := placeFields[1].Descriptor()
+	// place.SlugValidator is a validator for the "slug" field. It is called by the builders before save.
+	place.SlugValidator = placeDescSlug.Validators[0].(func(string) error)
+	// placeDescTitle is the schema descriptor for title field.
+	placeDescTitle := placeFields[2].Descriptor()
+	// place.TitleValidator is a validator for the "title" field. It is called by the builders before save.
+	place.TitleValidator = placeDescTitle.Validators[0].(func(string) error)
+	// placeDescPlaceType is the schema descriptor for place_type field.
+	placeDescPlaceType := placeFields[6].Descriptor()
+	// place.PlaceTypeValidator is a validator for the "place_type" field. It is called by the builders before save.
+	place.PlaceTypeValidator = placeDescPlaceType.Validators[0].(func(string) error)
+	// placeDescLocation is the schema descriptor for location field.
+	placeDescLocation := placeFields[9].Descriptor()
+	// place.LocationValidator is a validator for the "location" field. It is called by the builders before save.
+	place.LocationValidator = placeDescLocation.Validators[0].(func(string) error)
+	// placeDescID is the schema descriptor for id field.
+	placeDescID := placeFields[0].Descriptor()
+	// place.DefaultID holds the default value on creation for the id field.
+	place.DefaultID = placeDescID.Default.(func() string)
+	placeimageMixin := schema.PlaceImage{}.Mixin()
+	placeimageMixinFields0 := placeimageMixin[0].Fields()
+	_ = placeimageMixinFields0
+	placeimageMixinFields1 := placeimageMixin[1].Fields()
+	_ = placeimageMixinFields1
+	placeimageFields := schema.PlaceImage{}.Fields()
+	_ = placeimageFields
+	// placeimageDescStatus is the schema descriptor for status field.
+	placeimageDescStatus := placeimageMixinFields0[0].Descriptor()
+	// placeimage.DefaultStatus holds the default value on creation for the status field.
+	placeimage.DefaultStatus = placeimageDescStatus.Default.(string)
+	// placeimageDescCreatedAt is the schema descriptor for created_at field.
+	placeimageDescCreatedAt := placeimageMixinFields0[1].Descriptor()
+	// placeimage.DefaultCreatedAt holds the default value on creation for the created_at field.
+	placeimage.DefaultCreatedAt = placeimageDescCreatedAt.Default.(func() time.Time)
+	// placeimageDescUpdatedAt is the schema descriptor for updated_at field.
+	placeimageDescUpdatedAt := placeimageMixinFields0[2].Descriptor()
+	// placeimage.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	placeimage.DefaultUpdatedAt = placeimageDescUpdatedAt.Default.(func() time.Time)
+	// placeimage.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	placeimage.UpdateDefaultUpdatedAt = placeimageDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// placeimageDescMetadata is the schema descriptor for metadata field.
+	placeimageDescMetadata := placeimageMixinFields1[0].Descriptor()
+	// placeimage.DefaultMetadata holds the default value on creation for the metadata field.
+	placeimage.DefaultMetadata = placeimageDescMetadata.Default.(map[string]string)
+	// placeimageDescPlaceID is the schema descriptor for place_id field.
+	placeimageDescPlaceID := placeimageFields[1].Descriptor()
+	// placeimage.PlaceIDValidator is a validator for the "place_id" field. It is called by the builders before save.
+	placeimage.PlaceIDValidator = placeimageDescPlaceID.Validators[0].(func(string) error)
+	// placeimageDescURL is the schema descriptor for url field.
+	placeimageDescURL := placeimageFields[2].Descriptor()
+	// placeimage.URLValidator is a validator for the "url" field. It is called by the builders before save.
+	placeimage.URLValidator = placeimageDescURL.Validators[0].(func(string) error)
+	// placeimageDescPos is the schema descriptor for pos field.
+	placeimageDescPos := placeimageFields[4].Descriptor()
+	// placeimage.DefaultPos holds the default value on creation for the pos field.
+	placeimage.DefaultPos = placeimageDescPos.Default.(int)
+	// placeimageDescID is the schema descriptor for id field.
+	placeimageDescID := placeimageFields[0].Descriptor()
+	// placeimage.DefaultID holds the default value on creation for the id field.
+	placeimage.DefaultID = placeimageDescID.Default.(func() string)
 	userMixin := schema.User{}.Mixin()
 	userMixinFields0 := userMixin[0].Fields()
 	_ = userMixinFields0
+	userMixinFields1 := userMixin[1].Fields()
+	_ = userMixinFields1
 	userFields := schema.User{}.Fields()
 	_ = userFields
 	// userDescStatus is the schema descriptor for status field.
@@ -32,6 +156,10 @@ func init() {
 	user.DefaultUpdatedAt = userDescUpdatedAt.Default.(func() time.Time)
 	// user.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	user.UpdateDefaultUpdatedAt = userDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// userDescMetadata is the schema descriptor for metadata field.
+	userDescMetadata := userMixinFields1[0].Descriptor()
+	// user.DefaultMetadata holds the default value on creation for the metadata field.
+	user.DefaultMetadata = userDescMetadata.Default.(map[string]string)
 	// userDescName is the schema descriptor for name field.
 	userDescName := userFields[1].Descriptor()
 	// user.NameValidator is a validator for the "name" field. It is called by the builders before save.

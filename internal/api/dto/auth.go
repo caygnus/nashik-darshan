@@ -3,9 +3,9 @@ package dto
 import (
 	"context"
 
-	"github.com/omkar273/codegeeky/internal/domain/user"
-	"github.com/omkar273/codegeeky/internal/types"
-	"github.com/omkar273/codegeeky/internal/validator"
+	"github.com/omkar273/nashikdarshan/internal/domain/user"
+	"github.com/omkar273/nashikdarshan/internal/types"
+	"github.com/omkar273/nashikdarshan/internal/validator"
 )
 
 type SignupRequest struct {

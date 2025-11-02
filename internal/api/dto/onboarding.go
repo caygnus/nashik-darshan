@@ -1,7 +1,7 @@
 package dto
 
 import (
-	"github.com/omkar273/codegeeky/internal/domain/user"
+	"github.com/omkar273/nashikdarshan/internal/domain/user"
 )
 
 // OnboardingRequest is the request for the onboarding service

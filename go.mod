@@ -1,4 +1,4 @@
-module github.com/omkar273/codegeeky
+module github.com/omkar273/nashikdarshan
 
 go 1.24.0
 

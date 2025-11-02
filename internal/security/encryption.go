@@ -9,9 +9,9 @@ import (
 	"encoding/hex"
 	"io"
 
-	"github.com/omkar273/codegeeky/internal/config"
-	ierr "github.com/omkar273/codegeeky/internal/errors"
-	"github.com/omkar273/codegeeky/internal/logger"
+	"github.com/omkar273/nashikdarshan/internal/config"
+	ierr "github.com/omkar273/nashikdarshan/internal/errors"
+	"github.com/omkar273/nashikdarshan/internal/logger"
 )
 
 // EncryptionService defines the interface for encryption and hashing operations

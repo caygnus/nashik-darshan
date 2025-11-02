@@ -4,9 +4,9 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/omkar273/codegeeky/internal/api/dto"
-	ierr "github.com/omkar273/codegeeky/internal/errors"
-	"github.com/omkar273/codegeeky/internal/service"
+	"github.com/omkar273/nashikdarshan/internal/api/dto"
+	ierr "github.com/omkar273/nashikdarshan/internal/errors"
+	"github.com/omkar273/nashikdarshan/internal/service"
 )
 
 type AuthHandler struct {

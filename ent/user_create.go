@@ -10,7 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/omkar273/codegeeky/ent/user"
+	"github.com/omkar273/nashikdarshan/ent/user"
 )
 
 // UserCreate is the builder for creating a User entity.
@@ -87,6 +87,12 @@ func (_c *UserCreate) SetNillableUpdatedBy(v *string) *UserCreate {
 	if v != nil {
 		_c.SetUpdatedBy(*v)
 	}
+	return _c
+}
+
+// SetMetadata sets the "metadata" field.
+func (_c *UserCreate) SetMetadata(v map[string]string) *UserCreate {
+	_c.mutation.SetMetadata(v)
 	return _c
 }
 
@@ -182,6 +188,10 @@ func (_c *UserCreate) defaults() {
 	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		v := user.DefaultUpdatedAt()
 		_c.mutation.SetUpdatedAt(v)
+	}
+	if _, ok := _c.mutation.Metadata(); !ok {
+		v := user.DefaultMetadata
+		_c.mutation.SetMetadata(v)
 	}
 	if _, ok := _c.mutation.Role(); !ok {
 		v := user.DefaultRole
@@ -285,6 +295,10 @@ func (_c *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(user.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
+	}
+	if value, ok := _c.mutation.Metadata(); ok {
+		_spec.SetField(user.FieldMetadata, field.TypeJSON, value)
+		_node.Metadata = value
 	}
 	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(user.FieldName, field.TypeString, value)

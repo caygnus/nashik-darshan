@@ -37,5 +37,8 @@ func ValidateUUIDWithPrefix(uuid string, prefix string) bool {
 
 const (
 	// Prefixes for all domains and entities
-	UUID_PREFIX_USER = "user"
+	UUID_PREFIX_USER        = "user"
+	UUID_PREFIX_CATEGORY    = "category"
+	UUID_PREFIX_PLACE       = "place"
+	UUID_PREFIX_PLACE_IMAGE = "plcimg"
 )

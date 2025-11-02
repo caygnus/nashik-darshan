@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"entgo.io/ent/dialect/sql"
-	"github.com/omkar273/codegeeky/ent/predicate"
+	"github.com/omkar273/nashikdarshan/ent/predicate"
 )
 
 // ID filters vertices based on their ID field.
@@ -402,6 +402,16 @@ func UpdatedByEqualFold(v string) predicate.User {
 // UpdatedByContainsFold applies the ContainsFold predicate on the "updated_by" field.
 func UpdatedByContainsFold(v string) predicate.User {
 	return predicate.User(sql.FieldContainsFold(FieldUpdatedBy, v))
+}
+
+// MetadataIsNil applies the IsNil predicate on the "metadata" field.
+func MetadataIsNil() predicate.User {
+	return predicate.User(sql.FieldIsNull(FieldMetadata))
+}
+
+// MetadataNotNil applies the NotNil predicate on the "metadata" field.
+func MetadataNotNil() predicate.User {
+	return predicate.User(sql.FieldNotNull(FieldMetadata))
 }
 
 // NameEQ applies the EQ predicate on the "name" field.

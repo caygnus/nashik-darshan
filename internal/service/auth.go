@@ -3,9 +3,9 @@ package service
 import (
 	"context"
 
-	"github.com/omkar273/codegeeky/internal/api/dto"
-	"github.com/omkar273/codegeeky/internal/auth"
-	ierr "github.com/omkar273/codegeeky/internal/errors"
+	"github.com/omkar273/nashikdarshan/internal/api/dto"
+	"github.com/omkar273/nashikdarshan/internal/auth"
+	ierr "github.com/omkar273/nashikdarshan/internal/errors"
 )
 
 type AuthService interface {

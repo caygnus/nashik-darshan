@@ -8,6 +8,99 @@ import (
 )
 
 var (
+	// CategoriesColumns holds the columns for the "categories" table.
+	CategoriesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString, SchemaType: map[string]string{"postgres": "varchar(255)"}},
+		{Name: "status", Type: field.TypeString, Default: "published", SchemaType: map[string]string{"postgres": "varchar(20)"}},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "metadata", Type: field.TypeJSON, Nullable: true, SchemaType: map[string]string{"postgres": "jsonb"}},
+		{Name: "name", Type: field.TypeString, SchemaType: map[string]string{"postgres": "varchar(255)"}},
+		{Name: "description", Type: field.TypeString, Nullable: true, SchemaType: map[string]string{"postgres": "text"}},
+	}
+	// CategoriesTable holds the schema information for the "categories" table.
+	CategoriesTable = &schema.Table{
+		Name:       "categories",
+		Columns:    CategoriesColumns,
+		PrimaryKey: []*schema.Column{CategoriesColumns[0]},
+	}
+	// PlacesColumns holds the columns for the "places" table.
+	PlacesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString, SchemaType: map[string]string{"postgres": "varchar(255)"}},
+		{Name: "status", Type: field.TypeString, Default: "published", SchemaType: map[string]string{"postgres": "varchar(20)"}},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "metadata", Type: field.TypeJSON, Nullable: true, SchemaType: map[string]string{"postgres": "jsonb"}},
+		{Name: "slug", Type: field.TypeString, SchemaType: map[string]string{"postgres": "text"}},
+		{Name: "title", Type: field.TypeString, SchemaType: map[string]string{"postgres": "text"}},
+		{Name: "subtitle", Type: field.TypeString, Nullable: true, SchemaType: map[string]string{"postgres": "text"}},
+		{Name: "short_description", Type: field.TypeString, Nullable: true, SchemaType: map[string]string{"postgres": "text"}},
+		{Name: "long_description", Type: field.TypeString, Nullable: true, SchemaType: map[string]string{"postgres": "text"}},
+		{Name: "place_type", Type: field.TypeString, SchemaType: map[string]string{"postgres": "text"}},
+		{Name: "categories", Type: field.TypeJSON, Nullable: true, SchemaType: map[string]string{"postgres": "text[]"}},
+		{Name: "address", Type: field.TypeJSON, Nullable: true, SchemaType: map[string]string{"postgres": "jsonb"}},
+		{Name: "location", Type: field.TypeString, SchemaType: map[string]string{"postgres": "geography(Point,4326)"}},
+		{Name: "primary_image_url", Type: field.TypeString, Nullable: true, SchemaType: map[string]string{"postgres": "text"}},
+		{Name: "thumbnail_url", Type: field.TypeString, Nullable: true, SchemaType: map[string]string{"postgres": "text"}},
+		{Name: "amenities", Type: field.TypeJSON, Nullable: true, SchemaType: map[string]string{"postgres": "text[]"}},
+	}
+	// PlacesTable holds the schema information for the "places" table.
+	PlacesTable = &schema.Table{
+		Name:       "places",
+		Columns:    PlacesColumns,
+		PrimaryKey: []*schema.Column{PlacesColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "place_slug",
+				Unique:  true,
+				Columns: []*schema.Column{PlacesColumns[7]},
+			},
+		},
+	}
+	// PlaceImagesColumns holds the columns for the "place_images" table.
+	PlaceImagesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString, SchemaType: map[string]string{"postgres": "varchar(255)"}},
+		{Name: "status", Type: field.TypeString, Default: "published", SchemaType: map[string]string{"postgres": "varchar(20)"}},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "metadata", Type: field.TypeJSON, Nullable: true, SchemaType: map[string]string{"postgres": "jsonb"}},
+		{Name: "url", Type: field.TypeString, SchemaType: map[string]string{"postgres": "text"}},
+		{Name: "alt", Type: field.TypeString, Nullable: true, SchemaType: map[string]string{"postgres": "text"}},
+		{Name: "pos", Type: field.TypeInt, Default: 0, SchemaType: map[string]string{"postgres": "int"}},
+		{Name: "place_id", Type: field.TypeString, SchemaType: map[string]string{"postgres": "varchar(255)"}},
+	}
+	// PlaceImagesTable holds the schema information for the "place_images" table.
+	PlaceImagesTable = &schema.Table{
+		Name:       "place_images",
+		Columns:    PlaceImagesColumns,
+		PrimaryKey: []*schema.Column{PlaceImagesColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "place_images_places_images",
+				Columns:    []*schema.Column{PlaceImagesColumns[10]},
+				RefColumns: []*schema.Column{PlacesColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "placeimage_place_id",
+				Unique:  false,
+				Columns: []*schema.Column{PlaceImagesColumns[10]},
+			},
+			{
+				Name:    "placeimage_place_id_pos",
+				Unique:  false,
+				Columns: []*schema.Column{PlaceImagesColumns[10], PlaceImagesColumns[9]},
+			},
+		},
+	}
 	// UsersColumns holds the columns for the "users" table.
 	UsersColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString, SchemaType: map[string]string{"postgres": "varchar(255)"}},
@@ -16,6 +109,7 @@ var (
 		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "metadata", Type: field.TypeJSON, Nullable: true, SchemaType: map[string]string{"postgres": "jsonb"}},
 		{Name: "name", Type: field.TypeString, SchemaType: map[string]string{"postgres": "varchar(255)"}},
 		{Name: "email", Type: field.TypeString, SchemaType: map[string]string{"postgres": "varchar(255)"}},
 		{Name: "phone", Type: field.TypeString, SchemaType: map[string]string{"postgres": "varchar(255)"}},
@@ -30,25 +124,29 @@ var (
 			{
 				Name:    "user_email_phone",
 				Unique:  true,
-				Columns: []*schema.Column{UsersColumns[7], UsersColumns[8]},
+				Columns: []*schema.Column{UsersColumns[8], UsersColumns[9]},
 			},
 			{
 				Name:    "user_email",
 				Unique:  true,
-				Columns: []*schema.Column{UsersColumns[7]},
+				Columns: []*schema.Column{UsersColumns[8]},
 			},
 			{
 				Name:    "user_phone",
 				Unique:  true,
-				Columns: []*schema.Column{UsersColumns[8]},
+				Columns: []*schema.Column{UsersColumns[9]},
 			},
 		},
 	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
+		CategoriesTable,
+		PlacesTable,
+		PlaceImagesTable,
 		UsersTable,
 	}
 )
 
 func init() {
+	PlaceImagesTable.ForeignKeys[0].RefTable = PlacesTable
 }

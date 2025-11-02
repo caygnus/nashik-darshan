@@ -11,8 +11,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/omkar273/codegeeky/ent/predicate"
-	"github.com/omkar273/codegeeky/ent/user"
+	"github.com/omkar273/nashikdarshan/ent/predicate"
+	"github.com/omkar273/nashikdarshan/ent/user"
 )
 
 // UserUpdate is the builder for updating User entities.
@@ -65,6 +65,18 @@ func (_u *UserUpdate) SetNillableUpdatedBy(v *string) *UserUpdate {
 // ClearUpdatedBy clears the value of the "updated_by" field.
 func (_u *UserUpdate) ClearUpdatedBy() *UserUpdate {
 	_u.mutation.ClearUpdatedBy()
+	return _u
+}
+
+// SetMetadata sets the "metadata" field.
+func (_u *UserUpdate) SetMetadata(v map[string]string) *UserUpdate {
+	_u.mutation.SetMetadata(v)
+	return _u
+}
+
+// ClearMetadata clears the value of the "metadata" field.
+func (_u *UserUpdate) ClearMetadata() *UserUpdate {
+	_u.mutation.ClearMetadata()
 	return _u
 }
 
@@ -212,6 +224,12 @@ func (_u *UserUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(user.FieldUpdatedBy, field.TypeString)
 	}
+	if value, ok := _u.mutation.Metadata(); ok {
+		_spec.SetField(user.FieldMetadata, field.TypeJSON, value)
+	}
+	if _u.mutation.MetadataCleared() {
+		_spec.ClearField(user.FieldMetadata, field.TypeJSON)
+	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(user.FieldName, field.TypeString, value)
 	}
@@ -281,6 +299,18 @@ func (_u *UserUpdateOne) SetNillableUpdatedBy(v *string) *UserUpdateOne {
 // ClearUpdatedBy clears the value of the "updated_by" field.
 func (_u *UserUpdateOne) ClearUpdatedBy() *UserUpdateOne {
 	_u.mutation.ClearUpdatedBy()
+	return _u
+}
+
+// SetMetadata sets the "metadata" field.
+func (_u *UserUpdateOne) SetMetadata(v map[string]string) *UserUpdateOne {
+	_u.mutation.SetMetadata(v)
+	return _u
+}
+
+// ClearMetadata clears the value of the "metadata" field.
+func (_u *UserUpdateOne) ClearMetadata() *UserUpdateOne {
+	_u.mutation.ClearMetadata()
 	return _u
 }
 
@@ -457,6 +487,12 @@ func (_u *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) {
 	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(user.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.Metadata(); ok {
+		_spec.SetField(user.FieldMetadata, field.TypeJSON, value)
+	}
+	if _u.mutation.MetadataCleared() {
+		_spec.ClearField(user.FieldMetadata, field.TypeJSON)
 	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(user.FieldName, field.TypeString, value)

@@ -23,6 +23,8 @@ const (
 	FieldCreatedBy = "created_by"
 	// FieldUpdatedBy holds the string denoting the updated_by field in the database.
 	FieldUpdatedBy = "updated_by"
+	// FieldMetadata holds the string denoting the metadata field in the database.
+	FieldMetadata = "metadata"
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
 	// FieldEmail holds the string denoting the email field in the database.
@@ -43,6 +45,7 @@ var Columns = []string{
 	FieldUpdatedAt,
 	FieldCreatedBy,
 	FieldUpdatedBy,
+	FieldMetadata,
 	FieldName,
 	FieldEmail,
 	FieldPhone,
@@ -68,6 +71,8 @@ var (
 	DefaultUpdatedAt func() time.Time
 	// UpdateDefaultUpdatedAt holds the default value on update for the "updated_at" field.
 	UpdateDefaultUpdatedAt func() time.Time
+	// DefaultMetadata holds the default value on creation for the "metadata" field.
+	DefaultMetadata map[string]string
 	// NameValidator is a validator for the "name" field. It is called by the builders before save.
 	NameValidator func(string) error
 	// EmailValidator is a validator for the "email" field. It is called by the builders before save.

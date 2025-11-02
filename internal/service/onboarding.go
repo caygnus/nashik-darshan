@@ -3,7 +3,7 @@ package service
 import (
 	"context"
 
-	"github.com/omkar273/codegeeky/internal/api/dto"
+	"github.com/omkar273/nashikdarshan/internal/api/dto"
 )
 
 type OnboardingService interface {

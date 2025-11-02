@@ -3,7 +3,7 @@ package user
 import (
 	"context"
 
-	"github.com/omkar273/codegeeky/internal/types"
+	"github.com/omkar273/nashikdarshan/internal/types"
 )
 
 // Repository defines the interface for user persistence operations

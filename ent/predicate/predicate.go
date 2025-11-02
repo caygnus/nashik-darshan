@@ -6,5 +6,14 @@ import (
 	"entgo.io/ent/dialect/sql"
 )
 
+// Category is the predicate function for category builders.
+type Category func(*sql.Selector)
+
+// Place is the predicate function for place builders.
+type Place func(*sql.Selector)
+
+// PlaceImage is the predicate function for placeimage builders.
+type PlaceImage func(*sql.Selector)
+
 // User is the predicate function for user builders.
 type User func(*sql.Selector)

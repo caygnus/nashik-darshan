@@ -4,8 +4,8 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
-	baseMixin "github.com/omkar273/codegeeky/ent/mixin"
-	"github.com/omkar273/codegeeky/internal/types"
+	baseMixin "github.com/omkar273/nashikdarshan/ent/mixin"
+	"github.com/omkar273/nashikdarshan/internal/types"
 )
 
 type User struct {
@@ -14,8 +14,9 @@ type User struct {
 
 // Mixin of the User.
 func (User) Mixin() []ent.Mixin {
-return []ent.Mixin{
+	return []ent.Mixin{
 		baseMixin.BaseMixin{},
+		baseMixin.MetadataMixin{},
 	}
 }
 
