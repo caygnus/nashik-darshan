@@ -40,11 +40,7 @@ func (s *userService) Me(ctx context.Context) (*dto.MeResponse, error) {
 			Mark(ierr.ErrDatabase)
 	}
 	return &dto.MeResponse{
-		ID:       user.ID,
-		Email:    user.Email,
-		FullName: user.FullName,
-		Role:     string(user.Role),
-		Phone:    user.Phone,
+		User: user,
 	}, nil
 }
 
@@ -65,8 +61,8 @@ func (s *userService) Update(ctx context.Context, req *dto.UpdateUserRequest) (*
 			Mark(ierr.ErrDatabase)
 	}
 
-	if req.FullName != "" {
-		user.FullName = req.FullName
+	if req.Name != "" {
+		user.Name = req.Name
 	}
 	if req.Phone != "" {
 		user.Phone = req.Phone
@@ -78,10 +74,6 @@ func (s *userService) Update(ctx context.Context, req *dto.UpdateUserRequest) (*
 	}
 
 	return &dto.MeResponse{
-		ID:       user.ID,
-		Email:    user.Email,
-		FullName: user.FullName,
-		Role:     string(user.Role),
-		Phone:    user.Phone,
+		User: user,
 	}, nil
 }
