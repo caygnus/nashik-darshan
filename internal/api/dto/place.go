@@ -2,7 +2,6 @@ package dto
 
 import (
 	"context"
-	"strings"
 	"time"
 
 	"github.com/omkar273/nashikdarshan/internal/domain/place"
@@ -88,31 +87,6 @@ func (req *CreatePlaceRequest) Validate() error {
 		return err
 	}
 
-	// Validate slug format (alphanumeric, hyphens, underscores)
-	slug := strings.TrimSpace(req.Slug)
-	if slug == "" {
-		return ierr.NewError("slug is required").
-			WithHint("slug cannot be empty").
-			Mark(ierr.ErrValidation)
-	}
-
-	// Validate URLs if provided
-	if req.PrimaryImageURL != nil && *req.PrimaryImageURL != "" {
-		if !strings.HasPrefix(*req.PrimaryImageURL, "http://") && !strings.HasPrefix(*req.PrimaryImageURL, "https://") {
-			return ierr.NewError("invalid primary_image_url").
-				WithHint("URL must start with http:// or https://").
-				Mark(ierr.ErrValidation)
-		}
-	}
-
-	if req.ThumbnailURL != nil && *req.ThumbnailURL != "" {
-		if !strings.HasPrefix(*req.ThumbnailURL, "http://") && !strings.HasPrefix(*req.ThumbnailURL, "https://") {
-			return ierr.NewError("invalid thumbnail_url").
-				WithHint("URL must start with http:// or https://").
-				Mark(ierr.ErrValidation)
-		}
-	}
-
 	return nil
 }
 
@@ -143,33 +117,6 @@ func (req *UpdatePlaceRequest) Validate() error {
 	if req.Location != nil {
 		if err := req.Location.Validate(); err != nil {
 			return err
-		}
-	}
-
-	// Validate slug format if provided
-	if req.Slug != nil {
-		slug := strings.TrimSpace(*req.Slug)
-		if slug == "" {
-			return ierr.NewError("slug cannot be empty").
-				WithHint("slug must contain at least one non-whitespace character").
-				Mark(ierr.ErrValidation)
-		}
-	}
-
-	// Validate URLs if provided
-	if req.PrimaryImageURL != nil && *req.PrimaryImageURL != "" {
-		if !strings.HasPrefix(*req.PrimaryImageURL, "http://") && !strings.HasPrefix(*req.PrimaryImageURL, "https://") {
-			return ierr.NewError("invalid primary_image_url").
-				WithHint("URL must start with http:// or https://").
-				Mark(ierr.ErrValidation)
-		}
-	}
-
-	if req.ThumbnailURL != nil && *req.ThumbnailURL != "" {
-		if !strings.HasPrefix(*req.ThumbnailURL, "http://") && !strings.HasPrefix(*req.ThumbnailURL, "https://") {
-			return ierr.NewError("invalid thumbnail_url").
-				WithHint("URL must start with http:// or https://").
-				Mark(ierr.ErrValidation)
 		}
 	}
 

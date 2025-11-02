@@ -2,10 +2,8 @@ package dto
 
 import (
 	"context"
-	"strings"
 
 	"github.com/omkar273/nashikdarshan/internal/domain/category"
-	ierr "github.com/omkar273/nashikdarshan/internal/errors"
 	"github.com/omkar273/nashikdarshan/internal/types"
 	"github.com/omkar273/nashikdarshan/internal/validator"
 	"github.com/samber/lo"
@@ -24,29 +22,6 @@ func (req *CreateCategoryRequest) Validate() error {
 		return err
 	}
 
-	// Validate name is not just whitespace
-	name := strings.TrimSpace(req.Name)
-	if name == "" {
-		return ierr.NewError("name is required").
-			WithHint("name cannot be empty or just whitespace").
-			Mark(ierr.ErrValidation)
-	}
-
-	// Validate slug format
-	slug := strings.TrimSpace(req.Slug)
-	if slug == "" {
-		return ierr.NewError("slug is required").
-			WithHint("slug cannot be empty").
-			Mark(ierr.ErrValidation)
-	}
-
-	// Slug should be lowercase and URL-friendly
-	if strings.ToLower(slug) != slug {
-		return ierr.NewError("invalid slug format").
-			WithHint("slug must be lowercase").
-			Mark(ierr.ErrValidation)
-	}
-
 	return nil
 }
 
@@ -61,33 +36,6 @@ func (req *UpdateCategoryRequest) Validate() error {
 	// Validate struct tags
 	if err := validator.ValidateRequest(req); err != nil {
 		return err
-	}
-
-	// Validate name if provided
-	if req.Name != nil {
-		name := strings.TrimSpace(*req.Name)
-		if name == "" {
-			return ierr.NewError("name cannot be empty").
-				WithHint("name must contain at least one non-whitespace character").
-				Mark(ierr.ErrValidation)
-		}
-	}
-
-	// Validate slug format if provided
-	if req.Slug != nil {
-		slug := strings.TrimSpace(*req.Slug)
-		if slug == "" {
-			return ierr.NewError("slug cannot be empty").
-				WithHint("slug must contain at least one non-whitespace character").
-				Mark(ierr.ErrValidation)
-		}
-
-		// Slug should be lowercase and URL-friendly
-		if strings.ToLower(slug) != slug {
-			return ierr.NewError("invalid slug format").
-				WithHint("slug must be lowercase").
-				Mark(ierr.ErrValidation)
-		}
 	}
 
 	return nil
