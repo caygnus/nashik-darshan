@@ -102,6 +102,12 @@ func (_c *CategoryCreate) SetName(v string) *CategoryCreate {
 	return _c
 }
 
+// SetSlug sets the "slug" field.
+func (_c *CategoryCreate) SetSlug(v string) *CategoryCreate {
+	_c.mutation.SetSlug(v)
+	return _c
+}
+
 // SetDescription sets the "description" field.
 func (_c *CategoryCreate) SetDescription(v string) *CategoryCreate {
 	_c.mutation.SetDescription(v)
@@ -206,6 +212,14 @@ func (_c *CategoryCreate) check() error {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "Category.name": %w`, err)}
 		}
 	}
+	if _, ok := _c.mutation.Slug(); !ok {
+		return &ValidationError{Name: "slug", err: errors.New(`ent: missing required field "Category.slug"`)}
+	}
+	if v, ok := _c.mutation.Slug(); ok {
+		if err := category.SlugValidator(v); err != nil {
+			return &ValidationError{Name: "slug", err: fmt.Errorf(`ent: validator failed for field "Category.slug": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -268,6 +282,10 @@ func (_c *CategoryCreate) createSpec() (*Category, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(category.FieldName, field.TypeString, value)
 		_node.Name = value
+	}
+	if value, ok := _c.mutation.Slug(); ok {
+		_spec.SetField(category.FieldSlug, field.TypeString, value)
+		_node.Slug = value
 	}
 	if value, ok := _c.mutation.Description(); ok {
 		_spec.SetField(category.FieldDescription, field.TypeString, value)

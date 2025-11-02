@@ -65,8 +65,9 @@ func main() {
 			// auth provider
 			auth.NewSupabaseProvider,
 
-			// user repository
+			// repositories
 			repository.NewUserRepository,
+			repository.NewCategoryRepository,
 		),
 	)
 
@@ -78,6 +79,7 @@ func main() {
 		service.NewAuthService,
 		service.NewUserService,
 		service.NewOnboardingService,
+		service.NewCategoryService,
 	))
 
 	// factory layer
@@ -110,11 +112,12 @@ func startServer(
 	startAPIServer(lc, r, cfg, log)
 }
 
-func provideHandlers(logger *logger.Logger, authService service.AuthService, userService service.UserService) *api.Handlers {
+func provideHandlers(logger *logger.Logger, authService service.AuthService, userService service.UserService, categoryService service.CategoryService) *api.Handlers {
 	return &api.Handlers{
-		Health: v1.NewHealthHandler(logger),
-		Auth:   v1.NewAuthHandler(authService),
-		User:   v1.NewUserHandler(userService),
+		Health:   v1.NewHealthHandler(logger),
+		Auth:     v1.NewAuthHandler(authService),
+		User:     v1.NewUserHandler(userService),
+		Category: v1.NewCategoryHandler(categoryService),
 	}
 }
 

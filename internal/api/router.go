@@ -11,9 +11,10 @@ import (
 )
 
 type Handlers struct {
-	Health *v1.HealthHandler
-	Auth   *v1.AuthHandler
-	User   *v1.UserHandler
+	Health   *v1.HealthHandler
+	Auth     *v1.AuthHandler
+	User     *v1.UserHandler
+	Category *v1.CategoryHandler
 }
 
 func NewRouter(handlers *Handlers, cfg *config.Configuration, logger *logger.Logger) *gin.Engine {
@@ -37,12 +38,25 @@ func NewRouter(handlers *Handlers, cfg *config.Configuration, logger *logger.Log
 	v1Auth.Use(middleware.GuestAuthenticateMiddleware)
 	v1Auth.POST("/signup", handlers.Auth.Signup)
 
+	// Public category routes
+	v1Categories := v1Router.Group("/categories")
+	{
+		v1Categories.GET("", handlers.Category.List)
+		v1Categories.GET("/:id", handlers.Category.Get)
+		v1Categories.GET("/slug/:slug", handlers.Category.GetBySlug)
+	}
+
 	// Authenticated routes
 	v1Private := v1Router.Group("/")
 	v1Private.Use(middleware.AuthenticateMiddleware(cfg, logger))
 	{
 		v1Private.GET("/user/me", handlers.User.Me)
 		v1Private.PUT("/user", handlers.User.Update)
+
+		// Category management routes
+		v1Private.POST("/categories", handlers.Category.Create)
+		v1Private.PUT("/categories/:id", handlers.Category.Update)
+		v1Private.DELETE("/categories/:id", handlers.Category.Delete)
 	}
 
 	return router

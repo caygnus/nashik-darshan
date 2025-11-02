@@ -94,6 +94,20 @@ func (_u *CategoryUpdate) SetNillableName(v *string) *CategoryUpdate {
 	return _u
 }
 
+// SetSlug sets the "slug" field.
+func (_u *CategoryUpdate) SetSlug(v string) *CategoryUpdate {
+	_u.mutation.SetSlug(v)
+	return _u
+}
+
+// SetNillableSlug sets the "slug" field if the given value is not nil.
+func (_u *CategoryUpdate) SetNillableSlug(v *string) *CategoryUpdate {
+	if v != nil {
+		_u.SetSlug(*v)
+	}
+	return _u
+}
+
 // SetDescription sets the "description" field.
 func (_u *CategoryUpdate) SetDescription(v string) *CategoryUpdate {
 	_u.mutation.SetDescription(v)
@@ -162,6 +176,11 @@ func (_u *CategoryUpdate) check() error {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "Category.name": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.Slug(); ok {
+		if err := category.SlugValidator(v); err != nil {
+			return &ValidationError{Name: "slug", err: fmt.Errorf(`ent: validator failed for field "Category.slug": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -200,6 +219,9 @@ func (_u *CategoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(category.FieldName, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.Slug(); ok {
+		_spec.SetField(category.FieldSlug, field.TypeString, value)
 	}
 	if value, ok := _u.mutation.Description(); ok {
 		_spec.SetField(category.FieldDescription, field.TypeString, value)
@@ -293,6 +315,20 @@ func (_u *CategoryUpdateOne) SetNillableName(v *string) *CategoryUpdateOne {
 	return _u
 }
 
+// SetSlug sets the "slug" field.
+func (_u *CategoryUpdateOne) SetSlug(v string) *CategoryUpdateOne {
+	_u.mutation.SetSlug(v)
+	return _u
+}
+
+// SetNillableSlug sets the "slug" field if the given value is not nil.
+func (_u *CategoryUpdateOne) SetNillableSlug(v *string) *CategoryUpdateOne {
+	if v != nil {
+		_u.SetSlug(*v)
+	}
+	return _u
+}
+
 // SetDescription sets the "description" field.
 func (_u *CategoryUpdateOne) SetDescription(v string) *CategoryUpdateOne {
 	_u.mutation.SetDescription(v)
@@ -374,6 +410,11 @@ func (_u *CategoryUpdateOne) check() error {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "Category.name": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.Slug(); ok {
+		if err := category.SlugValidator(v); err != nil {
+			return &ValidationError{Name: "slug", err: fmt.Errorf(`ent: validator failed for field "Category.slug": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -429,6 +470,9 @@ func (_u *CategoryUpdateOne) sqlSave(ctx context.Context) (_node *Category, err 
 	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(category.FieldName, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.Slug(); ok {
+		_spec.SetField(category.FieldSlug, field.TypeString, value)
 	}
 	if value, ok := _u.mutation.Description(); ok {
 		_spec.SetField(category.FieldDescription, field.TypeString, value)

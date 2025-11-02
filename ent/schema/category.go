@@ -3,6 +3,7 @@ package schema
 import (
 	"entgo.io/ent"
 	"entgo.io/ent/schema/field"
+	"entgo.io/ent/schema/index"
 	baseMixin "github.com/omkar273/nashikdarshan/ent/mixin"
 	"github.com/omkar273/nashikdarshan/internal/types"
 )
@@ -33,6 +34,11 @@ func (Category) Fields() []ent.Field {
 				"postgres": "varchar(255)",
 			}).
 			NotEmpty(),
+		field.String("slug").
+			SchemaType(map[string]string{
+				"postgres": "text",
+			}).
+			NotEmpty(),
 		field.String("description").
 			SchemaType(map[string]string{
 				"postgres": "text",
@@ -46,5 +52,9 @@ func (Category) Edges() []ent.Edge {
 }
 
 func (Category) Indexes() []ent.Index {
-	return []ent.Index{}
+	return []ent.Index{
+		// Unique slug
+		index.Fields("slug").
+			Unique(),
+	}
 }

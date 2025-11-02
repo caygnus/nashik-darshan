@@ -2,6 +2,7 @@ package repository
 
 import (
 	"github.com/omkar273/nashikdarshan/internal/config"
+	"github.com/omkar273/nashikdarshan/internal/domain/category"
 	"github.com/omkar273/nashikdarshan/internal/domain/user"
 	"github.com/omkar273/nashikdarshan/internal/logger"
 	"github.com/omkar273/nashikdarshan/internal/postgres"
@@ -31,4 +32,8 @@ func NewRepositoryParams(
 
 func NewUserRepository(params RepositoryParams) user.Repository {
 	return ent.NewUserRepository(params.Client, params.Logger)
+}
+
+func NewCategoryRepository(params RepositoryParams) category.Repository {
+	return ent.NewCategoryRepository(params.Client, params.Logger)
 }

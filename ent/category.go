@@ -32,6 +32,8 @@ type Category struct {
 	Metadata map[string]string `json:"metadata,omitempty"`
 	// Name holds the value of the "name" field.
 	Name string `json:"name,omitempty"`
+	// Slug holds the value of the "slug" field.
+	Slug string `json:"slug,omitempty"`
 	// Description holds the value of the "description" field.
 	Description  string `json:"description,omitempty"`
 	selectValues sql.SelectValues
@@ -44,7 +46,7 @@ func (*Category) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case category.FieldMetadata:
 			values[i] = new([]byte)
-		case category.FieldID, category.FieldStatus, category.FieldCreatedBy, category.FieldUpdatedBy, category.FieldName, category.FieldDescription:
+		case category.FieldID, category.FieldStatus, category.FieldCreatedBy, category.FieldUpdatedBy, category.FieldName, category.FieldSlug, category.FieldDescription:
 			values[i] = new(sql.NullString)
 		case category.FieldCreatedAt, category.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -113,6 +115,12 @@ func (_m *Category) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.Name = value.String
 			}
+		case category.FieldSlug:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field slug", values[i])
+			} else if value.Valid {
+				_m.Slug = value.String
+			}
 		case category.FieldDescription:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field description", values[i])
@@ -175,6 +183,9 @@ func (_m *Category) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(_m.Name)
+	builder.WriteString(", ")
+	builder.WriteString("slug=")
+	builder.WriteString(_m.Slug)
 	builder.WriteString(", ")
 	builder.WriteString("description=")
 	builder.WriteString(_m.Description)
