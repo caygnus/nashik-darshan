@@ -4,10 +4,8 @@ import (
 	"context"
 
 	"github.com/omkar273/codegeeky/internal/domain/user"
-	ierr "github.com/omkar273/codegeeky/internal/errors"
 	"github.com/omkar273/codegeeky/internal/types"
 	"github.com/omkar273/codegeeky/internal/validator"
-	"github.com/samber/lo"
 )
 
 type SignupRequest struct {
@@ -15,9 +13,6 @@ type SignupRequest struct {
 	Email string `json:"email" validate:"email,required"`
 	Phone string `json:"phone"`
 	Name  string `json:"name" validate:"required"`
-
-	// role
-	Role types.UserRole `json:"-"`
 
 	// access token
 	AccessToken string `json:"access_token" validate:"required"`
@@ -29,7 +24,7 @@ func (r *SignupRequest) ToUser(ctx context.Context) *user.User {
 		Email:     r.Email,
 		Phone:     r.Phone,
 		Name:      r.Name,
-		Role:      r.Role,
+		Role:      types.UserRoleUser,
 		BaseModel: types.GetDefaultBaseModel(ctx),
 	}
 }
@@ -37,13 +32,6 @@ func (r *SignupRequest) ToUser(ctx context.Context) *user.User {
 func (r *SignupRequest) Validate() error {
 	if err := validator.ValidateRequest(r); err != nil {
 		return err
-	}
-
-	// validate role
-	if !lo.Contains(types.UserRoles, string(r.Role)) {
-		return ierr.NewError("invalid role").
-			WithHint("Invalid role").
-			Mark(ierr.ErrValidation)
 	}
 
 	return nil

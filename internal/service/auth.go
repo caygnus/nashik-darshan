@@ -50,20 +50,25 @@ func (s *authService) Signup(ctx context.Context, req *dto.SignupRequest) (*dto.
 		return nil, err
 	}
 
+	onboardingService := NewOnboardingService(s.ServiceParams)
+	userService := NewUserService(s.ServiceParams)
 	// create user
 	err = s.ServiceParams.DB.WithTx(ctx, func(ctx context.Context) error {
 
-		// onboard user
-		// it handles the creation of user if not exists
-		onboardingService := NewOnboardingService(s.ServiceParams)
+		userReq := req.ToUser(ctx)
+		user, err := userService.Create(ctx, userReq)
+		if err != nil {
+			return err
+		}
+
 		err = onboardingService.Onboard(ctx, &dto.OnboardingRequest{
-			SignupRequest:  *req,
-			ProviderUserID: claims.ID,
+			User: *user,
 		})
 
 		if err != nil {
 			return err
 		}
+
 		s.ServiceParams.Logger.Debugw("onboarded user", "user", claims.ID)
 
 		return nil

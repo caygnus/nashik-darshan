@@ -27,17 +27,6 @@ func (s *onboardingService) Onboard(ctx context.Context, req *dto.OnboardingRequ
 		return err
 	}
 
-	user := req.ToUser(ctx)
-
-	// update user with provider user id
-	user.ID = req.ProviderUserID
-
-	// create user
-	err := s.ServiceParams.UserRepo.Create(ctx, user)
-	if err != nil {
-		return err
-	}
-
 	// NOTE: Currently we are only craeting user during onboarding
 	// We will also have functionality to give user credits, goodies, etc.
 	return nil
