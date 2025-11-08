@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/omkar273/nashikdarshan/ent/place"
+	"github.com/shopspring/decimal"
 )
 
 // Place is the model entity for the Place schema.
@@ -46,8 +47,10 @@ type Place struct {
 	Categories []string `json:"categories,omitempty"`
 	// Address holds the value of the "address" field.
 	Address map[string]interface{} `json:"address,omitempty"`
-	// Location holds the value of the "location" field.
-	Location string `json:"location,omitempty"`
+	// Latitude holds the value of the "latitude" field.
+	Latitude decimal.Decimal `json:"latitude,omitempty"`
+	// Longitude holds the value of the "longitude" field.
+	Longitude decimal.Decimal `json:"longitude,omitempty"`
 	// PrimaryImageURL holds the value of the "primary_image_url" field.
 	PrimaryImageURL string `json:"primary_image_url,omitempty"`
 	// ThumbnailURL holds the value of the "thumbnail_url" field.
@@ -85,7 +88,9 @@ func (*Place) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case place.FieldMetadata, place.FieldCategories, place.FieldAddress, place.FieldAmenities:
 			values[i] = new([]byte)
-		case place.FieldID, place.FieldStatus, place.FieldCreatedBy, place.FieldUpdatedBy, place.FieldSlug, place.FieldTitle, place.FieldSubtitle, place.FieldShortDescription, place.FieldLongDescription, place.FieldPlaceType, place.FieldLocation, place.FieldPrimaryImageURL, place.FieldThumbnailURL:
+		case place.FieldLatitude, place.FieldLongitude:
+			values[i] = new(decimal.Decimal)
+		case place.FieldID, place.FieldStatus, place.FieldCreatedBy, place.FieldUpdatedBy, place.FieldSlug, place.FieldTitle, place.FieldSubtitle, place.FieldShortDescription, place.FieldLongDescription, place.FieldPlaceType, place.FieldPrimaryImageURL, place.FieldThumbnailURL:
 			values[i] = new(sql.NullString)
 		case place.FieldCreatedAt, place.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -200,11 +205,17 @@ func (_m *Place) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field address: %w", err)
 				}
 			}
-		case place.FieldLocation:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field location", values[i])
-			} else if value.Valid {
-				_m.Location = value.String
+		case place.FieldLatitude:
+			if value, ok := values[i].(*decimal.Decimal); !ok {
+				return fmt.Errorf("unexpected type %T for field latitude", values[i])
+			} else if value != nil {
+				_m.Latitude = *value
+			}
+		case place.FieldLongitude:
+			if value, ok := values[i].(*decimal.Decimal); !ok {
+				return fmt.Errorf("unexpected type %T for field longitude", values[i])
+			} else if value != nil {
+				_m.Longitude = *value
 			}
 		case place.FieldPrimaryImageURL:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -309,8 +320,11 @@ func (_m *Place) String() string {
 	builder.WriteString("address=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Address))
 	builder.WriteString(", ")
-	builder.WriteString("location=")
-	builder.WriteString(_m.Location)
+	builder.WriteString("latitude=")
+	builder.WriteString(fmt.Sprintf("%v", _m.Latitude))
+	builder.WriteString(", ")
+	builder.WriteString("longitude=")
+	builder.WriteString(fmt.Sprintf("%v", _m.Longitude))
 	builder.WriteString(", ")
 	builder.WriteString("primary_image_url=")
 	builder.WriteString(_m.PrimaryImageURL)

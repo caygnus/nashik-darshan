@@ -51,7 +51,8 @@ var (
 		{Name: "place_type", Type: field.TypeString, SchemaType: map[string]string{"postgres": "text"}},
 		{Name: "categories", Type: field.TypeJSON, Nullable: true, SchemaType: map[string]string{"postgres": "text[]"}},
 		{Name: "address", Type: field.TypeJSON, Nullable: true, SchemaType: map[string]string{"postgres": "jsonb"}},
-		{Name: "location", Type: field.TypeString, SchemaType: map[string]string{"postgres": "geography(Point,4326)"}},
+		{Name: "latitude", Type: field.TypeOther, SchemaType: map[string]string{"postgres": "decimal(10,8)"}},
+		{Name: "longitude", Type: field.TypeOther, SchemaType: map[string]string{"postgres": "decimal(11,8)"}},
 		{Name: "primary_image_url", Type: field.TypeString, Nullable: true, SchemaType: map[string]string{"postgres": "text"}},
 		{Name: "thumbnail_url", Type: field.TypeString, Nullable: true, SchemaType: map[string]string{"postgres": "text"}},
 		{Name: "amenities", Type: field.TypeJSON, Nullable: true, SchemaType: map[string]string{"postgres": "text[]"}},
@@ -66,6 +67,11 @@ var (
 				Name:    "place_slug_status",
 				Unique:  true,
 				Columns: []*schema.Column{PlacesColumns[7], PlacesColumns[1]},
+			},
+			{
+				Name:    "place_latitude_longitude",
+				Unique:  false,
+				Columns: []*schema.Column{PlacesColumns[15], PlacesColumns[16]},
 			},
 		},
 	}

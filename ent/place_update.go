@@ -15,6 +15,7 @@ import (
 	"github.com/omkar273/nashikdarshan/ent/place"
 	"github.com/omkar273/nashikdarshan/ent/placeimage"
 	"github.com/omkar273/nashikdarshan/ent/predicate"
+	"github.com/shopspring/decimal"
 )
 
 // PlaceUpdate is the builder for updating Place entities.
@@ -214,16 +215,30 @@ func (_u *PlaceUpdate) ClearAddress() *PlaceUpdate {
 	return _u
 }
 
-// SetLocation sets the "location" field.
-func (_u *PlaceUpdate) SetLocation(v string) *PlaceUpdate {
-	_u.mutation.SetLocation(v)
+// SetLatitude sets the "latitude" field.
+func (_u *PlaceUpdate) SetLatitude(v decimal.Decimal) *PlaceUpdate {
+	_u.mutation.SetLatitude(v)
 	return _u
 }
 
-// SetNillableLocation sets the "location" field if the given value is not nil.
-func (_u *PlaceUpdate) SetNillableLocation(v *string) *PlaceUpdate {
+// SetNillableLatitude sets the "latitude" field if the given value is not nil.
+func (_u *PlaceUpdate) SetNillableLatitude(v *decimal.Decimal) *PlaceUpdate {
 	if v != nil {
-		_u.SetLocation(*v)
+		_u.SetLatitude(*v)
+	}
+	return _u
+}
+
+// SetLongitude sets the "longitude" field.
+func (_u *PlaceUpdate) SetLongitude(v decimal.Decimal) *PlaceUpdate {
+	_u.mutation.SetLongitude(v)
+	return _u
+}
+
+// SetNillableLongitude sets the "longitude" field if the given value is not nil.
+func (_u *PlaceUpdate) SetNillableLongitude(v *decimal.Decimal) *PlaceUpdate {
+	if v != nil {
+		_u.SetLongitude(*v)
 	}
 	return _u
 }
@@ -380,11 +395,6 @@ func (_u *PlaceUpdate) check() error {
 			return &ValidationError{Name: "place_type", err: fmt.Errorf(`ent: validator failed for field "Place.place_type": %w`, err)}
 		}
 	}
-	if v, ok := _u.mutation.Location(); ok {
-		if err := place.LocationValidator(v); err != nil {
-			return &ValidationError{Name: "location", err: fmt.Errorf(`ent: validator failed for field "Place.location": %w`, err)}
-		}
-	}
 	return nil
 }
 
@@ -465,8 +475,11 @@ func (_u *PlaceUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if _u.mutation.AddressCleared() {
 		_spec.ClearField(place.FieldAddress, field.TypeJSON)
 	}
-	if value, ok := _u.mutation.Location(); ok {
-		_spec.SetField(place.FieldLocation, field.TypeString, value)
+	if value, ok := _u.mutation.Latitude(); ok {
+		_spec.SetField(place.FieldLatitude, field.TypeOther, value)
+	}
+	if value, ok := _u.mutation.Longitude(); ok {
+		_spec.SetField(place.FieldLongitude, field.TypeOther, value)
 	}
 	if value, ok := _u.mutation.PrimaryImageURL(); ok {
 		_spec.SetField(place.FieldPrimaryImageURL, field.TypeString, value)
@@ -740,16 +753,30 @@ func (_u *PlaceUpdateOne) ClearAddress() *PlaceUpdateOne {
 	return _u
 }
 
-// SetLocation sets the "location" field.
-func (_u *PlaceUpdateOne) SetLocation(v string) *PlaceUpdateOne {
-	_u.mutation.SetLocation(v)
+// SetLatitude sets the "latitude" field.
+func (_u *PlaceUpdateOne) SetLatitude(v decimal.Decimal) *PlaceUpdateOne {
+	_u.mutation.SetLatitude(v)
 	return _u
 }
 
-// SetNillableLocation sets the "location" field if the given value is not nil.
-func (_u *PlaceUpdateOne) SetNillableLocation(v *string) *PlaceUpdateOne {
+// SetNillableLatitude sets the "latitude" field if the given value is not nil.
+func (_u *PlaceUpdateOne) SetNillableLatitude(v *decimal.Decimal) *PlaceUpdateOne {
 	if v != nil {
-		_u.SetLocation(*v)
+		_u.SetLatitude(*v)
+	}
+	return _u
+}
+
+// SetLongitude sets the "longitude" field.
+func (_u *PlaceUpdateOne) SetLongitude(v decimal.Decimal) *PlaceUpdateOne {
+	_u.mutation.SetLongitude(v)
+	return _u
+}
+
+// SetNillableLongitude sets the "longitude" field if the given value is not nil.
+func (_u *PlaceUpdateOne) SetNillableLongitude(v *decimal.Decimal) *PlaceUpdateOne {
+	if v != nil {
+		_u.SetLongitude(*v)
 	}
 	return _u
 }
@@ -919,11 +946,6 @@ func (_u *PlaceUpdateOne) check() error {
 			return &ValidationError{Name: "place_type", err: fmt.Errorf(`ent: validator failed for field "Place.place_type": %w`, err)}
 		}
 	}
-	if v, ok := _u.mutation.Location(); ok {
-		if err := place.LocationValidator(v); err != nil {
-			return &ValidationError{Name: "location", err: fmt.Errorf(`ent: validator failed for field "Place.location": %w`, err)}
-		}
-	}
 	return nil
 }
 
@@ -1021,8 +1043,11 @@ func (_u *PlaceUpdateOne) sqlSave(ctx context.Context) (_node *Place, err error)
 	if _u.mutation.AddressCleared() {
 		_spec.ClearField(place.FieldAddress, field.TypeJSON)
 	}
-	if value, ok := _u.mutation.Location(); ok {
-		_spec.SetField(place.FieldLocation, field.TypeString, value)
+	if value, ok := _u.mutation.Latitude(); ok {
+		_spec.SetField(place.FieldLatitude, field.TypeOther, value)
+	}
+	if value, ok := _u.mutation.Longitude(); ok {
+		_spec.SetField(place.FieldLongitude, field.TypeOther, value)
 	}
 	if value, ok := _u.mutation.PrimaryImageURL(); ok {
 		_spec.SetField(place.FieldPrimaryImageURL, field.TypeString, value)

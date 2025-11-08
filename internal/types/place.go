@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/samber/lo"
+	"github.com/shopspring/decimal"
 )
 
 type PlaceType string
@@ -33,14 +34,11 @@ type PlaceFilter struct {
 	PlaceTypes []string `json:"place_types,omitempty" form:"place_types" validate:"omitempty"`
 	Categories []string `json:"categories,omitempty" form:"categories" validate:"omitempty"`
 	Amenities  []string `json:"amenities,omitempty" form:"amenities" validate:"omitempty"`
-	MinRating  *float64 `json:"min_rating,omitempty" form:"min_rating" validate:"omitempty,min=0,max=5"`
-	MaxRating  *float64 `json:"max_rating,omitempty" form:"max_rating" validate:"omitempty,min=0,max=5"`
-	Status     Status   `json:"status,omitempty" form:"status" validate:"omitempty"`
 
 	// Geospatial filters
-	Latitude  *float64 `json:"latitude,omitempty" form:"latitude" validate:"omitempty,latitude"`
-	Longitude *float64 `json:"longitude,omitempty" form:"longitude" validate:"omitempty,longitude"`
-	RadiusKM  *float64 `json:"radius_km,omitempty" form:"radius_km" validate:"omitempty,min=0"`
+	Latitude  *decimal.Decimal `json:"latitude,omitempty" form:"latitude" validate:"omitempty"`
+	Longitude *decimal.Decimal `json:"longitude,omitempty" form:"longitude" validate:"omitempty"`
+	RadiusM   *decimal.Decimal `json:"radius_m,omitempty" form:"radius_m" validate:"omitempty"` // radius in meters (cap: 10-15km for v1)
 
 	// Search
 	SearchQuery *string `json:"search_query,omitempty" form:"search_query" validate:"omitempty"`
@@ -68,15 +66,26 @@ func (f *PlaceFilter) Validate() error {
 		}
 	}
 
-	// Validate rating range
-	if f.MinRating != nil && f.MaxRating != nil && *f.MinRating > *f.MaxRating {
-		return fmt.Errorf("min_rating cannot be greater than max_rating")
-	}
-
 	// Validate geospatial filters
-	if f.Latitude != nil || f.Longitude != nil || f.RadiusKM != nil {
-		if f.Latitude == nil || f.Longitude == nil || f.RadiusKM == nil {
-			return fmt.Errorf("latitude, longitude, and radius_km must all be provided for geospatial search")
+	if f.Latitude != nil || f.Longitude != nil || f.RadiusM != nil {
+		if f.Latitude == nil || f.Longitude == nil || f.RadiusM == nil {
+			return fmt.Errorf("latitude, longitude, and radius_m must all be provided for geospatial search")
+		}
+		// Validate latitude range (-90 to 90)
+		if f.Latitude.LessThan(decimal.NewFromInt(-90)) || f.Latitude.GreaterThan(decimal.NewFromInt(90)) {
+			return fmt.Errorf("latitude must be between -90 and 90")
+		}
+		// Validate longitude range (-180 to 180)
+		if f.Longitude.LessThan(decimal.NewFromInt(-180)) || f.Longitude.GreaterThan(decimal.NewFromInt(180)) {
+			return fmt.Errorf("longitude must be between -180 and 180")
+		}
+		// Cap radius at 15km (15000m) for v1
+		if f.RadiusM.GreaterThan(decimal.NewFromInt(15000)) {
+			return fmt.Errorf("radius_m cannot exceed 15000 meters (15km)")
+		}
+		// Radius must be positive
+		if f.RadiusM.LessThanOrEqual(decimal.Zero) {
+			return fmt.Errorf("radius_m must be greater than 0")
 		}
 	}
 

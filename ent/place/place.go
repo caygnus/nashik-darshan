@@ -7,6 +7,7 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/shopspring/decimal"
 )
 
 const (
@@ -42,8 +43,10 @@ const (
 	FieldCategories = "categories"
 	// FieldAddress holds the string denoting the address field in the database.
 	FieldAddress = "address"
-	// FieldLocation holds the string denoting the location field in the database.
-	FieldLocation = "location"
+	// FieldLatitude holds the string denoting the latitude field in the database.
+	FieldLatitude = "latitude"
+	// FieldLongitude holds the string denoting the longitude field in the database.
+	FieldLongitude = "longitude"
 	// FieldPrimaryImageURL holds the string denoting the primary_image_url field in the database.
 	FieldPrimaryImageURL = "primary_image_url"
 	// FieldThumbnailURL holds the string denoting the thumbnail_url field in the database.
@@ -80,7 +83,8 @@ var Columns = []string{
 	FieldPlaceType,
 	FieldCategories,
 	FieldAddress,
-	FieldLocation,
+	FieldLatitude,
+	FieldLongitude,
 	FieldPrimaryImageURL,
 	FieldThumbnailURL,
 	FieldAmenities,
@@ -113,8 +117,10 @@ var (
 	TitleValidator func(string) error
 	// PlaceTypeValidator is a validator for the "place_type" field. It is called by the builders before save.
 	PlaceTypeValidator func(string) error
-	// LocationValidator is a validator for the "location" field. It is called by the builders before save.
-	LocationValidator func(string) error
+	// DefaultLatitude holds the default value on creation for the "latitude" field.
+	DefaultLatitude decimal.Decimal
+	// DefaultLongitude holds the default value on creation for the "longitude" field.
+	DefaultLongitude decimal.Decimal
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -182,9 +188,14 @@ func ByPlaceType(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPlaceType, opts...).ToFunc()
 }
 
-// ByLocation orders the results by the location field.
-func ByLocation(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldLocation, opts...).ToFunc()
+// ByLatitude orders the results by the latitude field.
+func ByLatitude(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLatitude, opts...).ToFunc()
+}
+
+// ByLongitude orders the results by the longitude field.
+func ByLongitude(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLongitude, opts...).ToFunc()
 }
 
 // ByPrimaryImageURL orders the results by the primary_image_url field.

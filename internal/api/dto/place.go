@@ -9,6 +9,7 @@ import (
 	"github.com/omkar273/nashikdarshan/internal/types"
 	"github.com/omkar273/nashikdarshan/internal/validator"
 	"github.com/samber/lo"
+	"github.com/shopspring/decimal"
 )
 
 // Location represents a simple location format for frontend communication
@@ -240,13 +241,10 @@ func NewPlaceResponse(p *place.Place) *PlaceResponse {
 		UpdatedBy:        p.UpdatedBy,
 	}
 
-	// Convert location from WKT to simple lat/lng format
-	if p.Location != "" {
-		location, err := (&Location{}).FromWKT(p.Location)
-		if err != nil {
-			return nil
-		}
-		resp.Location = location
+	// Convert location from lat/lng to Location format
+	resp.Location = &Location{
+		Latitude:  p.Latitude.InexactFloat64(),
+		Longitude: p.Longitude.InexactFloat64(),
 	}
 
 	// Convert images using lo.Map
@@ -263,12 +261,6 @@ func NewPlaceResponse(p *place.Place) *PlaceResponse {
 func (req *CreatePlaceRequest) ToPlace(ctx context.Context) (*place.Place, error) {
 	baseModel := types.GetDefaultBaseModel(ctx)
 
-	// Convert location to WKT format
-	locationWKT, err := req.Location.ToWKT()
-	if err != nil {
-		return nil, err
-	}
-
 	return &place.Place{
 		ID:               types.GenerateUUIDWithPrefix(types.UUID_PREFIX_PLACE),
 		Slug:             req.Slug,
@@ -279,7 +271,8 @@ func (req *CreatePlaceRequest) ToPlace(ctx context.Context) (*place.Place, error
 		PlaceType:        req.PlaceType,
 		Categories:       req.Categories,
 		Address:          req.Address,
-		Location:         locationWKT,
+		Latitude:         decimal.NewFromFloat(req.Location.Latitude),
+		Longitude:        decimal.NewFromFloat(req.Location.Longitude),
 		PrimaryImageURL:  req.PrimaryImageURL,
 		ThumbnailURL:     req.ThumbnailURL,
 		Amenities:        req.Amenities,
@@ -314,11 +307,8 @@ func (req *UpdatePlaceRequest) ApplyToPlace(ctx context.Context, p *place.Place)
 		p.Address = req.Address
 	}
 	if req.Location != nil {
-		locationWKT, err := req.Location.ToWKT()
-		if err != nil {
-			return err
-		}
-		p.Location = locationWKT
+		p.Latitude = decimal.NewFromFloat(req.Location.Latitude)
+		p.Longitude = decimal.NewFromFloat(req.Location.Longitude)
 	}
 	if req.PrimaryImageURL != nil {
 		p.PrimaryImageURL = req.PrimaryImageURL

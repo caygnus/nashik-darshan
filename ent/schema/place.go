@@ -7,6 +7,7 @@ import (
 	"entgo.io/ent/schema/index"
 	baseMixin "github.com/omkar273/nashikdarshan/ent/mixin"
 	"github.com/omkar273/nashikdarshan/internal/types"
+	"github.com/shopspring/decimal"
 )
 
 type Place struct {
@@ -70,12 +71,19 @@ func (Place) Fields() []ent.Field {
 				"postgres": "jsonb",
 			}).
 			Optional(),
-		// location will be handled as a string in ent, but stored as geography(Point,4326) in postgres
-		field.String("location").
+
+		field.Other("latitude", decimal.Decimal{}).
 			SchemaType(map[string]string{
-				"postgres": "geography(Point,4326)",
+				"postgres": "decimal(10,8)",
 			}).
-			NotEmpty(),
+			Default(decimal.Zero),
+
+		field.Other("longitude", decimal.Decimal{}).
+			SchemaType(map[string]string{
+				"postgres": "decimal(11,8)",
+			}).
+			Default(decimal.Zero),
+
 		field.String("primary_image_url").
 			SchemaType(map[string]string{
 				"postgres": "text",
@@ -105,5 +113,7 @@ func (Place) Indexes() []ent.Index {
 		// Unique slug
 		index.Fields("slug", "status").
 			Unique(),
+		// Index for bounding box queries
+		index.Fields("latitude", "longitude"),
 	}
 }

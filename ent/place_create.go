@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/omkar273/nashikdarshan/ent/place"
 	"github.com/omkar273/nashikdarshan/ent/placeimage"
+	"github.com/shopspring/decimal"
 )
 
 // PlaceCreate is the builder for creating a Place entity.
@@ -169,9 +170,31 @@ func (_c *PlaceCreate) SetAddress(v map[string]interface{}) *PlaceCreate {
 	return _c
 }
 
-// SetLocation sets the "location" field.
-func (_c *PlaceCreate) SetLocation(v string) *PlaceCreate {
-	_c.mutation.SetLocation(v)
+// SetLatitude sets the "latitude" field.
+func (_c *PlaceCreate) SetLatitude(v decimal.Decimal) *PlaceCreate {
+	_c.mutation.SetLatitude(v)
+	return _c
+}
+
+// SetNillableLatitude sets the "latitude" field if the given value is not nil.
+func (_c *PlaceCreate) SetNillableLatitude(v *decimal.Decimal) *PlaceCreate {
+	if v != nil {
+		_c.SetLatitude(*v)
+	}
+	return _c
+}
+
+// SetLongitude sets the "longitude" field.
+func (_c *PlaceCreate) SetLongitude(v decimal.Decimal) *PlaceCreate {
+	_c.mutation.SetLongitude(v)
+	return _c
+}
+
+// SetNillableLongitude sets the "longitude" field if the given value is not nil.
+func (_c *PlaceCreate) SetNillableLongitude(v *decimal.Decimal) *PlaceCreate {
+	if v != nil {
+		_c.SetLongitude(*v)
+	}
 	return _c
 }
 
@@ -289,6 +312,14 @@ func (_c *PlaceCreate) defaults() {
 		v := place.DefaultMetadata
 		_c.mutation.SetMetadata(v)
 	}
+	if _, ok := _c.mutation.Latitude(); !ok {
+		v := place.DefaultLatitude
+		_c.mutation.SetLatitude(v)
+	}
+	if _, ok := _c.mutation.Longitude(); !ok {
+		v := place.DefaultLongitude
+		_c.mutation.SetLongitude(v)
+	}
 	if _, ok := _c.mutation.ID(); !ok {
 		v := place.DefaultID()
 		_c.mutation.SetID(v)
@@ -330,13 +361,11 @@ func (_c *PlaceCreate) check() error {
 			return &ValidationError{Name: "place_type", err: fmt.Errorf(`ent: validator failed for field "Place.place_type": %w`, err)}
 		}
 	}
-	if _, ok := _c.mutation.Location(); !ok {
-		return &ValidationError{Name: "location", err: errors.New(`ent: missing required field "Place.location"`)}
+	if _, ok := _c.mutation.Latitude(); !ok {
+		return &ValidationError{Name: "latitude", err: errors.New(`ent: missing required field "Place.latitude"`)}
 	}
-	if v, ok := _c.mutation.Location(); ok {
-		if err := place.LocationValidator(v); err != nil {
-			return &ValidationError{Name: "location", err: fmt.Errorf(`ent: validator failed for field "Place.location": %w`, err)}
-		}
+	if _, ok := _c.mutation.Longitude(); !ok {
+		return &ValidationError{Name: "longitude", err: errors.New(`ent: missing required field "Place.longitude"`)}
 	}
 	return nil
 }
@@ -429,9 +458,13 @@ func (_c *PlaceCreate) createSpec() (*Place, *sqlgraph.CreateSpec) {
 		_spec.SetField(place.FieldAddress, field.TypeJSON, value)
 		_node.Address = value
 	}
-	if value, ok := _c.mutation.Location(); ok {
-		_spec.SetField(place.FieldLocation, field.TypeString, value)
-		_node.Location = value
+	if value, ok := _c.mutation.Latitude(); ok {
+		_spec.SetField(place.FieldLatitude, field.TypeOther, value)
+		_node.Latitude = value
+	}
+	if value, ok := _c.mutation.Longitude(); ok {
+		_spec.SetField(place.FieldLongitude, field.TypeOther, value)
+		_node.Longitude = value
 	}
 	if value, ok := _c.mutation.PrimaryImageURL(); ok {
 		_spec.SetField(place.FieldPrimaryImageURL, field.TypeString, value)

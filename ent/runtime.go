@@ -10,6 +10,7 @@ import (
 	"github.com/omkar273/nashikdarshan/ent/placeimage"
 	"github.com/omkar273/nashikdarshan/ent/schema"
 	"github.com/omkar273/nashikdarshan/ent/user"
+	"github.com/shopspring/decimal"
 )
 
 // The init function reads all schema descriptors with runtime code
@@ -90,10 +91,14 @@ func init() {
 	placeDescPlaceType := placeFields[6].Descriptor()
 	// place.PlaceTypeValidator is a validator for the "place_type" field. It is called by the builders before save.
 	place.PlaceTypeValidator = placeDescPlaceType.Validators[0].(func(string) error)
-	// placeDescLocation is the schema descriptor for location field.
-	placeDescLocation := placeFields[9].Descriptor()
-	// place.LocationValidator is a validator for the "location" field. It is called by the builders before save.
-	place.LocationValidator = placeDescLocation.Validators[0].(func(string) error)
+	// placeDescLatitude is the schema descriptor for latitude field.
+	placeDescLatitude := placeFields[9].Descriptor()
+	// place.DefaultLatitude holds the default value on creation for the latitude field.
+	place.DefaultLatitude = placeDescLatitude.Default.(decimal.Decimal)
+	// placeDescLongitude is the schema descriptor for longitude field.
+	placeDescLongitude := placeFields[10].Descriptor()
+	// place.DefaultLongitude holds the default value on creation for the longitude field.
+	place.DefaultLongitude = placeDescLongitude.Default.(decimal.Decimal)
 	// placeDescID is the schema descriptor for id field.
 	placeDescID := placeFields[0].Descriptor()
 	// place.DefaultID holds the default value on creation for the id field.

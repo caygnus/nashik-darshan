@@ -4,6 +4,7 @@ import (
 	"github.com/omkar273/nashikdarshan/ent"
 	"github.com/omkar273/nashikdarshan/internal/types"
 	"github.com/samber/lo"
+	"github.com/shopspring/decimal"
 )
 
 type Place struct {
@@ -16,7 +17,8 @@ type Place struct {
 	PlaceType        string                 `json:"place_type" db:"place_type"`
 	Categories       []string               `json:"categories" db:"categories"`
 	Address          map[string]interface{} `json:"address,omitempty" db:"address"`
-	Location         string                 `json:"location" db:"location"` // PostGIS geography point
+	Latitude         decimal.Decimal        `json:"latitude" db:"latitude"`
+	Longitude        decimal.Decimal        `json:"longitude" db:"longitude"`
 	PrimaryImageURL  *string                `json:"primary_image_url,omitempty" db:"primary_image_url"`
 	ThumbnailURL     *string                `json:"thumbnail_url,omitempty" db:"thumbnail_url"`
 	Amenities        []string               `json:"amenities" db:"amenities"`
@@ -47,7 +49,8 @@ func FromEnt(place *ent.Place) *Place {
 		LongDescription:  lo.ToPtr(place.LongDescription),
 		PlaceType:        place.PlaceType,
 		Categories:       place.Categories,
-		Location:         place.Location,
+		Latitude:         place.Latitude,
+		Longitude:        place.Longitude,
 		PrimaryImageURL:  lo.ToPtr(place.PrimaryImageURL),
 		ThumbnailURL:     lo.ToPtr(place.ThumbnailURL),
 		Amenities:        place.Amenities,

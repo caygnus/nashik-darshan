@@ -8,6 +8,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/omkar273/nashikdarshan/ent/predicate"
+	"github.com/shopspring/decimal"
 )
 
 // ID filters vertices based on their ID field.
@@ -120,9 +121,14 @@ func PlaceType(v string) predicate.Place {
 	return predicate.Place(sql.FieldEQ(FieldPlaceType, v))
 }
 
-// Location applies equality check predicate on the "location" field. It's identical to LocationEQ.
-func Location(v string) predicate.Place {
-	return predicate.Place(sql.FieldEQ(FieldLocation, v))
+// Latitude applies equality check predicate on the "latitude" field. It's identical to LatitudeEQ.
+func Latitude(v decimal.Decimal) predicate.Place {
+	return predicate.Place(sql.FieldEQ(FieldLatitude, v))
+}
+
+// Longitude applies equality check predicate on the "longitude" field. It's identical to LongitudeEQ.
+func Longitude(v decimal.Decimal) predicate.Place {
+	return predicate.Place(sql.FieldEQ(FieldLongitude, v))
 }
 
 // PrimaryImageURL applies equality check predicate on the "primary_image_url" field. It's identical to PrimaryImageURLEQ.
@@ -880,69 +886,84 @@ func AddressNotNil() predicate.Place {
 	return predicate.Place(sql.FieldNotNull(FieldAddress))
 }
 
-// LocationEQ applies the EQ predicate on the "location" field.
-func LocationEQ(v string) predicate.Place {
-	return predicate.Place(sql.FieldEQ(FieldLocation, v))
+// LatitudeEQ applies the EQ predicate on the "latitude" field.
+func LatitudeEQ(v decimal.Decimal) predicate.Place {
+	return predicate.Place(sql.FieldEQ(FieldLatitude, v))
 }
 
-// LocationNEQ applies the NEQ predicate on the "location" field.
-func LocationNEQ(v string) predicate.Place {
-	return predicate.Place(sql.FieldNEQ(FieldLocation, v))
+// LatitudeNEQ applies the NEQ predicate on the "latitude" field.
+func LatitudeNEQ(v decimal.Decimal) predicate.Place {
+	return predicate.Place(sql.FieldNEQ(FieldLatitude, v))
 }
 
-// LocationIn applies the In predicate on the "location" field.
-func LocationIn(vs ...string) predicate.Place {
-	return predicate.Place(sql.FieldIn(FieldLocation, vs...))
+// LatitudeIn applies the In predicate on the "latitude" field.
+func LatitudeIn(vs ...decimal.Decimal) predicate.Place {
+	return predicate.Place(sql.FieldIn(FieldLatitude, vs...))
 }
 
-// LocationNotIn applies the NotIn predicate on the "location" field.
-func LocationNotIn(vs ...string) predicate.Place {
-	return predicate.Place(sql.FieldNotIn(FieldLocation, vs...))
+// LatitudeNotIn applies the NotIn predicate on the "latitude" field.
+func LatitudeNotIn(vs ...decimal.Decimal) predicate.Place {
+	return predicate.Place(sql.FieldNotIn(FieldLatitude, vs...))
 }
 
-// LocationGT applies the GT predicate on the "location" field.
-func LocationGT(v string) predicate.Place {
-	return predicate.Place(sql.FieldGT(FieldLocation, v))
+// LatitudeGT applies the GT predicate on the "latitude" field.
+func LatitudeGT(v decimal.Decimal) predicate.Place {
+	return predicate.Place(sql.FieldGT(FieldLatitude, v))
 }
 
-// LocationGTE applies the GTE predicate on the "location" field.
-func LocationGTE(v string) predicate.Place {
-	return predicate.Place(sql.FieldGTE(FieldLocation, v))
+// LatitudeGTE applies the GTE predicate on the "latitude" field.
+func LatitudeGTE(v decimal.Decimal) predicate.Place {
+	return predicate.Place(sql.FieldGTE(FieldLatitude, v))
 }
 
-// LocationLT applies the LT predicate on the "location" field.
-func LocationLT(v string) predicate.Place {
-	return predicate.Place(sql.FieldLT(FieldLocation, v))
+// LatitudeLT applies the LT predicate on the "latitude" field.
+func LatitudeLT(v decimal.Decimal) predicate.Place {
+	return predicate.Place(sql.FieldLT(FieldLatitude, v))
 }
 
-// LocationLTE applies the LTE predicate on the "location" field.
-func LocationLTE(v string) predicate.Place {
-	return predicate.Place(sql.FieldLTE(FieldLocation, v))
+// LatitudeLTE applies the LTE predicate on the "latitude" field.
+func LatitudeLTE(v decimal.Decimal) predicate.Place {
+	return predicate.Place(sql.FieldLTE(FieldLatitude, v))
 }
 
-// LocationContains applies the Contains predicate on the "location" field.
-func LocationContains(v string) predicate.Place {
-	return predicate.Place(sql.FieldContains(FieldLocation, v))
+// LongitudeEQ applies the EQ predicate on the "longitude" field.
+func LongitudeEQ(v decimal.Decimal) predicate.Place {
+	return predicate.Place(sql.FieldEQ(FieldLongitude, v))
 }
 
-// LocationHasPrefix applies the HasPrefix predicate on the "location" field.
-func LocationHasPrefix(v string) predicate.Place {
-	return predicate.Place(sql.FieldHasPrefix(FieldLocation, v))
+// LongitudeNEQ applies the NEQ predicate on the "longitude" field.
+func LongitudeNEQ(v decimal.Decimal) predicate.Place {
+	return predicate.Place(sql.FieldNEQ(FieldLongitude, v))
 }
 
-// LocationHasSuffix applies the HasSuffix predicate on the "location" field.
-func LocationHasSuffix(v string) predicate.Place {
-	return predicate.Place(sql.FieldHasSuffix(FieldLocation, v))
+// LongitudeIn applies the In predicate on the "longitude" field.
+func LongitudeIn(vs ...decimal.Decimal) predicate.Place {
+	return predicate.Place(sql.FieldIn(FieldLongitude, vs...))
 }
 
-// LocationEqualFold applies the EqualFold predicate on the "location" field.
-func LocationEqualFold(v string) predicate.Place {
-	return predicate.Place(sql.FieldEqualFold(FieldLocation, v))
+// LongitudeNotIn applies the NotIn predicate on the "longitude" field.
+func LongitudeNotIn(vs ...decimal.Decimal) predicate.Place {
+	return predicate.Place(sql.FieldNotIn(FieldLongitude, vs...))
 }
 
-// LocationContainsFold applies the ContainsFold predicate on the "location" field.
-func LocationContainsFold(v string) predicate.Place {
-	return predicate.Place(sql.FieldContainsFold(FieldLocation, v))
+// LongitudeGT applies the GT predicate on the "longitude" field.
+func LongitudeGT(v decimal.Decimal) predicate.Place {
+	return predicate.Place(sql.FieldGT(FieldLongitude, v))
+}
+
+// LongitudeGTE applies the GTE predicate on the "longitude" field.
+func LongitudeGTE(v decimal.Decimal) predicate.Place {
+	return predicate.Place(sql.FieldGTE(FieldLongitude, v))
+}
+
+// LongitudeLT applies the LT predicate on the "longitude" field.
+func LongitudeLT(v decimal.Decimal) predicate.Place {
+	return predicate.Place(sql.FieldLT(FieldLongitude, v))
+}
+
+// LongitudeLTE applies the LTE predicate on the "longitude" field.
+func LongitudeLTE(v decimal.Decimal) predicate.Place {
+	return predicate.Place(sql.FieldLTE(FieldLongitude, v))
 }
 
 // PrimaryImageURLEQ applies the EQ predicate on the "primary_image_url" field.

@@ -16,6 +16,7 @@ import (
 	"github.com/omkar273/nashikdarshan/ent/placeimage"
 	"github.com/omkar273/nashikdarshan/ent/predicate"
 	"github.com/omkar273/nashikdarshan/ent/user"
+	"github.com/shopspring/decimal"
 )
 
 const (
@@ -897,7 +898,8 @@ type PlaceMutation struct {
 	categories        *[]string
 	appendcategories  []string
 	address           *map[string]interface{}
-	location          *string
+	latitude          *decimal.Decimal
+	longitude         *decimal.Decimal
 	primary_image_url *string
 	thumbnail_url     *string
 	amenities         *[]string
@@ -1639,40 +1641,76 @@ func (m *PlaceMutation) ResetAddress() {
 	delete(m.clearedFields, place.FieldAddress)
 }
 
-// SetLocation sets the "location" field.
-func (m *PlaceMutation) SetLocation(s string) {
-	m.location = &s
+// SetLatitude sets the "latitude" field.
+func (m *PlaceMutation) SetLatitude(d decimal.Decimal) {
+	m.latitude = &d
 }
 
-// Location returns the value of the "location" field in the mutation.
-func (m *PlaceMutation) Location() (r string, exists bool) {
-	v := m.location
+// Latitude returns the value of the "latitude" field in the mutation.
+func (m *PlaceMutation) Latitude() (r decimal.Decimal, exists bool) {
+	v := m.latitude
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldLocation returns the old "location" field's value of the Place entity.
+// OldLatitude returns the old "latitude" field's value of the Place entity.
 // If the Place object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *PlaceMutation) OldLocation(ctx context.Context) (v string, err error) {
+func (m *PlaceMutation) OldLatitude(ctx context.Context) (v decimal.Decimal, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldLocation is only allowed on UpdateOne operations")
+		return v, errors.New("OldLatitude is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldLocation requires an ID field in the mutation")
+		return v, errors.New("OldLatitude requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldLocation: %w", err)
+		return v, fmt.Errorf("querying old value for OldLatitude: %w", err)
 	}
-	return oldValue.Location, nil
+	return oldValue.Latitude, nil
 }
 
-// ResetLocation resets all changes to the "location" field.
-func (m *PlaceMutation) ResetLocation() {
-	m.location = nil
+// ResetLatitude resets all changes to the "latitude" field.
+func (m *PlaceMutation) ResetLatitude() {
+	m.latitude = nil
+}
+
+// SetLongitude sets the "longitude" field.
+func (m *PlaceMutation) SetLongitude(d decimal.Decimal) {
+	m.longitude = &d
+}
+
+// Longitude returns the value of the "longitude" field in the mutation.
+func (m *PlaceMutation) Longitude() (r decimal.Decimal, exists bool) {
+	v := m.longitude
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldLongitude returns the old "longitude" field's value of the Place entity.
+// If the Place object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PlaceMutation) OldLongitude(ctx context.Context) (v decimal.Decimal, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldLongitude is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldLongitude requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldLongitude: %w", err)
+	}
+	return oldValue.Longitude, nil
+}
+
+// ResetLongitude resets all changes to the "longitude" field.
+func (m *PlaceMutation) ResetLongitude() {
+	m.longitude = nil
 }
 
 // SetPrimaryImageURL sets the "primary_image_url" field.
@@ -1926,7 +1964,7 @@ func (m *PlaceMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *PlaceMutation) Fields() []string {
-	fields := make([]string, 0, 18)
+	fields := make([]string, 0, 19)
 	if m.status != nil {
 		fields = append(fields, place.FieldStatus)
 	}
@@ -1969,8 +2007,11 @@ func (m *PlaceMutation) Fields() []string {
 	if m.address != nil {
 		fields = append(fields, place.FieldAddress)
 	}
-	if m.location != nil {
-		fields = append(fields, place.FieldLocation)
+	if m.latitude != nil {
+		fields = append(fields, place.FieldLatitude)
+	}
+	if m.longitude != nil {
+		fields = append(fields, place.FieldLongitude)
 	}
 	if m.primary_image_url != nil {
 		fields = append(fields, place.FieldPrimaryImageURL)
@@ -2017,8 +2058,10 @@ func (m *PlaceMutation) Field(name string) (ent.Value, bool) {
 		return m.Categories()
 	case place.FieldAddress:
 		return m.Address()
-	case place.FieldLocation:
-		return m.Location()
+	case place.FieldLatitude:
+		return m.Latitude()
+	case place.FieldLongitude:
+		return m.Longitude()
 	case place.FieldPrimaryImageURL:
 		return m.PrimaryImageURL()
 	case place.FieldThumbnailURL:
@@ -2062,8 +2105,10 @@ func (m *PlaceMutation) OldField(ctx context.Context, name string) (ent.Value, e
 		return m.OldCategories(ctx)
 	case place.FieldAddress:
 		return m.OldAddress(ctx)
-	case place.FieldLocation:
-		return m.OldLocation(ctx)
+	case place.FieldLatitude:
+		return m.OldLatitude(ctx)
+	case place.FieldLongitude:
+		return m.OldLongitude(ctx)
 	case place.FieldPrimaryImageURL:
 		return m.OldPrimaryImageURL(ctx)
 	case place.FieldThumbnailURL:
@@ -2177,12 +2222,19 @@ func (m *PlaceMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetAddress(v)
 		return nil
-	case place.FieldLocation:
-		v, ok := value.(string)
+	case place.FieldLatitude:
+		v, ok := value.(decimal.Decimal)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetLocation(v)
+		m.SetLatitude(v)
+		return nil
+	case place.FieldLongitude:
+		v, ok := value.(decimal.Decimal)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetLongitude(v)
 		return nil
 	case place.FieldPrimaryImageURL:
 		v, ok := value.(string)
@@ -2365,8 +2417,11 @@ func (m *PlaceMutation) ResetField(name string) error {
 	case place.FieldAddress:
 		m.ResetAddress()
 		return nil
-	case place.FieldLocation:
-		m.ResetLocation()
+	case place.FieldLatitude:
+		m.ResetLatitude()
+		return nil
+	case place.FieldLongitude:
+		m.ResetLongitude()
 		return nil
 	case place.FieldPrimaryImageURL:
 		m.ResetPrimaryImageURL()
