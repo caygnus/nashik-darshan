@@ -57,6 +57,16 @@ type Place struct {
 	ThumbnailURL string `json:"thumbnail_url,omitempty"`
 	// Amenities holds the value of the "amenities" field.
 	Amenities []string `json:"amenities,omitempty"`
+	// ViewCount holds the value of the "view_count" field.
+	ViewCount int `json:"view_count,omitempty"`
+	// RatingAvg holds the value of the "rating_avg" field.
+	RatingAvg decimal.Decimal `json:"rating_avg,omitempty"`
+	// RatingCount holds the value of the "rating_count" field.
+	RatingCount int `json:"rating_count,omitempty"`
+	// LastViewedAt holds the value of the "last_viewed_at" field.
+	LastViewedAt time.Time `json:"last_viewed_at,omitempty"`
+	// PopularityScore holds the value of the "popularity_score" field.
+	PopularityScore decimal.Decimal `json:"popularity_score,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the PlaceQuery when eager-loading is set.
 	Edges        PlaceEdges `json:"edges"`
@@ -88,11 +98,13 @@ func (*Place) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case place.FieldMetadata, place.FieldCategories, place.FieldAddress, place.FieldAmenities:
 			values[i] = new([]byte)
-		case place.FieldLatitude, place.FieldLongitude:
+		case place.FieldLatitude, place.FieldLongitude, place.FieldRatingAvg, place.FieldPopularityScore:
 			values[i] = new(decimal.Decimal)
+		case place.FieldViewCount, place.FieldRatingCount:
+			values[i] = new(sql.NullInt64)
 		case place.FieldID, place.FieldStatus, place.FieldCreatedBy, place.FieldUpdatedBy, place.FieldSlug, place.FieldTitle, place.FieldSubtitle, place.FieldShortDescription, place.FieldLongDescription, place.FieldPlaceType, place.FieldPrimaryImageURL, place.FieldThumbnailURL:
 			values[i] = new(sql.NullString)
-		case place.FieldCreatedAt, place.FieldUpdatedAt:
+		case place.FieldCreatedAt, place.FieldUpdatedAt, place.FieldLastViewedAt:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -237,6 +249,36 @@ func (_m *Place) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field amenities: %w", err)
 				}
 			}
+		case place.FieldViewCount:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field view_count", values[i])
+			} else if value.Valid {
+				_m.ViewCount = int(value.Int64)
+			}
+		case place.FieldRatingAvg:
+			if value, ok := values[i].(*decimal.Decimal); !ok {
+				return fmt.Errorf("unexpected type %T for field rating_avg", values[i])
+			} else if value != nil {
+				_m.RatingAvg = *value
+			}
+		case place.FieldRatingCount:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field rating_count", values[i])
+			} else if value.Valid {
+				_m.RatingCount = int(value.Int64)
+			}
+		case place.FieldLastViewedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field last_viewed_at", values[i])
+			} else if value.Valid {
+				_m.LastViewedAt = value.Time
+			}
+		case place.FieldPopularityScore:
+			if value, ok := values[i].(*decimal.Decimal); !ok {
+				return fmt.Errorf("unexpected type %T for field popularity_score", values[i])
+			} else if value != nil {
+				_m.PopularityScore = *value
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -334,6 +376,21 @@ func (_m *Place) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("amenities=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Amenities))
+	builder.WriteString(", ")
+	builder.WriteString("view_count=")
+	builder.WriteString(fmt.Sprintf("%v", _m.ViewCount))
+	builder.WriteString(", ")
+	builder.WriteString("rating_avg=")
+	builder.WriteString(fmt.Sprintf("%v", _m.RatingAvg))
+	builder.WriteString(", ")
+	builder.WriteString("rating_count=")
+	builder.WriteString(fmt.Sprintf("%v", _m.RatingCount))
+	builder.WriteString(", ")
+	builder.WriteString("last_viewed_at=")
+	builder.WriteString(_m.LastViewedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("popularity_score=")
+	builder.WriteString(fmt.Sprintf("%v", _m.PopularityScore))
 	builder.WriteByte(')')
 	return builder.String()
 }

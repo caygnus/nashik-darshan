@@ -8,6 +8,7 @@ import (
 	"github.com/omkar273/nashikdarshan/ent/category"
 	"github.com/omkar273/nashikdarshan/ent/place"
 	"github.com/omkar273/nashikdarshan/ent/placeimage"
+	"github.com/omkar273/nashikdarshan/ent/review"
 	"github.com/omkar273/nashikdarshan/ent/schema"
 	"github.com/omkar273/nashikdarshan/ent/user"
 	"github.com/shopspring/decimal"
@@ -99,6 +100,26 @@ func init() {
 	placeDescLongitude := placeFields[10].Descriptor()
 	// place.DefaultLongitude holds the default value on creation for the longitude field.
 	place.DefaultLongitude = placeDescLongitude.Default.(decimal.Decimal)
+	// placeDescViewCount is the schema descriptor for view_count field.
+	placeDescViewCount := placeFields[14].Descriptor()
+	// place.DefaultViewCount holds the default value on creation for the view_count field.
+	place.DefaultViewCount = placeDescViewCount.Default.(int)
+	// place.ViewCountValidator is a validator for the "view_count" field. It is called by the builders before save.
+	place.ViewCountValidator = placeDescViewCount.Validators[0].(func(int) error)
+	// placeDescRatingAvg is the schema descriptor for rating_avg field.
+	placeDescRatingAvg := placeFields[15].Descriptor()
+	// place.DefaultRatingAvg holds the default value on creation for the rating_avg field.
+	place.DefaultRatingAvg = placeDescRatingAvg.Default.(decimal.Decimal)
+	// placeDescRatingCount is the schema descriptor for rating_count field.
+	placeDescRatingCount := placeFields[16].Descriptor()
+	// place.DefaultRatingCount holds the default value on creation for the rating_count field.
+	place.DefaultRatingCount = placeDescRatingCount.Default.(int)
+	// place.RatingCountValidator is a validator for the "rating_count" field. It is called by the builders before save.
+	place.RatingCountValidator = placeDescRatingCount.Validators[0].(func(int) error)
+	// placeDescPopularityScore is the schema descriptor for popularity_score field.
+	placeDescPopularityScore := placeFields[18].Descriptor()
+	// place.DefaultPopularityScore holds the default value on creation for the popularity_score field.
+	place.DefaultPopularityScore = placeDescPopularityScore.Default.(decimal.Decimal)
 	// placeDescID is the schema descriptor for id field.
 	placeDescID := placeFields[0].Descriptor()
 	// place.DefaultID holds the default value on creation for the id field.
@@ -144,6 +165,67 @@ func init() {
 	placeimageDescID := placeimageFields[0].Descriptor()
 	// placeimage.DefaultID holds the default value on creation for the id field.
 	placeimage.DefaultID = placeimageDescID.Default.(func() string)
+	reviewMixin := schema.Review{}.Mixin()
+	reviewMixinFields0 := reviewMixin[0].Fields()
+	_ = reviewMixinFields0
+	reviewMixinFields1 := reviewMixin[1].Fields()
+	_ = reviewMixinFields1
+	reviewFields := schema.Review{}.Fields()
+	_ = reviewFields
+	// reviewDescStatus is the schema descriptor for status field.
+	reviewDescStatus := reviewMixinFields0[0].Descriptor()
+	// review.DefaultStatus holds the default value on creation for the status field.
+	review.DefaultStatus = reviewDescStatus.Default.(string)
+	// reviewDescCreatedAt is the schema descriptor for created_at field.
+	reviewDescCreatedAt := reviewMixinFields0[1].Descriptor()
+	// review.DefaultCreatedAt holds the default value on creation for the created_at field.
+	review.DefaultCreatedAt = reviewDescCreatedAt.Default.(func() time.Time)
+	// reviewDescUpdatedAt is the schema descriptor for updated_at field.
+	reviewDescUpdatedAt := reviewMixinFields0[2].Descriptor()
+	// review.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	review.DefaultUpdatedAt = reviewDescUpdatedAt.Default.(func() time.Time)
+	// review.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	review.UpdateDefaultUpdatedAt = reviewDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// reviewDescMetadata is the schema descriptor for metadata field.
+	reviewDescMetadata := reviewMixinFields1[0].Descriptor()
+	// review.DefaultMetadata holds the default value on creation for the metadata field.
+	review.DefaultMetadata = reviewDescMetadata.Default.(map[string]string)
+	// reviewDescEntityType is the schema descriptor for entity_type field.
+	reviewDescEntityType := reviewFields[1].Descriptor()
+	// review.EntityTypeValidator is a validator for the "entity_type" field. It is called by the builders before save.
+	review.EntityTypeValidator = reviewDescEntityType.Validators[0].(func(string) error)
+	// reviewDescEntityID is the schema descriptor for entity_id field.
+	reviewDescEntityID := reviewFields[2].Descriptor()
+	// review.EntityIDValidator is a validator for the "entity_id" field. It is called by the builders before save.
+	review.EntityIDValidator = reviewDescEntityID.Validators[0].(func(string) error)
+	// reviewDescUserID is the schema descriptor for user_id field.
+	reviewDescUserID := reviewFields[3].Descriptor()
+	// review.UserIDValidator is a validator for the "user_id" field. It is called by the builders before save.
+	review.UserIDValidator = reviewDescUserID.Validators[0].(func(string) error)
+	// reviewDescHelpfulCount is the schema descriptor for helpful_count field.
+	reviewDescHelpfulCount := reviewFields[9].Descriptor()
+	// review.DefaultHelpfulCount holds the default value on creation for the helpful_count field.
+	review.DefaultHelpfulCount = reviewDescHelpfulCount.Default.(int)
+	// review.HelpfulCountValidator is a validator for the "helpful_count" field. It is called by the builders before save.
+	review.HelpfulCountValidator = reviewDescHelpfulCount.Validators[0].(func(int) error)
+	// reviewDescNotHelpfulCount is the schema descriptor for not_helpful_count field.
+	reviewDescNotHelpfulCount := reviewFields[10].Descriptor()
+	// review.DefaultNotHelpfulCount holds the default value on creation for the not_helpful_count field.
+	review.DefaultNotHelpfulCount = reviewDescNotHelpfulCount.Default.(int)
+	// review.NotHelpfulCountValidator is a validator for the "not_helpful_count" field. It is called by the builders before save.
+	review.NotHelpfulCountValidator = reviewDescNotHelpfulCount.Validators[0].(func(int) error)
+	// reviewDescIsVerified is the schema descriptor for is_verified field.
+	reviewDescIsVerified := reviewFields[11].Descriptor()
+	// review.DefaultIsVerified holds the default value on creation for the is_verified field.
+	review.DefaultIsVerified = reviewDescIsVerified.Default.(bool)
+	// reviewDescIsFeatured is the schema descriptor for is_featured field.
+	reviewDescIsFeatured := reviewFields[12].Descriptor()
+	// review.DefaultIsFeatured holds the default value on creation for the is_featured field.
+	review.DefaultIsFeatured = reviewDescIsFeatured.Default.(bool)
+	// reviewDescID is the schema descriptor for id field.
+	reviewDescID := reviewFields[0].Descriptor()
+	// review.IDValidator is a validator for the "id" field. It is called by the builders before save.
+	review.IDValidator = reviewDescID.Validators[0].(func(string) error)
 	userMixin := schema.User{}.Mixin()
 	userMixinFields0 := userMixin[0].Fields()
 	_ = userMixinFields0

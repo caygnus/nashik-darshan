@@ -301,6 +301,96 @@ func (_u *PlaceUpdate) ClearAmenities() *PlaceUpdate {
 	return _u
 }
 
+// SetViewCount sets the "view_count" field.
+func (_u *PlaceUpdate) SetViewCount(v int) *PlaceUpdate {
+	_u.mutation.ResetViewCount()
+	_u.mutation.SetViewCount(v)
+	return _u
+}
+
+// SetNillableViewCount sets the "view_count" field if the given value is not nil.
+func (_u *PlaceUpdate) SetNillableViewCount(v *int) *PlaceUpdate {
+	if v != nil {
+		_u.SetViewCount(*v)
+	}
+	return _u
+}
+
+// AddViewCount adds value to the "view_count" field.
+func (_u *PlaceUpdate) AddViewCount(v int) *PlaceUpdate {
+	_u.mutation.AddViewCount(v)
+	return _u
+}
+
+// SetRatingAvg sets the "rating_avg" field.
+func (_u *PlaceUpdate) SetRatingAvg(v decimal.Decimal) *PlaceUpdate {
+	_u.mutation.SetRatingAvg(v)
+	return _u
+}
+
+// SetNillableRatingAvg sets the "rating_avg" field if the given value is not nil.
+func (_u *PlaceUpdate) SetNillableRatingAvg(v *decimal.Decimal) *PlaceUpdate {
+	if v != nil {
+		_u.SetRatingAvg(*v)
+	}
+	return _u
+}
+
+// SetRatingCount sets the "rating_count" field.
+func (_u *PlaceUpdate) SetRatingCount(v int) *PlaceUpdate {
+	_u.mutation.ResetRatingCount()
+	_u.mutation.SetRatingCount(v)
+	return _u
+}
+
+// SetNillableRatingCount sets the "rating_count" field if the given value is not nil.
+func (_u *PlaceUpdate) SetNillableRatingCount(v *int) *PlaceUpdate {
+	if v != nil {
+		_u.SetRatingCount(*v)
+	}
+	return _u
+}
+
+// AddRatingCount adds value to the "rating_count" field.
+func (_u *PlaceUpdate) AddRatingCount(v int) *PlaceUpdate {
+	_u.mutation.AddRatingCount(v)
+	return _u
+}
+
+// SetLastViewedAt sets the "last_viewed_at" field.
+func (_u *PlaceUpdate) SetLastViewedAt(v time.Time) *PlaceUpdate {
+	_u.mutation.SetLastViewedAt(v)
+	return _u
+}
+
+// SetNillableLastViewedAt sets the "last_viewed_at" field if the given value is not nil.
+func (_u *PlaceUpdate) SetNillableLastViewedAt(v *time.Time) *PlaceUpdate {
+	if v != nil {
+		_u.SetLastViewedAt(*v)
+	}
+	return _u
+}
+
+// ClearLastViewedAt clears the value of the "last_viewed_at" field.
+func (_u *PlaceUpdate) ClearLastViewedAt() *PlaceUpdate {
+	_u.mutation.ClearLastViewedAt()
+	return _u
+}
+
+// SetPopularityScore sets the "popularity_score" field.
+func (_u *PlaceUpdate) SetPopularityScore(v decimal.Decimal) *PlaceUpdate {
+	_u.mutation.SetPopularityScore(v)
+	return _u
+}
+
+// SetNillablePopularityScore sets the "popularity_score" field if the given value is not nil.
+func (_u *PlaceUpdate) SetNillablePopularityScore(v *decimal.Decimal) *PlaceUpdate {
+	if v != nil {
+		_u.SetPopularityScore(*v)
+	}
+	return _u
+}
+
 // AddImageIDs adds the "images" edge to the PlaceImage entity by IDs.
 func (_u *PlaceUpdate) AddImageIDs(ids ...string) *PlaceUpdate {
 	_u.mutation.AddImageIDs(ids...)
@@ -393,6 +483,16 @@ func (_u *PlaceUpdate) check() error {
 	if v, ok := _u.mutation.PlaceType(); ok {
 		if err := place.PlaceTypeValidator(v); err != nil {
 			return &ValidationError{Name: "place_type", err: fmt.Errorf(`ent: validator failed for field "Place.place_type": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.ViewCount(); ok {
+		if err := place.ViewCountValidator(v); err != nil {
+			return &ValidationError{Name: "view_count", err: fmt.Errorf(`ent: validator failed for field "Place.view_count": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.RatingCount(); ok {
+		if err := place.RatingCountValidator(v); err != nil {
+			return &ValidationError{Name: "rating_count", err: fmt.Errorf(`ent: validator failed for field "Place.rating_count": %w`, err)}
 		}
 	}
 	return nil
@@ -503,6 +603,30 @@ func (_u *PlaceUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.AmenitiesCleared() {
 		_spec.ClearField(place.FieldAmenities, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.ViewCount(); ok {
+		_spec.SetField(place.FieldViewCount, field.TypeInt, value)
+	}
+	if value, ok := _u.mutation.AddedViewCount(); ok {
+		_spec.AddField(place.FieldViewCount, field.TypeInt, value)
+	}
+	if value, ok := _u.mutation.RatingAvg(); ok {
+		_spec.SetField(place.FieldRatingAvg, field.TypeOther, value)
+	}
+	if value, ok := _u.mutation.RatingCount(); ok {
+		_spec.SetField(place.FieldRatingCount, field.TypeInt, value)
+	}
+	if value, ok := _u.mutation.AddedRatingCount(); ok {
+		_spec.AddField(place.FieldRatingCount, field.TypeInt, value)
+	}
+	if value, ok := _u.mutation.LastViewedAt(); ok {
+		_spec.SetField(place.FieldLastViewedAt, field.TypeTime, value)
+	}
+	if _u.mutation.LastViewedAtCleared() {
+		_spec.ClearField(place.FieldLastViewedAt, field.TypeTime)
+	}
+	if value, ok := _u.mutation.PopularityScore(); ok {
+		_spec.SetField(place.FieldPopularityScore, field.TypeOther, value)
 	}
 	if _u.mutation.ImagesCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -839,6 +963,96 @@ func (_u *PlaceUpdateOne) ClearAmenities() *PlaceUpdateOne {
 	return _u
 }
 
+// SetViewCount sets the "view_count" field.
+func (_u *PlaceUpdateOne) SetViewCount(v int) *PlaceUpdateOne {
+	_u.mutation.ResetViewCount()
+	_u.mutation.SetViewCount(v)
+	return _u
+}
+
+// SetNillableViewCount sets the "view_count" field if the given value is not nil.
+func (_u *PlaceUpdateOne) SetNillableViewCount(v *int) *PlaceUpdateOne {
+	if v != nil {
+		_u.SetViewCount(*v)
+	}
+	return _u
+}
+
+// AddViewCount adds value to the "view_count" field.
+func (_u *PlaceUpdateOne) AddViewCount(v int) *PlaceUpdateOne {
+	_u.mutation.AddViewCount(v)
+	return _u
+}
+
+// SetRatingAvg sets the "rating_avg" field.
+func (_u *PlaceUpdateOne) SetRatingAvg(v decimal.Decimal) *PlaceUpdateOne {
+	_u.mutation.SetRatingAvg(v)
+	return _u
+}
+
+// SetNillableRatingAvg sets the "rating_avg" field if the given value is not nil.
+func (_u *PlaceUpdateOne) SetNillableRatingAvg(v *decimal.Decimal) *PlaceUpdateOne {
+	if v != nil {
+		_u.SetRatingAvg(*v)
+	}
+	return _u
+}
+
+// SetRatingCount sets the "rating_count" field.
+func (_u *PlaceUpdateOne) SetRatingCount(v int) *PlaceUpdateOne {
+	_u.mutation.ResetRatingCount()
+	_u.mutation.SetRatingCount(v)
+	return _u
+}
+
+// SetNillableRatingCount sets the "rating_count" field if the given value is not nil.
+func (_u *PlaceUpdateOne) SetNillableRatingCount(v *int) *PlaceUpdateOne {
+	if v != nil {
+		_u.SetRatingCount(*v)
+	}
+	return _u
+}
+
+// AddRatingCount adds value to the "rating_count" field.
+func (_u *PlaceUpdateOne) AddRatingCount(v int) *PlaceUpdateOne {
+	_u.mutation.AddRatingCount(v)
+	return _u
+}
+
+// SetLastViewedAt sets the "last_viewed_at" field.
+func (_u *PlaceUpdateOne) SetLastViewedAt(v time.Time) *PlaceUpdateOne {
+	_u.mutation.SetLastViewedAt(v)
+	return _u
+}
+
+// SetNillableLastViewedAt sets the "last_viewed_at" field if the given value is not nil.
+func (_u *PlaceUpdateOne) SetNillableLastViewedAt(v *time.Time) *PlaceUpdateOne {
+	if v != nil {
+		_u.SetLastViewedAt(*v)
+	}
+	return _u
+}
+
+// ClearLastViewedAt clears the value of the "last_viewed_at" field.
+func (_u *PlaceUpdateOne) ClearLastViewedAt() *PlaceUpdateOne {
+	_u.mutation.ClearLastViewedAt()
+	return _u
+}
+
+// SetPopularityScore sets the "popularity_score" field.
+func (_u *PlaceUpdateOne) SetPopularityScore(v decimal.Decimal) *PlaceUpdateOne {
+	_u.mutation.SetPopularityScore(v)
+	return _u
+}
+
+// SetNillablePopularityScore sets the "popularity_score" field if the given value is not nil.
+func (_u *PlaceUpdateOne) SetNillablePopularityScore(v *decimal.Decimal) *PlaceUpdateOne {
+	if v != nil {
+		_u.SetPopularityScore(*v)
+	}
+	return _u
+}
+
 // AddImageIDs adds the "images" edge to the PlaceImage entity by IDs.
 func (_u *PlaceUpdateOne) AddImageIDs(ids ...string) *PlaceUpdateOne {
 	_u.mutation.AddImageIDs(ids...)
@@ -944,6 +1158,16 @@ func (_u *PlaceUpdateOne) check() error {
 	if v, ok := _u.mutation.PlaceType(); ok {
 		if err := place.PlaceTypeValidator(v); err != nil {
 			return &ValidationError{Name: "place_type", err: fmt.Errorf(`ent: validator failed for field "Place.place_type": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.ViewCount(); ok {
+		if err := place.ViewCountValidator(v); err != nil {
+			return &ValidationError{Name: "view_count", err: fmt.Errorf(`ent: validator failed for field "Place.view_count": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.RatingCount(); ok {
+		if err := place.RatingCountValidator(v); err != nil {
+			return &ValidationError{Name: "rating_count", err: fmt.Errorf(`ent: validator failed for field "Place.rating_count": %w`, err)}
 		}
 	}
 	return nil
@@ -1071,6 +1295,30 @@ func (_u *PlaceUpdateOne) sqlSave(ctx context.Context) (_node *Place, err error)
 	}
 	if _u.mutation.AmenitiesCleared() {
 		_spec.ClearField(place.FieldAmenities, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.ViewCount(); ok {
+		_spec.SetField(place.FieldViewCount, field.TypeInt, value)
+	}
+	if value, ok := _u.mutation.AddedViewCount(); ok {
+		_spec.AddField(place.FieldViewCount, field.TypeInt, value)
+	}
+	if value, ok := _u.mutation.RatingAvg(); ok {
+		_spec.SetField(place.FieldRatingAvg, field.TypeOther, value)
+	}
+	if value, ok := _u.mutation.RatingCount(); ok {
+		_spec.SetField(place.FieldRatingCount, field.TypeInt, value)
+	}
+	if value, ok := _u.mutation.AddedRatingCount(); ok {
+		_spec.AddField(place.FieldRatingCount, field.TypeInt, value)
+	}
+	if value, ok := _u.mutation.LastViewedAt(); ok {
+		_spec.SetField(place.FieldLastViewedAt, field.TypeTime, value)
+	}
+	if _u.mutation.LastViewedAtCleared() {
+		_spec.ClearField(place.FieldLastViewedAt, field.TypeTime)
+	}
+	if value, ok := _u.mutation.PopularityScore(); ok {
+		_spec.SetField(place.FieldPopularityScore, field.TypeOther, value)
 	}
 	if _u.mutation.ImagesCleared() {
 		edge := &sqlgraph.EdgeSpec{

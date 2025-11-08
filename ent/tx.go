@@ -18,6 +18,8 @@ type Tx struct {
 	Place *PlaceClient
 	// PlaceImage is the client for interacting with the PlaceImage builders.
 	PlaceImage *PlaceImageClient
+	// Review is the client for interacting with the Review builders.
+	Review *ReviewClient
 	// User is the client for interacting with the User builders.
 	User *UserClient
 
@@ -154,6 +156,7 @@ func (tx *Tx) init() {
 	tx.Category = NewCategoryClient(tx.config)
 	tx.Place = NewPlaceClient(tx.config)
 	tx.PlaceImage = NewPlaceImageClient(tx.config)
+	tx.Review = NewReviewClient(tx.config)
 	tx.User = NewUserClient(tx.config)
 }
 

@@ -15,5 +15,8 @@ type Place func(*sql.Selector)
 // PlaceImage is the predicate function for placeimage builders.
 type PlaceImage func(*sql.Selector)
 
+// Review is the predicate function for review builders.
+type Review func(*sql.Selector)
+
 // User is the predicate function for user builders.
 type User func(*sql.Selector)

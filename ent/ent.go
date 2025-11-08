@@ -15,6 +15,7 @@ import (
 	"github.com/omkar273/nashikdarshan/ent/category"
 	"github.com/omkar273/nashikdarshan/ent/place"
 	"github.com/omkar273/nashikdarshan/ent/placeimage"
+	"github.com/omkar273/nashikdarshan/ent/review"
 	"github.com/omkar273/nashikdarshan/ent/user"
 )
 
@@ -79,6 +80,7 @@ func checkColumn(t, c string) error {
 			category.Table:   category.ValidColumn,
 			place.Table:      place.ValidColumn,
 			placeimage.Table: placeimage.ValidColumn,
+			review.Table:     review.ValidColumn,
 			user.Table:       user.ValidColumn,
 		})
 	})

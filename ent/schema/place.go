@@ -99,6 +99,39 @@ func (Place) Fields() []ent.Field {
 				"postgres": "text[]",
 			}).
 			Optional(),
+
+		// Engagement fields for feed functionality
+		field.Int("view_count").
+			SchemaType(map[string]string{
+				"postgres": "integer",
+			}).
+			Default(0).
+			NonNegative(),
+
+		field.Other("rating_avg", decimal.Decimal{}).
+			SchemaType(map[string]string{
+				"postgres": "decimal(3,2)",
+			}).
+			Default(decimal.Zero),
+
+		field.Int("rating_count").
+			SchemaType(map[string]string{
+				"postgres": "integer",
+			}).
+			Default(0).
+			NonNegative(),
+
+		field.Time("last_viewed_at").
+			SchemaType(map[string]string{
+				"postgres": "timestamp with time zone",
+			}).
+			Optional(),
+
+		field.Other("popularity_score", decimal.Decimal{}).
+			SchemaType(map[string]string{
+				"postgres": "decimal(10,4)",
+			}).
+			Default(decimal.Zero),
 	}
 }
 
@@ -115,5 +148,12 @@ func (Place) Indexes() []ent.Index {
 			Unique(),
 		// Index for bounding box queries
 		index.Fields("latitude", "longitude"),
+		// Indexes for feed functionality
+		index.Fields("popularity_score"),
+		index.Fields("view_count"),
+		index.Fields("rating_avg"),
+		index.Fields("last_viewed_at"),
+		// Composite index for trending queries
+		index.Fields("last_viewed_at", "popularity_score"),
 	}
 }

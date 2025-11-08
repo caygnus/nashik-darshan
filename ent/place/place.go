@@ -53,6 +53,16 @@ const (
 	FieldThumbnailURL = "thumbnail_url"
 	// FieldAmenities holds the string denoting the amenities field in the database.
 	FieldAmenities = "amenities"
+	// FieldViewCount holds the string denoting the view_count field in the database.
+	FieldViewCount = "view_count"
+	// FieldRatingAvg holds the string denoting the rating_avg field in the database.
+	FieldRatingAvg = "rating_avg"
+	// FieldRatingCount holds the string denoting the rating_count field in the database.
+	FieldRatingCount = "rating_count"
+	// FieldLastViewedAt holds the string denoting the last_viewed_at field in the database.
+	FieldLastViewedAt = "last_viewed_at"
+	// FieldPopularityScore holds the string denoting the popularity_score field in the database.
+	FieldPopularityScore = "popularity_score"
 	// EdgeImages holds the string denoting the images edge name in mutations.
 	EdgeImages = "images"
 	// Table holds the table name of the place in the database.
@@ -88,6 +98,11 @@ var Columns = []string{
 	FieldPrimaryImageURL,
 	FieldThumbnailURL,
 	FieldAmenities,
+	FieldViewCount,
+	FieldRatingAvg,
+	FieldRatingCount,
+	FieldLastViewedAt,
+	FieldPopularityScore,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -121,6 +136,18 @@ var (
 	DefaultLatitude decimal.Decimal
 	// DefaultLongitude holds the default value on creation for the "longitude" field.
 	DefaultLongitude decimal.Decimal
+	// DefaultViewCount holds the default value on creation for the "view_count" field.
+	DefaultViewCount int
+	// ViewCountValidator is a validator for the "view_count" field. It is called by the builders before save.
+	ViewCountValidator func(int) error
+	// DefaultRatingAvg holds the default value on creation for the "rating_avg" field.
+	DefaultRatingAvg decimal.Decimal
+	// DefaultRatingCount holds the default value on creation for the "rating_count" field.
+	DefaultRatingCount int
+	// RatingCountValidator is a validator for the "rating_count" field. It is called by the builders before save.
+	RatingCountValidator func(int) error
+	// DefaultPopularityScore holds the default value on creation for the "popularity_score" field.
+	DefaultPopularityScore decimal.Decimal
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -206,6 +233,31 @@ func ByPrimaryImageURL(opts ...sql.OrderTermOption) OrderOption {
 // ByThumbnailURL orders the results by the thumbnail_url field.
 func ByThumbnailURL(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldThumbnailURL, opts...).ToFunc()
+}
+
+// ByViewCount orders the results by the view_count field.
+func ByViewCount(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldViewCount, opts...).ToFunc()
+}
+
+// ByRatingAvg orders the results by the rating_avg field.
+func ByRatingAvg(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldRatingAvg, opts...).ToFunc()
+}
+
+// ByRatingCount orders the results by the rating_count field.
+func ByRatingCount(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldRatingCount, opts...).ToFunc()
+}
+
+// ByLastViewedAt orders the results by the last_viewed_at field.
+func ByLastViewedAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLastViewedAt, opts...).ToFunc()
+}
+
+// ByPopularityScore orders the results by the popularity_score field.
+func ByPopularityScore(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPopularityScore, opts...).ToFunc()
 }
 
 // ByImagesCount orders the results by images count.

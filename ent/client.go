@@ -18,6 +18,7 @@ import (
 	"github.com/omkar273/nashikdarshan/ent/category"
 	"github.com/omkar273/nashikdarshan/ent/place"
 	"github.com/omkar273/nashikdarshan/ent/placeimage"
+	"github.com/omkar273/nashikdarshan/ent/review"
 	"github.com/omkar273/nashikdarshan/ent/user"
 )
 
@@ -32,6 +33,8 @@ type Client struct {
 	Place *PlaceClient
 	// PlaceImage is the client for interacting with the PlaceImage builders.
 	PlaceImage *PlaceImageClient
+	// Review is the client for interacting with the Review builders.
+	Review *ReviewClient
 	// User is the client for interacting with the User builders.
 	User *UserClient
 }
@@ -48,6 +51,7 @@ func (c *Client) init() {
 	c.Category = NewCategoryClient(c.config)
 	c.Place = NewPlaceClient(c.config)
 	c.PlaceImage = NewPlaceImageClient(c.config)
+	c.Review = NewReviewClient(c.config)
 	c.User = NewUserClient(c.config)
 }
 
@@ -144,6 +148,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		Category:   NewCategoryClient(cfg),
 		Place:      NewPlaceClient(cfg),
 		PlaceImage: NewPlaceImageClient(cfg),
+		Review:     NewReviewClient(cfg),
 		User:       NewUserClient(cfg),
 	}, nil
 }
@@ -167,6 +172,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		Category:   NewCategoryClient(cfg),
 		Place:      NewPlaceClient(cfg),
 		PlaceImage: NewPlaceImageClient(cfg),
+		Review:     NewReviewClient(cfg),
 		User:       NewUserClient(cfg),
 	}, nil
 }
@@ -199,6 +205,7 @@ func (c *Client) Use(hooks ...Hook) {
 	c.Category.Use(hooks...)
 	c.Place.Use(hooks...)
 	c.PlaceImage.Use(hooks...)
+	c.Review.Use(hooks...)
 	c.User.Use(hooks...)
 }
 
@@ -208,6 +215,7 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 	c.Category.Intercept(interceptors...)
 	c.Place.Intercept(interceptors...)
 	c.PlaceImage.Intercept(interceptors...)
+	c.Review.Intercept(interceptors...)
 	c.User.Intercept(interceptors...)
 }
 
@@ -220,6 +228,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.Place.mutate(ctx, m)
 	case *PlaceImageMutation:
 		return c.PlaceImage.mutate(ctx, m)
+	case *ReviewMutation:
+		return c.Review.mutate(ctx, m)
 	case *UserMutation:
 		return c.User.mutate(ctx, m)
 	default:
@@ -658,6 +668,139 @@ func (c *PlaceImageClient) mutate(ctx context.Context, m *PlaceImageMutation) (V
 	}
 }
 
+// ReviewClient is a client for the Review schema.
+type ReviewClient struct {
+	config
+}
+
+// NewReviewClient returns a client for the Review from the given config.
+func NewReviewClient(c config) *ReviewClient {
+	return &ReviewClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `review.Hooks(f(g(h())))`.
+func (c *ReviewClient) Use(hooks ...Hook) {
+	c.hooks.Review = append(c.hooks.Review, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `review.Intercept(f(g(h())))`.
+func (c *ReviewClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Review = append(c.inters.Review, interceptors...)
+}
+
+// Create returns a builder for creating a Review entity.
+func (c *ReviewClient) Create() *ReviewCreate {
+	mutation := newReviewMutation(c.config, OpCreate)
+	return &ReviewCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Review entities.
+func (c *ReviewClient) CreateBulk(builders ...*ReviewCreate) *ReviewCreateBulk {
+	return &ReviewCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *ReviewClient) MapCreateBulk(slice any, setFunc func(*ReviewCreate, int)) *ReviewCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &ReviewCreateBulk{err: fmt.Errorf("calling to ReviewClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*ReviewCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &ReviewCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Review.
+func (c *ReviewClient) Update() *ReviewUpdate {
+	mutation := newReviewMutation(c.config, OpUpdate)
+	return &ReviewUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *ReviewClient) UpdateOne(_m *Review) *ReviewUpdateOne {
+	mutation := newReviewMutation(c.config, OpUpdateOne, withReview(_m))
+	return &ReviewUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *ReviewClient) UpdateOneID(id string) *ReviewUpdateOne {
+	mutation := newReviewMutation(c.config, OpUpdateOne, withReviewID(id))
+	return &ReviewUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Review.
+func (c *ReviewClient) Delete() *ReviewDelete {
+	mutation := newReviewMutation(c.config, OpDelete)
+	return &ReviewDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *ReviewClient) DeleteOne(_m *Review) *ReviewDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *ReviewClient) DeleteOneID(id string) *ReviewDeleteOne {
+	builder := c.Delete().Where(review.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &ReviewDeleteOne{builder}
+}
+
+// Query returns a query builder for Review.
+func (c *ReviewClient) Query() *ReviewQuery {
+	return &ReviewQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeReview},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Review entity by its id.
+func (c *ReviewClient) Get(ctx context.Context, id string) (*Review, error) {
+	return c.Query().Where(review.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *ReviewClient) GetX(ctx context.Context, id string) *Review {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *ReviewClient) Hooks() []Hook {
+	return c.hooks.Review
+}
+
+// Interceptors returns the client interceptors.
+func (c *ReviewClient) Interceptors() []Interceptor {
+	return c.inters.Review
+}
+
+func (c *ReviewClient) mutate(ctx context.Context, m *ReviewMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&ReviewCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&ReviewUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&ReviewUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&ReviewDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown Review mutation op: %q", m.Op())
+	}
+}
+
 // UserClient is a client for the User schema.
 type UserClient struct {
 	config
@@ -794,9 +937,9 @@ func (c *UserClient) mutate(ctx context.Context, m *UserMutation) (Value, error)
 // hooks and interceptors per client, for fast access.
 type (
 	hooks struct {
-		Category, Place, PlaceImage, User []ent.Hook
+		Category, Place, PlaceImage, Review, User []ent.Hook
 	}
 	inters struct {
-		Category, Place, PlaceImage, User []ent.Interceptor
+		Category, Place, PlaceImage, Review, User []ent.Interceptor
 	}
 )

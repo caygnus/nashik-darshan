@@ -141,6 +141,31 @@ func ThumbnailURL(v string) predicate.Place {
 	return predicate.Place(sql.FieldEQ(FieldThumbnailURL, v))
 }
 
+// ViewCount applies equality check predicate on the "view_count" field. It's identical to ViewCountEQ.
+func ViewCount(v int) predicate.Place {
+	return predicate.Place(sql.FieldEQ(FieldViewCount, v))
+}
+
+// RatingAvg applies equality check predicate on the "rating_avg" field. It's identical to RatingAvgEQ.
+func RatingAvg(v decimal.Decimal) predicate.Place {
+	return predicate.Place(sql.FieldEQ(FieldRatingAvg, v))
+}
+
+// RatingCount applies equality check predicate on the "rating_count" field. It's identical to RatingCountEQ.
+func RatingCount(v int) predicate.Place {
+	return predicate.Place(sql.FieldEQ(FieldRatingCount, v))
+}
+
+// LastViewedAt applies equality check predicate on the "last_viewed_at" field. It's identical to LastViewedAtEQ.
+func LastViewedAt(v time.Time) predicate.Place {
+	return predicate.Place(sql.FieldEQ(FieldLastViewedAt, v))
+}
+
+// PopularityScore applies equality check predicate on the "popularity_score" field. It's identical to PopularityScoreEQ.
+func PopularityScore(v decimal.Decimal) predicate.Place {
+	return predicate.Place(sql.FieldEQ(FieldPopularityScore, v))
+}
+
 // StatusEQ applies the EQ predicate on the "status" field.
 func StatusEQ(v string) predicate.Place {
 	return predicate.Place(sql.FieldEQ(FieldStatus, v))
@@ -1124,6 +1149,216 @@ func AmenitiesIsNil() predicate.Place {
 // AmenitiesNotNil applies the NotNil predicate on the "amenities" field.
 func AmenitiesNotNil() predicate.Place {
 	return predicate.Place(sql.FieldNotNull(FieldAmenities))
+}
+
+// ViewCountEQ applies the EQ predicate on the "view_count" field.
+func ViewCountEQ(v int) predicate.Place {
+	return predicate.Place(sql.FieldEQ(FieldViewCount, v))
+}
+
+// ViewCountNEQ applies the NEQ predicate on the "view_count" field.
+func ViewCountNEQ(v int) predicate.Place {
+	return predicate.Place(sql.FieldNEQ(FieldViewCount, v))
+}
+
+// ViewCountIn applies the In predicate on the "view_count" field.
+func ViewCountIn(vs ...int) predicate.Place {
+	return predicate.Place(sql.FieldIn(FieldViewCount, vs...))
+}
+
+// ViewCountNotIn applies the NotIn predicate on the "view_count" field.
+func ViewCountNotIn(vs ...int) predicate.Place {
+	return predicate.Place(sql.FieldNotIn(FieldViewCount, vs...))
+}
+
+// ViewCountGT applies the GT predicate on the "view_count" field.
+func ViewCountGT(v int) predicate.Place {
+	return predicate.Place(sql.FieldGT(FieldViewCount, v))
+}
+
+// ViewCountGTE applies the GTE predicate on the "view_count" field.
+func ViewCountGTE(v int) predicate.Place {
+	return predicate.Place(sql.FieldGTE(FieldViewCount, v))
+}
+
+// ViewCountLT applies the LT predicate on the "view_count" field.
+func ViewCountLT(v int) predicate.Place {
+	return predicate.Place(sql.FieldLT(FieldViewCount, v))
+}
+
+// ViewCountLTE applies the LTE predicate on the "view_count" field.
+func ViewCountLTE(v int) predicate.Place {
+	return predicate.Place(sql.FieldLTE(FieldViewCount, v))
+}
+
+// RatingAvgEQ applies the EQ predicate on the "rating_avg" field.
+func RatingAvgEQ(v decimal.Decimal) predicate.Place {
+	return predicate.Place(sql.FieldEQ(FieldRatingAvg, v))
+}
+
+// RatingAvgNEQ applies the NEQ predicate on the "rating_avg" field.
+func RatingAvgNEQ(v decimal.Decimal) predicate.Place {
+	return predicate.Place(sql.FieldNEQ(FieldRatingAvg, v))
+}
+
+// RatingAvgIn applies the In predicate on the "rating_avg" field.
+func RatingAvgIn(vs ...decimal.Decimal) predicate.Place {
+	return predicate.Place(sql.FieldIn(FieldRatingAvg, vs...))
+}
+
+// RatingAvgNotIn applies the NotIn predicate on the "rating_avg" field.
+func RatingAvgNotIn(vs ...decimal.Decimal) predicate.Place {
+	return predicate.Place(sql.FieldNotIn(FieldRatingAvg, vs...))
+}
+
+// RatingAvgGT applies the GT predicate on the "rating_avg" field.
+func RatingAvgGT(v decimal.Decimal) predicate.Place {
+	return predicate.Place(sql.FieldGT(FieldRatingAvg, v))
+}
+
+// RatingAvgGTE applies the GTE predicate on the "rating_avg" field.
+func RatingAvgGTE(v decimal.Decimal) predicate.Place {
+	return predicate.Place(sql.FieldGTE(FieldRatingAvg, v))
+}
+
+// RatingAvgLT applies the LT predicate on the "rating_avg" field.
+func RatingAvgLT(v decimal.Decimal) predicate.Place {
+	return predicate.Place(sql.FieldLT(FieldRatingAvg, v))
+}
+
+// RatingAvgLTE applies the LTE predicate on the "rating_avg" field.
+func RatingAvgLTE(v decimal.Decimal) predicate.Place {
+	return predicate.Place(sql.FieldLTE(FieldRatingAvg, v))
+}
+
+// RatingCountEQ applies the EQ predicate on the "rating_count" field.
+func RatingCountEQ(v int) predicate.Place {
+	return predicate.Place(sql.FieldEQ(FieldRatingCount, v))
+}
+
+// RatingCountNEQ applies the NEQ predicate on the "rating_count" field.
+func RatingCountNEQ(v int) predicate.Place {
+	return predicate.Place(sql.FieldNEQ(FieldRatingCount, v))
+}
+
+// RatingCountIn applies the In predicate on the "rating_count" field.
+func RatingCountIn(vs ...int) predicate.Place {
+	return predicate.Place(sql.FieldIn(FieldRatingCount, vs...))
+}
+
+// RatingCountNotIn applies the NotIn predicate on the "rating_count" field.
+func RatingCountNotIn(vs ...int) predicate.Place {
+	return predicate.Place(sql.FieldNotIn(FieldRatingCount, vs...))
+}
+
+// RatingCountGT applies the GT predicate on the "rating_count" field.
+func RatingCountGT(v int) predicate.Place {
+	return predicate.Place(sql.FieldGT(FieldRatingCount, v))
+}
+
+// RatingCountGTE applies the GTE predicate on the "rating_count" field.
+func RatingCountGTE(v int) predicate.Place {
+	return predicate.Place(sql.FieldGTE(FieldRatingCount, v))
+}
+
+// RatingCountLT applies the LT predicate on the "rating_count" field.
+func RatingCountLT(v int) predicate.Place {
+	return predicate.Place(sql.FieldLT(FieldRatingCount, v))
+}
+
+// RatingCountLTE applies the LTE predicate on the "rating_count" field.
+func RatingCountLTE(v int) predicate.Place {
+	return predicate.Place(sql.FieldLTE(FieldRatingCount, v))
+}
+
+// LastViewedAtEQ applies the EQ predicate on the "last_viewed_at" field.
+func LastViewedAtEQ(v time.Time) predicate.Place {
+	return predicate.Place(sql.FieldEQ(FieldLastViewedAt, v))
+}
+
+// LastViewedAtNEQ applies the NEQ predicate on the "last_viewed_at" field.
+func LastViewedAtNEQ(v time.Time) predicate.Place {
+	return predicate.Place(sql.FieldNEQ(FieldLastViewedAt, v))
+}
+
+// LastViewedAtIn applies the In predicate on the "last_viewed_at" field.
+func LastViewedAtIn(vs ...time.Time) predicate.Place {
+	return predicate.Place(sql.FieldIn(FieldLastViewedAt, vs...))
+}
+
+// LastViewedAtNotIn applies the NotIn predicate on the "last_viewed_at" field.
+func LastViewedAtNotIn(vs ...time.Time) predicate.Place {
+	return predicate.Place(sql.FieldNotIn(FieldLastViewedAt, vs...))
+}
+
+// LastViewedAtGT applies the GT predicate on the "last_viewed_at" field.
+func LastViewedAtGT(v time.Time) predicate.Place {
+	return predicate.Place(sql.FieldGT(FieldLastViewedAt, v))
+}
+
+// LastViewedAtGTE applies the GTE predicate on the "last_viewed_at" field.
+func LastViewedAtGTE(v time.Time) predicate.Place {
+	return predicate.Place(sql.FieldGTE(FieldLastViewedAt, v))
+}
+
+// LastViewedAtLT applies the LT predicate on the "last_viewed_at" field.
+func LastViewedAtLT(v time.Time) predicate.Place {
+	return predicate.Place(sql.FieldLT(FieldLastViewedAt, v))
+}
+
+// LastViewedAtLTE applies the LTE predicate on the "last_viewed_at" field.
+func LastViewedAtLTE(v time.Time) predicate.Place {
+	return predicate.Place(sql.FieldLTE(FieldLastViewedAt, v))
+}
+
+// LastViewedAtIsNil applies the IsNil predicate on the "last_viewed_at" field.
+func LastViewedAtIsNil() predicate.Place {
+	return predicate.Place(sql.FieldIsNull(FieldLastViewedAt))
+}
+
+// LastViewedAtNotNil applies the NotNil predicate on the "last_viewed_at" field.
+func LastViewedAtNotNil() predicate.Place {
+	return predicate.Place(sql.FieldNotNull(FieldLastViewedAt))
+}
+
+// PopularityScoreEQ applies the EQ predicate on the "popularity_score" field.
+func PopularityScoreEQ(v decimal.Decimal) predicate.Place {
+	return predicate.Place(sql.FieldEQ(FieldPopularityScore, v))
+}
+
+// PopularityScoreNEQ applies the NEQ predicate on the "popularity_score" field.
+func PopularityScoreNEQ(v decimal.Decimal) predicate.Place {
+	return predicate.Place(sql.FieldNEQ(FieldPopularityScore, v))
+}
+
+// PopularityScoreIn applies the In predicate on the "popularity_score" field.
+func PopularityScoreIn(vs ...decimal.Decimal) predicate.Place {
+	return predicate.Place(sql.FieldIn(FieldPopularityScore, vs...))
+}
+
+// PopularityScoreNotIn applies the NotIn predicate on the "popularity_score" field.
+func PopularityScoreNotIn(vs ...decimal.Decimal) predicate.Place {
+	return predicate.Place(sql.FieldNotIn(FieldPopularityScore, vs...))
+}
+
+// PopularityScoreGT applies the GT predicate on the "popularity_score" field.
+func PopularityScoreGT(v decimal.Decimal) predicate.Place {
+	return predicate.Place(sql.FieldGT(FieldPopularityScore, v))
+}
+
+// PopularityScoreGTE applies the GTE predicate on the "popularity_score" field.
+func PopularityScoreGTE(v decimal.Decimal) predicate.Place {
+	return predicate.Place(sql.FieldGTE(FieldPopularityScore, v))
+}
+
+// PopularityScoreLT applies the LT predicate on the "popularity_score" field.
+func PopularityScoreLT(v decimal.Decimal) predicate.Place {
+	return predicate.Place(sql.FieldLT(FieldPopularityScore, v))
+}
+
+// PopularityScoreLTE applies the LTE predicate on the "popularity_score" field.
+func PopularityScoreLTE(v decimal.Decimal) predicate.Place {
+	return predicate.Place(sql.FieldLTE(FieldPopularityScore, v))
 }
 
 // HasImages applies the HasEdge predicate on the "images" edge.

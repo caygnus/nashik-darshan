@@ -15,6 +15,7 @@ import (
 	"github.com/omkar273/nashikdarshan/ent/place"
 	"github.com/omkar273/nashikdarshan/ent/placeimage"
 	"github.com/omkar273/nashikdarshan/ent/predicate"
+	"github.com/omkar273/nashikdarshan/ent/review"
 	"github.com/omkar273/nashikdarshan/ent/user"
 	"github.com/shopspring/decimal"
 )
@@ -31,6 +32,7 @@ const (
 	TypeCategory   = "Category"
 	TypePlace      = "Place"
 	TypePlaceImage = "PlaceImage"
+	TypeReview     = "Review"
 	TypeUser       = "User"
 )
 
@@ -904,6 +906,13 @@ type PlaceMutation struct {
 	thumbnail_url     *string
 	amenities         *[]string
 	appendamenities   []string
+	view_count        *int
+	addview_count     *int
+	rating_avg        *decimal.Decimal
+	rating_count      *int
+	addrating_count   *int
+	last_viewed_at    *time.Time
+	popularity_score  *decimal.Decimal
 	clearedFields     map[string]struct{}
 	images            map[string]struct{}
 	removedimages     map[string]struct{}
@@ -1876,6 +1885,239 @@ func (m *PlaceMutation) ResetAmenities() {
 	delete(m.clearedFields, place.FieldAmenities)
 }
 
+// SetViewCount sets the "view_count" field.
+func (m *PlaceMutation) SetViewCount(i int) {
+	m.view_count = &i
+	m.addview_count = nil
+}
+
+// ViewCount returns the value of the "view_count" field in the mutation.
+func (m *PlaceMutation) ViewCount() (r int, exists bool) {
+	v := m.view_count
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldViewCount returns the old "view_count" field's value of the Place entity.
+// If the Place object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PlaceMutation) OldViewCount(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldViewCount is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldViewCount requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldViewCount: %w", err)
+	}
+	return oldValue.ViewCount, nil
+}
+
+// AddViewCount adds i to the "view_count" field.
+func (m *PlaceMutation) AddViewCount(i int) {
+	if m.addview_count != nil {
+		*m.addview_count += i
+	} else {
+		m.addview_count = &i
+	}
+}
+
+// AddedViewCount returns the value that was added to the "view_count" field in this mutation.
+func (m *PlaceMutation) AddedViewCount() (r int, exists bool) {
+	v := m.addview_count
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetViewCount resets all changes to the "view_count" field.
+func (m *PlaceMutation) ResetViewCount() {
+	m.view_count = nil
+	m.addview_count = nil
+}
+
+// SetRatingAvg sets the "rating_avg" field.
+func (m *PlaceMutation) SetRatingAvg(d decimal.Decimal) {
+	m.rating_avg = &d
+}
+
+// RatingAvg returns the value of the "rating_avg" field in the mutation.
+func (m *PlaceMutation) RatingAvg() (r decimal.Decimal, exists bool) {
+	v := m.rating_avg
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRatingAvg returns the old "rating_avg" field's value of the Place entity.
+// If the Place object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PlaceMutation) OldRatingAvg(ctx context.Context) (v decimal.Decimal, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldRatingAvg is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldRatingAvg requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRatingAvg: %w", err)
+	}
+	return oldValue.RatingAvg, nil
+}
+
+// ResetRatingAvg resets all changes to the "rating_avg" field.
+func (m *PlaceMutation) ResetRatingAvg() {
+	m.rating_avg = nil
+}
+
+// SetRatingCount sets the "rating_count" field.
+func (m *PlaceMutation) SetRatingCount(i int) {
+	m.rating_count = &i
+	m.addrating_count = nil
+}
+
+// RatingCount returns the value of the "rating_count" field in the mutation.
+func (m *PlaceMutation) RatingCount() (r int, exists bool) {
+	v := m.rating_count
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRatingCount returns the old "rating_count" field's value of the Place entity.
+// If the Place object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PlaceMutation) OldRatingCount(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldRatingCount is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldRatingCount requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRatingCount: %w", err)
+	}
+	return oldValue.RatingCount, nil
+}
+
+// AddRatingCount adds i to the "rating_count" field.
+func (m *PlaceMutation) AddRatingCount(i int) {
+	if m.addrating_count != nil {
+		*m.addrating_count += i
+	} else {
+		m.addrating_count = &i
+	}
+}
+
+// AddedRatingCount returns the value that was added to the "rating_count" field in this mutation.
+func (m *PlaceMutation) AddedRatingCount() (r int, exists bool) {
+	v := m.addrating_count
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetRatingCount resets all changes to the "rating_count" field.
+func (m *PlaceMutation) ResetRatingCount() {
+	m.rating_count = nil
+	m.addrating_count = nil
+}
+
+// SetLastViewedAt sets the "last_viewed_at" field.
+func (m *PlaceMutation) SetLastViewedAt(t time.Time) {
+	m.last_viewed_at = &t
+}
+
+// LastViewedAt returns the value of the "last_viewed_at" field in the mutation.
+func (m *PlaceMutation) LastViewedAt() (r time.Time, exists bool) {
+	v := m.last_viewed_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldLastViewedAt returns the old "last_viewed_at" field's value of the Place entity.
+// If the Place object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PlaceMutation) OldLastViewedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldLastViewedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldLastViewedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldLastViewedAt: %w", err)
+	}
+	return oldValue.LastViewedAt, nil
+}
+
+// ClearLastViewedAt clears the value of the "last_viewed_at" field.
+func (m *PlaceMutation) ClearLastViewedAt() {
+	m.last_viewed_at = nil
+	m.clearedFields[place.FieldLastViewedAt] = struct{}{}
+}
+
+// LastViewedAtCleared returns if the "last_viewed_at" field was cleared in this mutation.
+func (m *PlaceMutation) LastViewedAtCleared() bool {
+	_, ok := m.clearedFields[place.FieldLastViewedAt]
+	return ok
+}
+
+// ResetLastViewedAt resets all changes to the "last_viewed_at" field.
+func (m *PlaceMutation) ResetLastViewedAt() {
+	m.last_viewed_at = nil
+	delete(m.clearedFields, place.FieldLastViewedAt)
+}
+
+// SetPopularityScore sets the "popularity_score" field.
+func (m *PlaceMutation) SetPopularityScore(d decimal.Decimal) {
+	m.popularity_score = &d
+}
+
+// PopularityScore returns the value of the "popularity_score" field in the mutation.
+func (m *PlaceMutation) PopularityScore() (r decimal.Decimal, exists bool) {
+	v := m.popularity_score
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPopularityScore returns the old "popularity_score" field's value of the Place entity.
+// If the Place object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PlaceMutation) OldPopularityScore(ctx context.Context) (v decimal.Decimal, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPopularityScore is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPopularityScore requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPopularityScore: %w", err)
+	}
+	return oldValue.PopularityScore, nil
+}
+
+// ResetPopularityScore resets all changes to the "popularity_score" field.
+func (m *PlaceMutation) ResetPopularityScore() {
+	m.popularity_score = nil
+}
+
 // AddImageIDs adds the "images" edge to the PlaceImage entity by ids.
 func (m *PlaceMutation) AddImageIDs(ids ...string) {
 	if m.images == nil {
@@ -1964,7 +2206,7 @@ func (m *PlaceMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *PlaceMutation) Fields() []string {
-	fields := make([]string, 0, 19)
+	fields := make([]string, 0, 24)
 	if m.status != nil {
 		fields = append(fields, place.FieldStatus)
 	}
@@ -2022,6 +2264,21 @@ func (m *PlaceMutation) Fields() []string {
 	if m.amenities != nil {
 		fields = append(fields, place.FieldAmenities)
 	}
+	if m.view_count != nil {
+		fields = append(fields, place.FieldViewCount)
+	}
+	if m.rating_avg != nil {
+		fields = append(fields, place.FieldRatingAvg)
+	}
+	if m.rating_count != nil {
+		fields = append(fields, place.FieldRatingCount)
+	}
+	if m.last_viewed_at != nil {
+		fields = append(fields, place.FieldLastViewedAt)
+	}
+	if m.popularity_score != nil {
+		fields = append(fields, place.FieldPopularityScore)
+	}
 	return fields
 }
 
@@ -2068,6 +2325,16 @@ func (m *PlaceMutation) Field(name string) (ent.Value, bool) {
 		return m.ThumbnailURL()
 	case place.FieldAmenities:
 		return m.Amenities()
+	case place.FieldViewCount:
+		return m.ViewCount()
+	case place.FieldRatingAvg:
+		return m.RatingAvg()
+	case place.FieldRatingCount:
+		return m.RatingCount()
+	case place.FieldLastViewedAt:
+		return m.LastViewedAt()
+	case place.FieldPopularityScore:
+		return m.PopularityScore()
 	}
 	return nil, false
 }
@@ -2115,6 +2382,16 @@ func (m *PlaceMutation) OldField(ctx context.Context, name string) (ent.Value, e
 		return m.OldThumbnailURL(ctx)
 	case place.FieldAmenities:
 		return m.OldAmenities(ctx)
+	case place.FieldViewCount:
+		return m.OldViewCount(ctx)
+	case place.FieldRatingAvg:
+		return m.OldRatingAvg(ctx)
+	case place.FieldRatingCount:
+		return m.OldRatingCount(ctx)
+	case place.FieldLastViewedAt:
+		return m.OldLastViewedAt(ctx)
+	case place.FieldPopularityScore:
+		return m.OldPopularityScore(ctx)
 	}
 	return nil, fmt.Errorf("unknown Place field %s", name)
 }
@@ -2257,6 +2534,41 @@ func (m *PlaceMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetAmenities(v)
 		return nil
+	case place.FieldViewCount:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetViewCount(v)
+		return nil
+	case place.FieldRatingAvg:
+		v, ok := value.(decimal.Decimal)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRatingAvg(v)
+		return nil
+	case place.FieldRatingCount:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRatingCount(v)
+		return nil
+	case place.FieldLastViewedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetLastViewedAt(v)
+		return nil
+	case place.FieldPopularityScore:
+		v, ok := value.(decimal.Decimal)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPopularityScore(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Place field %s", name)
 }
@@ -2264,13 +2576,26 @@ func (m *PlaceMutation) SetField(name string, value ent.Value) error {
 // AddedFields returns all numeric fields that were incremented/decremented during
 // this mutation.
 func (m *PlaceMutation) AddedFields() []string {
-	return nil
+	var fields []string
+	if m.addview_count != nil {
+		fields = append(fields, place.FieldViewCount)
+	}
+	if m.addrating_count != nil {
+		fields = append(fields, place.FieldRatingCount)
+	}
+	return fields
 }
 
 // AddedField returns the numeric value that was incremented/decremented on a field
 // with the given name. The second boolean return value indicates that this field
 // was not set, or was not defined in the schema.
 func (m *PlaceMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case place.FieldViewCount:
+		return m.AddedViewCount()
+	case place.FieldRatingCount:
+		return m.AddedRatingCount()
+	}
 	return nil, false
 }
 
@@ -2279,6 +2604,20 @@ func (m *PlaceMutation) AddedField(name string) (ent.Value, bool) {
 // type.
 func (m *PlaceMutation) AddField(name string, value ent.Value) error {
 	switch name {
+	case place.FieldViewCount:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddViewCount(v)
+		return nil
+	case place.FieldRatingCount:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddRatingCount(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Place numeric field %s", name)
 }
@@ -2319,6 +2658,9 @@ func (m *PlaceMutation) ClearedFields() []string {
 	}
 	if m.FieldCleared(place.FieldAmenities) {
 		fields = append(fields, place.FieldAmenities)
+	}
+	if m.FieldCleared(place.FieldLastViewedAt) {
+		fields = append(fields, place.FieldLastViewedAt)
 	}
 	return fields
 }
@@ -2366,6 +2708,9 @@ func (m *PlaceMutation) ClearField(name string) error {
 		return nil
 	case place.FieldAmenities:
 		m.ClearAmenities()
+		return nil
+	case place.FieldLastViewedAt:
+		m.ClearLastViewedAt()
 		return nil
 	}
 	return fmt.Errorf("unknown Place nullable field %s", name)
@@ -2431,6 +2776,21 @@ func (m *PlaceMutation) ResetField(name string) error {
 		return nil
 	case place.FieldAmenities:
 		m.ResetAmenities()
+		return nil
+	case place.FieldViewCount:
+		m.ResetViewCount()
+		return nil
+	case place.FieldRatingAvg:
+		m.ResetRatingAvg()
+		return nil
+	case place.FieldRatingCount:
+		m.ResetRatingCount()
+		return nil
+	case place.FieldLastViewedAt:
+		m.ResetLastViewedAt()
+		return nil
+	case place.FieldPopularityScore:
+		m.ResetPopularityScore()
 		return nil
 	}
 	return fmt.Errorf("unknown Place field %s", name)
@@ -3505,6 +3865,1495 @@ func (m *PlaceImageMutation) ResetEdge(name string) error {
 		return nil
 	}
 	return fmt.Errorf("unknown PlaceImage edge %s", name)
+}
+
+// ReviewMutation represents an operation that mutates the Review nodes in the graph.
+type ReviewMutation struct {
+	config
+	op                   Op
+	typ                  string
+	id                   *string
+	status               *string
+	created_at           *time.Time
+	updated_at           *time.Time
+	created_by           *string
+	updated_by           *string
+	metadata             *map[string]string
+	entity_type          *string
+	entity_id            *string
+	user_id              *string
+	rating               *decimal.Decimal
+	title                *string
+	content              *string
+	tags                 *[]string
+	appendtags           []string
+	images               *[]string
+	appendimages         []string
+	helpful_count        *int
+	addhelpful_count     *int
+	not_helpful_count    *int
+	addnot_helpful_count *int
+	is_verified          *bool
+	is_featured          *bool
+	clearedFields        map[string]struct{}
+	done                 bool
+	oldValue             func(context.Context) (*Review, error)
+	predicates           []predicate.Review
+}
+
+var _ ent.Mutation = (*ReviewMutation)(nil)
+
+// reviewOption allows management of the mutation configuration using functional options.
+type reviewOption func(*ReviewMutation)
+
+// newReviewMutation creates new mutation for the Review entity.
+func newReviewMutation(c config, op Op, opts ...reviewOption) *ReviewMutation {
+	m := &ReviewMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeReview,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withReviewID sets the ID field of the mutation.
+func withReviewID(id string) reviewOption {
+	return func(m *ReviewMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *Review
+		)
+		m.oldValue = func(ctx context.Context) (*Review, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().Review.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withReview sets the old Review of the mutation.
+func withReview(node *Review) reviewOption {
+	return func(m *ReviewMutation) {
+		m.oldValue = func(context.Context) (*Review, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m ReviewMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m ReviewMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of Review entities.
+func (m *ReviewMutation) SetID(id string) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *ReviewMutation) ID() (id string, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *ReviewMutation) IDs(ctx context.Context) ([]string, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []string{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().Review.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetStatus sets the "status" field.
+func (m *ReviewMutation) SetStatus(s string) {
+	m.status = &s
+}
+
+// Status returns the value of the "status" field in the mutation.
+func (m *ReviewMutation) Status() (r string, exists bool) {
+	v := m.status
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldStatus returns the old "status" field's value of the Review entity.
+// If the Review object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ReviewMutation) OldStatus(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldStatus is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldStatus requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldStatus: %w", err)
+	}
+	return oldValue.Status, nil
+}
+
+// ResetStatus resets all changes to the "status" field.
+func (m *ReviewMutation) ResetStatus() {
+	m.status = nil
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (m *ReviewMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *ReviewMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the Review entity.
+// If the Review object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ReviewMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *ReviewMutation) ResetCreatedAt() {
+	m.created_at = nil
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *ReviewMutation) SetUpdatedAt(t time.Time) {
+	m.updated_at = &t
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *ReviewMutation) UpdatedAt() (r time.Time, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the Review entity.
+// If the Review object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ReviewMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *ReviewMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (m *ReviewMutation) SetCreatedBy(s string) {
+	m.created_by = &s
+}
+
+// CreatedBy returns the value of the "created_by" field in the mutation.
+func (m *ReviewMutation) CreatedBy() (r string, exists bool) {
+	v := m.created_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedBy returns the old "created_by" field's value of the Review entity.
+// If the Review object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ReviewMutation) OldCreatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedBy: %w", err)
+	}
+	return oldValue.CreatedBy, nil
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (m *ReviewMutation) ClearCreatedBy() {
+	m.created_by = nil
+	m.clearedFields[review.FieldCreatedBy] = struct{}{}
+}
+
+// CreatedByCleared returns if the "created_by" field was cleared in this mutation.
+func (m *ReviewMutation) CreatedByCleared() bool {
+	_, ok := m.clearedFields[review.FieldCreatedBy]
+	return ok
+}
+
+// ResetCreatedBy resets all changes to the "created_by" field.
+func (m *ReviewMutation) ResetCreatedBy() {
+	m.created_by = nil
+	delete(m.clearedFields, review.FieldCreatedBy)
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (m *ReviewMutation) SetUpdatedBy(s string) {
+	m.updated_by = &s
+}
+
+// UpdatedBy returns the value of the "updated_by" field in the mutation.
+func (m *ReviewMutation) UpdatedBy() (r string, exists bool) {
+	v := m.updated_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedBy returns the old "updated_by" field's value of the Review entity.
+// If the Review object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ReviewMutation) OldUpdatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedBy: %w", err)
+	}
+	return oldValue.UpdatedBy, nil
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (m *ReviewMutation) ClearUpdatedBy() {
+	m.updated_by = nil
+	m.clearedFields[review.FieldUpdatedBy] = struct{}{}
+}
+
+// UpdatedByCleared returns if the "updated_by" field was cleared in this mutation.
+func (m *ReviewMutation) UpdatedByCleared() bool {
+	_, ok := m.clearedFields[review.FieldUpdatedBy]
+	return ok
+}
+
+// ResetUpdatedBy resets all changes to the "updated_by" field.
+func (m *ReviewMutation) ResetUpdatedBy() {
+	m.updated_by = nil
+	delete(m.clearedFields, review.FieldUpdatedBy)
+}
+
+// SetMetadata sets the "metadata" field.
+func (m *ReviewMutation) SetMetadata(value map[string]string) {
+	m.metadata = &value
+}
+
+// Metadata returns the value of the "metadata" field in the mutation.
+func (m *ReviewMutation) Metadata() (r map[string]string, exists bool) {
+	v := m.metadata
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldMetadata returns the old "metadata" field's value of the Review entity.
+// If the Review object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ReviewMutation) OldMetadata(ctx context.Context) (v map[string]string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldMetadata is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldMetadata requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldMetadata: %w", err)
+	}
+	return oldValue.Metadata, nil
+}
+
+// ClearMetadata clears the value of the "metadata" field.
+func (m *ReviewMutation) ClearMetadata() {
+	m.metadata = nil
+	m.clearedFields[review.FieldMetadata] = struct{}{}
+}
+
+// MetadataCleared returns if the "metadata" field was cleared in this mutation.
+func (m *ReviewMutation) MetadataCleared() bool {
+	_, ok := m.clearedFields[review.FieldMetadata]
+	return ok
+}
+
+// ResetMetadata resets all changes to the "metadata" field.
+func (m *ReviewMutation) ResetMetadata() {
+	m.metadata = nil
+	delete(m.clearedFields, review.FieldMetadata)
+}
+
+// SetEntityType sets the "entity_type" field.
+func (m *ReviewMutation) SetEntityType(s string) {
+	m.entity_type = &s
+}
+
+// EntityType returns the value of the "entity_type" field in the mutation.
+func (m *ReviewMutation) EntityType() (r string, exists bool) {
+	v := m.entity_type
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldEntityType returns the old "entity_type" field's value of the Review entity.
+// If the Review object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ReviewMutation) OldEntityType(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldEntityType is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldEntityType requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldEntityType: %w", err)
+	}
+	return oldValue.EntityType, nil
+}
+
+// ResetEntityType resets all changes to the "entity_type" field.
+func (m *ReviewMutation) ResetEntityType() {
+	m.entity_type = nil
+}
+
+// SetEntityID sets the "entity_id" field.
+func (m *ReviewMutation) SetEntityID(s string) {
+	m.entity_id = &s
+}
+
+// EntityID returns the value of the "entity_id" field in the mutation.
+func (m *ReviewMutation) EntityID() (r string, exists bool) {
+	v := m.entity_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldEntityID returns the old "entity_id" field's value of the Review entity.
+// If the Review object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ReviewMutation) OldEntityID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldEntityID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldEntityID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldEntityID: %w", err)
+	}
+	return oldValue.EntityID, nil
+}
+
+// ResetEntityID resets all changes to the "entity_id" field.
+func (m *ReviewMutation) ResetEntityID() {
+	m.entity_id = nil
+}
+
+// SetUserID sets the "user_id" field.
+func (m *ReviewMutation) SetUserID(s string) {
+	m.user_id = &s
+}
+
+// UserID returns the value of the "user_id" field in the mutation.
+func (m *ReviewMutation) UserID() (r string, exists bool) {
+	v := m.user_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUserID returns the old "user_id" field's value of the Review entity.
+// If the Review object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ReviewMutation) OldUserID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUserID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUserID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUserID: %w", err)
+	}
+	return oldValue.UserID, nil
+}
+
+// ResetUserID resets all changes to the "user_id" field.
+func (m *ReviewMutation) ResetUserID() {
+	m.user_id = nil
+}
+
+// SetRating sets the "rating" field.
+func (m *ReviewMutation) SetRating(d decimal.Decimal) {
+	m.rating = &d
+}
+
+// Rating returns the value of the "rating" field in the mutation.
+func (m *ReviewMutation) Rating() (r decimal.Decimal, exists bool) {
+	v := m.rating
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRating returns the old "rating" field's value of the Review entity.
+// If the Review object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ReviewMutation) OldRating(ctx context.Context) (v decimal.Decimal, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldRating is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldRating requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRating: %w", err)
+	}
+	return oldValue.Rating, nil
+}
+
+// ResetRating resets all changes to the "rating" field.
+func (m *ReviewMutation) ResetRating() {
+	m.rating = nil
+}
+
+// SetTitle sets the "title" field.
+func (m *ReviewMutation) SetTitle(s string) {
+	m.title = &s
+}
+
+// Title returns the value of the "title" field in the mutation.
+func (m *ReviewMutation) Title() (r string, exists bool) {
+	v := m.title
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTitle returns the old "title" field's value of the Review entity.
+// If the Review object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ReviewMutation) OldTitle(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTitle is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTitle requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTitle: %w", err)
+	}
+	return oldValue.Title, nil
+}
+
+// ClearTitle clears the value of the "title" field.
+func (m *ReviewMutation) ClearTitle() {
+	m.title = nil
+	m.clearedFields[review.FieldTitle] = struct{}{}
+}
+
+// TitleCleared returns if the "title" field was cleared in this mutation.
+func (m *ReviewMutation) TitleCleared() bool {
+	_, ok := m.clearedFields[review.FieldTitle]
+	return ok
+}
+
+// ResetTitle resets all changes to the "title" field.
+func (m *ReviewMutation) ResetTitle() {
+	m.title = nil
+	delete(m.clearedFields, review.FieldTitle)
+}
+
+// SetContent sets the "content" field.
+func (m *ReviewMutation) SetContent(s string) {
+	m.content = &s
+}
+
+// Content returns the value of the "content" field in the mutation.
+func (m *ReviewMutation) Content() (r string, exists bool) {
+	v := m.content
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldContent returns the old "content" field's value of the Review entity.
+// If the Review object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ReviewMutation) OldContent(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldContent is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldContent requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldContent: %w", err)
+	}
+	return oldValue.Content, nil
+}
+
+// ClearContent clears the value of the "content" field.
+func (m *ReviewMutation) ClearContent() {
+	m.content = nil
+	m.clearedFields[review.FieldContent] = struct{}{}
+}
+
+// ContentCleared returns if the "content" field was cleared in this mutation.
+func (m *ReviewMutation) ContentCleared() bool {
+	_, ok := m.clearedFields[review.FieldContent]
+	return ok
+}
+
+// ResetContent resets all changes to the "content" field.
+func (m *ReviewMutation) ResetContent() {
+	m.content = nil
+	delete(m.clearedFields, review.FieldContent)
+}
+
+// SetTags sets the "tags" field.
+func (m *ReviewMutation) SetTags(s []string) {
+	m.tags = &s
+	m.appendtags = nil
+}
+
+// Tags returns the value of the "tags" field in the mutation.
+func (m *ReviewMutation) Tags() (r []string, exists bool) {
+	v := m.tags
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTags returns the old "tags" field's value of the Review entity.
+// If the Review object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ReviewMutation) OldTags(ctx context.Context) (v []string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTags is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTags requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTags: %w", err)
+	}
+	return oldValue.Tags, nil
+}
+
+// AppendTags adds s to the "tags" field.
+func (m *ReviewMutation) AppendTags(s []string) {
+	m.appendtags = append(m.appendtags, s...)
+}
+
+// AppendedTags returns the list of values that were appended to the "tags" field in this mutation.
+func (m *ReviewMutation) AppendedTags() ([]string, bool) {
+	if len(m.appendtags) == 0 {
+		return nil, false
+	}
+	return m.appendtags, true
+}
+
+// ClearTags clears the value of the "tags" field.
+func (m *ReviewMutation) ClearTags() {
+	m.tags = nil
+	m.appendtags = nil
+	m.clearedFields[review.FieldTags] = struct{}{}
+}
+
+// TagsCleared returns if the "tags" field was cleared in this mutation.
+func (m *ReviewMutation) TagsCleared() bool {
+	_, ok := m.clearedFields[review.FieldTags]
+	return ok
+}
+
+// ResetTags resets all changes to the "tags" field.
+func (m *ReviewMutation) ResetTags() {
+	m.tags = nil
+	m.appendtags = nil
+	delete(m.clearedFields, review.FieldTags)
+}
+
+// SetImages sets the "images" field.
+func (m *ReviewMutation) SetImages(s []string) {
+	m.images = &s
+	m.appendimages = nil
+}
+
+// Images returns the value of the "images" field in the mutation.
+func (m *ReviewMutation) Images() (r []string, exists bool) {
+	v := m.images
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldImages returns the old "images" field's value of the Review entity.
+// If the Review object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ReviewMutation) OldImages(ctx context.Context) (v []string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldImages is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldImages requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldImages: %w", err)
+	}
+	return oldValue.Images, nil
+}
+
+// AppendImages adds s to the "images" field.
+func (m *ReviewMutation) AppendImages(s []string) {
+	m.appendimages = append(m.appendimages, s...)
+}
+
+// AppendedImages returns the list of values that were appended to the "images" field in this mutation.
+func (m *ReviewMutation) AppendedImages() ([]string, bool) {
+	if len(m.appendimages) == 0 {
+		return nil, false
+	}
+	return m.appendimages, true
+}
+
+// ClearImages clears the value of the "images" field.
+func (m *ReviewMutation) ClearImages() {
+	m.images = nil
+	m.appendimages = nil
+	m.clearedFields[review.FieldImages] = struct{}{}
+}
+
+// ImagesCleared returns if the "images" field was cleared in this mutation.
+func (m *ReviewMutation) ImagesCleared() bool {
+	_, ok := m.clearedFields[review.FieldImages]
+	return ok
+}
+
+// ResetImages resets all changes to the "images" field.
+func (m *ReviewMutation) ResetImages() {
+	m.images = nil
+	m.appendimages = nil
+	delete(m.clearedFields, review.FieldImages)
+}
+
+// SetHelpfulCount sets the "helpful_count" field.
+func (m *ReviewMutation) SetHelpfulCount(i int) {
+	m.helpful_count = &i
+	m.addhelpful_count = nil
+}
+
+// HelpfulCount returns the value of the "helpful_count" field in the mutation.
+func (m *ReviewMutation) HelpfulCount() (r int, exists bool) {
+	v := m.helpful_count
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldHelpfulCount returns the old "helpful_count" field's value of the Review entity.
+// If the Review object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ReviewMutation) OldHelpfulCount(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldHelpfulCount is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldHelpfulCount requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldHelpfulCount: %w", err)
+	}
+	return oldValue.HelpfulCount, nil
+}
+
+// AddHelpfulCount adds i to the "helpful_count" field.
+func (m *ReviewMutation) AddHelpfulCount(i int) {
+	if m.addhelpful_count != nil {
+		*m.addhelpful_count += i
+	} else {
+		m.addhelpful_count = &i
+	}
+}
+
+// AddedHelpfulCount returns the value that was added to the "helpful_count" field in this mutation.
+func (m *ReviewMutation) AddedHelpfulCount() (r int, exists bool) {
+	v := m.addhelpful_count
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetHelpfulCount resets all changes to the "helpful_count" field.
+func (m *ReviewMutation) ResetHelpfulCount() {
+	m.helpful_count = nil
+	m.addhelpful_count = nil
+}
+
+// SetNotHelpfulCount sets the "not_helpful_count" field.
+func (m *ReviewMutation) SetNotHelpfulCount(i int) {
+	m.not_helpful_count = &i
+	m.addnot_helpful_count = nil
+}
+
+// NotHelpfulCount returns the value of the "not_helpful_count" field in the mutation.
+func (m *ReviewMutation) NotHelpfulCount() (r int, exists bool) {
+	v := m.not_helpful_count
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldNotHelpfulCount returns the old "not_helpful_count" field's value of the Review entity.
+// If the Review object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ReviewMutation) OldNotHelpfulCount(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldNotHelpfulCount is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldNotHelpfulCount requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldNotHelpfulCount: %w", err)
+	}
+	return oldValue.NotHelpfulCount, nil
+}
+
+// AddNotHelpfulCount adds i to the "not_helpful_count" field.
+func (m *ReviewMutation) AddNotHelpfulCount(i int) {
+	if m.addnot_helpful_count != nil {
+		*m.addnot_helpful_count += i
+	} else {
+		m.addnot_helpful_count = &i
+	}
+}
+
+// AddedNotHelpfulCount returns the value that was added to the "not_helpful_count" field in this mutation.
+func (m *ReviewMutation) AddedNotHelpfulCount() (r int, exists bool) {
+	v := m.addnot_helpful_count
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetNotHelpfulCount resets all changes to the "not_helpful_count" field.
+func (m *ReviewMutation) ResetNotHelpfulCount() {
+	m.not_helpful_count = nil
+	m.addnot_helpful_count = nil
+}
+
+// SetIsVerified sets the "is_verified" field.
+func (m *ReviewMutation) SetIsVerified(b bool) {
+	m.is_verified = &b
+}
+
+// IsVerified returns the value of the "is_verified" field in the mutation.
+func (m *ReviewMutation) IsVerified() (r bool, exists bool) {
+	v := m.is_verified
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIsVerified returns the old "is_verified" field's value of the Review entity.
+// If the Review object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ReviewMutation) OldIsVerified(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldIsVerified is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldIsVerified requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIsVerified: %w", err)
+	}
+	return oldValue.IsVerified, nil
+}
+
+// ResetIsVerified resets all changes to the "is_verified" field.
+func (m *ReviewMutation) ResetIsVerified() {
+	m.is_verified = nil
+}
+
+// SetIsFeatured sets the "is_featured" field.
+func (m *ReviewMutation) SetIsFeatured(b bool) {
+	m.is_featured = &b
+}
+
+// IsFeatured returns the value of the "is_featured" field in the mutation.
+func (m *ReviewMutation) IsFeatured() (r bool, exists bool) {
+	v := m.is_featured
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIsFeatured returns the old "is_featured" field's value of the Review entity.
+// If the Review object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ReviewMutation) OldIsFeatured(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldIsFeatured is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldIsFeatured requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIsFeatured: %w", err)
+	}
+	return oldValue.IsFeatured, nil
+}
+
+// ResetIsFeatured resets all changes to the "is_featured" field.
+func (m *ReviewMutation) ResetIsFeatured() {
+	m.is_featured = nil
+}
+
+// Where appends a list predicates to the ReviewMutation builder.
+func (m *ReviewMutation) Where(ps ...predicate.Review) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the ReviewMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *ReviewMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.Review, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *ReviewMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *ReviewMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (Review).
+func (m *ReviewMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *ReviewMutation) Fields() []string {
+	fields := make([]string, 0, 18)
+	if m.status != nil {
+		fields = append(fields, review.FieldStatus)
+	}
+	if m.created_at != nil {
+		fields = append(fields, review.FieldCreatedAt)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, review.FieldUpdatedAt)
+	}
+	if m.created_by != nil {
+		fields = append(fields, review.FieldCreatedBy)
+	}
+	if m.updated_by != nil {
+		fields = append(fields, review.FieldUpdatedBy)
+	}
+	if m.metadata != nil {
+		fields = append(fields, review.FieldMetadata)
+	}
+	if m.entity_type != nil {
+		fields = append(fields, review.FieldEntityType)
+	}
+	if m.entity_id != nil {
+		fields = append(fields, review.FieldEntityID)
+	}
+	if m.user_id != nil {
+		fields = append(fields, review.FieldUserID)
+	}
+	if m.rating != nil {
+		fields = append(fields, review.FieldRating)
+	}
+	if m.title != nil {
+		fields = append(fields, review.FieldTitle)
+	}
+	if m.content != nil {
+		fields = append(fields, review.FieldContent)
+	}
+	if m.tags != nil {
+		fields = append(fields, review.FieldTags)
+	}
+	if m.images != nil {
+		fields = append(fields, review.FieldImages)
+	}
+	if m.helpful_count != nil {
+		fields = append(fields, review.FieldHelpfulCount)
+	}
+	if m.not_helpful_count != nil {
+		fields = append(fields, review.FieldNotHelpfulCount)
+	}
+	if m.is_verified != nil {
+		fields = append(fields, review.FieldIsVerified)
+	}
+	if m.is_featured != nil {
+		fields = append(fields, review.FieldIsFeatured)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *ReviewMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case review.FieldStatus:
+		return m.Status()
+	case review.FieldCreatedAt:
+		return m.CreatedAt()
+	case review.FieldUpdatedAt:
+		return m.UpdatedAt()
+	case review.FieldCreatedBy:
+		return m.CreatedBy()
+	case review.FieldUpdatedBy:
+		return m.UpdatedBy()
+	case review.FieldMetadata:
+		return m.Metadata()
+	case review.FieldEntityType:
+		return m.EntityType()
+	case review.FieldEntityID:
+		return m.EntityID()
+	case review.FieldUserID:
+		return m.UserID()
+	case review.FieldRating:
+		return m.Rating()
+	case review.FieldTitle:
+		return m.Title()
+	case review.FieldContent:
+		return m.Content()
+	case review.FieldTags:
+		return m.Tags()
+	case review.FieldImages:
+		return m.Images()
+	case review.FieldHelpfulCount:
+		return m.HelpfulCount()
+	case review.FieldNotHelpfulCount:
+		return m.NotHelpfulCount()
+	case review.FieldIsVerified:
+		return m.IsVerified()
+	case review.FieldIsFeatured:
+		return m.IsFeatured()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *ReviewMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case review.FieldStatus:
+		return m.OldStatus(ctx)
+	case review.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case review.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	case review.FieldCreatedBy:
+		return m.OldCreatedBy(ctx)
+	case review.FieldUpdatedBy:
+		return m.OldUpdatedBy(ctx)
+	case review.FieldMetadata:
+		return m.OldMetadata(ctx)
+	case review.FieldEntityType:
+		return m.OldEntityType(ctx)
+	case review.FieldEntityID:
+		return m.OldEntityID(ctx)
+	case review.FieldUserID:
+		return m.OldUserID(ctx)
+	case review.FieldRating:
+		return m.OldRating(ctx)
+	case review.FieldTitle:
+		return m.OldTitle(ctx)
+	case review.FieldContent:
+		return m.OldContent(ctx)
+	case review.FieldTags:
+		return m.OldTags(ctx)
+	case review.FieldImages:
+		return m.OldImages(ctx)
+	case review.FieldHelpfulCount:
+		return m.OldHelpfulCount(ctx)
+	case review.FieldNotHelpfulCount:
+		return m.OldNotHelpfulCount(ctx)
+	case review.FieldIsVerified:
+		return m.OldIsVerified(ctx)
+	case review.FieldIsFeatured:
+		return m.OldIsFeatured(ctx)
+	}
+	return nil, fmt.Errorf("unknown Review field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *ReviewMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case review.FieldStatus:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetStatus(v)
+		return nil
+	case review.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case review.FieldUpdatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
+	case review.FieldCreatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedBy(v)
+		return nil
+	case review.FieldUpdatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedBy(v)
+		return nil
+	case review.FieldMetadata:
+		v, ok := value.(map[string]string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetMetadata(v)
+		return nil
+	case review.FieldEntityType:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetEntityType(v)
+		return nil
+	case review.FieldEntityID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetEntityID(v)
+		return nil
+	case review.FieldUserID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUserID(v)
+		return nil
+	case review.FieldRating:
+		v, ok := value.(decimal.Decimal)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRating(v)
+		return nil
+	case review.FieldTitle:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTitle(v)
+		return nil
+	case review.FieldContent:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetContent(v)
+		return nil
+	case review.FieldTags:
+		v, ok := value.([]string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTags(v)
+		return nil
+	case review.FieldImages:
+		v, ok := value.([]string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetImages(v)
+		return nil
+	case review.FieldHelpfulCount:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetHelpfulCount(v)
+		return nil
+	case review.FieldNotHelpfulCount:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetNotHelpfulCount(v)
+		return nil
+	case review.FieldIsVerified:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIsVerified(v)
+		return nil
+	case review.FieldIsFeatured:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIsFeatured(v)
+		return nil
+	}
+	return fmt.Errorf("unknown Review field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *ReviewMutation) AddedFields() []string {
+	var fields []string
+	if m.addhelpful_count != nil {
+		fields = append(fields, review.FieldHelpfulCount)
+	}
+	if m.addnot_helpful_count != nil {
+		fields = append(fields, review.FieldNotHelpfulCount)
+	}
+	return fields
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *ReviewMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case review.FieldHelpfulCount:
+		return m.AddedHelpfulCount()
+	case review.FieldNotHelpfulCount:
+		return m.AddedNotHelpfulCount()
+	}
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *ReviewMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	case review.FieldHelpfulCount:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddHelpfulCount(v)
+		return nil
+	case review.FieldNotHelpfulCount:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddNotHelpfulCount(v)
+		return nil
+	}
+	return fmt.Errorf("unknown Review numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *ReviewMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(review.FieldCreatedBy) {
+		fields = append(fields, review.FieldCreatedBy)
+	}
+	if m.FieldCleared(review.FieldUpdatedBy) {
+		fields = append(fields, review.FieldUpdatedBy)
+	}
+	if m.FieldCleared(review.FieldMetadata) {
+		fields = append(fields, review.FieldMetadata)
+	}
+	if m.FieldCleared(review.FieldTitle) {
+		fields = append(fields, review.FieldTitle)
+	}
+	if m.FieldCleared(review.FieldContent) {
+		fields = append(fields, review.FieldContent)
+	}
+	if m.FieldCleared(review.FieldTags) {
+		fields = append(fields, review.FieldTags)
+	}
+	if m.FieldCleared(review.FieldImages) {
+		fields = append(fields, review.FieldImages)
+	}
+	return fields
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *ReviewMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *ReviewMutation) ClearField(name string) error {
+	switch name {
+	case review.FieldCreatedBy:
+		m.ClearCreatedBy()
+		return nil
+	case review.FieldUpdatedBy:
+		m.ClearUpdatedBy()
+		return nil
+	case review.FieldMetadata:
+		m.ClearMetadata()
+		return nil
+	case review.FieldTitle:
+		m.ClearTitle()
+		return nil
+	case review.FieldContent:
+		m.ClearContent()
+		return nil
+	case review.FieldTags:
+		m.ClearTags()
+		return nil
+	case review.FieldImages:
+		m.ClearImages()
+		return nil
+	}
+	return fmt.Errorf("unknown Review nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *ReviewMutation) ResetField(name string) error {
+	switch name {
+	case review.FieldStatus:
+		m.ResetStatus()
+		return nil
+	case review.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case review.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	case review.FieldCreatedBy:
+		m.ResetCreatedBy()
+		return nil
+	case review.FieldUpdatedBy:
+		m.ResetUpdatedBy()
+		return nil
+	case review.FieldMetadata:
+		m.ResetMetadata()
+		return nil
+	case review.FieldEntityType:
+		m.ResetEntityType()
+		return nil
+	case review.FieldEntityID:
+		m.ResetEntityID()
+		return nil
+	case review.FieldUserID:
+		m.ResetUserID()
+		return nil
+	case review.FieldRating:
+		m.ResetRating()
+		return nil
+	case review.FieldTitle:
+		m.ResetTitle()
+		return nil
+	case review.FieldContent:
+		m.ResetContent()
+		return nil
+	case review.FieldTags:
+		m.ResetTags()
+		return nil
+	case review.FieldImages:
+		m.ResetImages()
+		return nil
+	case review.FieldHelpfulCount:
+		m.ResetHelpfulCount()
+		return nil
+	case review.FieldNotHelpfulCount:
+		m.ResetNotHelpfulCount()
+		return nil
+	case review.FieldIsVerified:
+		m.ResetIsVerified()
+		return nil
+	case review.FieldIsFeatured:
+		m.ResetIsFeatured()
+		return nil
+	}
+	return fmt.Errorf("unknown Review field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *ReviewMutation) AddedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *ReviewMutation) AddedIDs(name string) []ent.Value {
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *ReviewMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *ReviewMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *ReviewMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *ReviewMutation) EdgeCleared(name string) bool {
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *ReviewMutation) ClearEdge(name string) error {
+	return fmt.Errorf("unknown Review unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *ReviewMutation) ResetEdge(name string) error {
+	return fmt.Errorf("unknown Review edge %s", name)
 }
 
 // UserMutation represents an operation that mutates the User nodes in the graph.

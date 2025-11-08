@@ -56,6 +56,11 @@ var (
 		{Name: "primary_image_url", Type: field.TypeString, Nullable: true, SchemaType: map[string]string{"postgres": "text"}},
 		{Name: "thumbnail_url", Type: field.TypeString, Nullable: true, SchemaType: map[string]string{"postgres": "text"}},
 		{Name: "amenities", Type: field.TypeJSON, Nullable: true, SchemaType: map[string]string{"postgres": "text[]"}},
+		{Name: "view_count", Type: field.TypeInt, Default: 0, SchemaType: map[string]string{"postgres": "integer"}},
+		{Name: "rating_avg", Type: field.TypeOther, SchemaType: map[string]string{"postgres": "decimal(3,2)"}},
+		{Name: "rating_count", Type: field.TypeInt, Default: 0, SchemaType: map[string]string{"postgres": "integer"}},
+		{Name: "last_viewed_at", Type: field.TypeTime, Nullable: true, SchemaType: map[string]string{"postgres": "timestamp with time zone"}},
+		{Name: "popularity_score", Type: field.TypeOther, SchemaType: map[string]string{"postgres": "decimal(10,4)"}},
 	}
 	// PlacesTable holds the schema information for the "places" table.
 	PlacesTable = &schema.Table{
@@ -72,6 +77,31 @@ var (
 				Name:    "place_latitude_longitude",
 				Unique:  false,
 				Columns: []*schema.Column{PlacesColumns[15], PlacesColumns[16]},
+			},
+			{
+				Name:    "place_popularity_score",
+				Unique:  false,
+				Columns: []*schema.Column{PlacesColumns[24]},
+			},
+			{
+				Name:    "place_view_count",
+				Unique:  false,
+				Columns: []*schema.Column{PlacesColumns[20]},
+			},
+			{
+				Name:    "place_rating_avg",
+				Unique:  false,
+				Columns: []*schema.Column{PlacesColumns[21]},
+			},
+			{
+				Name:    "place_last_viewed_at",
+				Unique:  false,
+				Columns: []*schema.Column{PlacesColumns[23]},
+			},
+			{
+				Name:    "place_last_viewed_at_popularity_score",
+				Unique:  false,
+				Columns: []*schema.Column{PlacesColumns[23], PlacesColumns[24]},
 			},
 		},
 	}
@@ -112,6 +142,76 @@ var (
 				Name:    "placeimage_place_id_pos",
 				Unique:  false,
 				Columns: []*schema.Column{PlaceImagesColumns[10], PlaceImagesColumns[9]},
+			},
+		},
+	}
+	// ReviewsColumns holds the columns for the "reviews" table.
+	ReviewsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString, SchemaType: map[string]string{"postgres": "varchar(255)"}},
+		{Name: "status", Type: field.TypeString, Default: "published", SchemaType: map[string]string{"postgres": "varchar(20)"}},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "metadata", Type: field.TypeJSON, Nullable: true, SchemaType: map[string]string{"postgres": "jsonb"}},
+		{Name: "entity_type", Type: field.TypeString, SchemaType: map[string]string{"postgres": "varchar(50)"}},
+		{Name: "entity_id", Type: field.TypeString, SchemaType: map[string]string{"postgres": "varchar(255)"}},
+		{Name: "user_id", Type: field.TypeString, SchemaType: map[string]string{"postgres": "varchar(255)"}},
+		{Name: "rating", Type: field.TypeOther, SchemaType: map[string]string{"postgres": "decimal(2,1)"}},
+		{Name: "title", Type: field.TypeString, Nullable: true, SchemaType: map[string]string{"postgres": "varchar(255)"}},
+		{Name: "content", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true, SchemaType: map[string]string{"postgres": "text[]"}},
+		{Name: "images", Type: field.TypeJSON, Nullable: true, SchemaType: map[string]string{"postgres": "jsonb"}},
+		{Name: "helpful_count", Type: field.TypeInt, Default: 0, SchemaType: map[string]string{"postgres": "integer"}},
+		{Name: "not_helpful_count", Type: field.TypeInt, Default: 0, SchemaType: map[string]string{"postgres": "integer"}},
+		{Name: "is_verified", Type: field.TypeBool, Default: false},
+		{Name: "is_featured", Type: field.TypeBool, Default: false},
+	}
+	// ReviewsTable holds the schema information for the "reviews" table.
+	ReviewsTable = &schema.Table{
+		Name:       "reviews",
+		Columns:    ReviewsColumns,
+		PrimaryKey: []*schema.Column{ReviewsColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "review_entity_type_entity_id",
+				Unique:  false,
+				Columns: []*schema.Column{ReviewsColumns[7], ReviewsColumns[8]},
+			},
+			{
+				Name:    "review_entity_type_entity_id_status",
+				Unique:  false,
+				Columns: []*schema.Column{ReviewsColumns[7], ReviewsColumns[8], ReviewsColumns[1]},
+			},
+			{
+				Name:    "review_user_id_status",
+				Unique:  false,
+				Columns: []*schema.Column{ReviewsColumns[9], ReviewsColumns[1]},
+			},
+			{
+				Name:    "review_entity_type_entity_id_rating",
+				Unique:  false,
+				Columns: []*schema.Column{ReviewsColumns[7], ReviewsColumns[8], ReviewsColumns[10]},
+			},
+			{
+				Name:    "review_entity_type_entity_id_is_featured_status",
+				Unique:  false,
+				Columns: []*schema.Column{ReviewsColumns[7], ReviewsColumns[8], ReviewsColumns[18], ReviewsColumns[1]},
+			},
+			{
+				Name:    "review_entity_type_entity_id_helpful_count",
+				Unique:  false,
+				Columns: []*schema.Column{ReviewsColumns[7], ReviewsColumns[8], ReviewsColumns[15]},
+			},
+			{
+				Name:    "review_entity_type_entity_id_created_at",
+				Unique:  false,
+				Columns: []*schema.Column{ReviewsColumns[7], ReviewsColumns[8], ReviewsColumns[2]},
+			},
+			{
+				Name:    "review_entity_type_entity_id_rating_helpful_count_created_at",
+				Unique:  false,
+				Columns: []*schema.Column{ReviewsColumns[7], ReviewsColumns[8], ReviewsColumns[10], ReviewsColumns[15], ReviewsColumns[2]},
 			},
 		},
 	}
@@ -157,6 +257,7 @@ var (
 		CategoriesTable,
 		PlacesTable,
 		PlaceImagesTable,
+		ReviewsTable,
 		UsersTable,
 	}
 )

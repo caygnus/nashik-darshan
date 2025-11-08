@@ -232,6 +232,76 @@ func (_c *PlaceCreate) SetAmenities(v []string) *PlaceCreate {
 	return _c
 }
 
+// SetViewCount sets the "view_count" field.
+func (_c *PlaceCreate) SetViewCount(v int) *PlaceCreate {
+	_c.mutation.SetViewCount(v)
+	return _c
+}
+
+// SetNillableViewCount sets the "view_count" field if the given value is not nil.
+func (_c *PlaceCreate) SetNillableViewCount(v *int) *PlaceCreate {
+	if v != nil {
+		_c.SetViewCount(*v)
+	}
+	return _c
+}
+
+// SetRatingAvg sets the "rating_avg" field.
+func (_c *PlaceCreate) SetRatingAvg(v decimal.Decimal) *PlaceCreate {
+	_c.mutation.SetRatingAvg(v)
+	return _c
+}
+
+// SetNillableRatingAvg sets the "rating_avg" field if the given value is not nil.
+func (_c *PlaceCreate) SetNillableRatingAvg(v *decimal.Decimal) *PlaceCreate {
+	if v != nil {
+		_c.SetRatingAvg(*v)
+	}
+	return _c
+}
+
+// SetRatingCount sets the "rating_count" field.
+func (_c *PlaceCreate) SetRatingCount(v int) *PlaceCreate {
+	_c.mutation.SetRatingCount(v)
+	return _c
+}
+
+// SetNillableRatingCount sets the "rating_count" field if the given value is not nil.
+func (_c *PlaceCreate) SetNillableRatingCount(v *int) *PlaceCreate {
+	if v != nil {
+		_c.SetRatingCount(*v)
+	}
+	return _c
+}
+
+// SetLastViewedAt sets the "last_viewed_at" field.
+func (_c *PlaceCreate) SetLastViewedAt(v time.Time) *PlaceCreate {
+	_c.mutation.SetLastViewedAt(v)
+	return _c
+}
+
+// SetNillableLastViewedAt sets the "last_viewed_at" field if the given value is not nil.
+func (_c *PlaceCreate) SetNillableLastViewedAt(v *time.Time) *PlaceCreate {
+	if v != nil {
+		_c.SetLastViewedAt(*v)
+	}
+	return _c
+}
+
+// SetPopularityScore sets the "popularity_score" field.
+func (_c *PlaceCreate) SetPopularityScore(v decimal.Decimal) *PlaceCreate {
+	_c.mutation.SetPopularityScore(v)
+	return _c
+}
+
+// SetNillablePopularityScore sets the "popularity_score" field if the given value is not nil.
+func (_c *PlaceCreate) SetNillablePopularityScore(v *decimal.Decimal) *PlaceCreate {
+	if v != nil {
+		_c.SetPopularityScore(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *PlaceCreate) SetID(v string) *PlaceCreate {
 	_c.mutation.SetID(v)
@@ -320,6 +390,22 @@ func (_c *PlaceCreate) defaults() {
 		v := place.DefaultLongitude
 		_c.mutation.SetLongitude(v)
 	}
+	if _, ok := _c.mutation.ViewCount(); !ok {
+		v := place.DefaultViewCount
+		_c.mutation.SetViewCount(v)
+	}
+	if _, ok := _c.mutation.RatingAvg(); !ok {
+		v := place.DefaultRatingAvg
+		_c.mutation.SetRatingAvg(v)
+	}
+	if _, ok := _c.mutation.RatingCount(); !ok {
+		v := place.DefaultRatingCount
+		_c.mutation.SetRatingCount(v)
+	}
+	if _, ok := _c.mutation.PopularityScore(); !ok {
+		v := place.DefaultPopularityScore
+		_c.mutation.SetPopularityScore(v)
+	}
 	if _, ok := _c.mutation.ID(); !ok {
 		v := place.DefaultID()
 		_c.mutation.SetID(v)
@@ -366,6 +452,28 @@ func (_c *PlaceCreate) check() error {
 	}
 	if _, ok := _c.mutation.Longitude(); !ok {
 		return &ValidationError{Name: "longitude", err: errors.New(`ent: missing required field "Place.longitude"`)}
+	}
+	if _, ok := _c.mutation.ViewCount(); !ok {
+		return &ValidationError{Name: "view_count", err: errors.New(`ent: missing required field "Place.view_count"`)}
+	}
+	if v, ok := _c.mutation.ViewCount(); ok {
+		if err := place.ViewCountValidator(v); err != nil {
+			return &ValidationError{Name: "view_count", err: fmt.Errorf(`ent: validator failed for field "Place.view_count": %w`, err)}
+		}
+	}
+	if _, ok := _c.mutation.RatingAvg(); !ok {
+		return &ValidationError{Name: "rating_avg", err: errors.New(`ent: missing required field "Place.rating_avg"`)}
+	}
+	if _, ok := _c.mutation.RatingCount(); !ok {
+		return &ValidationError{Name: "rating_count", err: errors.New(`ent: missing required field "Place.rating_count"`)}
+	}
+	if v, ok := _c.mutation.RatingCount(); ok {
+		if err := place.RatingCountValidator(v); err != nil {
+			return &ValidationError{Name: "rating_count", err: fmt.Errorf(`ent: validator failed for field "Place.rating_count": %w`, err)}
+		}
+	}
+	if _, ok := _c.mutation.PopularityScore(); !ok {
+		return &ValidationError{Name: "popularity_score", err: errors.New(`ent: missing required field "Place.popularity_score"`)}
 	}
 	return nil
 }
@@ -477,6 +585,26 @@ func (_c *PlaceCreate) createSpec() (*Place, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.Amenities(); ok {
 		_spec.SetField(place.FieldAmenities, field.TypeJSON, value)
 		_node.Amenities = value
+	}
+	if value, ok := _c.mutation.ViewCount(); ok {
+		_spec.SetField(place.FieldViewCount, field.TypeInt, value)
+		_node.ViewCount = value
+	}
+	if value, ok := _c.mutation.RatingAvg(); ok {
+		_spec.SetField(place.FieldRatingAvg, field.TypeOther, value)
+		_node.RatingAvg = value
+	}
+	if value, ok := _c.mutation.RatingCount(); ok {
+		_spec.SetField(place.FieldRatingCount, field.TypeInt, value)
+		_node.RatingCount = value
+	}
+	if value, ok := _c.mutation.LastViewedAt(); ok {
+		_spec.SetField(place.FieldLastViewedAt, field.TypeTime, value)
+		_node.LastViewedAt = value
+	}
+	if value, ok := _c.mutation.PopularityScore(); ok {
+		_spec.SetField(place.FieldPopularityScore, field.TypeOther, value)
+		_node.PopularityScore = value
 	}
 	if nodes := _c.mutation.ImagesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
