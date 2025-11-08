@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"database/sql"
 	"flag"
 	"fmt"
 	"log"
@@ -49,30 +48,10 @@ func main() {
 
 	logger.Infow("Connecting to database", "host", cfg.Postgres.Host)
 
-	// Open raw database connection to enable PostGIS extension
-	db, err := sql.Open("postgres", migrationDSN)
-	if err != nil {
-		logger.Fatalw("Failed to connect to postgres", "error", err)
-	}
-	defer db.Close()
-
-	// Test connection
-	if err := db.Ping(); err != nil {
-		logger.Fatalw("Failed to ping postgres", "error", err)
-	}
-
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 
-	// Enable PostGIS extension if not already enabled
-	logger.Info("Enabling PostGIS extension...")
-	_, err = db.ExecContext(ctx, "CREATE EXTENSION IF NOT EXISTS postgis")
-	if err != nil {
-		logger.Fatalw("Failed to enable PostGIS extension", "error", err)
-	}
-	logger.Info("PostGIS extension enabled successfully")
-
-	// Create Ent client with migration DSN that disables prepared statements
+	// Create Ent client with migration DSN
 	client, err := ent.Open("postgres", migrationDSN)
 	if err != nil {
 		logger.Fatalw("Failed to create ent client", "error", err)
