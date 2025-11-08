@@ -169,6 +169,7 @@ func (req *CreatePlaceImageRequest) ToPlaceImage(ctx context.Context, placeID st
 	baseModel := types.GetDefaultBaseModel(ctx)
 
 	image := &place.PlaceImage{
+		ID:        types.GenerateUUIDWithPrefix(types.UUID_PREFIX_PLACE_IMAGE),
 		PlaceID:   placeID,
 		URL:       req.URL,
 		Pos:       req.Pos,
@@ -269,6 +270,7 @@ func (req *CreatePlaceRequest) ToPlace(ctx context.Context) (*place.Place, error
 	}
 
 	return &place.Place{
+		ID:               types.GenerateUUIDWithPrefix(types.UUID_PREFIX_PLACE),
 		Slug:             req.Slug,
 		Title:            req.Title,
 		Subtitle:         req.Subtitle,
