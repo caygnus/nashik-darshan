@@ -64,8 +64,18 @@ func (r *PlaceRepository) Create(ctx context.Context, p *domain.Place) error {
 	if p.LongDescription != nil {
 		create = create.SetLongDescription(*p.LongDescription)
 	}
+	// Set categories - filter out empty strings to avoid issues
 	if len(p.Categories) > 0 {
-		create = create.SetCategories(p.Categories)
+		// Filter out empty strings
+		validCategories := []string{}
+		for _, cat := range p.Categories {
+			if cat != "" {
+				validCategories = append(validCategories, cat)
+			}
+		}
+		if len(validCategories) > 0 {
+			create = create.SetCategories(validCategories)
+		}
 	}
 	if len(p.Address) > 0 {
 		create = create.SetAddress(p.Address)
@@ -77,7 +87,16 @@ func (r *PlaceRepository) Create(ctx context.Context, p *domain.Place) error {
 		create = create.SetThumbnailURL(*p.ThumbnailURL)
 	}
 	if len(p.Amenities) > 0 {
-		create = create.SetAmenities(p.Amenities)
+		// Filter out empty strings
+		validAmenities := []string{}
+		for _, amenity := range p.Amenities {
+			if amenity != "" {
+				validAmenities = append(validAmenities, amenity)
+			}
+		}
+		if len(validAmenities) > 0 {
+			create = create.SetAmenities(validAmenities)
+		}
 	}
 
 	_, err := create.Save(ctx)
@@ -595,8 +614,12 @@ func (o PlaceQueryOptions) ApplyBaseFilters(
 		query = o.ApplyPaginationFilter(query, filter.GetLimit(), filter.GetOffset())
 	}
 
-	// Apply sorting
-	query = o.ApplySortFilter(query, filter.GetSort(), filter.GetOrder())
+	// Apply sorting - skip if geospatial ordering will be applied
+	// (geospatial ordering takes precedence and will be applied in ApplyEntityQueryOptions)
+	hasGeospatialOrdering := filter.Latitude != nil && filter.Longitude != nil && filter.RadiusKM != nil
+	if !hasGeospatialOrdering {
+		query = o.ApplySortFilter(query, filter.GetSort(), filter.GetOrder())
+	}
 
 	return query
 }
@@ -624,8 +647,10 @@ func (o PlaceQueryOptions) ApplyEntityQueryOptions(
 	// PostgreSQL array overlap operator: && (returns true if arrays have any elements in common)
 	if len(f.Categories) > 0 {
 		// Use raw SQL predicate for array overlap
+		// Convert categories slice to PostgreSQL array format
+		categoriesArray := pq.Array(f.Categories)
 		query = query.Where(predicate.Place(func(s *entsql.Selector) {
-			s.Where(entsql.ExprP("categories && ?", pq.Array(f.Categories)))
+			s.Where(entsql.ExprP("categories && ?", categoriesArray))
 		}))
 	}
 
@@ -633,8 +658,10 @@ func (o PlaceQueryOptions) ApplyEntityQueryOptions(
 	// PostgreSQL array overlap operator: && (returns true if arrays have any elements in common)
 	if len(f.Amenities) > 0 {
 		// Use raw SQL predicate for array overlap
+		// Convert amenities slice to PostgreSQL array format
+		amenitiesArray := pq.Array(f.Amenities)
 		query = query.Where(predicate.Place(func(s *entsql.Selector) {
-			s.Where(entsql.ExprP("amenities && ?", pq.Array(f.Amenities)))
+			s.Where(entsql.ExprP("amenities && ?", amenitiesArray))
 		}))
 	}
 
@@ -671,8 +698,8 @@ func (o PlaceQueryOptions) ApplyEntityQueryOptions(
 			))
 		}))
 
-		// Add custom ordering by distance (closest first)
-		// Using PostGIS distance operator <-> for efficient distance-based ordering
+		// Apply distance-based ordering (closest first)
+		// This replaces the default ordering from ApplyBaseFilters
 		query = query.Order(place.OrderOption(func(s *entsql.Selector) {
 			s.OrderExpr(entsql.ExprP(
 				"location::geography <-> ST_GeogFromText(?)::geography ASC",
