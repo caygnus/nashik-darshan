@@ -221,16 +221,16 @@ func (h *PlaceHandler) List(c *gin.Context) {
 // @Tags Place
 // @Accept json
 // @Produce json
-// @Param place_id path string true "Place ID"
+// @Param id path string true "Place ID"
 // @Param request body dto.CreatePlaceImageRequest true "Create place image request"
 // @Success 201 {object} dto.PlaceImageResponse
 // @Failure 400 {object} ierr.ErrorResponse
 // @Failure 404 {object} ierr.ErrorResponse
 // @Failure 500 {object} ierr.ErrorResponse
-// @Router /places/{place_id}/images [post]
+// @Router /places/{id}/images [post]
 // @Security Authorization
 func (h *PlaceHandler) AddImage(c *gin.Context) {
-	placeID := c.Param("place_id")
+	placeID := c.Param("id")
 	if placeID == "" {
 		c.Error(ierr.NewError("place ID is required").
 			WithHint("Please provide a valid place ID").
@@ -259,13 +259,13 @@ func (h *PlaceHandler) AddImage(c *gin.Context) {
 // @Tags Place
 // @Accept json
 // @Produce json
-// @Param place_id path string true "Place ID"
+// @Param id path string true "Place ID"
 // @Success 200 {array} dto.PlaceImageResponse
 // @Failure 404 {object} ierr.ErrorResponse
 // @Failure 500 {object} ierr.ErrorResponse
-// @Router /places/{place_id}/images [get]
+// @Router /places/{id}/images [get]
 func (h *PlaceHandler) GetImages(c *gin.Context) {
-	placeID := c.Param("place_id")
+	placeID := c.Param("id")
 	if placeID == "" {
 		c.Error(ierr.NewError("place ID is required").
 			WithHint("Please provide a valid place ID").
@@ -346,4 +346,3 @@ func (h *PlaceHandler) DeleteImage(c *gin.Context) {
 	}
 	c.Status(http.StatusNoContent)
 }
-

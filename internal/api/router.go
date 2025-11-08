@@ -64,15 +64,16 @@ func NewRouter(handlers *Handlers, cfg *config.Configuration, logger *logger.Log
 	v1Place := v1Router.Group("/places")
 	{
 		v1Place.GET("", handlers.Place.List)
-		v1Place.GET("/:id", handlers.Place.Get)
 		v1Place.GET("/slug/:slug", handlers.Place.GetBySlug)
-		v1Place.GET("/:place_id/images", handlers.Place.GetImages)
+		// More specific routes must come before less specific ones
+		v1Place.GET("/:id/images", handlers.Place.GetImages)
+		v1Place.GET("/:id", handlers.Place.Get)
 
 		v1Place.Use(middleware.AuthenticateMiddleware(cfg, logger))
 		v1Place.POST("", handlers.Place.Create)
 		v1Place.PUT("/:id", handlers.Place.Update)
 		v1Place.DELETE("/:id", handlers.Place.Delete)
-		v1Place.POST("/:place_id/images", handlers.Place.AddImage)
+		v1Place.POST("/:id/images", handlers.Place.AddImage)
 	}
 
 	// Place image routes (authenticated only)
