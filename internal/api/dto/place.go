@@ -9,9 +9,6 @@ import (
 	"github.com/samber/lo"
 )
 
-// Use domain Location type
-type Location = place.Location
-
 // CreatePlaceRequest represents a request to create a place
 type CreatePlaceRequest struct {
 	Slug             string            `json:"slug" binding:"required,min=1"`
@@ -22,7 +19,7 @@ type CreatePlaceRequest struct {
 	PlaceType        string            `json:"place_type" binding:"required"`
 	Categories       []string          `json:"categories,omitempty"`
 	Address          map[string]string `json:"address,omitempty"`
-	Location         Location          `json:"location" binding:"required"`
+	Location         types.Location    `json:"location" binding:"required"`
 	PrimaryImageURL  *string           `json:"primary_image_url,omitempty"`
 	ThumbnailURL     *string           `json:"thumbnail_url,omitempty"`
 	Amenities        []string          `json:"amenities,omitempty"`
@@ -53,7 +50,7 @@ type UpdatePlaceRequest struct {
 	PlaceType        *string           `json:"place_type,omitempty"`
 	Categories       []string          `json:"categories,omitempty"`
 	Address          map[string]string `json:"address,omitempty"`
-	Location         *Location         `json:"location,omitempty"`
+	Location         *types.Location   `json:"location,omitempty"`
 	PrimaryImageURL  *string           `json:"primary_image_url,omitempty"`
 	ThumbnailURL     *string           `json:"thumbnail_url,omitempty"`
 	Amenities        []string          `json:"amenities,omitempty"`

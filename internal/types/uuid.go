@@ -41,4 +41,5 @@ const (
 	UUID_PREFIX_CATEGORY    = "category"
 	UUID_PREFIX_PLACE       = "place"
 	UUID_PREFIX_PLACE_IMAGE = "plcimg"
+	UUID_PREFIX_REVIEW      = "review"
 )

@@ -820,5 +820,101 @@ func (o PlaceQueryOptions) ApplyEntityQueryOptions(
 		}
 	}
 
+	// Apply trending filter (last viewed after)
+	if f.LastViewedAfter != nil {
+		query = query.Where(place.LastViewedAtGTE(*f.LastViewedAfter))
+	}
+
 	return query
+}
+
+// Feed-specific methods for engagement tracking and trending queries
+
+// IncrementViewCount increments the view count for a place and updates last_viewed_at
+func (r *PlaceRepository) IncrementViewCount(ctx context.Context, placeID string) error {
+	client := r.client.Querier(ctx)
+
+	r.log.Debugw("incrementing view count", "place_id", placeID)
+
+	now := time.Now().UTC()
+	_, err := client.Place.UpdateOneID(placeID).
+		AddViewCount(1).
+		SetLastViewedAt(now).
+		SetUpdatedAt(now).
+		SetUpdatedBy(types.GetUserID(ctx)).
+		Save(ctx)
+
+	if err != nil {
+		return ierr.WithError(err).
+			WithHint("Failed to increment view count").
+			Mark(ierr.ErrDatabase)
+	}
+
+	return nil
+}
+
+// UpdateRating updates the rating for a place (recalculates average and increments count)
+func (r *PlaceRepository) UpdateRating(ctx context.Context, placeID string, newRating decimal.Decimal) error {
+	client := r.client.Querier(ctx)
+
+	r.log.Debugw("updating place rating",
+		"place_id", placeID,
+		"new_rating", newRating.String())
+
+	// Get current place to calculate new average
+	currentPlace, err := client.Place.Get(ctx, placeID)
+	if err != nil {
+		return ierr.WithError(err).
+			WithHint("Failed to get place for rating update").
+			Mark(ierr.ErrDatabase)
+	}
+
+	// Calculate new rating average
+	currentCount := currentPlace.RatingCount
+	currentAvg := currentPlace.RatingAvg
+
+	newCount := currentCount + 1
+	newAvg := currentAvg.Mul(decimal.NewFromInt(int64(currentCount))).
+		Add(newRating).
+		Div(decimal.NewFromInt(int64(newCount)))
+
+	now := time.Now().UTC()
+	_, err = client.Place.UpdateOneID(placeID).
+		SetRatingAvg(newAvg).
+		SetRatingCount(newCount).
+		SetUpdatedAt(now).
+		SetUpdatedBy(types.GetUserID(ctx)).
+		Save(ctx)
+
+	if err != nil {
+		return ierr.WithError(err).
+			WithHint("Failed to update place rating").
+			Mark(ierr.ErrDatabase)
+	}
+
+	return nil
+}
+
+// UpdatePopularityScore updates the popularity score for a place
+func (r *PlaceRepository) UpdatePopularityScore(ctx context.Context, placeID string, score decimal.Decimal) error {
+	client := r.client.Querier(ctx)
+
+	r.log.Debugw("updating popularity score",
+		"place_id", placeID,
+		"score", score.String())
+
+	now := time.Now().UTC()
+	_, err := client.Place.UpdateOneID(placeID).
+		SetPopularityScore(score).
+		SetUpdatedAt(now).
+		SetUpdatedBy(types.GetUserID(ctx)).
+		Save(ctx)
+
+	if err != nil {
+		return ierr.WithError(err).
+			WithHint("Failed to update popularity score").
+			Mark(ierr.ErrDatabase)
+	}
+
+	return nil
 }

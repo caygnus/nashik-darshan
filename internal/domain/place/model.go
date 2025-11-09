@@ -1,37 +1,14 @@
 package place
 
 import (
+	"math"
+	"time"
+
 	"github.com/omkar273/nashikdarshan/ent"
-	ierr "github.com/omkar273/nashikdarshan/internal/errors"
 	"github.com/omkar273/nashikdarshan/internal/types"
 	"github.com/samber/lo"
 	"github.com/shopspring/decimal"
 )
-
-// Location represents a geographic location with latitude and longitude (WGS84)
-type Location struct {
-	Latitude  decimal.Decimal `json:"latitude"`
-	Longitude decimal.Decimal `json:"longitude"`
-}
-
-// Validate validates the Location coordinates
-func (l Location) Validate() error {
-	// Validate latitude range (-90 to 90)
-	if l.Latitude.LessThan(decimal.NewFromInt(-90)) || l.Latitude.GreaterThan(decimal.NewFromInt(90)) {
-		return ierr.NewError("invalid latitude").
-			WithHint("latitude must be between -90 and 90").
-			Mark(ierr.ErrValidation)
-	}
-
-	// Validate longitude range (-180 to 180)
-	if l.Longitude.LessThan(decimal.NewFromInt(-180)) || l.Longitude.GreaterThan(decimal.NewFromInt(180)) {
-		return ierr.NewError("invalid longitude").
-			WithHint("longitude must be between -180 and 180").
-			Mark(ierr.ErrValidation)
-	}
-
-	return nil
-}
 
 type Place struct {
 	ID               string            `json:"id" db:"id"`
@@ -43,10 +20,18 @@ type Place struct {
 	PlaceType        string            `json:"place_type" db:"place_type"`
 	Categories       []string          `json:"categories" db:"categories"`
 	Address          map[string]string `json:"address,omitempty" db:"address"`
-	Location         Location          `json:"location" db:"location"`
+	Location         types.Location    `json:"location" db:"location"`
 	PrimaryImageURL  *string           `json:"primary_image_url,omitempty" db:"primary_image_url"`
 	ThumbnailURL     *string           `json:"thumbnail_url,omitempty" db:"thumbnail_url"`
 	Amenities        []string          `json:"amenities" db:"amenities"`
+
+	// Engagement fields for feed functionality
+	ViewCount       int             `json:"view_count" db:"view_count"`
+	RatingAvg       decimal.Decimal `json:"rating_avg" db:"rating_avg"`
+	RatingCount     int             `json:"rating_count" db:"rating_count"`
+	LastViewedAt    *time.Time      `json:"last_viewed_at,omitempty" db:"last_viewed_at"`
+	PopularityScore decimal.Decimal `json:"popularity_score" db:"popularity_score"`
+
 	types.BaseModel
 
 	// Relationships
@@ -74,13 +59,21 @@ func FromEnt(place *ent.Place) *Place {
 		LongDescription:  lo.ToPtr(place.LongDescription),
 		PlaceType:        place.PlaceType,
 		Categories:       place.Categories,
-		Location: Location{
+		Location: types.Location{
 			Latitude:  place.Latitude,
 			Longitude: place.Longitude,
 		},
 		PrimaryImageURL: lo.ToPtr(place.PrimaryImageURL),
 		ThumbnailURL:    lo.ToPtr(place.ThumbnailURL),
 		Amenities:       place.Amenities,
+
+		// Engagement fields
+		ViewCount:       place.ViewCount,
+		RatingAvg:       place.RatingAvg,
+		RatingCount:     place.RatingCount,
+		LastViewedAt:    lo.ToPtr(place.LastViewedAt),
+		PopularityScore: place.PopularityScore,
+
 		BaseModel: types.BaseModel{
 			Status:    types.Status(place.Status),
 			CreatedAt: place.CreatedAt,
@@ -142,4 +135,36 @@ func FromEntImageList(images []*ent.PlaceImage) []*PlaceImage {
 	return lo.Map(images, func(image *ent.PlaceImage, _ int) *PlaceImage {
 		return FromEntImage(image)
 	})
+}
+
+// CalculatePopularityScore calculates the popularity score for a place using engagement metrics
+func (p *Place) CalculatePopularityScore() decimal.Decimal {
+	// Base score: (view_count * 0.3) + (rating_avg * rating_count * 0.7)
+	viewScore := decimal.NewFromInt(int64(p.ViewCount)).Mul(decimal.NewFromFloat(0.3))
+	ratingScore := p.RatingAvg.Mul(decimal.NewFromInt(int64(p.RatingCount))).Mul(decimal.NewFromFloat(0.7))
+	baseScore := viewScore.Add(ratingScore)
+
+	// Time decay factor (addresses stale content)
+	ageDays := time.Since(p.CreatedAt).Hours() / 24
+	timeFactor := math.Max(0.1, 1.0-(ageDays/365)) // Decay over 1 year
+
+	// Cold start boost (addresses new place visibility)
+	newPlaceBoost := 1.0
+	if ageDays <= 7 {
+		newPlaceBoost = 1.5 // 50% boost for places created in last 7 days
+	}
+
+	// Quality threshold (addresses low-quality content)
+	qualityFactor := 1.0
+	if p.RatingCount >= 5 && p.RatingAvg.GreaterThanOrEqual(decimal.NewFromFloat(4.0)) {
+		qualityFactor = 1.2 // 20% boost for high-quality places
+	}
+
+	// Final score calculation
+	finalScore := baseScore.
+		Mul(decimal.NewFromFloat(timeFactor)).
+		Mul(decimal.NewFromFloat(newPlaceBoost)).
+		Mul(decimal.NewFromFloat(qualityFactor))
+
+	return finalScore
 }

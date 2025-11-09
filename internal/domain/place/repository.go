@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/omkar273/nashikdarshan/internal/types"
+	"github.com/shopspring/decimal"
 )
 
 // Repository defines the interface for place persistence operations
@@ -26,4 +27,9 @@ type Repository interface {
 	GetImages(ctx context.Context, placeID string) ([]*PlaceImage, error)
 	UpdateImage(ctx context.Context, image *PlaceImage) error
 	DeleteImage(ctx context.Context, imageID string) error
+
+	// Feed-specific operations
+	IncrementViewCount(ctx context.Context, placeID string) error
+	UpdateRating(ctx context.Context, placeID string, newRating decimal.Decimal) error
+	UpdatePopularityScore(ctx context.Context, placeID string, score decimal.Decimal) error
 }

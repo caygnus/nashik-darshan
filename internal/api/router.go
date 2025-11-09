@@ -16,6 +16,8 @@ type Handlers struct {
 	User     *v1.UserHandler
 	Category *v1.CategoryHandler
 	Place    *v1.PlaceHandler
+	Feed     *v1.FeedHandler
+	Review   *v1.ReviewHandler
 }
 
 func NewRouter(handlers *Handlers, cfg *config.Configuration, logger *logger.Logger) *gin.Engine {
@@ -82,6 +84,27 @@ func NewRouter(handlers *Handlers, cfg *config.Configuration, logger *logger.Log
 	{
 		v1PlaceImage.PUT("/:image_id", handlers.Place.UpdateImage)
 		v1PlaceImage.DELETE("/:image_id", handlers.Place.DeleteImage)
+	}
+
+	// Feed routes (public)
+	v1Router.POST("/feed", handlers.Feed.GetFeed)
+
+	// Engagement tracking routes
+	v1Router.POST("/places/:id/view", handlers.Feed.IncrementViewCount) // Public for analytics
+
+	// Review routes
+	v1Review := v1Router.Group("/reviews")
+	{
+		// Public review routes
+		v1Review.GET("", handlers.Review.ListReviews)
+		v1Review.GET("/:id", handlers.Review.GetReview)
+		v1Review.GET("/stats/:entityType/:entityId", handlers.Review.GetRatingStats)
+
+		// Authenticated review routes
+		v1Review.Use(middleware.AuthenticateMiddleware(cfg, logger))
+		v1Review.POST("", handlers.Review.CreateReview)
+		v1Review.PUT("/:id", handlers.Review.UpdateReview)
+		v1Review.DELETE("/:id", handlers.Review.DeleteReview)
 	}
 
 	return router

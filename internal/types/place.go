@@ -2,7 +2,9 @@ package types
 
 import (
 	"fmt"
+	"time"
 
+	ierr "github.com/omkar273/nashikdarshan/internal/errors"
 	"github.com/samber/lo"
 	"github.com/shopspring/decimal"
 )
@@ -25,6 +27,25 @@ var PlaceTypes = []string{
 	string(PlaceTypeExperience),
 }
 
+// ValidateCoordinates validates latitude and longitude values
+func ValidateCoordinates(latitude, longitude decimal.Decimal) error {
+	// Validate latitude range (-90 to 90)
+	if latitude.LessThan(decimal.NewFromInt(-90)) || latitude.GreaterThan(decimal.NewFromInt(90)) {
+		return ierr.NewError("latitude must be between -90 and 90").
+			WithHint("Please provide a valid latitude value").
+			Mark(ierr.ErrValidation)
+	}
+
+	// Validate longitude range (-180 to 180)
+	if longitude.LessThan(decimal.NewFromInt(-180)) || longitude.GreaterThan(decimal.NewFromInt(180)) {
+		return ierr.NewError("longitude must be between -180 and 180").
+			WithHint("Please provide a valid longitude value").
+			Mark(ierr.ErrValidation)
+	}
+
+	return nil
+}
+
 type PlaceFilter struct {
 	*QueryFilter
 	*TimeRangeFilter
@@ -42,6 +63,9 @@ type PlaceFilter struct {
 
 	// Search
 	SearchQuery *string `json:"search_query,omitempty" form:"search_query" validate:"omitempty"`
+
+	// Trending filter
+	LastViewedAfter *time.Time `json:"last_viewed_after,omitempty" form:"last_viewed_after" validate:"omitempty"`
 }
 
 func (f *PlaceFilter) Validate() error {
@@ -71,13 +95,11 @@ func (f *PlaceFilter) Validate() error {
 		if f.Latitude == nil || f.Longitude == nil || f.RadiusM == nil {
 			return fmt.Errorf("latitude, longitude, and radius_m must all be provided for geospatial search")
 		}
-		// Validate latitude range (-90 to 90)
-		if f.Latitude.LessThan(decimal.NewFromInt(-90)) || f.Latitude.GreaterThan(decimal.NewFromInt(90)) {
-			return fmt.Errorf("latitude must be between -90 and 90")
-		}
-		// Validate longitude range (-180 to 180)
-		if f.Longitude.LessThan(decimal.NewFromInt(-180)) || f.Longitude.GreaterThan(decimal.NewFromInt(180)) {
-			return fmt.Errorf("longitude must be between -180 and 180")
+
+		// Create location and validate coordinates
+		location := NewLocation(*f.Latitude, *f.Longitude)
+		if err := location.Validate(); err != nil {
+			return err
 		}
 		// Cap radius at 15km (15000m) for v1
 		if f.RadiusM.GreaterThan(decimal.NewFromInt(15000)) {
