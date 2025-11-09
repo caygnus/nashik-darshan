@@ -21,4 +21,11 @@ id_rsa.pub
 # macos
 .DS_Store
 
-server
+# Instead of ignoring the whole cmd/server directory
+cmd/server/server
+cmd/server/*.exe
+cmd/server/nashik-darshan-*
+
+# But allow source files
+!cmd/server/main.go
+!cmd/server/*.go
