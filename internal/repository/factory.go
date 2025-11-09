@@ -4,6 +4,7 @@ import (
 	"github.com/omkar273/nashikdarshan/internal/config"
 	"github.com/omkar273/nashikdarshan/internal/domain/category"
 	"github.com/omkar273/nashikdarshan/internal/domain/place"
+	"github.com/omkar273/nashikdarshan/internal/domain/review"
 	"github.com/omkar273/nashikdarshan/internal/domain/user"
 	"github.com/omkar273/nashikdarshan/internal/logger"
 	"github.com/omkar273/nashikdarshan/internal/postgres"
@@ -41,4 +42,8 @@ func NewCategoryRepository(params RepositoryParams) category.Repository {
 
 func NewPlaceRepository(params RepositoryParams) place.Repository {
 	return ent.NewPlaceRepository(params.Client, params.Logger)
+}
+
+func NewReviewRepository(params RepositoryParams) review.Repository {
+	return ent.NewReviewRepository(params.Client, params.Logger)
 }
