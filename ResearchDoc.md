@@ -87,69 +87,80 @@ Once you validate demand, upgrade to paid plans like MakCorps ($350/month) or ne
 - Scalability: Very low (unsustainable)[](https://landing.hotelston.com/api/)
 
 
+## Google Hotels APIs (Recommended for Startups)
 
+**SerpAPI Google Hotels API**​  
+SerpAPI provides the cleanest integration for scraping Google Hotels search results with instant responses under 1 second. The API requires no free tier but offers a pay-per-use model starting at **$0.005-$0.01 per request**. You only pay for successful requests, making it cost-predictable—100 hotel searches would cost $0.50-$1.00. The API supports city-level geo-targeting (crucial for Nashik), filters like price range, star rating, amenities, and free cancellation options. Response data includes hotel name, price, ratings, reviews, and check-in/out times in clean JSON format. **Best for:** Price comparison and search aggregation.[](https://serpapi.com/google-hotels-api)​
 
-SerpAPI Google Hotels API​
-SerpAPI provides the cleanest integration for scraping Google Hotels search results with instant responses under 1 second. The API requires no free tier but offers a pay-per-use model start$0.005-$0.01 per request. You only pay for successful requests, making it cost-predictable—100 hotel searches would cost $0.50-$1.00. The API supports city-level geo-targeting (crucial for Nashik), filters like price range, star rating, amenities, and free cancellation options. Response data includes hotel name, price, ratings, reviews, and check-in/out times in clean JSON format. Best for: Price comparison and search aggregation.
+**Bright Data Google Hotels API**​  
+Bright Data's approach combines proxy management, CAPTCHA solving, and automatic retries into a seamless package. Unlike traditional APIs, you pay only for successful data delivery, with pricing models ranging from basic to enterprise. The platform includes JavaScript rendering, user-agent rotation, and handles geo-location targeting with a **FREE geo-location feature**. Bright Data also offers a **Booking.com Scraper API** with example code provided. They serve 20,000+ customers with 99.99% uptime. **Best for:** High-volume scraping without IP blocking concerns.​
 
+**ScrapingDog Google Hotels API**[](https://www.scrapingdog.com/google-hotels-api/)​  
+ScrapingDog offers the most **affordable entry point at $40/month for 200,000 credits (equivalent to 40,000 Google Hotels requests)**. Each request returns comprehensive hotel data including prices, reviews, overall ratings, amenities, hotel class, and free cancellation status in JSON format. The API supports filter-rich queries matching Google's interface (price range, star class, brand, review score, amenities). For Nashik, you can specify location, language (English/Hindi), and currency (INR). **Best for:** Budget-conscious startups with moderate request volumes.[](https://www.scrapingdog.com/google-hotels-api/)​
 
-Bright Data Google Hotels API​
-Bright Data's approach combines proxy management, CAPTCHA solving, and automatic retries into a seamless package. Unlike traditional APIs, you pay only for successful data delivery, with pricing models ranging from basic to enterprise. The platform includes JavaScript rendering, user-agent rotation, and handles geo-location targeting with a FREE geo-location feature. Bright Data also offers a Booking.com Scraper API with example code provided. They serve 20,000+ customers with 99.99% uptime. Best for: High-volume scraping without IP blocking concerns.​
-
-ScrapingDog Google Hotels API​
-ScrapingDog offers the most affordable entry point at $40/month for 200,000 credits (equivalent to 40,000 Google Hotels requests). Each request returns comprehensive hotel data including prices, reviews, overall ratings, amenities, hotel class, and free cancellation status in JSON format. The API supports filter-rich queries matching Google's interface (price range, star class, brand, review score, amenities). For Nashik, you can specify location, language (English/Hindi), and currency (INR). Best for: Budget-conscious startups with moderate request volumes.​
-
-DataForSEO Google Hotels API​
-DataForSEO offers the cheapest per-request pricing at $0.00075 for standard and $0.0015 for high-priority requests. You get $1 free credit on signup plus unlimited sandbox environment for testing. However, they require a $50 minimum payment before going live. Once you activate, you pay only for actual requests—1,000 searches would cost under $1. DataForSEO covers 1.5M+ properties globally with multi-language and multi-currency support. Best for: High-volume applications after initial scaling.​
+**DataForSEO Google Hotels API**​  
+DataForSEO offers the **cheapest per-request pricing at $0.00075 for standard and $0.0015 for high-priority requests**. You get **$1 free credit on signup plus unlimited sandbox environment for testing**. However, they require a **$50 minimum payment** before going live. Once you activate, you pay only for actual requests—1,000 searches would cost under $1. DataForSEO covers 1.5M+ properties globally with multi-language and multi-currency support. **Best for:** High-volume applications after initial scaling.​
 
 Free and Low-Cost Hotel APIs for Nashik Web Application
-Traditional Hotel APIs (Better for Mature Projects)
-Amadeus Self-Service API​
-Amadeus provides the most comprehensive solution with access to 1.5M+ hotels globally. The self-service tier is genuinely free for development, providing 200-10,000 free API calls per month depending on the endpoint. Once you exceed the free quota, charges are €0.0008-0.025 ($0.0008-0.024) per API call. The infrastructure includes a test environment with fixed API quotas, SDK kits for multiple languages (Python, Java, Node.js, Ruby), and community support on Discord/StackOverflow. Pros: Completely free for MVP development. Cons: Enterprise complexity for a single-city app may be unnecessary.​
 
-RapidAPI Booking.com Endpoints​
-RapidAPI aggregates multiple hotel APIs under one marketplace. The Booking COM API offers a free tier with 20 requests/month (extremely limited) and pro plans starting at $7.99/month for 10,000 requests. A different "Booking" endpoint on RapidAPI provides 500 free requests/month, making it more practical for testing. Both tiers include rate limiting (5 requests/second). Advantage: No credit card needed for free tier, transparent pricing. Disadvantage: Booking.com data only; other OTA coverage unavailable.​
+## Traditional Hotel APIs (Better for Mature Projects)
 
-HotelAPI.co (MakCorps)​
-HotelAPI.co aggregates data from 200+ OTAs (Booking.com, Hotels.com, Expedia, Priceline, Trip.com, Agoda, StayForLong). You get a 2-month free trial with 10,000 API credits per month, then pricing starts at $350/month (Basic) or $500/month (Advance). Each hotel property consumes credits; prices for multiple vendors per hotel are included in a single response. The response includes hotel name, price from each vendor separately with tax information, enabling real price comparison. Best for: Serious commercial projects needing multi-OTA coverage.​
+**Amadeus Self-Service API**​  
+Amadeus provides the most comprehensive solution with access to 1.5M+ hotels globally. The **self-service tier is genuinely free for development**, providing 200-10,000 free API calls per month depending on the endpoint. Once you exceed the free quota, charges are **€0.0008-0.025 ($0.0008-0.024) per API call**. The infrastructure includes a test environment with fixed API quotas, SDK kits for multiple languages (Python, Java, Node.js, Ruby), and community support on Discord/StackOverflow. **Pros:** Completely free for MVP development. **Cons:** Enterprise complexity for a single-city app may be unnecessary.​
 
-Completely Free Alternatives (Location Data Only)
-OpenTripMap API​
-OpenTripMap is completely free and unlimited—no registration, no rate limiting, no credit card required. The API returns points of interest (POI) data from OpenStreetMap, Wikidata, and Wikipedia, meaning you can fetch all hotels in Nashik with their basic information (address, coordinates, description, images, Wikipedia links). However, it does NOT include real-time pricing or availability—only static hotel information. Best for: Location discovery phase or combining with another pricing API.​
+**RapidAPI Booking.com Endpoints**​  
+RapidAPI aggregates multiple hotel APIs under one marketplace. The **Booking COM API offers a free tier with 20 requests/month** (extremely limited) and pro plans starting at **$7.99/month for 10,000 requests**. A different **"Booking" endpoint on RapidAPI provides 500 free requests/month**, making it more practical for testing. Both tiers include rate limiting (5 requests/second). **Advantage:** No credit card needed for free tier, transparent pricing. **Disadvantage:** Booking.com data only; other OTA coverage unavailable.​
 
-Geoapify Places API​
-Geoapify offers 3,000 free credits per day—each request costs 1 credit, so you get 3,000 free requests daily. You can search for accommodation by category with filters (amenities, accessibility, internet access). Like OpenTripMap, it provides location and amenity data but not real-time pricing. After the free tier, pricing is $0.01-0.001 per credit depending on the plan. Best for: Combining with another API for complete solution.​
+**HotelAPI.co (MakCorps)**​  
+HotelAPI.co aggregates data from **200+ OTAs (Booking.com, Hotels.com, Expedia, Priceline, Trip.com, Agoda, StayForLong)**. You get a **2-month free trial with 10,000 API credits per month**, then pricing starts at **$350/month (Basic) or $500/month (Advance)**. Each hotel property consumes credits; prices for multiple vendors per hotel are included in a single response. The response includes hotel name, price from each vendor separately with tax information, enabling real price comparison. **Best for:** Serious commercial projects needing multi-OTA coverage.​
 
-Recommended Strategy for Nashik MVP
-Phase 1: Build UI/Test (0 Cost)
-Start with OpenTripMap API to populate your database with all Nashik hotels and basic information (name, location, amenities). Use Geoapify Places API as backup (3,000 free requests/day). This costs nothing and gives you 331+ hotels that MakeMyTrip/Goibibo list.​
+## Completely Free Alternatives (Location Data Only)
 
-Phase 2: Add Real-Time Pricing (Minimal Cost)
+**OpenTripMap API**[](https://dev.opentripmap.org/)​  
+OpenTripMap is **completely free and unlimited**—no registration, no rate limiting, no credit card required. The API returns points of interest (POI) data from OpenStreetMap, Wikidata, and Wikipedia, meaning you can fetch all hotels in Nashik with their basic information (address, coordinates, description, images, Wikipedia links). **However**, it does **NOT include real-time pricing or availability**—only static hotel information. **Best for:** Location discovery phase or combining with another pricing API.[](https://dev.opentripmap.org/)​
+
+**Geoapify Places API**[](https://www.geoapify.com/places-api/)​  
+Geoapify offers **3,000 free credits per day**—each request costs 1 credit, so you get 3,000 free requests daily. You can search for accommodation by category with filters (amenities, accessibility, internet access). Like OpenTripMap, it provides location and amenity data but **not real-time pricing**. After the free tier, pricing is **$0.01-0.001 per credit depending on the plan**. **Best for:** Combining with another API for complete solution.[](https://www.geoapify.com/places-api/)​
+
+## Recommended Strategy for Nashik MVP
+
+**Phase 1: Build UI/Test (0 Cost)**  
+Start with **OpenTripMap API** to populate your database with all Nashik hotels and basic information (name, location, amenities). Use **Geoapify Places API** as backup (3,000 free requests/day). This costs nothing and gives you 331+ hotels that MakeMyTrip/Goibibo list.​
+
+**Phase 2: Add Real-Time Pricing (Minimal Cost)**  
 Choose one of these based on traffic expectations:
 
-Low traffic (<100 searches/day): DataForSEO at $0.00075/request = ~$2.25/month​
+- **Low traffic (<100 searches/day):** DataForSEO at **$0.00075/request** = ~$2.25/month​
+    
+- **Medium traffic (100-500 searches/day):** ScrapingDog at **$40/month**[](https://www.scrapingdog.com/google-hotels-api/)​
+    
+- **High traffic (500+ searches/day):** SerpAPI or Bright Data with pay-per-success model​
+    
 
-Medium traffic (100-500 searches/day): ScrapingDog at $40/month​
+**Phase 3: Scale with OTA Aggregation**  
+Once validated, upgrade to **HotelAPI.co's 2-month free trial** to test multi-OTA price comparison.[](https://hotelapi.co/)​
 
-High traffic (500+ searches/day): SerpAPI or Bright Data with pay-per-success model​
+## Technical Implementation Considerations
 
-Phase 3: Scale with OTA Aggregation
-Once validated, upgrade to HotelAPI.co's 2-month free trial to test multi-OTA price comparison.​
+**Best Free Option Overall:** If you want **real-time pricing with zero upfront cost**, use **DataForSEO's $1 free trial** ($0.00075/request after you add $50 minimum).​
 
-Technical Implementation Considerations
-Best Free Option Overall: If you want real-time pricing with zero upfront cost, use DataForSEO's $1 free trial ($0.00075/request after you add $50 minimum).​
+**Best Budget Option:** **ScrapingDog at $40/month** gives predictable costs with no surprise charges—covers 40,000 Google Hotels requests monthly, ideal for single-city apps.[](https://www.scrapingdog.com/google-hotels-api/)​
 
-Best Budget Option: ScrapingDog at $40/month gives predictable costs with no surprise charges—covers 40,000 Google Hotels requests monthly, ideal for single-city apps.​
+**Best Comprehensive Option:** **HotelAPI.co's 2-month free trial** testing multi-OTA data before committing to $350/month.​
 
-Best Comprehensive Option: HotelAPI.co's 2-month free trial testing multi-OTA data before committing to $350/month.​
+**Web Scraping Alternative:** You could also manually scrape hotel data from MakeMyTrip/Goibibo for Nashik using libraries like Selenium or BeautifulSoup, but **this violates their Terms of Service and may result in IP blocking**. Not recommended for production apps.​
 
-Web Scraping Alternative: You could also manually scrape hotel data from MakeMyTrip/Goibibo for Nashik using libraries like Selenium or BeautifulSoup, but this violates their Terms of Service and may result in IP blocking. Not recommended for production apps.​
+## Cost Projection for First Year
 
-Cost Projection for First Year
-Approach	Month 1-2	Month 3-6	Month 7-12	Year Total
-Completely Free (no pricing)	$0	$0	$0	$0
-ScrapingDog Only	$40	$40 × 4 = $160	$40 × 6 = $240	$440
-DataForSEO (1k searches/day)	$50 min	$22.50/mo × 5 = $112.50	$22.50 × 6 = $135	$297.50
-HotelAPI.co (post-trial)	$0 (free)	$0 (free)	$350 × 6 = $2,100	$2,100
-Final Recommendation
-For a Nashik-only MVP (Dec 2025-Jan 2026): Start with OpenTripMap (free) + DataForSEO ($1 trial) combination. If your first 100 searches cost $0.075, you'll know your cost structure before investing in paid APIs. Once you validate user demand, migrate to ScrapingDog ($40/month) for predictable budgeting, then evaluate HotelAPI.co when you're ready for multi-OTA comparison features.
+|Approach|Month 1-2|Month 3-6|Month 7-12|Year Total|
+|---|---|---|---|---|
+|**Completely Free (no pricing)**|$0|$0|$0|$0|
+|**ScrapingDog Only**|$40|$40 × 4 = $160|$40 × 6 = $240|$440|
+|**DataForSEO (1k searches/day)**|$50 min|$22.50/mo × 5 = $112.50|$22.50 × 6 = $135|$297.50|
+|**HotelAPI.co (post-trial)**|$0 (free)|$0 (free)|$350 × 6 = $2,100|$2,100|
+
+## Final Recommendation
+
+**For a Nashik-only MVP (Dec 2025 - January 2026):** Start with **OpenTripMap (free) + DataForSEO ($1 trial)** combination. If your first 100 searches cost $0.075, you'll know your cost structure before investing in paid APIs. Once you validate user demand, migrate to **ScrapingDog ($40/month)** for predictable budgeting, then evaluate **HotelAPI.co** when you're ready for multi-OTA comparison features.
+
+This approach keeps your initial investment under $50 while maintaining real-time pricing accuracy—exactly what travelers expect from a booking app.
