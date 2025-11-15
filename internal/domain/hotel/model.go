@@ -60,8 +60,8 @@ func FromEnt(hotel *ent.Hotel) *Hotel {
 		Website:         lo.ToPtr(hotel.Website),
 		PrimaryImageURL: lo.ToPtr(hotel.PrimaryImageURL),
 		ThumbnailURL:    lo.ToPtr(hotel.ThumbnailURL),
-		PriceMin:        lo.Ternary(!hotel.PriceMin.IsZero(), &hotel.PriceMin, nil),
-		PriceMax:        lo.Ternary(!hotel.PriceMax.IsZero(), &hotel.PriceMax, nil),
+		PriceMin:        lo.ToPtr(hotel.PriceMin),
+		PriceMax:        lo.ToPtr(hotel.PriceMax),
 		Currency:        lo.ToPtr(hotel.Currency),
 
 		// Engagement fields
