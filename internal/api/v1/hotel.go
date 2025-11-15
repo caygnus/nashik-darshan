@@ -180,8 +180,6 @@ func (h *HotelHandler) Delete(c *gin.Context) {
 // @Param order query string false "Sort order (asc/desc)"
 // @Param slug query []string false "Filter by slugs"
 // @Param star_rating query []int false "Filter by star ratings"
-// @Param facilities query []string false "Filter by facilities"
-// @Param room_types query []string false "Filter by room types"
 // @Param min_price query number false "Minimum price"
 // @Param max_price query number false "Maximum price"
 // @Param latitude query number false "Latitude for geospatial filtering"

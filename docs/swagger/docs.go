@@ -506,26 +506,6 @@ const docTemplate = `{
                         "in": "query"
                     },
                     {
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        },
-                        "collectionFormat": "csv",
-                        "description": "Filter by facilities",
-                        "name": "facilities",
-                        "in": "query"
-                    },
-                    {
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        },
-                        "collectionFormat": "csv",
-                        "description": "Filter by room types",
-                        "name": "room_types",
-                        "in": "query"
-                    },
-                    {
                         "type": "number",
                         "description": "Minimum price",
                         "name": "min_price",
@@ -2008,12 +1988,6 @@ const docTemplate = `{
                 "email": {
                     "type": "string"
                 },
-                "facilities": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
                 "location": {
                     "$ref": "#/definitions/types.Location"
                 },
@@ -2036,12 +2010,6 @@ const docTemplate = `{
                 "room_count": {
                     "type": "integer",
                     "minimum": 0
-                },
-                "room_types": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
                 },
                 "slug": {
                     "type": "string",
@@ -2340,12 +2308,6 @@ const docTemplate = `{
                 "email": {
                     "type": "string"
                 },
-                "facilities": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
                 "id": {
                     "type": "string"
                 },
@@ -2381,12 +2343,6 @@ const docTemplate = `{
                 },
                 "room_count": {
                     "type": "integer"
-                },
-                "room_types": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
                 },
                 "slug": {
                     "type": "string"
@@ -2812,12 +2768,6 @@ const docTemplate = `{
                 "email": {
                     "type": "string"
                 },
-                "facilities": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
                 "location": {
                     "$ref": "#/definitions/types.Location"
                 },
@@ -2840,12 +2790,6 @@ const docTemplate = `{
                 "room_count": {
                     "type": "integer",
                     "minimum": 0
-                },
-                "room_types": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
                 },
                 "slug": {
                     "type": "string",

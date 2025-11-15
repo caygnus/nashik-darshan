@@ -116,43 +116,43 @@ func init() {
 	// hotel.RoomCountValidator is a validator for the "room_count" field. It is called by the builders before save.
 	hotel.RoomCountValidator = hotelDescRoomCount.Validators[0].(func(int) error)
 	// hotelDescLatitude is the schema descriptor for latitude field.
-	hotelDescLatitude := hotelFields[11].Descriptor()
+	hotelDescLatitude := hotelFields[9].Descriptor()
 	// hotel.DefaultLatitude holds the default value on creation for the latitude field.
 	hotel.DefaultLatitude = hotelDescLatitude.Default.(decimal.Decimal)
 	// hotelDescLongitude is the schema descriptor for longitude field.
-	hotelDescLongitude := hotelFields[12].Descriptor()
+	hotelDescLongitude := hotelFields[10].Descriptor()
 	// hotel.DefaultLongitude holds the default value on creation for the longitude field.
 	hotel.DefaultLongitude = hotelDescLongitude.Default.(decimal.Decimal)
 	// hotelDescPriceMin is the schema descriptor for price_min field.
-	hotelDescPriceMin := hotelFields[18].Descriptor()
+	hotelDescPriceMin := hotelFields[16].Descriptor()
 	// hotel.DefaultPriceMin holds the default value on creation for the price_min field.
 	hotel.DefaultPriceMin = hotelDescPriceMin.Default.(decimal.Decimal)
 	// hotelDescPriceMax is the schema descriptor for price_max field.
-	hotelDescPriceMax := hotelFields[19].Descriptor()
+	hotelDescPriceMax := hotelFields[17].Descriptor()
 	// hotel.DefaultPriceMax holds the default value on creation for the price_max field.
 	hotel.DefaultPriceMax = hotelDescPriceMax.Default.(decimal.Decimal)
 	// hotelDescCurrency is the schema descriptor for currency field.
-	hotelDescCurrency := hotelFields[20].Descriptor()
+	hotelDescCurrency := hotelFields[18].Descriptor()
 	// hotel.DefaultCurrency holds the default value on creation for the currency field.
 	hotel.DefaultCurrency = hotelDescCurrency.Default.(string)
 	// hotelDescViewCount is the schema descriptor for view_count field.
-	hotelDescViewCount := hotelFields[21].Descriptor()
+	hotelDescViewCount := hotelFields[19].Descriptor()
 	// hotel.DefaultViewCount holds the default value on creation for the view_count field.
 	hotel.DefaultViewCount = hotelDescViewCount.Default.(int)
 	// hotel.ViewCountValidator is a validator for the "view_count" field. It is called by the builders before save.
 	hotel.ViewCountValidator = hotelDescViewCount.Validators[0].(func(int) error)
 	// hotelDescRatingAvg is the schema descriptor for rating_avg field.
-	hotelDescRatingAvg := hotelFields[22].Descriptor()
+	hotelDescRatingAvg := hotelFields[20].Descriptor()
 	// hotel.DefaultRatingAvg holds the default value on creation for the rating_avg field.
 	hotel.DefaultRatingAvg = hotelDescRatingAvg.Default.(decimal.Decimal)
 	// hotelDescRatingCount is the schema descriptor for rating_count field.
-	hotelDescRatingCount := hotelFields[23].Descriptor()
+	hotelDescRatingCount := hotelFields[21].Descriptor()
 	// hotel.DefaultRatingCount holds the default value on creation for the rating_count field.
 	hotel.DefaultRatingCount = hotelDescRatingCount.Default.(int)
 	// hotel.RatingCountValidator is a validator for the "rating_count" field. It is called by the builders before save.
 	hotel.RatingCountValidator = hotelDescRatingCount.Validators[0].(func(int) error)
 	// hotelDescPopularityScore is the schema descriptor for popularity_score field.
-	hotelDescPopularityScore := hotelFields[25].Descriptor()
+	hotelDescPopularityScore := hotelFields[23].Descriptor()
 	// hotel.DefaultPopularityScore holds the default value on creation for the popularity_score field.
 	hotel.DefaultPopularityScore = hotelDescPopularityScore.Default.(decimal.Decimal)
 	// hotelDescID is the schema descriptor for id field.

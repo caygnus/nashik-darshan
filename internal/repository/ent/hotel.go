@@ -5,11 +5,8 @@ import (
 	"sort"
 	"time"
 
-	entsql "entgo.io/ent/dialect/sql"
-	"github.com/lib/pq"
 	"github.com/omkar273/nashikdarshan/ent"
 	"github.com/omkar273/nashikdarshan/ent/hotel"
-	"github.com/omkar273/nashikdarshan/ent/predicate"
 	domain "github.com/omkar273/nashikdarshan/internal/domain/hotel"
 	ierr "github.com/omkar273/nashikdarshan/internal/errors"
 	"github.com/omkar273/nashikdarshan/internal/logger"
@@ -65,28 +62,6 @@ func (r *HotelRepository) Create(ctx context.Context, h *domain.Hotel) error {
 	}
 	if h.CheckOutTime != nil {
 		create = create.SetCheckOutTime(*h.CheckOutTime)
-	}
-	if len(h.Facilities) > 0 {
-		validFacilities := []string{}
-		for _, f := range h.Facilities {
-			if f != "" {
-				validFacilities = append(validFacilities, f)
-			}
-		}
-		if len(validFacilities) > 0 {
-			create = create.SetFacilities(validFacilities)
-		}
-	}
-	if len(h.RoomTypes) > 0 {
-		validRoomTypes := []string{}
-		for _, rt := range h.RoomTypes {
-			if rt != "" {
-				validRoomTypes = append(validRoomTypes, rt)
-			}
-		}
-		if len(validRoomTypes) > 0 {
-			create = create.SetRoomTypes(validRoomTypes)
-		}
 	}
 	if len(h.Address) > 0 {
 		create = create.SetAddress(h.Address)
@@ -346,16 +321,6 @@ func (r *HotelRepository) Update(ctx context.Context, h *domain.Hotel) error {
 		update = update.SetCheckOutTime(*h.CheckOutTime)
 	} else {
 		update = update.ClearCheckOutTime()
-	}
-	if len(h.Facilities) > 0 {
-		update = update.SetFacilities(h.Facilities)
-	} else {
-		update = update.ClearFacilities()
-	}
-	if len(h.RoomTypes) > 0 {
-		update = update.SetRoomTypes(h.RoomTypes)
-	} else {
-		update = update.ClearRoomTypes()
 	}
 	if len(h.Address) > 0 {
 		update = update.SetAddress(h.Address)
@@ -645,22 +610,6 @@ func (o HotelQueryOptions) ApplyEntityQueryOptions(
 	// Apply star rating filter if specified
 	if len(f.StarRating) > 0 {
 		query = query.Where(hotel.StarRatingIn(f.StarRating...))
-	}
-
-	// Apply facilities filter if specified
-	if len(f.Facilities) > 0 {
-		facilitiesArray := pq.Array(f.Facilities)
-		query = query.Where(predicate.Hotel(func(s *entsql.Selector) {
-			s.Where(entsql.ExprP("facilities && ?", facilitiesArray))
-		}))
-	}
-
-	// Apply room types filter if specified
-	if len(f.RoomTypes) > 0 {
-		roomTypesArray := pq.Array(f.RoomTypes)
-		query = query.Where(predicate.Hotel(func(s *entsql.Selector) {
-			s.Where(entsql.ExprP("room_types && ?", roomTypesArray))
-		}))
 	}
 
 	// Apply price range filters

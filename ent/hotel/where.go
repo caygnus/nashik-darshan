@@ -940,26 +940,6 @@ func CheckOutTimeContainsFold(v string) predicate.Hotel {
 	return predicate.Hotel(sql.FieldContainsFold(FieldCheckOutTime, v))
 }
 
-// FacilitiesIsNil applies the IsNil predicate on the "facilities" field.
-func FacilitiesIsNil() predicate.Hotel {
-	return predicate.Hotel(sql.FieldIsNull(FieldFacilities))
-}
-
-// FacilitiesNotNil applies the NotNil predicate on the "facilities" field.
-func FacilitiesNotNil() predicate.Hotel {
-	return predicate.Hotel(sql.FieldNotNull(FieldFacilities))
-}
-
-// RoomTypesIsNil applies the IsNil predicate on the "room_types" field.
-func RoomTypesIsNil() predicate.Hotel {
-	return predicate.Hotel(sql.FieldIsNull(FieldRoomTypes))
-}
-
-// RoomTypesNotNil applies the NotNil predicate on the "room_types" field.
-func RoomTypesNotNil() predicate.Hotel {
-	return predicate.Hotel(sql.FieldNotNull(FieldRoomTypes))
-}
-
 // AddressIsNil applies the IsNil predicate on the "address" field.
 func AddressIsNil() predicate.Hotel {
 	return predicate.Hotel(sql.FieldIsNull(FieldAddress))

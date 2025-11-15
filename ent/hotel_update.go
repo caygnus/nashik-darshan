@@ -10,7 +10,6 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/omkar273/nashikdarshan/ent/hotel"
 	"github.com/omkar273/nashikdarshan/ent/predicate"
@@ -209,42 +208,6 @@ func (_u *HotelUpdate) SetNillableCheckOutTime(v *string) *HotelUpdate {
 // ClearCheckOutTime clears the value of the "check_out_time" field.
 func (_u *HotelUpdate) ClearCheckOutTime() *HotelUpdate {
 	_u.mutation.ClearCheckOutTime()
-	return _u
-}
-
-// SetFacilities sets the "facilities" field.
-func (_u *HotelUpdate) SetFacilities(v []string) *HotelUpdate {
-	_u.mutation.SetFacilities(v)
-	return _u
-}
-
-// AppendFacilities appends value to the "facilities" field.
-func (_u *HotelUpdate) AppendFacilities(v []string) *HotelUpdate {
-	_u.mutation.AppendFacilities(v)
-	return _u
-}
-
-// ClearFacilities clears the value of the "facilities" field.
-func (_u *HotelUpdate) ClearFacilities() *HotelUpdate {
-	_u.mutation.ClearFacilities()
-	return _u
-}
-
-// SetRoomTypes sets the "room_types" field.
-func (_u *HotelUpdate) SetRoomTypes(v []string) *HotelUpdate {
-	_u.mutation.SetRoomTypes(v)
-	return _u
-}
-
-// AppendRoomTypes appends value to the "room_types" field.
-func (_u *HotelUpdate) AppendRoomTypes(v []string) *HotelUpdate {
-	_u.mutation.AppendRoomTypes(v)
-	return _u
-}
-
-// ClearRoomTypes clears the value of the "room_types" field.
-func (_u *HotelUpdate) ClearRoomTypes() *HotelUpdate {
-	_u.mutation.ClearRoomTypes()
 	return _u
 }
 
@@ -683,28 +646,6 @@ func (_u *HotelUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if _u.mutation.CheckOutTimeCleared() {
 		_spec.ClearField(hotel.FieldCheckOutTime, field.TypeString)
 	}
-	if value, ok := _u.mutation.Facilities(); ok {
-		_spec.SetField(hotel.FieldFacilities, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedFacilities(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, hotel.FieldFacilities, value)
-		})
-	}
-	if _u.mutation.FacilitiesCleared() {
-		_spec.ClearField(hotel.FieldFacilities, field.TypeJSON)
-	}
-	if value, ok := _u.mutation.RoomTypes(); ok {
-		_spec.SetField(hotel.FieldRoomTypes, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedRoomTypes(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, hotel.FieldRoomTypes, value)
-		})
-	}
-	if _u.mutation.RoomTypesCleared() {
-		_spec.ClearField(hotel.FieldRoomTypes, field.TypeJSON)
-	}
 	if value, ok := _u.mutation.Address(); ok {
 		_spec.SetField(hotel.FieldAddress, field.TypeJSON, value)
 	}
@@ -988,42 +929,6 @@ func (_u *HotelUpdateOne) SetNillableCheckOutTime(v *string) *HotelUpdateOne {
 // ClearCheckOutTime clears the value of the "check_out_time" field.
 func (_u *HotelUpdateOne) ClearCheckOutTime() *HotelUpdateOne {
 	_u.mutation.ClearCheckOutTime()
-	return _u
-}
-
-// SetFacilities sets the "facilities" field.
-func (_u *HotelUpdateOne) SetFacilities(v []string) *HotelUpdateOne {
-	_u.mutation.SetFacilities(v)
-	return _u
-}
-
-// AppendFacilities appends value to the "facilities" field.
-func (_u *HotelUpdateOne) AppendFacilities(v []string) *HotelUpdateOne {
-	_u.mutation.AppendFacilities(v)
-	return _u
-}
-
-// ClearFacilities clears the value of the "facilities" field.
-func (_u *HotelUpdateOne) ClearFacilities() *HotelUpdateOne {
-	_u.mutation.ClearFacilities()
-	return _u
-}
-
-// SetRoomTypes sets the "room_types" field.
-func (_u *HotelUpdateOne) SetRoomTypes(v []string) *HotelUpdateOne {
-	_u.mutation.SetRoomTypes(v)
-	return _u
-}
-
-// AppendRoomTypes appends value to the "room_types" field.
-func (_u *HotelUpdateOne) AppendRoomTypes(v []string) *HotelUpdateOne {
-	_u.mutation.AppendRoomTypes(v)
-	return _u
-}
-
-// ClearRoomTypes clears the value of the "room_types" field.
-func (_u *HotelUpdateOne) ClearRoomTypes() *HotelUpdateOne {
-	_u.mutation.ClearRoomTypes()
 	return _u
 }
 
@@ -1491,28 +1396,6 @@ func (_u *HotelUpdateOne) sqlSave(ctx context.Context) (_node *Hotel, err error)
 	}
 	if _u.mutation.CheckOutTimeCleared() {
 		_spec.ClearField(hotel.FieldCheckOutTime, field.TypeString)
-	}
-	if value, ok := _u.mutation.Facilities(); ok {
-		_spec.SetField(hotel.FieldFacilities, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedFacilities(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, hotel.FieldFacilities, value)
-		})
-	}
-	if _u.mutation.FacilitiesCleared() {
-		_spec.ClearField(hotel.FieldFacilities, field.TypeJSON)
-	}
-	if value, ok := _u.mutation.RoomTypes(); ok {
-		_spec.SetField(hotel.FieldRoomTypes, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedRoomTypes(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, hotel.FieldRoomTypes, value)
-		})
-	}
-	if _u.mutation.RoomTypesCleared() {
-		_spec.ClearField(hotel.FieldRoomTypes, field.TypeJSON)
 	}
 	if value, ok := _u.mutation.Address(); ok {
 		_spec.SetField(hotel.FieldAddress, field.TypeJSON, value)

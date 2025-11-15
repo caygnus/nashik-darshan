@@ -20,8 +20,6 @@ type CreateHotelRequest struct {
 	RoomCount       int               `json:"room_count" binding:"omitempty,min=0"`
 	CheckInTime     *string           `json:"check_in_time,omitempty"`
 	CheckOutTime    *string           `json:"check_out_time,omitempty"`
-	Facilities      []string          `json:"facilities,omitempty"`
-	RoomTypes       []string          `json:"room_types,omitempty"`
 	Address         map[string]string `json:"address,omitempty"`
 	Location        types.Location    `json:"location" binding:"required"`
 	Phone           *string           `json:"phone,omitempty"`
@@ -65,8 +63,6 @@ type UpdateHotelRequest struct {
 	RoomCount       *int              `json:"room_count,omitempty" binding:"omitempty,min=0"`
 	CheckInTime     *string           `json:"check_in_time,omitempty"`
 	CheckOutTime    *string           `json:"check_out_time,omitempty"`
-	Facilities      []string          `json:"facilities,omitempty"`
-	RoomTypes       []string          `json:"room_types,omitempty"`
 	Address         map[string]string `json:"address,omitempty"`
 	Location        *types.Location   `json:"location,omitempty"`
 	Phone           *string           `json:"phone,omitempty"`
@@ -131,8 +127,6 @@ func (req *CreateHotelRequest) ToHotel(ctx context.Context) (*hotel.Hotel, error
 		RoomCount:       req.RoomCount,
 		CheckInTime:     req.CheckInTime,
 		CheckOutTime:    req.CheckOutTime,
-		Facilities:      req.Facilities,
-		RoomTypes:       req.RoomTypes,
 		Address:         req.Address,
 		Location:        req.Location,
 		Phone:           req.Phone,
@@ -169,12 +163,6 @@ func (req *UpdateHotelRequest) ApplyToHotel(ctx context.Context, h *hotel.Hotel)
 	}
 	if req.CheckOutTime != nil {
 		h.CheckOutTime = req.CheckOutTime
-	}
-	if req.Facilities != nil {
-		h.Facilities = req.Facilities
-	}
-	if req.RoomTypes != nil {
-		h.RoomTypes = req.RoomTypes
 	}
 	if req.Address != nil {
 		h.Address = req.Address

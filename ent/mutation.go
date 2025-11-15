@@ -902,10 +902,6 @@ type HotelMutation struct {
 	addroom_count     *int
 	check_in_time     *string
 	check_out_time    *string
-	facilities        *[]string
-	appendfacilities  []string
-	room_types        *[]string
-	appendroom_types  []string
 	address           *map[string]string
 	latitude          *decimal.Decimal
 	longitude         *decimal.Decimal
@@ -1618,136 +1614,6 @@ func (m *HotelMutation) CheckOutTimeCleared() bool {
 func (m *HotelMutation) ResetCheckOutTime() {
 	m.check_out_time = nil
 	delete(m.clearedFields, hotel.FieldCheckOutTime)
-}
-
-// SetFacilities sets the "facilities" field.
-func (m *HotelMutation) SetFacilities(s []string) {
-	m.facilities = &s
-	m.appendfacilities = nil
-}
-
-// Facilities returns the value of the "facilities" field in the mutation.
-func (m *HotelMutation) Facilities() (r []string, exists bool) {
-	v := m.facilities
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldFacilities returns the old "facilities" field's value of the Hotel entity.
-// If the Hotel object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *HotelMutation) OldFacilities(ctx context.Context) (v []string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldFacilities is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldFacilities requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldFacilities: %w", err)
-	}
-	return oldValue.Facilities, nil
-}
-
-// AppendFacilities adds s to the "facilities" field.
-func (m *HotelMutation) AppendFacilities(s []string) {
-	m.appendfacilities = append(m.appendfacilities, s...)
-}
-
-// AppendedFacilities returns the list of values that were appended to the "facilities" field in this mutation.
-func (m *HotelMutation) AppendedFacilities() ([]string, bool) {
-	if len(m.appendfacilities) == 0 {
-		return nil, false
-	}
-	return m.appendfacilities, true
-}
-
-// ClearFacilities clears the value of the "facilities" field.
-func (m *HotelMutation) ClearFacilities() {
-	m.facilities = nil
-	m.appendfacilities = nil
-	m.clearedFields[hotel.FieldFacilities] = struct{}{}
-}
-
-// FacilitiesCleared returns if the "facilities" field was cleared in this mutation.
-func (m *HotelMutation) FacilitiesCleared() bool {
-	_, ok := m.clearedFields[hotel.FieldFacilities]
-	return ok
-}
-
-// ResetFacilities resets all changes to the "facilities" field.
-func (m *HotelMutation) ResetFacilities() {
-	m.facilities = nil
-	m.appendfacilities = nil
-	delete(m.clearedFields, hotel.FieldFacilities)
-}
-
-// SetRoomTypes sets the "room_types" field.
-func (m *HotelMutation) SetRoomTypes(s []string) {
-	m.room_types = &s
-	m.appendroom_types = nil
-}
-
-// RoomTypes returns the value of the "room_types" field in the mutation.
-func (m *HotelMutation) RoomTypes() (r []string, exists bool) {
-	v := m.room_types
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldRoomTypes returns the old "room_types" field's value of the Hotel entity.
-// If the Hotel object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *HotelMutation) OldRoomTypes(ctx context.Context) (v []string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldRoomTypes is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldRoomTypes requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldRoomTypes: %w", err)
-	}
-	return oldValue.RoomTypes, nil
-}
-
-// AppendRoomTypes adds s to the "room_types" field.
-func (m *HotelMutation) AppendRoomTypes(s []string) {
-	m.appendroom_types = append(m.appendroom_types, s...)
-}
-
-// AppendedRoomTypes returns the list of values that were appended to the "room_types" field in this mutation.
-func (m *HotelMutation) AppendedRoomTypes() ([]string, bool) {
-	if len(m.appendroom_types) == 0 {
-		return nil, false
-	}
-	return m.appendroom_types, true
-}
-
-// ClearRoomTypes clears the value of the "room_types" field.
-func (m *HotelMutation) ClearRoomTypes() {
-	m.room_types = nil
-	m.appendroom_types = nil
-	m.clearedFields[hotel.FieldRoomTypes] = struct{}{}
-}
-
-// RoomTypesCleared returns if the "room_types" field was cleared in this mutation.
-func (m *HotelMutation) RoomTypesCleared() bool {
-	_, ok := m.clearedFields[hotel.FieldRoomTypes]
-	return ok
-}
-
-// ResetRoomTypes resets all changes to the "room_types" field.
-func (m *HotelMutation) ResetRoomTypes() {
-	m.room_types = nil
-	m.appendroom_types = nil
-	delete(m.clearedFields, hotel.FieldRoomTypes)
 }
 
 // SetAddress sets the "address" field.
@@ -2530,7 +2396,7 @@ func (m *HotelMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *HotelMutation) Fields() []string {
-	fields := make([]string, 0, 31)
+	fields := make([]string, 0, 29)
 	if m.status != nil {
 		fields = append(fields, hotel.FieldStatus)
 	}
@@ -2569,12 +2435,6 @@ func (m *HotelMutation) Fields() []string {
 	}
 	if m.check_out_time != nil {
 		fields = append(fields, hotel.FieldCheckOutTime)
-	}
-	if m.facilities != nil {
-		fields = append(fields, hotel.FieldFacilities)
-	}
-	if m.room_types != nil {
-		fields = append(fields, hotel.FieldRoomTypes)
 	}
 	if m.address != nil {
 		fields = append(fields, hotel.FieldAddress)
@@ -2658,10 +2518,6 @@ func (m *HotelMutation) Field(name string) (ent.Value, bool) {
 		return m.CheckInTime()
 	case hotel.FieldCheckOutTime:
 		return m.CheckOutTime()
-	case hotel.FieldFacilities:
-		return m.Facilities()
-	case hotel.FieldRoomTypes:
-		return m.RoomTypes()
 	case hotel.FieldAddress:
 		return m.Address()
 	case hotel.FieldLatitude:
@@ -2729,10 +2585,6 @@ func (m *HotelMutation) OldField(ctx context.Context, name string) (ent.Value, e
 		return m.OldCheckInTime(ctx)
 	case hotel.FieldCheckOutTime:
 		return m.OldCheckOutTime(ctx)
-	case hotel.FieldFacilities:
-		return m.OldFacilities(ctx)
-	case hotel.FieldRoomTypes:
-		return m.OldRoomTypes(ctx)
 	case hotel.FieldAddress:
 		return m.OldAddress(ctx)
 	case hotel.FieldLatitude:
@@ -2864,20 +2716,6 @@ func (m *HotelMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetCheckOutTime(v)
-		return nil
-	case hotel.FieldFacilities:
-		v, ok := value.([]string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetFacilities(v)
-		return nil
-	case hotel.FieldRoomTypes:
-		v, ok := value.([]string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetRoomTypes(v)
 		return nil
 	case hotel.FieldAddress:
 		v, ok := value.(map[string]string)
@@ -3090,12 +2928,6 @@ func (m *HotelMutation) ClearedFields() []string {
 	if m.FieldCleared(hotel.FieldCheckOutTime) {
 		fields = append(fields, hotel.FieldCheckOutTime)
 	}
-	if m.FieldCleared(hotel.FieldFacilities) {
-		fields = append(fields, hotel.FieldFacilities)
-	}
-	if m.FieldCleared(hotel.FieldRoomTypes) {
-		fields = append(fields, hotel.FieldRoomTypes)
-	}
 	if m.FieldCleared(hotel.FieldAddress) {
 		fields = append(fields, hotel.FieldAddress)
 	}
@@ -3157,12 +2989,6 @@ func (m *HotelMutation) ClearField(name string) error {
 		return nil
 	case hotel.FieldCheckOutTime:
 		m.ClearCheckOutTime()
-		return nil
-	case hotel.FieldFacilities:
-		m.ClearFacilities()
-		return nil
-	case hotel.FieldRoomTypes:
-		m.ClearRoomTypes()
 		return nil
 	case hotel.FieldAddress:
 		m.ClearAddress()
@@ -3240,12 +3066,6 @@ func (m *HotelMutation) ResetField(name string) error {
 		return nil
 	case hotel.FieldCheckOutTime:
 		m.ResetCheckOutTime()
-		return nil
-	case hotel.FieldFacilities:
-		m.ResetFacilities()
-		return nil
-	case hotel.FieldRoomTypes:
-		m.ResetRoomTypes()
 		return nil
 	case hotel.FieldAddress:
 		m.ResetAddress()

@@ -40,10 +40,6 @@ const (
 	FieldCheckInTime = "check_in_time"
 	// FieldCheckOutTime holds the string denoting the check_out_time field in the database.
 	FieldCheckOutTime = "check_out_time"
-	// FieldFacilities holds the string denoting the facilities field in the database.
-	FieldFacilities = "facilities"
-	// FieldRoomTypes holds the string denoting the room_types field in the database.
-	FieldRoomTypes = "room_types"
 	// FieldAddress holds the string denoting the address field in the database.
 	FieldAddress = "address"
 	// FieldLatitude holds the string denoting the latitude field in the database.
@@ -96,8 +92,6 @@ var Columns = []string{
 	FieldRoomCount,
 	FieldCheckInTime,
 	FieldCheckOutTime,
-	FieldFacilities,
-	FieldRoomTypes,
 	FieldAddress,
 	FieldLatitude,
 	FieldLongitude,

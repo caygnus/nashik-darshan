@@ -50,8 +50,6 @@ var (
 		{Name: "room_count", Type: field.TypeInt, Default: 0, SchemaType: map[string]string{"postgres": "integer"}},
 		{Name: "check_in_time", Type: field.TypeString, Nullable: true, SchemaType: map[string]string{"postgres": "varchar(10)"}},
 		{Name: "check_out_time", Type: field.TypeString, Nullable: true, SchemaType: map[string]string{"postgres": "varchar(10)"}},
-		{Name: "facilities", Type: field.TypeJSON, Nullable: true, SchemaType: map[string]string{"postgres": "text[]"}},
-		{Name: "room_types", Type: field.TypeJSON, Nullable: true, SchemaType: map[string]string{"postgres": "text[]"}},
 		{Name: "address", Type: field.TypeJSON, Nullable: true, SchemaType: map[string]string{"postgres": "jsonb"}},
 		{Name: "latitude", Type: field.TypeOther, SchemaType: map[string]string{"postgres": "decimal(10,8)"}},
 		{Name: "longitude", Type: field.TypeOther, SchemaType: map[string]string{"postgres": "decimal(11,8)"}},
@@ -83,7 +81,7 @@ var (
 			{
 				Name:    "hotel_latitude_longitude",
 				Unique:  false,
-				Columns: []*schema.Column{HotelsColumns[17], HotelsColumns[18]},
+				Columns: []*schema.Column{HotelsColumns[15], HotelsColumns[16]},
 			},
 			{
 				Name:    "hotel_star_rating",
@@ -93,32 +91,32 @@ var (
 			{
 				Name:    "hotel_price_min_price_max",
 				Unique:  false,
-				Columns: []*schema.Column{HotelsColumns[24], HotelsColumns[25]},
+				Columns: []*schema.Column{HotelsColumns[22], HotelsColumns[23]},
 			},
 			{
 				Name:    "hotel_popularity_score",
 				Unique:  false,
-				Columns: []*schema.Column{HotelsColumns[31]},
+				Columns: []*schema.Column{HotelsColumns[29]},
 			},
 			{
 				Name:    "hotel_view_count",
 				Unique:  false,
-				Columns: []*schema.Column{HotelsColumns[27]},
+				Columns: []*schema.Column{HotelsColumns[25]},
 			},
 			{
 				Name:    "hotel_rating_avg",
 				Unique:  false,
-				Columns: []*schema.Column{HotelsColumns[28]},
+				Columns: []*schema.Column{HotelsColumns[26]},
 			},
 			{
 				Name:    "hotel_last_viewed_at",
 				Unique:  false,
-				Columns: []*schema.Column{HotelsColumns[30]},
+				Columns: []*schema.Column{HotelsColumns[28]},
 			},
 			{
 				Name:    "hotel_last_viewed_at_popularity_score",
 				Unique:  false,
-				Columns: []*schema.Column{HotelsColumns[30], HotelsColumns[31]},
+				Columns: []*schema.Column{HotelsColumns[28], HotelsColumns[29]},
 			},
 		},
 	}

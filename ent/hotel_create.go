@@ -179,18 +179,6 @@ func (_c *HotelCreate) SetNillableCheckOutTime(v *string) *HotelCreate {
 	return _c
 }
 
-// SetFacilities sets the "facilities" field.
-func (_c *HotelCreate) SetFacilities(v []string) *HotelCreate {
-	_c.mutation.SetFacilities(v)
-	return _c
-}
-
-// SetRoomTypes sets the "room_types" field.
-func (_c *HotelCreate) SetRoomTypes(v []string) *HotelCreate {
-	_c.mutation.SetRoomTypes(v)
-	return _c
-}
-
 // SetAddress sets the "address" field.
 func (_c *HotelCreate) SetAddress(v map[string]string) *HotelCreate {
 	_c.mutation.SetAddress(v)
@@ -679,14 +667,6 @@ func (_c *HotelCreate) createSpec() (*Hotel, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.CheckOutTime(); ok {
 		_spec.SetField(hotel.FieldCheckOutTime, field.TypeString, value)
 		_node.CheckOutTime = value
-	}
-	if value, ok := _c.mutation.Facilities(); ok {
-		_spec.SetField(hotel.FieldFacilities, field.TypeJSON, value)
-		_node.Facilities = value
-	}
-	if value, ok := _c.mutation.RoomTypes(); ok {
-		_spec.SetField(hotel.FieldRoomTypes, field.TypeJSON, value)
-		_node.RoomTypes = value
 	}
 	if value, ok := _c.mutation.Address(); ok {
 		_spec.SetField(hotel.FieldAddress, field.TypeJSON, value)

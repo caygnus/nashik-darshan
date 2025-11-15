@@ -14,8 +14,6 @@ type HotelFilter struct {
 	// Custom filters
 	Slug       []string `json:"slug,omitempty" form:"slug" validate:"omitempty"`
 	StarRating []int    `json:"star_rating,omitempty" form:"star_rating" validate:"omitempty"`
-	Facilities []string `json:"facilities,omitempty" form:"facilities" validate:"omitempty"`
-	RoomTypes  []string `json:"room_types,omitempty" form:"room_types" validate:"omitempty"`
 
 	// Price range filters
 	MinPrice *decimal.Decimal `json:"min_price,omitempty" form:"min_price" validate:"omitempty"`

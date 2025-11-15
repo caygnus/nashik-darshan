@@ -56,10 +56,6 @@ definitions:
         type: string
       email:
         type: string
-      facilities:
-        items:
-          type: string
-        type: array
       location:
         $ref: '#/definitions/types.Location'
       name:
@@ -76,10 +72,6 @@ definitions:
       room_count:
         minimum: 0
         type: integer
-      room_types:
-        items:
-          type: string
-        type: array
       slug:
         minLength: 1
         type: string
@@ -290,10 +282,6 @@ definitions:
         type: string
       email:
         type: string
-      facilities:
-        items:
-          type: string
-        type: array
       id:
         type: string
       last_viewed_at:
@@ -318,10 +306,6 @@ definitions:
         type: integer
       room_count:
         type: integer
-      room_types:
-        items:
-          type: string
-        type: array
       slug:
         type: string
       star_rating:
@@ -604,10 +588,6 @@ definitions:
         type: string
       email:
         type: string
-      facilities:
-        items:
-          type: string
-        type: array
       location:
         $ref: '#/definitions/types.Location'
       name:
@@ -624,10 +604,6 @@ definitions:
       room_count:
         minimum: 0
         type: integer
-      room_types:
-        items:
-          type: string
-        type: array
       slug:
         minLength: 1
         type: string
@@ -1161,20 +1137,6 @@ paths:
         items:
           type: integer
         name: star_rating
-        type: array
-      - collectionFormat: csv
-        description: Filter by facilities
-        in: query
-        items:
-          type: string
-        name: facilities
-        type: array
-      - collectionFormat: csv
-        description: Filter by room types
-        in: query
-        items:
-          type: string
-        name: room_types
         type: array
       - description: Minimum price
         in: query

@@ -45,10 +45,6 @@ type Hotel struct {
 	CheckInTime string `json:"check_in_time,omitempty"`
 	// CheckOutTime holds the value of the "check_out_time" field.
 	CheckOutTime string `json:"check_out_time,omitempty"`
-	// Facilities holds the value of the "facilities" field.
-	Facilities []string `json:"facilities,omitempty"`
-	// RoomTypes holds the value of the "room_types" field.
-	RoomTypes []string `json:"room_types,omitempty"`
 	// Address holds the value of the "address" field.
 	Address map[string]string `json:"address,omitempty"`
 	// Latitude holds the value of the "latitude" field.
@@ -89,7 +85,7 @@ func (*Hotel) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case hotel.FieldMetadata, hotel.FieldFacilities, hotel.FieldRoomTypes, hotel.FieldAddress:
+		case hotel.FieldMetadata, hotel.FieldAddress:
 			values[i] = new([]byte)
 		case hotel.FieldLatitude, hotel.FieldLongitude, hotel.FieldPriceMin, hotel.FieldPriceMax, hotel.FieldRatingAvg, hotel.FieldPopularityScore:
 			values[i] = new(decimal.Decimal)
@@ -199,22 +195,6 @@ func (_m *Hotel) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field check_out_time", values[i])
 			} else if value.Valid {
 				_m.CheckOutTime = value.String
-			}
-		case hotel.FieldFacilities:
-			if value, ok := values[i].(*[]byte); !ok {
-				return fmt.Errorf("unexpected type %T for field facilities", values[i])
-			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &_m.Facilities); err != nil {
-					return fmt.Errorf("unmarshal field facilities: %w", err)
-				}
-			}
-		case hotel.FieldRoomTypes:
-			if value, ok := values[i].(*[]byte); !ok {
-				return fmt.Errorf("unexpected type %T for field room_types", values[i])
-			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &_m.RoomTypes); err != nil {
-					return fmt.Errorf("unmarshal field room_types: %w", err)
-				}
 			}
 		case hotel.FieldAddress:
 			if value, ok := values[i].(*[]byte); !ok {
@@ -388,12 +368,6 @@ func (_m *Hotel) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("check_out_time=")
 	builder.WriteString(_m.CheckOutTime)
-	builder.WriteString(", ")
-	builder.WriteString("facilities=")
-	builder.WriteString(fmt.Sprintf("%v", _m.Facilities))
-	builder.WriteString(", ")
-	builder.WriteString("room_types=")
-	builder.WriteString(fmt.Sprintf("%v", _m.RoomTypes))
 	builder.WriteString(", ")
 	builder.WriteString("address=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Address))

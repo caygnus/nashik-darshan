@@ -19,8 +19,6 @@ type Hotel struct {
 	RoomCount       int               `json:"room_count" db:"room_count"`
 	CheckInTime     *string           `json:"check_in_time,omitempty" db:"check_in_time"`
 	CheckOutTime    *string           `json:"check_out_time,omitempty" db:"check_out_time"`
-	Facilities      []string          `json:"facilities" db:"facilities"`
-	RoomTypes       []string          `json:"room_types" db:"room_types"`
 	Address         map[string]string `json:"address,omitempty" db:"address"`
 	Location        types.Location    `json:"location" db:"location"`
 	Phone           *string           `json:"phone,omitempty" db:"phone"`
@@ -53,8 +51,6 @@ func FromEnt(hotel *ent.Hotel) *Hotel {
 		RoomCount:    hotel.RoomCount,
 		CheckInTime:  lo.ToPtr(hotel.CheckInTime),
 		CheckOutTime: lo.ToPtr(hotel.CheckOutTime),
-		Facilities:   hotel.Facilities,
-		RoomTypes:    hotel.RoomTypes,
 		Location: types.Location{
 			Latitude:  hotel.Latitude,
 			Longitude: hotel.Longitude,

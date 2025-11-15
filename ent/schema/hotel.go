@@ -68,16 +68,6 @@ func (Hotel) Fields() []ent.Field {
 				"postgres": "varchar(10)",
 			}).
 			Optional(),
-		field.Strings("facilities").
-			SchemaType(map[string]string{
-				"postgres": "text[]",
-			}).
-			Optional(),
-		field.Strings("room_types").
-			SchemaType(map[string]string{
-				"postgres": "text[]",
-			}).
-			Optional(),
 		field.JSON("address", map[string]string{}).
 			SchemaType(map[string]string{
 				"postgres": "jsonb",
