@@ -3,6 +3,7 @@
 package migrate
 
 import (
+	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/dialect/sql/schema"
 	"entgo.io/ent/schema/field"
 )
@@ -322,19 +323,28 @@ var (
 		PrimaryKey: []*schema.Column{UsersColumns[0]},
 		Indexes: []*schema.Index{
 			{
-				Name:    "user_email_phone",
-				Unique:  true,
-				Columns: []*schema.Column{UsersColumns[8], UsersColumns[9]},
-			},
-			{
 				Name:    "user_email",
 				Unique:  true,
 				Columns: []*schema.Column{UsersColumns[8]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "email IS NOT NULL AND email != ''",
+				},
 			},
 			{
 				Name:    "user_phone",
 				Unique:  true,
 				Columns: []*schema.Column{UsersColumns[9]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "phone IS NOT NULL AND phone != ''",
+				},
+			},
+			{
+				Name:    "user_email_phone",
+				Unique:  true,
+				Columns: []*schema.Column{UsersColumns[8], UsersColumns[9]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "(email IS NOT NULL AND email != '') AND (phone IS NOT NULL AND phone != '')",
+				},
 			},
 		},
 	}

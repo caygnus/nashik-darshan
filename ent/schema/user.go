@@ -2,6 +2,7 @@ package schema
 
 import (
 	"entgo.io/ent"
+	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 	baseMixin "github.com/omkar273/nashikdarshan/ent/mixin"
@@ -62,11 +63,23 @@ func (User) Edges() []ent.Edge {
 // Indexes of the User.
 func (User) Indexes() []ent.Index {
 	return []ent.Index{
-		index.Fields("email", "phone").
-			Unique(),
+		// Partial unique index for email - only when email is not empty
 		index.Fields("email").
-			Unique(),
+			Unique().
+			Annotations(
+				entsql.IndexWhere("email IS NOT NULL AND email != ''"),
+			),
+		// Partial unique index for phone - only when phone is not null and not empty
 		index.Fields("phone").
-			Unique(),
+			Unique().
+			Annotations(
+				entsql.IndexWhere("phone IS NOT NULL AND phone != ''"),
+			),
+		// Partial unique index for email and phone combination - only when both are not empty
+		index.Fields("email", "phone").
+			Unique().
+			Annotations(
+				entsql.IndexWhere("(email IS NOT NULL AND email != '') AND (phone IS NOT NULL AND phone != '')"),
+			),
 	}
 }
