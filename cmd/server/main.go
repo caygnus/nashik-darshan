@@ -85,7 +85,6 @@ func main() {
 		service.NewCategoryService,
 		service.NewPlaceService,
 		service.NewReviewService,
-		service.NewFeedService,
 		service.NewHotelService,
 	))
 
@@ -119,7 +118,7 @@ func startServer(
 	startAPIServer(lc, r, cfg, log)
 }
 
-func provideHandlers(logger *logger.Logger, authService service.AuthService, userService service.UserService, categoryService service.CategoryService, placeService service.PlaceService, reviewService service.ReviewService, feedService service.FeedService, hotelService service.HotelService) *api.Handlers {
+func provideHandlers(logger *logger.Logger, authService service.AuthService, userService service.UserService, categoryService service.CategoryService, placeService service.PlaceService, reviewService service.ReviewService, hotelService service.HotelService) *api.Handlers {
 	return &api.Handlers{
 		Health:   v1.NewHealthHandler(logger),
 		Auth:     v1.NewAuthHandler(authService),
@@ -127,7 +126,6 @@ func provideHandlers(logger *logger.Logger, authService service.AuthService, use
 		Category: v1.NewCategoryHandler(categoryService),
 		Place:    v1.NewPlaceHandler(placeService),
 		Review:   v1.NewReviewHandler(reviewService),
-		Feed:     v1.NewFeedHandler(feedService),
 		Hotel:    v1.NewHotelHandler(hotelService),
 	}
 }

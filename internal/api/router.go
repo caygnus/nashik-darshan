@@ -16,7 +16,6 @@ type Handlers struct {
 	User     *v1.UserHandler
 	Category *v1.CategoryHandler
 	Place    *v1.PlaceHandler
-	Feed     *v1.FeedHandler
 	Review   *v1.ReviewHandler
 	Hotel    *v1.HotelHandler
 }
@@ -88,10 +87,10 @@ func NewRouter(handlers *Handlers, cfg *config.Configuration, logger *logger.Log
 	}
 
 	// Feed routes (public)
-	v1Router.POST("/feed", handlers.Feed.GetFeed)
+	v1Router.POST("/feed", handlers.Place.GetFeed)
 
 	// Engagement tracking routes
-	v1Router.POST("/places/:id/view", handlers.Feed.IncrementViewCount) // Public for analytics
+	v1Router.POST("/places/:id/view", handlers.Place.IncrementViewCount) // Public for analytics
 
 	// Review routes
 	v1Review := v1Router.Group("/reviews")
