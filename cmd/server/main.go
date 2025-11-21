@@ -71,10 +71,9 @@ func main() {
 			repository.NewPlaceRepository,
 			repository.NewReviewRepository,
 			repository.NewHotelRepository,
+			repository.NewEventRepository,
 		),
-	)
-
-	// services
+	) // services
 	opts = append(opts, fx.Provide(
 
 		// all services
@@ -86,6 +85,8 @@ func main() {
 		service.NewPlaceService,
 		service.NewReviewService,
 		service.NewHotelService,
+		service.NewEventService,
+		service.NewEventExpander,
 	))
 
 	// factory layer
@@ -118,7 +119,7 @@ func startServer(
 	startAPIServer(lc, r, cfg, log)
 }
 
-func provideHandlers(logger *logger.Logger, authService service.AuthService, userService service.UserService, categoryService service.CategoryService, placeService service.PlaceService, reviewService service.ReviewService, hotelService service.HotelService) *api.Handlers {
+func provideHandlers(logger *logger.Logger, authService service.AuthService, userService service.UserService, categoryService service.CategoryService, placeService service.PlaceService, reviewService service.ReviewService, hotelService service.HotelService, eventService service.EventService) *api.Handlers {
 	return &api.Handlers{
 		Health:   v1.NewHealthHandler(logger),
 		Auth:     v1.NewAuthHandler(authService),
@@ -127,6 +128,7 @@ func provideHandlers(logger *logger.Logger, authService service.AuthService, use
 		Place:    v1.NewPlaceHandler(placeService),
 		Review:   v1.NewReviewHandler(reviewService),
 		Hotel:    v1.NewHotelHandler(hotelService),
+		Event:    v1.NewEventHandler(eventService),
 	}
 }
 

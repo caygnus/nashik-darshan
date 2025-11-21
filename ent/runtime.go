@@ -6,6 +6,8 @@ import (
 	"time"
 
 	"github.com/omkar273/nashikdarshan/ent/category"
+	"github.com/omkar273/nashikdarshan/ent/event"
+	"github.com/omkar273/nashikdarshan/ent/eventoccurrence"
 	"github.com/omkar273/nashikdarshan/ent/hotel"
 	"github.com/omkar273/nashikdarshan/ent/place"
 	"github.com/omkar273/nashikdarshan/ent/placeimage"
@@ -56,6 +58,158 @@ func init() {
 	categoryDescID := categoryFields[0].Descriptor()
 	// category.IDValidator is a validator for the "id" field. It is called by the builders before save.
 	category.IDValidator = categoryDescID.Validators[0].(func(string) error)
+	eventFields := schema.Event{}.Fields()
+	_ = eventFields
+	// eventDescSlug is the schema descriptor for slug field.
+	eventDescSlug := eventFields[1].Descriptor()
+	// event.SlugValidator is a validator for the "slug" field. It is called by the builders before save.
+	event.SlugValidator = eventDescSlug.Validators[0].(func(string) error)
+	// eventDescTitle is the schema descriptor for title field.
+	eventDescTitle := eventFields[3].Descriptor()
+	// event.TitleValidator is a validator for the "title" field. It is called by the builders before save.
+	event.TitleValidator = func() func(string) error {
+		validators := eventDescTitle.Validators
+		fns := [...]func(string) error{
+			validators[0].(func(string) error),
+			validators[1].(func(string) error),
+		}
+		return func(title string) error {
+			for _, fn := range fns {
+				if err := fn(title); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
+	// eventDescSubtitle is the schema descriptor for subtitle field.
+	eventDescSubtitle := eventFields[4].Descriptor()
+	// event.SubtitleValidator is a validator for the "subtitle" field. It is called by the builders before save.
+	event.SubtitleValidator = eventDescSubtitle.Validators[0].(func(string) error)
+	// eventDescCoverImageURL is the schema descriptor for cover_image_url field.
+	eventDescCoverImageURL := eventFields[9].Descriptor()
+	// event.CoverImageURLValidator is a validator for the "cover_image_url" field. It is called by the builders before save.
+	event.CoverImageURLValidator = eventDescCoverImageURL.Validators[0].(func(string) error)
+	// eventDescLocationName is the schema descriptor for location_name field.
+	eventDescLocationName := eventFields[15].Descriptor()
+	// event.LocationNameValidator is a validator for the "location_name" field. It is called by the builders before save.
+	event.LocationNameValidator = eventDescLocationName.Validators[0].(func(string) error)
+	// eventDescViewCount is the schema descriptor for view_count field.
+	eventDescViewCount := eventFields[16].Descriptor()
+	// event.DefaultViewCount holds the default value on creation for the view_count field.
+	event.DefaultViewCount = eventDescViewCount.Default.(int)
+	// event.ViewCountValidator is a validator for the "view_count" field. It is called by the builders before save.
+	event.ViewCountValidator = eventDescViewCount.Validators[0].(func(int) error)
+	// eventDescInterestedCount is the schema descriptor for interested_count field.
+	eventDescInterestedCount := eventFields[17].Descriptor()
+	// event.DefaultInterestedCount holds the default value on creation for the interested_count field.
+	event.DefaultInterestedCount = eventDescInterestedCount.Default.(int)
+	// event.InterestedCountValidator is a validator for the "interested_count" field. It is called by the builders before save.
+	event.InterestedCountValidator = eventDescInterestedCount.Validators[0].(func(int) error)
+	// eventDescCreatedBy is the schema descriptor for created_by field.
+	eventDescCreatedBy := eventFields[19].Descriptor()
+	// event.CreatedByValidator is a validator for the "created_by" field. It is called by the builders before save.
+	event.CreatedByValidator = eventDescCreatedBy.Validators[0].(func(string) error)
+	// eventDescUpdatedBy is the schema descriptor for updated_by field.
+	eventDescUpdatedBy := eventFields[20].Descriptor()
+	// event.UpdatedByValidator is a validator for the "updated_by" field. It is called by the builders before save.
+	event.UpdatedByValidator = eventDescUpdatedBy.Validators[0].(func(string) error)
+	// eventDescCreatedAt is the schema descriptor for created_at field.
+	eventDescCreatedAt := eventFields[21].Descriptor()
+	// event.DefaultCreatedAt holds the default value on creation for the created_at field.
+	event.DefaultCreatedAt = eventDescCreatedAt.Default.(func() time.Time)
+	// eventDescUpdatedAt is the schema descriptor for updated_at field.
+	eventDescUpdatedAt := eventFields[22].Descriptor()
+	// event.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	event.DefaultUpdatedAt = eventDescUpdatedAt.Default.(func() time.Time)
+	// event.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	event.UpdateDefaultUpdatedAt = eventDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// eventDescID is the schema descriptor for id field.
+	eventDescID := eventFields[0].Descriptor()
+	// event.IDValidator is a validator for the "id" field. It is called by the builders before save.
+	event.IDValidator = eventDescID.Validators[0].(func(string) error)
+	eventoccurrenceFields := schema.EventOccurrence{}.Fields()
+	_ = eventoccurrenceFields
+	// eventoccurrenceDescEventID is the schema descriptor for event_id field.
+	eventoccurrenceDescEventID := eventoccurrenceFields[1].Descriptor()
+	// eventoccurrence.EventIDValidator is a validator for the "event_id" field. It is called by the builders before save.
+	eventoccurrence.EventIDValidator = eventoccurrenceDescEventID.Validators[0].(func(string) error)
+	// eventoccurrenceDescDayOfWeek is the schema descriptor for day_of_week field.
+	eventoccurrenceDescDayOfWeek := eventoccurrenceFields[6].Descriptor()
+	// eventoccurrence.DayOfWeekValidator is a validator for the "day_of_week" field. It is called by the builders before save.
+	eventoccurrence.DayOfWeekValidator = func() func(int) error {
+		validators := eventoccurrenceDescDayOfWeek.Validators
+		fns := [...]func(int) error{
+			validators[0].(func(int) error),
+			validators[1].(func(int) error),
+		}
+		return func(day_of_week int) error {
+			for _, fn := range fns {
+				if err := fn(day_of_week); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
+	// eventoccurrenceDescDayOfMonth is the schema descriptor for day_of_month field.
+	eventoccurrenceDescDayOfMonth := eventoccurrenceFields[7].Descriptor()
+	// eventoccurrence.DayOfMonthValidator is a validator for the "day_of_month" field. It is called by the builders before save.
+	eventoccurrence.DayOfMonthValidator = func() func(int) error {
+		validators := eventoccurrenceDescDayOfMonth.Validators
+		fns := [...]func(int) error{
+			validators[0].(func(int) error),
+			validators[1].(func(int) error),
+		}
+		return func(day_of_month int) error {
+			for _, fn := range fns {
+				if err := fn(day_of_month); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
+	// eventoccurrenceDescMonthOfYear is the schema descriptor for month_of_year field.
+	eventoccurrenceDescMonthOfYear := eventoccurrenceFields[8].Descriptor()
+	// eventoccurrence.MonthOfYearValidator is a validator for the "month_of_year" field. It is called by the builders before save.
+	eventoccurrence.MonthOfYearValidator = func() func(int) error {
+		validators := eventoccurrenceDescMonthOfYear.Validators
+		fns := [...]func(int) error{
+			validators[0].(func(int) error),
+			validators[1].(func(int) error),
+		}
+		return func(month_of_year int) error {
+			for _, fn := range fns {
+				if err := fn(month_of_year); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
+	// eventoccurrenceDescCreatedBy is the schema descriptor for created_by field.
+	eventoccurrenceDescCreatedBy := eventoccurrenceFields[12].Descriptor()
+	// eventoccurrence.CreatedByValidator is a validator for the "created_by" field. It is called by the builders before save.
+	eventoccurrence.CreatedByValidator = eventoccurrenceDescCreatedBy.Validators[0].(func(string) error)
+	// eventoccurrenceDescUpdatedBy is the schema descriptor for updated_by field.
+	eventoccurrenceDescUpdatedBy := eventoccurrenceFields[13].Descriptor()
+	// eventoccurrence.UpdatedByValidator is a validator for the "updated_by" field. It is called by the builders before save.
+	eventoccurrence.UpdatedByValidator = eventoccurrenceDescUpdatedBy.Validators[0].(func(string) error)
+	// eventoccurrenceDescCreatedAt is the schema descriptor for created_at field.
+	eventoccurrenceDescCreatedAt := eventoccurrenceFields[14].Descriptor()
+	// eventoccurrence.DefaultCreatedAt holds the default value on creation for the created_at field.
+	eventoccurrence.DefaultCreatedAt = eventoccurrenceDescCreatedAt.Default.(func() time.Time)
+	// eventoccurrenceDescUpdatedAt is the schema descriptor for updated_at field.
+	eventoccurrenceDescUpdatedAt := eventoccurrenceFields[15].Descriptor()
+	// eventoccurrence.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	eventoccurrence.DefaultUpdatedAt = eventoccurrenceDescUpdatedAt.Default.(func() time.Time)
+	// eventoccurrence.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	eventoccurrence.UpdateDefaultUpdatedAt = eventoccurrenceDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// eventoccurrenceDescID is the schema descriptor for id field.
+	eventoccurrenceDescID := eventoccurrenceFields[0].Descriptor()
+	// eventoccurrence.IDValidator is a validator for the "id" field. It is called by the builders before save.
+	eventoccurrence.IDValidator = eventoccurrenceDescID.Validators[0].(func(string) error)
 	hotelMixin := schema.Hotel{}.Mixin()
 	hotelMixinFields0 := hotelMixin[0].Fields()
 	_ = hotelMixinFields0

@@ -395,6 +395,656 @@ const docTemplate = `{
                 }
             }
         },
+        "/events": {
+            "get": {
+                "description": "Get a paginated list of events with filtering and pagination",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Event"
+                ],
+                "summary": "List events",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "name": "expand",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "ISO date YYYY-MM-DD",
+                        "name": "from_date",
+                        "in": "query"
+                    },
+                    {
+                        "maximum": 1000,
+                        "minimum": 1,
+                        "type": "integer",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "minimum": 0,
+                        "type": "integer",
+                        "name": "offset",
+                        "in": "query"
+                    },
+                    {
+                        "enum": [
+                            "asc",
+                            "desc"
+                        ],
+                        "type": "string",
+                        "name": "order",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "place_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "sort",
+                        "in": "query"
+                    },
+                    {
+                        "enum": [
+                            "published",
+                            "deleted",
+                            "archived",
+                            "inactive",
+                            "pending",
+                            "draft"
+                        ],
+                        "type": "string",
+                        "x-enum-varnames": [
+                            "StatusPublished",
+                            "StatusDeleted",
+                            "StatusArchived",
+                            "StatusInactive",
+                            "StatusPending",
+                            "StatusDraft"
+                        ],
+                        "name": "status",
+                        "in": "query"
+                    },
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "csv",
+                        "name": "tags",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "ISO date YYYY-MM-DD",
+                        "name": "to_date",
+                        "in": "query"
+                    },
+                    {
+                        "enum": [
+                            "AARTI",
+                            "FESTIVAL",
+                            "CULTURAL",
+                            "WORKSHOP",
+                            "SPECIAL_DARSHAN",
+                            "OTHER"
+                        ],
+                        "type": "string",
+                        "x-enum-varnames": [
+                            "EventTypeAarti",
+                            "EventTypeFestival",
+                            "EventTypeCultural",
+                            "EventTypeWorkshop",
+                            "EventTypeSpecialDarshan",
+                            "EventTypeOther"
+                        ],
+                        "name": "type",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.ListEventsResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ierr.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/ierr.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ],
+                "description": "Create a new event with the provided details",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Event"
+                ],
+                "summary": "Create a new event",
+                "parameters": [
+                    {
+                        "description": "Create event request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.CreateEventRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/dto.EventResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ierr.ErrorResponse"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/ierr.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/ierr.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/events/slug/{slug}": {
+            "get": {
+                "description": "Get an event by its slug",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Event"
+                ],
+                "summary": "Get event by slug",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Event slug",
+                        "name": "slug",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.EventResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/ierr.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/ierr.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/events/{eventId}/expanded": {
+            "get": {
+                "description": "Get expanded concrete instances of event occurrences for a date range",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Event"
+                ],
+                "summary": "Get expanded occurrences",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Event ID",
+                        "name": "eventId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Start date (YYYY-MM-DD)",
+                        "name": "from_date",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "End date (YYYY-MM-DD)",
+                        "name": "to_date",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/dto.ExpandedOccurrenceResponse"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ierr.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/ierr.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/ierr.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/events/{eventId}/occurrences": {
+            "get": {
+                "description": "Get all occurrences for a specific event",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Event"
+                ],
+                "summary": "List occurrences for event",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Event ID",
+                        "name": "eventId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/dto.OccurrenceResponse"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/ierr.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/ierr.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ],
+                "description": "Create a new occurrence for an event",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Event"
+                ],
+                "summary": "Create event occurrence",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Event ID",
+                        "name": "eventId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Create occurrence request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.CreateOccurrenceRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/dto.OccurrenceResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ierr.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/ierr.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/ierr.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/events/{id}": {
+            "get": {
+                "description": "Get an event by its ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Event"
+                ],
+                "summary": "Get event by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Event ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.EventResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/ierr.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/ierr.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ],
+                "description": "Update an existing event",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Event"
+                ],
+                "summary": "Update an event",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Event ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Update event request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.UpdateEventRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.EventResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ierr.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/ierr.ErrorResponse"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/ierr.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/ierr.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ],
+                "description": "Soft delete an event",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Event"
+                ],
+                "summary": "Delete an event",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Event ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/ierr.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/ierr.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/events/{id}/interested": {
+            "post": {
+                "description": "Increment the interested count for an event (user marked as interested)",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Event"
+                ],
+                "summary": "Increment event interested count",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Event ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/ierr.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/ierr.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/events/{id}/view": {
+            "post": {
+                "description": "Increment the view count for an event (analytics)",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Event"
+                ],
+                "summary": "Increment event view count",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Event ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/ierr.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/ierr.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/feed": {
             "post": {
                 "description": "Get feed data with multiple sections (trending, popular, latest, nearby)",
@@ -405,7 +1055,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Feed"
+                    "Place"
                 ],
                 "summary": "Get feed data",
                 "parameters": [
@@ -562,7 +1212,8 @@ const docTemplate = `{
                             "deleted",
                             "archived",
                             "inactive",
-                            "pending"
+                            "pending",
+                            "draft"
                         ],
                         "type": "string",
                         "x-enum-varnames": [
@@ -570,7 +1221,8 @@ const docTemplate = `{
                             "StatusDeleted",
                             "StatusArchived",
                             "StatusInactive",
-                            "StatusPending"
+                            "StatusPending",
+                            "StatusDraft"
                         ],
                         "name": "status",
                         "in": "query"
@@ -829,6 +1481,156 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "description": "Hotel ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/ierr.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/ierr.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/occurrences/{id}": {
+            "get": {
+                "description": "Get an event occurrence by its ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Event"
+                ],
+                "summary": "Get occurrence by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Occurrence ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.OccurrenceResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/ierr.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/ierr.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ],
+                "description": "Update an existing event occurrence",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Event"
+                ],
+                "summary": "Update occurrence",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Occurrence ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Update occurrence request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.UpdateOccurrenceRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.OccurrenceResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ierr.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/ierr.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/ierr.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ],
+                "description": "Soft delete an event occurrence",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Event"
+                ],
+                "summary": "Delete occurrence",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Occurrence ID",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -1478,7 +2280,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Feed"
+                    "Place"
                 ],
                 "summary": "Increment view count for a place",
                 "parameters": [
@@ -1976,7 +2778,8 @@ const docTemplate = `{
             ],
             "properties": {
                 "description": {
-                    "type": "string"
+                    "type": "string",
+                    "maxLength": 2000
                 },
                 "metadata": {
                     "$ref": "#/definitions/types.Metadata"
@@ -1984,11 +2787,89 @@ const docTemplate = `{
                 "name": {
                     "type": "string",
                     "maxLength": 255,
-                    "minLength": 1
+                    "minLength": 2
                 },
                 "slug": {
                     "type": "string",
-                    "minLength": 1
+                    "maxLength": 100,
+                    "minLength": 3
+                }
+            }
+        },
+        "dto.CreateEventRequest": {
+            "type": "object",
+            "required": [
+                "slug",
+                "start_date",
+                "title",
+                "type"
+            ],
+            "properties": {
+                "cover_image_url": {
+                    "type": "string",
+                    "maxLength": 500
+                },
+                "description": {
+                    "type": "string",
+                    "maxLength": 10000
+                },
+                "end_date": {
+                    "description": "YYYY-MM-DD",
+                    "type": "string"
+                },
+                "images": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "latitude": {
+                    "type": "number"
+                },
+                "location_name": {
+                    "type": "string",
+                    "maxLength": 255
+                },
+                "longitude": {
+                    "type": "number"
+                },
+                "metadata": {
+                    "type": "object",
+                    "additionalProperties": true
+                },
+                "place_id": {
+                    "type": "string"
+                },
+                "slug": {
+                    "type": "string",
+                    "maxLength": 100,
+                    "minLength": 3
+                },
+                "start_date": {
+                    "description": "YYYY-MM-DD",
+                    "type": "string"
+                },
+                "status": {
+                    "description": "draft, published, archived",
+                    "type": "string"
+                },
+                "subtitle": {
+                    "type": "string",
+                    "maxLength": 500
+                },
+                "tags": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "title": {
+                    "type": "string",
+                    "maxLength": 255,
+                    "minLength": 2
+                },
+                "type": {
+                    "type": "string"
                 }
             }
         },
@@ -2017,20 +2898,25 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "description": {
-                    "type": "string"
+                    "type": "string",
+                    "maxLength": 5000
                 },
                 "email": {
-                    "type": "string"
+                    "type": "string",
+                    "maxLength": 255
                 },
                 "location": {
                     "$ref": "#/definitions/types.Location"
                 },
                 "name": {
                     "type": "string",
-                    "minLength": 1
+                    "maxLength": 255,
+                    "minLength": 2
                 },
                 "phone": {
-                    "type": "string"
+                    "type": "string",
+                    "maxLength": 20,
+                    "minLength": 10
                 },
                 "price_max": {
                     "type": "number"
@@ -2039,15 +2925,18 @@ const docTemplate = `{
                     "type": "number"
                 },
                 "primary_image_url": {
-                    "type": "string"
+                    "type": "string",
+                    "maxLength": 500
                 },
                 "room_count": {
                     "type": "integer",
+                    "maximum": 10000,
                     "minimum": 0
                 },
                 "slug": {
                     "type": "string",
-                    "minLength": 1
+                    "maxLength": 100,
+                    "minLength": 3
                 },
                 "star_rating": {
                     "type": "integer",
@@ -2055,9 +2944,60 @@ const docTemplate = `{
                     "minimum": 1
                 },
                 "thumbnail_url": {
-                    "type": "string"
+                    "type": "string",
+                    "maxLength": 500
                 },
                 "website": {
+                    "type": "string",
+                    "maxLength": 500
+                }
+            }
+        },
+        "dto.CreateOccurrenceRequest": {
+            "type": "object",
+            "required": [
+                "end_time",
+                "recurrence_type",
+                "start_time"
+            ],
+            "properties": {
+                "day_of_month": {
+                    "description": "1-31 for MONTHLY/YEARLY",
+                    "type": "integer"
+                },
+                "day_of_week": {
+                    "description": "0-6 for WEEKLY",
+                    "type": "integer"
+                },
+                "end_time": {
+                    "description": "HH:MM format",
+                    "type": "string"
+                },
+                "exception_dates": {
+                    "description": "[\"2025-12-25\", ...]",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "metadata": {
+                    "type": "object",
+                    "additionalProperties": true
+                },
+                "month_of_year": {
+                    "description": "1-12 for YEARLY",
+                    "type": "integer"
+                },
+                "recurrence_type": {
+                    "description": "NONE, DAILY, WEEKLY, MONTHLY, YEARLY",
+                    "type": "string"
+                },
+                "start_time": {
+                    "description": "HH:MM format",
+                    "type": "string"
+                },
+                "status": {
+                    "description": "active, paused, archived",
                     "type": "string"
                 }
             }
@@ -2069,17 +3009,20 @@ const docTemplate = `{
             ],
             "properties": {
                 "alt": {
-                    "type": "string"
+                    "type": "string",
+                    "maxLength": 255
                 },
                 "metadata": {
                     "$ref": "#/definitions/types.Metadata"
                 },
                 "pos": {
                     "type": "integer",
+                    "maximum": 100,
                     "minimum": 0
                 },
                 "url": {
-                    "type": "string"
+                    "type": "string",
+                    "maxLength": 500
                 }
             }
         },
@@ -2114,30 +3057,39 @@ const docTemplate = `{
                     "$ref": "#/definitions/types.Location"
                 },
                 "long_description": {
-                    "type": "string"
+                    "type": "string",
+                    "maxLength": 10000
                 },
                 "place_type": {
-                    "type": "string"
+                    "type": "string",
+                    "maxLength": 50,
+                    "minLength": 2
                 },
                 "primary_image_url": {
-                    "type": "string"
+                    "type": "string",
+                    "maxLength": 500
                 },
                 "short_description": {
-                    "type": "string"
+                    "type": "string",
+                    "maxLength": 1000
                 },
                 "slug": {
                     "type": "string",
-                    "minLength": 1
+                    "maxLength": 100,
+                    "minLength": 3
                 },
                 "subtitle": {
-                    "type": "string"
+                    "type": "string",
+                    "maxLength": 500
                 },
                 "thumbnail_url": {
-                    "type": "string"
+                    "type": "string",
+                    "maxLength": 500
                 },
                 "title": {
                     "type": "string",
-                    "minLength": 1
+                    "maxLength": 255,
+                    "minLength": 2
                 }
             }
         },
@@ -2151,13 +3103,20 @@ const docTemplate = `{
             "properties": {
                 "content": {
                     "type": "string",
-                    "maxLength": 2000
+                    "maxLength": 3000
                 },
                 "entity_id": {
-                    "type": "string"
+                    "type": "string",
+                    "maxLength": 100,
+                    "minLength": 1
                 },
                 "entity_type": {
-                    "$ref": "#/definitions/types.ReviewEntityType"
+                    "maxLength": 50,
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/types.ReviewEntityType"
+                        }
+                    ]
                 },
                 "images": {
                     "type": "array",
@@ -2179,6 +3138,137 @@ const docTemplate = `{
                 "title": {
                     "type": "string",
                     "maxLength": 255
+                }
+            }
+        },
+        "dto.EventResponse": {
+            "type": "object",
+            "properties": {
+                "cover_image_url": {
+                    "description": "Media",
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "created_by": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "end_date": {
+                    "type": "string"
+                },
+                "id": {
+                    "description": "Identity",
+                    "type": "string"
+                },
+                "images": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "interested_count": {
+                    "type": "integer"
+                },
+                "latitude": {
+                    "description": "Location (for citywide)",
+                    "type": "number"
+                },
+                "location_name": {
+                    "type": "string"
+                },
+                "longitude": {
+                    "type": "number"
+                },
+                "metadata": {
+                    "type": "object",
+                    "additionalProperties": true
+                },
+                "occurrences": {
+                    "description": "Relations (populated when needed)",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/event.EventOccurrence"
+                    }
+                },
+                "place_id": {
+                    "description": "Association",
+                    "type": "string"
+                },
+                "slug": {
+                    "type": "string"
+                },
+                "start_date": {
+                    "description": "Validity",
+                    "type": "string"
+                },
+                "status": {
+                    "$ref": "#/definitions/types.Status"
+                },
+                "subtitle": {
+                    "type": "string"
+                },
+                "tags": {
+                    "description": "Metadata",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "title": {
+                    "type": "string"
+                },
+                "type": {
+                    "description": "Core",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/types.EventType"
+                        }
+                    ]
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "updated_by": {
+                    "type": "string"
+                },
+                "view_count": {
+                    "description": "Stats",
+                    "type": "integer"
+                }
+            }
+        },
+        "dto.ExpandedOccurrenceResponse": {
+            "type": "object",
+            "properties": {
+                "days_until": {
+                    "type": "integer"
+                },
+                "end_time": {
+                    "description": "Full datetime",
+                    "type": "string"
+                },
+                "event_id": {
+                    "type": "string"
+                },
+                "is_today": {
+                    "type": "boolean"
+                },
+                "is_upcoming": {
+                    "type": "boolean"
+                },
+                "occurrence_id": {
+                    "type": "string"
+                },
+                "start_time": {
+                    "description": "Full datetime",
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
                 }
             }
         },
@@ -2422,6 +3512,20 @@ const docTemplate = `{
                 }
             }
         },
+        "dto.ListEventsResponse": {
+            "type": "object",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.EventResponse"
+                    }
+                },
+                "pagination": {
+                    "$ref": "#/definitions/types.PaginationResponse"
+                }
+            }
+        },
         "dto.ListHotelsResponse": {
             "type": "object",
             "properties": {
@@ -2476,6 +3580,75 @@ const docTemplate = `{
                 },
                 "role": {
                     "$ref": "#/definitions/types.UserRole"
+                },
+                "status": {
+                    "$ref": "#/definitions/types.Status"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "updated_by": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.OccurrenceResponse": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "created_by": {
+                    "type": "string"
+                },
+                "day_of_month": {
+                    "description": "1-31",
+                    "type": "integer"
+                },
+                "day_of_week": {
+                    "description": "Day specifics",
+                    "type": "integer"
+                },
+                "duration_minutes": {
+                    "type": "integer"
+                },
+                "end_time": {
+                    "type": "string"
+                },
+                "event_id": {
+                    "type": "string"
+                },
+                "exception_dates": {
+                    "description": "Exceptions",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "id": {
+                    "description": "Identity",
+                    "type": "string"
+                },
+                "metadata": {
+                    "description": "Metadata",
+                    "type": "object",
+                    "additionalProperties": true
+                },
+                "month_of_year": {
+                    "description": "1-12 (renamed from Month)",
+                    "type": "integer"
+                },
+                "recurrence_type": {
+                    "description": "Recurrence",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/types.RecurrenceType"
+                        }
+                    ]
+                },
+                "start_time": {
+                    "description": "Time",
+                    "type": "string"
                 },
                 "status": {
                     "$ref": "#/definitions/types.Status"
@@ -2768,16 +3941,83 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "description": {
-                    "type": "string"
+                    "type": "string",
+                    "maxLength": 2000
                 },
                 "name": {
                     "type": "string",
                     "maxLength": 255,
-                    "minLength": 1
+                    "minLength": 2
                 },
                 "slug": {
                     "type": "string",
-                    "minLength": 1
+                    "maxLength": 100,
+                    "minLength": 3
+                }
+            }
+        },
+        "dto.UpdateEventRequest": {
+            "type": "object",
+            "properties": {
+                "cover_image_url": {
+                    "type": "string",
+                    "maxLength": 500
+                },
+                "description": {
+                    "type": "string",
+                    "maxLength": 10000
+                },
+                "end_date": {
+                    "description": "YYYY-MM-DD",
+                    "type": "string"
+                },
+                "images": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "latitude": {
+                    "type": "number"
+                },
+                "location_name": {
+                    "type": "string",
+                    "maxLength": 255
+                },
+                "longitude": {
+                    "type": "number"
+                },
+                "metadata": {
+                    "type": "object",
+                    "additionalProperties": true
+                },
+                "place_id": {
+                    "type": "string"
+                },
+                "start_date": {
+                    "description": "YYYY-MM-DD",
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "subtitle": {
+                    "type": "string",
+                    "maxLength": 500
+                },
+                "tags": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "title": {
+                    "type": "string",
+                    "maxLength": 255,
+                    "minLength": 2
+                },
+                "type": {
+                    "type": "string"
                 }
             }
         },
@@ -2800,20 +4040,25 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "description": {
-                    "type": "string"
+                    "type": "string",
+                    "maxLength": 5000
                 },
                 "email": {
-                    "type": "string"
+                    "type": "string",
+                    "maxLength": 255
                 },
                 "location": {
                     "$ref": "#/definitions/types.Location"
                 },
                 "name": {
                     "type": "string",
-                    "minLength": 1
+                    "maxLength": 255,
+                    "minLength": 2
                 },
                 "phone": {
-                    "type": "string"
+                    "type": "string",
+                    "maxLength": 20,
+                    "minLength": 10
                 },
                 "price_max": {
                     "type": "number"
@@ -2822,10 +4067,12 @@ const docTemplate = `{
                     "type": "number"
                 },
                 "primary_image_url": {
-                    "type": "string"
+                    "type": "string",
+                    "maxLength": 500
                 },
                 "room_count": {
                     "type": "integer",
+                    "maximum": 10000,
                     "minimum": 0
                 },
                 "star_rating": {
@@ -2834,9 +4081,49 @@ const docTemplate = `{
                     "minimum": 1
                 },
                 "thumbnail_url": {
-                    "type": "string"
+                    "type": "string",
+                    "maxLength": 500
                 },
                 "website": {
+                    "type": "string",
+                    "maxLength": 500
+                }
+            }
+        },
+        "dto.UpdateOccurrenceRequest": {
+            "type": "object",
+            "properties": {
+                "day_of_month": {
+                    "type": "integer"
+                },
+                "day_of_week": {
+                    "type": "integer"
+                },
+                "end_time": {
+                    "description": "HH:MM format",
+                    "type": "string"
+                },
+                "exception_dates": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "metadata": {
+                    "type": "object",
+                    "additionalProperties": true
+                },
+                "month_of_year": {
+                    "type": "integer"
+                },
+                "recurrence_type": {
+                    "type": "string"
+                },
+                "start_time": {
+                    "description": "HH:MM format",
+                    "type": "string"
+                },
+                "status": {
                     "type": "string"
                 }
             }
@@ -2884,30 +4171,39 @@ const docTemplate = `{
                     "$ref": "#/definitions/types.Location"
                 },
                 "long_description": {
-                    "type": "string"
+                    "type": "string",
+                    "maxLength": 10000
                 },
                 "place_type": {
-                    "type": "string"
+                    "type": "string",
+                    "maxLength": 50,
+                    "minLength": 2
                 },
                 "primary_image_url": {
-                    "type": "string"
+                    "type": "string",
+                    "maxLength": 500
                 },
                 "short_description": {
-                    "type": "string"
+                    "type": "string",
+                    "maxLength": 1000
                 },
                 "slug": {
                     "type": "string",
-                    "minLength": 1
+                    "maxLength": 100,
+                    "minLength": 3
                 },
                 "subtitle": {
-                    "type": "string"
+                    "type": "string",
+                    "maxLength": 500
                 },
                 "thumbnail_url": {
-                    "type": "string"
+                    "type": "string",
+                    "maxLength": 500
                 },
                 "title": {
                     "type": "string",
-                    "minLength": 1
+                    "maxLength": 255,
+                    "minLength": 2
                 }
             }
         },
@@ -2916,7 +4212,7 @@ const docTemplate = `{
             "properties": {
                 "content": {
                     "type": "string",
-                    "maxLength": 2000
+                    "maxLength": 3000
                 },
                 "images": {
                     "type": "array",
@@ -2945,9 +4241,82 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "name": {
-                    "type": "string"
+                    "type": "string",
+                    "maxLength": 255,
+                    "minLength": 2
                 },
                 "phone": {
+                    "type": "string",
+                    "maxLength": 20,
+                    "minLength": 10
+                }
+            }
+        },
+        "event.EventOccurrence": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "created_by": {
+                    "type": "string"
+                },
+                "day_of_month": {
+                    "description": "1-31",
+                    "type": "integer"
+                },
+                "day_of_week": {
+                    "description": "Day specifics",
+                    "type": "integer"
+                },
+                "duration_minutes": {
+                    "type": "integer"
+                },
+                "end_time": {
+                    "type": "string"
+                },
+                "event_id": {
+                    "type": "string"
+                },
+                "exception_dates": {
+                    "description": "Exceptions",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "id": {
+                    "description": "Identity",
+                    "type": "string"
+                },
+                "metadata": {
+                    "description": "Metadata",
+                    "type": "object",
+                    "additionalProperties": true
+                },
+                "month_of_year": {
+                    "description": "1-12 (renamed from Month)",
+                    "type": "integer"
+                },
+                "recurrence_type": {
+                    "description": "Recurrence",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/types.RecurrenceType"
+                        }
+                    ]
+                },
+                "start_time": {
+                    "description": "Time",
+                    "type": "string"
+                },
+                "status": {
+                    "$ref": "#/definitions/types.Status"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "updated_by": {
                     "type": "string"
                 }
             }
@@ -3016,6 +4385,25 @@ const docTemplate = `{
                 }
             }
         },
+        "types.EventType": {
+            "type": "string",
+            "enum": [
+                "AARTI",
+                "FESTIVAL",
+                "CULTURAL",
+                "WORKSHOP",
+                "SPECIAL_DARSHAN",
+                "OTHER"
+            ],
+            "x-enum-varnames": [
+                "EventTypeAarti",
+                "EventTypeFestival",
+                "EventTypeCultural",
+                "EventTypeWorkshop",
+                "EventTypeSpecialDarshan",
+                "EventTypeOther"
+            ]
+        },
         "types.FeedSectionType": {
             "type": "string",
             "enum": [
@@ -3062,6 +4450,21 @@ const docTemplate = `{
                 "type": "string"
             }
         },
+        "types.OccurrenceStatus": {
+            "type": "string",
+            "enum": [
+                "active",
+                "paused",
+                "archived",
+                "deleted"
+            ],
+            "x-enum-varnames": [
+                "OccurrenceActive",
+                "OccurrencePaused",
+                "OccurrenceArchived",
+                "OccurrenceDeleted"
+            ]
+        },
         "types.PaginationResponse": {
             "type": "object",
             "properties": {
@@ -3075,6 +4478,37 @@ const docTemplate = `{
                     "type": "integer"
                 }
             }
+        },
+        "types.RecurrenceType": {
+            "type": "string",
+            "enum": [
+                "NONE",
+                "DAILY",
+                "WEEKLY",
+                "MONTHLY",
+                "YEARLY"
+            ],
+            "x-enum-comments": {
+                "RecurrenceDaily": "Every day",
+                "RecurrenceMonthly": "Specific date each month",
+                "RecurrenceNone": "One-time event",
+                "RecurrenceWeekly": "Specific day each week",
+                "RecurrenceYearly": "Specific date each year"
+            },
+            "x-enum-descriptions": [
+                "One-time event",
+                "Every day",
+                "Specific day each week",
+                "Specific date each month",
+                "Specific date each year"
+            ],
+            "x-enum-varnames": [
+                "RecurrenceNone",
+                "RecurrenceDaily",
+                "RecurrenceWeekly",
+                "RecurrenceMonthly",
+                "RecurrenceYearly"
+            ]
         },
         "types.ReviewEntityType": {
             "type": "string",
@@ -3102,14 +4536,16 @@ const docTemplate = `{
                 "deleted",
                 "archived",
                 "inactive",
-                "pending"
+                "pending",
+                "draft"
             ],
             "x-enum-varnames": [
                 "StatusPublished",
                 "StatusDeleted",
                 "StatusArchived",
                 "StatusInactive",
-                "StatusPending"
+                "StatusPending",
+                "StatusDraft"
             ]
         },
         "types.UserRole": {

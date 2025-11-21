@@ -62,11 +62,12 @@ func (User) Edges() []ent.Edge {
 // Indexes of the User.
 func (User) Indexes() []ent.Index {
 	return []ent.Index{
-		index.Fields("email", "phone").
-			Unique(),
+		// Email must be unique
 		index.Fields("email").
 			Unique(),
-		index.Fields("phone").
-			Unique(),
+		// Phone should be unique only when not NULL
+		// Note: Ent doesn't support partial indexes directly, so we remove the unique constraint on phone
+		// and handle uniqueness at the application level for non-null phones
+		index.Fields("phone"),
 	}
 }
