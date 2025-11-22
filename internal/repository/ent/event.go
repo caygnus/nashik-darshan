@@ -739,9 +739,15 @@ func (opts EventQueryOptions) ApplyEntityQueryOptions(ctx context.Context, filte
 			// Convert single tag to JSON array format: ["tag"]
 			tagJSON, err := json.Marshal([]string{tag})
 			if err == nil {
-				// Use custom SQL predicate with CAST: tags @> CAST('["tag"]' AS jsonb)
+				// Use SQL function syntax: tags @> to_jsonb(?::text)
+				// This avoids the CAST syntax that was causing issues
 				tagPredicates = append(tagPredicates, predicate.Event(func(s *entsql.Selector) {
-					s.Where(entsql.ExprP("tags @> CAST(? AS jsonb)", string(tagJSON)))
+					s.Where(entsql.P(func(b *entsql.Builder) {
+						b.WriteString("tags @> ")
+						b.WriteString("'")
+						b.WriteString(string(tagJSON))
+						b.WriteString("'::jsonb")
+					}))
 				}))
 			}
 		}
