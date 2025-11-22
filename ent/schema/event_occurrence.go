@@ -1,17 +1,24 @@
 package schema
 
 import (
-	"time"
-
 	"entgo.io/ent"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
+	mixinpkg "github.com/omkar273/nashikdarshan/ent/mixin"
 )
 
 // EventOccurrence holds the schema definition for the EventOccurrence entity.
 type EventOccurrence struct {
 	ent.Schema
+}
+
+// Mixin of the EventOccurrence
+func (EventOccurrence) Mixin() []ent.Mixin {
+	return []ent.Mixin{
+		mixinpkg.BaseMixin{},
+		mixinpkg.MetadataMixin{},
+	}
 }
 
 // Fields of the EventOccurrence.
@@ -28,16 +35,19 @@ func (EventOccurrence) Fields() []ent.Field {
 			Comment("FK to parent event"),
 
 		// Recurrence Pattern
-		field.Enum("recurrence_type").
-			Values("NONE", "DAILY", "WEEKLY", "MONTHLY", "YEARLY").
-			Default("NONE").
-			Comment("How this occurrence repeats"),
+		field.String("recurrence_type").
+			NotEmpty().
+			Comment("How this occurrence repeats: NONE, DAILY, WEEKLY, MONTHLY, YEARLY"),
 
 		// Time Configuration
 		field.Time("start_time").
+			Optional().
+			Nillable().
 			Comment("Time of day (only time component used)"),
 
 		field.Time("end_time").
+			Optional().
+			Nillable().
 			Comment("End time of day (only time component used)"),
 
 		field.Int("duration_minutes").
@@ -71,36 +81,6 @@ func (EventOccurrence) Fields() []ent.Field {
 		field.JSON("exception_dates", []string{}).
 			Optional().
 			Comment("ISO dates to skip: ['2025-12-25', '2025-01-26']"),
-
-		// Metadata
-		field.JSON("metadata", map[string]interface{}{}).
-			Optional().
-			Comment("Occurrence-specific data"),
-
-		// Lifecycle
-		field.Enum("status").
-			Values("active", "paused", "archived", "deleted").
-			Default("active").
-			Comment("Occurrence status"),
-
-		// Audit
-		field.String("created_by").
-			NotEmpty().
-			Comment("User ID who created"),
-
-		field.String("updated_by").
-			NotEmpty().
-			Comment("User ID who last updated"),
-
-		field.Time("created_at").
-			Default(time.Now).
-			Immutable().
-			Comment("Creation timestamp"),
-
-		field.Time("updated_at").
-			Default(time.Now).
-			UpdateDefault(time.Now).
-			Comment("Last update timestamp"),
 	}
 }
 

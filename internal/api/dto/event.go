@@ -16,13 +16,13 @@ import (
 // CreateEventRequest represents a request to create an event
 type CreateEventRequest struct {
 	Slug          string                 `json:"slug" binding:"required,min=3,max=100"`
-	Type          string                 `json:"type" binding:"required"`
+	Type          types.EventType        `json:"type" binding:"required"`
 	Title         string                 `json:"title" binding:"required,min=2,max=255"`
 	Subtitle      *string                `json:"subtitle,omitempty" binding:"omitempty,max=500"`
 	Description   *string                `json:"description,omitempty" binding:"omitempty,max=10000"`
 	PlaceID       *string                `json:"place_id,omitempty"`
-	StartDate     string                 `json:"start_date" binding:"required"` // YYYY-MM-DD
-	EndDate       *string                `json:"end_date,omitempty"`            // YYYY-MM-DD
+	StartDate     *time.Time             `json:"start_date,omitempty"`
+	EndDate       *time.Time             `json:"end_date,omitempty"`
 	CoverImageURL *string                `json:"cover_image_url,omitempty" binding:"omitempty,url,max=500"`
 	Images        []string               `json:"images,omitempty"`
 	Tags          []string               `json:"tags,omitempty"`
@@ -30,7 +30,6 @@ type CreateEventRequest struct {
 	Latitude      *decimal.Decimal       `json:"latitude,omitempty"`
 	Longitude     *decimal.Decimal       `json:"longitude,omitempty"`
 	LocationName  *string                `json:"location_name,omitempty" binding:"omitempty,max=255"`
-	Status        *string                `json:"status,omitempty"` // draft, published, archived
 }
 
 // Validate validates the CreateEventRequest
@@ -44,53 +43,48 @@ func (req *CreateEventRequest) Validate() error {
 		return err
 	}
 
-	// Validate event type
-	if err := validator.ValidateEventType(req.Type); err != nil {
+	// Validate event type using the type's own Validate method
+	if err := req.Type.Validate(); err != nil {
 		return err
 	}
 
-	// Parse and validate dates
-	startDate, err := time.Parse("2006-01-02", req.StartDate)
-	if err != nil {
-		return ierr.NewError("Invalid start_date format, expected YYYY-MM-DD").Mark(ierr.ErrValidation)
-	}
+	// Validate dates if provided
+	if req.StartDate != nil && req.EndDate != nil {
+		// Start date must not be too far in the past
+		now := time.Now().UTC()
+		oneYearAgo := now.AddDate(-1, 0, 0)
 
-	var endDate *time.Time
-	if req.EndDate != nil {
-		parsed, err := time.Parse("2006-01-02", *req.EndDate)
-		if err != nil {
-			return ierr.NewError("Invalid end_date format, expected YYYY-MM-DD").Mark(ierr.ErrValidation)
+		if req.StartDate.Before(oneYearAgo) {
+			return ierr.NewError("Start date cannot be more than 1 year in the past").
+				Mark(ierr.ErrValidation)
 		}
-		endDate = &parsed
+
+		// End date must be after start date
+		if !req.EndDate.After(*req.StartDate) {
+			return ierr.NewError("End date must be after start date").
+				Mark(ierr.ErrValidation)
+		}
+
+		// Event duration should not exceed 10 years
+		maxEndDate := req.StartDate.AddDate(10, 0, 0)
+		if req.EndDate.After(maxEndDate) {
+			return ierr.NewError("Event duration cannot exceed 10 years").
+				Mark(ierr.ErrValidation)
+		}
 	}
 
-	if err := validator.ValidateEventDates(startDate, endDate); err != nil {
-		return err
-	}
-
-	// Validate location: must have either place_id or (latitude+longitude+location_name)
+	// Validate location: must have either place_id OR coordinates, but not both
 	hasPlaceID := req.PlaceID != nil && *req.PlaceID != ""
 	hasCoordinates := req.Latitude != nil && req.Longitude != nil
+
+	if hasPlaceID && hasCoordinates {
+		return ierr.NewError("Event cannot have both place_id and coordinates. Please provide only one").
+			Mark(ierr.ErrValidation)
+	}
 
 	if !hasPlaceID && !hasCoordinates {
 		return ierr.NewError("Event must have either place_id or coordinates (latitude+longitude)").
 			Mark(ierr.ErrValidation)
-	}
-
-	// Validate status if provided
-	if req.Status != nil {
-		validStatuses := []string{"draft", "published", "archived"}
-		valid := false
-		for _, s := range validStatuses {
-			if *req.Status == s {
-				valid = true
-				break
-			}
-		}
-		if !valid {
-			return ierr.NewError("Invalid status. Must be one of: draft, published, archived").
-				Mark(ierr.ErrValidation)
-		}
 	}
 
 	return nil
@@ -100,49 +94,59 @@ func (req *CreateEventRequest) Validate() error {
 func (req *CreateEventRequest) ToEvent(ctx context.Context) (*eventdomain.Event, error) {
 	baseModel := types.GetDefaultBaseModel(ctx)
 
-	startDate, _ := time.Parse("2006-01-02", req.StartDate)
-	var endDate *time.Time
-	if req.EndDate != nil {
-		parsed, _ := time.Parse("2006-01-02", *req.EndDate)
-		endDate = &parsed
+	// Use provided StartDate or default to now()
+	startDate := time.Now().UTC()
+	if req.StartDate != nil {
+		startDate = *req.StartDate
 	}
 
-	status := types.StatusDraft
-	if req.Status != nil {
-		status = types.Status(*req.Status)
+	// Status is always draft for new events (handled internally)
+	baseModel.Status = types.StatusDraft
+
+	// Convert metadata from map[string]interface{} to *types.Metadata
+	var metadata *types.Metadata
+	if req.Metadata != nil {
+		md := make(types.Metadata)
+		for k, v := range req.Metadata {
+			if strVal, ok := v.(string); ok {
+				md[k] = strVal
+			}
+		}
+		metadata = &md
 	}
 
 	return &eventdomain.Event{
-		ID:            types.GenerateUUIDWithPrefix(types.UUID_PREFIX_EVENT),
-		Slug:          req.Slug,
-		Type:          types.EventType(req.Type),
-		Title:         req.Title,
-		Subtitle:      req.Subtitle,
-		Description:   req.Description,
-		PlaceID:       req.PlaceID,
-		StartDate:     startDate,
-		EndDate:       endDate,
-		CoverImageURL: req.CoverImageURL,
-		Images:        req.Images,
-		Tags:          req.Tags,
-		Metadata:      req.Metadata,
-		Latitude:      req.Latitude,
-		Longitude:     req.Longitude,
-		LocationName:  req.LocationName,
-		Status:        status,
-		BaseModel:     baseModel,
+		ID:              types.GenerateUUIDWithPrefix(types.UUID_PREFIX_EVENT),
+		Slug:            req.Slug,
+		Type:            req.Type,
+		Title:           req.Title,
+		Subtitle:        req.Subtitle,
+		Description:     req.Description,
+		PlaceID:         req.PlaceID,
+		StartDate:       startDate,
+		EndDate:         req.EndDate,
+		CoverImageURL:   req.CoverImageURL,
+		Images:          req.Images,
+		Tags:            req.Tags,
+		Metadata:        metadata,
+		Latitude:        req.Latitude,
+		Longitude:       req.Longitude,
+		LocationName:    req.LocationName,
+		ViewCount:       0, // Default to 0 for new events
+		InterestedCount: 0, // Default to 0 for new events
+		BaseModel:       baseModel,
 	}, nil
 }
 
 // UpdateEventRequest represents a request to update an event
 type UpdateEventRequest struct {
-	Type          *string                `json:"type,omitempty"`
+	Type          *types.EventType       `json:"type,omitempty"`
 	Title         *string                `json:"title,omitempty" binding:"omitempty,min=2,max=255"`
 	Subtitle      *string                `json:"subtitle,omitempty" binding:"omitempty,max=500"`
 	Description   *string                `json:"description,omitempty" binding:"omitempty,max=10000"`
 	PlaceID       *string                `json:"place_id,omitempty"`
-	StartDate     *string                `json:"start_date,omitempty"` // YYYY-MM-DD
-	EndDate       *string                `json:"end_date,omitempty"`   // YYYY-MM-DD
+	StartDate     *time.Time             `json:"start_date,omitempty"`
+	EndDate       *time.Time             `json:"end_date,omitempty"`
 	CoverImageURL *string                `json:"cover_image_url,omitempty" binding:"omitempty,url,max=500"`
 	Images        []string               `json:"images,omitempty"`
 	Tags          []string               `json:"tags,omitempty"`
@@ -150,7 +154,6 @@ type UpdateEventRequest struct {
 	Latitude      *decimal.Decimal       `json:"latitude,omitempty"`
 	Longitude     *decimal.Decimal       `json:"longitude,omitempty"`
 	LocationName  *string                `json:"location_name,omitempty" binding:"omitempty,max=255"`
-	Status        *string                `json:"status,omitempty"`
 }
 
 // Validate validates the UpdateEventRequest
@@ -159,51 +162,34 @@ func (req *UpdateEventRequest) Validate() error {
 		return err
 	}
 
-	// Validate event type if provided
+	// Validate event type if provided using the type's own Validate method
 	if req.Type != nil {
-		if err := validator.ValidateEventType(*req.Type); err != nil {
+		if err := req.Type.Validate(); err != nil {
 			return err
 		}
-	}
-
-	// Parse and validate dates if provided
-	var startDate *time.Time
-	if req.StartDate != nil {
-		parsed, err := time.Parse("2006-01-02", *req.StartDate)
-		if err != nil {
-			return ierr.NewError("Invalid start_date format, expected YYYY-MM-DD").Mark(ierr.ErrValidation)
-		}
-		startDate = &parsed
-	}
-
-	var endDate *time.Time
-	if req.EndDate != nil {
-		parsed, err := time.Parse("2006-01-02", *req.EndDate)
-		if err != nil {
-			return ierr.NewError("Invalid end_date format, expected YYYY-MM-DD").Mark(ierr.ErrValidation)
-		}
-		endDate = &parsed
 	}
 
 	// If both dates are provided, validate them
-	if startDate != nil && endDate != nil {
-		if err := validator.ValidateEventDates(*startDate, endDate); err != nil {
-			return err
-		}
-	}
+	if req.StartDate != nil && req.EndDate != nil {
+		// Start date must not be too far in the past
+		now := time.Now().UTC()
+		oneYearAgo := now.AddDate(-1, 0, 0)
 
-	// Validate status if provided
-	if req.Status != nil {
-		validStatuses := []string{"draft", "published", "archived"}
-		valid := false
-		for _, s := range validStatuses {
-			if *req.Status == s {
-				valid = true
-				break
-			}
+		if req.StartDate.Before(oneYearAgo) {
+			return ierr.NewError("Start date cannot be more than 1 year in the past").
+				Mark(ierr.ErrValidation)
 		}
-		if !valid {
-			return ierr.NewError("Invalid status. Must be one of: draft, published, archived").
+
+		// End date must be after start date
+		if !req.EndDate.After(*req.StartDate) {
+			return ierr.NewError("End date must be after start date").
+				Mark(ierr.ErrValidation)
+		}
+
+		// Event duration should not exceed 10 years
+		maxEndDate := req.StartDate.AddDate(10, 0, 0)
+		if req.EndDate.After(maxEndDate) {
+			return ierr.NewError("Event duration cannot exceed 10 years").
 				Mark(ierr.ErrValidation)
 		}
 	}
@@ -214,7 +200,7 @@ func (req *UpdateEventRequest) Validate() error {
 // ApplyToEvent applies the update request to an existing event
 func (req *UpdateEventRequest) ApplyToEvent(ctx context.Context, event *eventdomain.Event) error {
 	if req.Type != nil {
-		event.Type = types.EventType(*req.Type)
+		event.Type = *req.Type
 	}
 	if req.Title != nil {
 		event.Title = *req.Title
@@ -229,16 +215,10 @@ func (req *UpdateEventRequest) ApplyToEvent(ctx context.Context, event *eventdom
 		event.PlaceID = req.PlaceID
 	}
 	if req.StartDate != nil {
-		parsed, _ := time.Parse("2006-01-02", *req.StartDate)
-		event.StartDate = parsed
+		event.StartDate = *req.StartDate
 	}
 	if req.EndDate != nil {
-		if *req.EndDate == "" {
-			event.EndDate = nil
-		} else {
-			parsed, _ := time.Parse("2006-01-02", *req.EndDate)
-			event.EndDate = &parsed
-		}
+		event.EndDate = req.EndDate
 	}
 	if req.CoverImageURL != nil {
 		event.CoverImageURL = req.CoverImageURL
@@ -250,7 +230,13 @@ func (req *UpdateEventRequest) ApplyToEvent(ctx context.Context, event *eventdom
 		event.Tags = req.Tags
 	}
 	if req.Metadata != nil {
-		event.Metadata = req.Metadata
+		md := make(types.Metadata)
+		for k, v := range req.Metadata {
+			if strVal, ok := v.(string); ok {
+				md[k] = strVal
+			}
+		}
+		event.Metadata = &md
 	}
 	if req.Latitude != nil {
 		event.Latitude = req.Latitude
@@ -261,13 +247,6 @@ func (req *UpdateEventRequest) ApplyToEvent(ctx context.Context, event *eventdom
 	if req.LocationName != nil {
 		event.LocationName = req.LocationName
 	}
-	if req.Status != nil {
-		event.Status = types.Status(*req.Status)
-	}
-
-	// Update audit fields
-	event.UpdatedBy = types.GetUserID(ctx)
-	event.UpdatedAt = time.Now().UTC()
 
 	return nil
 }
@@ -302,15 +281,15 @@ func NewListEventsResponse(events []*eventdomain.Event, total, limit, offset int
 
 // CreateOccurrenceRequest represents a request to create an occurrence
 type CreateOccurrenceRequest struct {
-	RecurrenceType string                 `json:"recurrence_type" binding:"required"` // NONE, DAILY, WEEKLY, MONTHLY, YEARLY
-	StartTime      string                 `json:"start_time" binding:"required"`      // HH:MM format
-	EndTime        string                 `json:"end_time" binding:"required"`        // HH:MM format
-	DayOfWeek      *int                   `json:"day_of_week,omitempty"`              // 0-6 for WEEKLY
-	DayOfMonth     *int                   `json:"day_of_month,omitempty"`             // 1-31 for MONTHLY/YEARLY
-	MonthOfYear    *int                   `json:"month_of_year,omitempty"`            // 1-12 for YEARLY
-	ExceptionDates []string               `json:"exception_dates,omitempty"`          // ["2025-12-25", ...]
+	EventID        string                 `json:"event_id" binding:"required"`
+	RecurrenceType types.RecurrenceType   `json:"recurrence_type" binding:"required"`
+	StartTime      string                 `json:"start_time" binding:"required"` // HH:MM format
+	EndTime        string                 `json:"end_time" binding:"required"`   // HH:MM format
+	DayOfWeek      *int                   `json:"day_of_week,omitempty"`         // 0-6 for WEEKLY
+	DayOfMonth     *int                   `json:"day_of_month,omitempty"`        // 1-31 for MONTHLY/YEARLY
+	MonthOfYear    *int                   `json:"month_of_year,omitempty"`       // 1-12 for YEARLY
+	ExceptionDates []string               `json:"exception_dates,omitempty"`     // ["2025-12-25", ...]
 	Metadata       map[string]interface{} `json:"metadata,omitempty"`
-	Status         *string                `json:"status,omitempty"` // active, paused, archived
 }
 
 // Validate validates the CreateOccurrenceRequest
@@ -319,8 +298,8 @@ func (req *CreateOccurrenceRequest) Validate() error {
 		return err
 	}
 
-	// Validate recurrence type
-	if err := validator.ValidateRecurrenceType(req.RecurrenceType); err != nil {
+	// Validate recurrence type using the type's own Validate method
+	if err := req.RecurrenceType.Validate(); err != nil {
 		return err
 	}
 
@@ -335,36 +314,84 @@ func (req *CreateOccurrenceRequest) Validate() error {
 		return ierr.NewError("Invalid end_time format, expected HH:MM (24-hour format)").Mark(ierr.ErrValidation)
 	}
 
-	if err := validator.ValidateOccurrenceTimes(startTime, endTime); err != nil {
-		return err
+	// Validate occurrence times inline
+	startHour, startMin := startTime.Hour(), startTime.Minute()
+	endHour, endMin := endTime.Hour(), endTime.Minute()
+
+	startMinutes := startHour*60 + startMin
+	endMinutes := endHour*60 + endMin
+
+	if endMinutes <= startMinutes {
+		return ierr.NewError("End time must be after start time").
+			Mark(ierr.ErrValidation)
 	}
 
-	// Validate recurrence rules
-	recurrenceType := types.RecurrenceType(req.RecurrenceType)
-	if err := validator.ValidateRecurrenceRules(recurrenceType, req.DayOfWeek, req.DayOfMonth, req.MonthOfYear); err != nil {
-		return err
+	// Duration should be reasonable (max 12 hours)
+	duration := endMinutes - startMinutes
+	if duration > 12*60 {
+		return ierr.NewError("Occurrence duration cannot exceed 12 hours").
+			Mark(ierr.ErrValidation)
 	}
 
-	// Validate exception dates
-	if len(req.ExceptionDates) > 0 {
-		if err := validator.ValidateExceptionDates(req.ExceptionDates); err != nil {
-			return err
-		}
-	}
-
-	// Validate status if provided
-	if req.Status != nil {
-		validStatuses := []string{"active", "paused", "archived"}
-		valid := false
-		for _, s := range validStatuses {
-			if *req.Status == s {
-				valid = true
-				break
-			}
-		}
-		if !valid {
-			return ierr.NewError("Invalid status. Must be one of: active, paused, archived").
+	// Validate recurrence rules inline
+	switch req.RecurrenceType {
+	case types.RecurrenceNone, types.RecurrenceDaily:
+		// No day restrictions needed
+	case types.RecurrenceWeekly:
+		// Weekly events MUST have day_of_week
+		if req.DayOfWeek == nil {
+			return ierr.NewError("Weekly recurrence requires day_of_week (0-6)").
 				Mark(ierr.ErrValidation)
+		}
+		// Validate day of week (0-6, Sunday=0)
+		if *req.DayOfWeek < 0 || *req.DayOfWeek > 6 {
+			return ierr.NewError("Day of week must be between 0 (Sunday) and 6 (Saturday)").
+				Mark(ierr.ErrValidation)
+		}
+	case types.RecurrenceMonthly:
+		// Monthly events MUST have day_of_month
+		if req.DayOfMonth == nil {
+			return ierr.NewError("Monthly recurrence requires day_of_month (1-31)").
+				Mark(ierr.ErrValidation)
+		}
+		// Validate day of month (1-31)
+		if *req.DayOfMonth < 1 || *req.DayOfMonth > 31 {
+			return ierr.NewError("Day of month must be between 1 and 31").
+				Mark(ierr.ErrValidation)
+		}
+	case types.RecurrenceYearly:
+		// Yearly events MUST have both day_of_month and month_of_year
+		if req.DayOfMonth == nil {
+			return ierr.NewError("Yearly recurrence requires day_of_month (1-31)").
+				Mark(ierr.ErrValidation)
+		}
+		if req.MonthOfYear == nil {
+			return ierr.NewError("Yearly recurrence requires month_of_year (1-12)").
+				Mark(ierr.ErrValidation)
+		}
+		// Validate day of month (1-31)
+		if *req.DayOfMonth < 1 || *req.DayOfMonth > 31 {
+			return ierr.NewError("Day of month must be between 1 and 31").
+				Mark(ierr.ErrValidation)
+		}
+		// Validate month of year (1-12)
+		if *req.MonthOfYear < 1 || *req.MonthOfYear > 12 {
+			return ierr.NewError("Month of year must be between 1 (January) and 12 (December)").
+				Mark(ierr.ErrValidation)
+		}
+	}
+
+	// Validate exception dates inline
+	if len(req.ExceptionDates) > 0 {
+		for _, dateStr := range req.ExceptionDates {
+			_, err := time.Parse("2006-01-02", dateStr)
+			if err != nil {
+				return ierr.NewError("Exception dates must be in YYYY-MM-DD format").
+					WithReportableDetails(map[string]any{
+						"invalid_date": dateStr,
+					}).
+					Mark(ierr.ErrValidation)
+			}
 		}
 	}
 
@@ -372,47 +399,56 @@ func (req *CreateOccurrenceRequest) Validate() error {
 }
 
 // ToOccurrence converts CreateOccurrenceRequest to domain EventOccurrence
-func (req *CreateOccurrenceRequest) ToOccurrence(ctx context.Context, eventID string) (*eventdomain.EventOccurrence, error) {
+func (req *CreateOccurrenceRequest) ToOccurrence(ctx context.Context) (*eventdomain.EventOccurrence, error) {
 	baseModel := types.GetDefaultBaseModel(ctx)
 
 	// Parse times (we use a reference date, only time matters)
 	refDate := time.Date(2000, 1, 1, 0, 0, 0, 0, time.UTC)
-	startTime, _ := time.Parse("15:04", req.StartTime)
-	startTime = time.Date(refDate.Year(), refDate.Month(), refDate.Day(),
-		startTime.Hour(), startTime.Minute(), 0, 0, time.UTC)
+	parsedStart, _ := time.Parse("15:04", req.StartTime)
+	startTime := time.Date(refDate.Year(), refDate.Month(), refDate.Day(),
+		parsedStart.Hour(), parsedStart.Minute(), 0, 0, time.UTC)
 
-	endTime, _ := time.Parse("15:04", req.EndTime)
-	endTime = time.Date(refDate.Year(), refDate.Month(), refDate.Day(),
-		endTime.Hour(), endTime.Minute(), 0, 0, time.UTC)
+	parsedEnd, _ := time.Parse("15:04", req.EndTime)
+	endTime := time.Date(refDate.Year(), refDate.Month(), refDate.Day(),
+		parsedEnd.Hour(), parsedEnd.Minute(), 0, 0, time.UTC)
 
 	// Calculate duration
 	duration := int(endTime.Sub(startTime).Minutes())
 
-	status := types.OccurrenceActive
-	if req.Status != nil {
-		status = types.OccurrenceStatus(*req.Status)
+	// Status is always published for new occurrences (active/published state)
+	baseModel.Status = types.StatusPublished
+
+	// Convert metadata from map[string]interface{} to *types.Metadata
+	var metadata *types.Metadata
+	if req.Metadata != nil {
+		md := make(types.Metadata)
+		for k, v := range req.Metadata {
+			if strVal, ok := v.(string); ok {
+				md[k] = strVal
+			}
+		}
+		metadata = &md
 	}
 
 	return &eventdomain.EventOccurrence{
 		ID:              types.GenerateUUIDWithPrefix(types.UUID_PREFIX_OCCURRENCE),
-		EventID:         eventID,
-		RecurrenceType:  types.RecurrenceType(req.RecurrenceType),
-		StartTime:       startTime,
-		EndTime:         endTime,
+		EventID:         req.EventID,
+		RecurrenceType:  req.RecurrenceType,
+		StartTime:       &startTime,
+		EndTime:         &endTime,
 		DurationMinutes: &duration,
 		DayOfWeek:       req.DayOfWeek,
 		DayOfMonth:      req.DayOfMonth,
 		MonthOfYear:     req.MonthOfYear,
 		ExceptionDates:  req.ExceptionDates,
-		Metadata:        req.Metadata,
-		Status:          status,
+		Metadata:        metadata,
 		BaseModel:       baseModel,
 	}, nil
 }
 
 // UpdateOccurrenceRequest represents a request to update an occurrence
 type UpdateOccurrenceRequest struct {
-	RecurrenceType *string                `json:"recurrence_type,omitempty"`
+	RecurrenceType *types.RecurrenceType  `json:"recurrence_type,omitempty"`
 	StartTime      *string                `json:"start_time,omitempty"` // HH:MM format
 	EndTime        *string                `json:"end_time,omitempty"`   // HH:MM format
 	DayOfWeek      *int                   `json:"day_of_week,omitempty"`
@@ -420,7 +456,6 @@ type UpdateOccurrenceRequest struct {
 	MonthOfYear    *int                   `json:"month_of_year,omitempty"`
 	ExceptionDates []string               `json:"exception_dates,omitempty"`
 	Metadata       map[string]interface{} `json:"metadata,omitempty"`
-	Status         *string                `json:"status,omitempty"`
 }
 
 // Validate validates the UpdateOccurrenceRequest
@@ -429,9 +464,9 @@ func (req *UpdateOccurrenceRequest) Validate() error {
 		return err
 	}
 
-	// Validate recurrence type if provided
+	// Validate recurrence type if provided using the type's own Validate method
 	if req.RecurrenceType != nil {
-		if err := validator.ValidateRecurrenceType(*req.RecurrenceType); err != nil {
+		if err := req.RecurrenceType.Validate(); err != nil {
 			return err
 		}
 	}
@@ -454,33 +489,39 @@ func (req *UpdateOccurrenceRequest) Validate() error {
 		endTime = &parsed
 	}
 
-	// If both times are provided, validate them
+	// If both times are provided, validate them inline
 	if startTime != nil && endTime != nil {
-		if err := validator.ValidateOccurrenceTimes(*startTime, *endTime); err != nil {
-			return err
-		}
-	}
+		// Validate occurrence times
+		startHour, startMin := startTime.Hour(), startTime.Minute()
+		endHour, endMin := endTime.Hour(), endTime.Minute()
 
-	// Validate exception dates
-	if len(req.ExceptionDates) > 0 {
-		if err := validator.ValidateExceptionDates(req.ExceptionDates); err != nil {
-			return err
-		}
-	}
+		startMinutes := startHour*60 + startMin
+		endMinutes := endHour*60 + endMin
 
-	// Validate status if provided
-	if req.Status != nil {
-		validStatuses := []string{"active", "paused", "archived"}
-		valid := false
-		for _, s := range validStatuses {
-			if *req.Status == s {
-				valid = true
-				break
-			}
-		}
-		if !valid {
-			return ierr.NewError("Invalid status. Must be one of: active, paused, archived").
+		if endMinutes <= startMinutes {
+			return ierr.NewError("End time must be after start time").
 				Mark(ierr.ErrValidation)
+		}
+
+		// Duration should be reasonable (max 12 hours)
+		duration := endMinutes - startMinutes
+		if duration > 12*60 {
+			return ierr.NewError("Occurrence duration cannot exceed 12 hours").
+				Mark(ierr.ErrValidation)
+		}
+	}
+
+	// Validate exception dates inline
+	if len(req.ExceptionDates) > 0 {
+		for _, dateStr := range req.ExceptionDates {
+			_, err := time.Parse("2006-01-02", dateStr)
+			if err != nil {
+				return ierr.NewError("Exception dates must be in YYYY-MM-DD format").
+					WithReportableDetails(map[string]any{
+						"invalid_date": dateStr,
+					}).
+					Mark(ierr.ErrValidation)
+			}
 		}
 	}
 
@@ -492,22 +533,26 @@ func (req *UpdateOccurrenceRequest) ApplyToOccurrence(ctx context.Context, occ *
 	refDate := time.Date(2000, 1, 1, 0, 0, 0, 0, time.UTC)
 
 	if req.RecurrenceType != nil {
-		occ.RecurrenceType = types.RecurrenceType(*req.RecurrenceType)
+		occ.RecurrenceType = *req.RecurrenceType
 	}
 	if req.StartTime != nil {
 		parsed, _ := time.Parse("15:04", *req.StartTime)
-		occ.StartTime = time.Date(refDate.Year(), refDate.Month(), refDate.Day(),
+		startTime := time.Date(refDate.Year(), refDate.Month(), refDate.Day(),
 			parsed.Hour(), parsed.Minute(), 0, 0, time.UTC)
+		occ.StartTime = &startTime
 	}
 	if req.EndTime != nil {
 		parsed, _ := time.Parse("15:04", *req.EndTime)
-		occ.EndTime = time.Date(refDate.Year(), refDate.Month(), refDate.Day(),
+		endTime := time.Date(refDate.Year(), refDate.Month(), refDate.Day(),
 			parsed.Hour(), parsed.Minute(), 0, 0, time.UTC)
+		occ.EndTime = &endTime
 	}
 
-	// Recalculate duration
-	duration := int(occ.EndTime.Sub(occ.StartTime).Minutes())
-	occ.DurationMinutes = &duration
+	// Recalculate duration if both times are set
+	if occ.StartTime != nil && occ.EndTime != nil {
+		duration := int(occ.EndTime.Sub(*occ.StartTime).Minutes())
+		occ.DurationMinutes = &duration
+	}
 
 	if req.DayOfWeek != nil {
 		occ.DayOfWeek = req.DayOfWeek
@@ -522,15 +567,14 @@ func (req *UpdateOccurrenceRequest) ApplyToOccurrence(ctx context.Context, occ *
 		occ.ExceptionDates = req.ExceptionDates
 	}
 	if req.Metadata != nil {
-		occ.Metadata = req.Metadata
+		md := make(types.Metadata)
+		for k, v := range req.Metadata {
+			if strVal, ok := v.(string); ok {
+				md[k] = strVal
+			}
+		}
+		occ.Metadata = &md
 	}
-	if req.Status != nil {
-		occ.Status = types.OccurrenceStatus(*req.Status)
-	}
-
-	// Update audit fields
-	occ.UpdatedBy = types.GetUserID(ctx)
-	occ.UpdatedAt = time.Now().UTC()
 
 	return nil
 }

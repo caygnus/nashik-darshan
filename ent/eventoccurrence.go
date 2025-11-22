@@ -20,14 +20,26 @@ type EventOccurrence struct {
 	// ID of the ent.
 	// Unique occurrence identifier with prefix occ_
 	ID string `json:"id,omitempty"`
+	// Status holds the value of the "status" field.
+	Status string `json:"status,omitempty"`
+	// CreatedAt holds the value of the "created_at" field.
+	CreatedAt time.Time `json:"created_at,omitempty"`
+	// UpdatedAt holds the value of the "updated_at" field.
+	UpdatedAt time.Time `json:"updated_at,omitempty"`
+	// CreatedBy holds the value of the "created_by" field.
+	CreatedBy string `json:"created_by,omitempty"`
+	// UpdatedBy holds the value of the "updated_by" field.
+	UpdatedBy string `json:"updated_by,omitempty"`
+	// Metadata holds the value of the "metadata" field.
+	Metadata map[string]string `json:"metadata,omitempty"`
 	// FK to parent event
 	EventID string `json:"event_id,omitempty"`
-	// How this occurrence repeats
-	RecurrenceType eventoccurrence.RecurrenceType `json:"recurrence_type,omitempty"`
+	// How this occurrence repeats: NONE, DAILY, WEEKLY, MONTHLY, YEARLY
+	RecurrenceType string `json:"recurrence_type,omitempty"`
 	// Time of day (only time component used)
-	StartTime time.Time `json:"start_time,omitempty"`
+	StartTime *time.Time `json:"start_time,omitempty"`
 	// End time of day (only time component used)
-	EndTime time.Time `json:"end_time,omitempty"`
+	EndTime *time.Time `json:"end_time,omitempty"`
 	// Auto-calculated duration
 	DurationMinutes *int `json:"duration_minutes,omitempty"`
 	// 0=Sunday, 6=Saturday - for WEEKLY
@@ -38,18 +50,6 @@ type EventOccurrence struct {
 	MonthOfYear *int `json:"month_of_year,omitempty"`
 	// ISO dates to skip: ['2025-12-25', '2025-01-26']
 	ExceptionDates []string `json:"exception_dates,omitempty"`
-	// Occurrence-specific data
-	Metadata map[string]interface{} `json:"metadata,omitempty"`
-	// Occurrence status
-	Status eventoccurrence.Status `json:"status,omitempty"`
-	// User ID who created
-	CreatedBy string `json:"created_by,omitempty"`
-	// User ID who last updated
-	UpdatedBy string `json:"updated_by,omitempty"`
-	// Creation timestamp
-	CreatedAt time.Time `json:"created_at,omitempty"`
-	// Last update timestamp
-	UpdatedAt time.Time `json:"updated_at,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the EventOccurrenceQuery when eager-loading is set.
 	Edges        EventOccurrenceEdges `json:"edges"`
@@ -81,13 +81,13 @@ func (*EventOccurrence) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case eventoccurrence.FieldExceptionDates, eventoccurrence.FieldMetadata:
+		case eventoccurrence.FieldMetadata, eventoccurrence.FieldExceptionDates:
 			values[i] = new([]byte)
 		case eventoccurrence.FieldDurationMinutes, eventoccurrence.FieldDayOfWeek, eventoccurrence.FieldDayOfMonth, eventoccurrence.FieldMonthOfYear:
 			values[i] = new(sql.NullInt64)
-		case eventoccurrence.FieldID, eventoccurrence.FieldEventID, eventoccurrence.FieldRecurrenceType, eventoccurrence.FieldStatus, eventoccurrence.FieldCreatedBy, eventoccurrence.FieldUpdatedBy:
+		case eventoccurrence.FieldID, eventoccurrence.FieldStatus, eventoccurrence.FieldCreatedBy, eventoccurrence.FieldUpdatedBy, eventoccurrence.FieldEventID, eventoccurrence.FieldRecurrenceType:
 			values[i] = new(sql.NullString)
-		case eventoccurrence.FieldStartTime, eventoccurrence.FieldEndTime, eventoccurrence.FieldCreatedAt, eventoccurrence.FieldUpdatedAt:
+		case eventoccurrence.FieldCreatedAt, eventoccurrence.FieldUpdatedAt, eventoccurrence.FieldStartTime, eventoccurrence.FieldEndTime:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -110,6 +110,44 @@ func (_m *EventOccurrence) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.ID = value.String
 			}
+		case eventoccurrence.FieldStatus:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field status", values[i])
+			} else if value.Valid {
+				_m.Status = value.String
+			}
+		case eventoccurrence.FieldCreatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field created_at", values[i])
+			} else if value.Valid {
+				_m.CreatedAt = value.Time
+			}
+		case eventoccurrence.FieldUpdatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
+			} else if value.Valid {
+				_m.UpdatedAt = value.Time
+			}
+		case eventoccurrence.FieldCreatedBy:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by", values[i])
+			} else if value.Valid {
+				_m.CreatedBy = value.String
+			}
+		case eventoccurrence.FieldUpdatedBy:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+			} else if value.Valid {
+				_m.UpdatedBy = value.String
+			}
+		case eventoccurrence.FieldMetadata:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field metadata", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.Metadata); err != nil {
+					return fmt.Errorf("unmarshal field metadata: %w", err)
+				}
+			}
 		case eventoccurrence.FieldEventID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field event_id", values[i])
@@ -120,19 +158,21 @@ func (_m *EventOccurrence) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field recurrence_type", values[i])
 			} else if value.Valid {
-				_m.RecurrenceType = eventoccurrence.RecurrenceType(value.String)
+				_m.RecurrenceType = value.String
 			}
 		case eventoccurrence.FieldStartTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field start_time", values[i])
 			} else if value.Valid {
-				_m.StartTime = value.Time
+				_m.StartTime = new(time.Time)
+				*_m.StartTime = value.Time
 			}
 		case eventoccurrence.FieldEndTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field end_time", values[i])
 			} else if value.Valid {
-				_m.EndTime = value.Time
+				_m.EndTime = new(time.Time)
+				*_m.EndTime = value.Time
 			}
 		case eventoccurrence.FieldDurationMinutes:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -169,44 +209,6 @@ func (_m *EventOccurrence) assignValues(columns []string, values []any) error {
 				if err := json.Unmarshal(*value, &_m.ExceptionDates); err != nil {
 					return fmt.Errorf("unmarshal field exception_dates: %w", err)
 				}
-			}
-		case eventoccurrence.FieldMetadata:
-			if value, ok := values[i].(*[]byte); !ok {
-				return fmt.Errorf("unexpected type %T for field metadata", values[i])
-			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &_m.Metadata); err != nil {
-					return fmt.Errorf("unmarshal field metadata: %w", err)
-				}
-			}
-		case eventoccurrence.FieldStatus:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field status", values[i])
-			} else if value.Valid {
-				_m.Status = eventoccurrence.Status(value.String)
-			}
-		case eventoccurrence.FieldCreatedBy:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field created_by", values[i])
-			} else if value.Valid {
-				_m.CreatedBy = value.String
-			}
-		case eventoccurrence.FieldUpdatedBy:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
-			} else if value.Valid {
-				_m.UpdatedBy = value.String
-			}
-		case eventoccurrence.FieldCreatedAt:
-			if value, ok := values[i].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field created_at", values[i])
-			} else if value.Valid {
-				_m.CreatedAt = value.Time
-			}
-		case eventoccurrence.FieldUpdatedAt:
-			if value, ok := values[i].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
-			} else if value.Valid {
-				_m.UpdatedAt = value.Time
 			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
@@ -249,17 +251,39 @@ func (_m *EventOccurrence) String() string {
 	var builder strings.Builder
 	builder.WriteString("EventOccurrence(")
 	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
+	builder.WriteString("status=")
+	builder.WriteString(_m.Status)
+	builder.WriteString(", ")
+	builder.WriteString("created_at=")
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("updated_at=")
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("created_by=")
+	builder.WriteString(_m.CreatedBy)
+	builder.WriteString(", ")
+	builder.WriteString("updated_by=")
+	builder.WriteString(_m.UpdatedBy)
+	builder.WriteString(", ")
+	builder.WriteString("metadata=")
+	builder.WriteString(fmt.Sprintf("%v", _m.Metadata))
+	builder.WriteString(", ")
 	builder.WriteString("event_id=")
 	builder.WriteString(_m.EventID)
 	builder.WriteString(", ")
 	builder.WriteString("recurrence_type=")
-	builder.WriteString(fmt.Sprintf("%v", _m.RecurrenceType))
+	builder.WriteString(_m.RecurrenceType)
 	builder.WriteString(", ")
-	builder.WriteString("start_time=")
-	builder.WriteString(_m.StartTime.Format(time.ANSIC))
+	if v := _m.StartTime; v != nil {
+		builder.WriteString("start_time=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
 	builder.WriteString(", ")
-	builder.WriteString("end_time=")
-	builder.WriteString(_m.EndTime.Format(time.ANSIC))
+	if v := _m.EndTime; v != nil {
+		builder.WriteString("end_time=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
 	builder.WriteString(", ")
 	if v := _m.DurationMinutes; v != nil {
 		builder.WriteString("duration_minutes=")
@@ -283,24 +307,6 @@ func (_m *EventOccurrence) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("exception_dates=")
 	builder.WriteString(fmt.Sprintf("%v", _m.ExceptionDates))
-	builder.WriteString(", ")
-	builder.WriteString("metadata=")
-	builder.WriteString(fmt.Sprintf("%v", _m.Metadata))
-	builder.WriteString(", ")
-	builder.WriteString("status=")
-	builder.WriteString(fmt.Sprintf("%v", _m.Status))
-	builder.WriteString(", ")
-	builder.WriteString("created_by=")
-	builder.WriteString(_m.CreatedBy)
-	builder.WriteString(", ")
-	builder.WriteString("updated_by=")
-	builder.WriteString(_m.UpdatedBy)
-	builder.WriteString(", ")
-	builder.WriteString("created_at=")
-	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
-	builder.WriteString(", ")
-	builder.WriteString("updated_at=")
-	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteByte(')')
 	return builder.String()
 }

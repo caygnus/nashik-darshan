@@ -299,12 +299,12 @@ func (_q *EventQuery) WithOccurrences(opts ...func(*EventOccurrenceQuery)) *Even
 // Example:
 //
 //	var v []struct {
-//		Slug string `json:"slug,omitempty"`
+//		Status string `json:"status,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
 //	client.Event.Query().
-//		GroupBy(event.FieldSlug).
+//		GroupBy(event.FieldStatus).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
 func (_q *EventQuery) GroupBy(field string, fields ...string) *EventGroupBy {
@@ -322,11 +322,11 @@ func (_q *EventQuery) GroupBy(field string, fields ...string) *EventGroupBy {
 // Example:
 //
 //	var v []struct {
-//		Slug string `json:"slug,omitempty"`
+//		Status string `json:"status,omitempty"`
 //	}
 //
 //	client.Event.Query().
-//		Select(event.FieldSlug).
+//		Select(event.FieldStatus).
 //		Scan(ctx, &v)
 func (_q *EventQuery) Select(fields ...string) *EventSelect {
 	_q.ctx.Fields = append(_q.ctx.Fields, fields...)

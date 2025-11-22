@@ -3,7 +3,6 @@
 package eventoccurrence
 
 import (
-	"fmt"
 	"time"
 
 	"entgo.io/ent/dialect/sql"
@@ -15,6 +14,18 @@ const (
 	Label = "event_occurrence"
 	// FieldID holds the string denoting the id field in the database.
 	FieldID = "id"
+	// FieldStatus holds the string denoting the status field in the database.
+	FieldStatus = "status"
+	// FieldCreatedAt holds the string denoting the created_at field in the database.
+	FieldCreatedAt = "created_at"
+	// FieldUpdatedAt holds the string denoting the updated_at field in the database.
+	FieldUpdatedAt = "updated_at"
+	// FieldCreatedBy holds the string denoting the created_by field in the database.
+	FieldCreatedBy = "created_by"
+	// FieldUpdatedBy holds the string denoting the updated_by field in the database.
+	FieldUpdatedBy = "updated_by"
+	// FieldMetadata holds the string denoting the metadata field in the database.
+	FieldMetadata = "metadata"
 	// FieldEventID holds the string denoting the event_id field in the database.
 	FieldEventID = "event_id"
 	// FieldRecurrenceType holds the string denoting the recurrence_type field in the database.
@@ -33,18 +44,6 @@ const (
 	FieldMonthOfYear = "month_of_year"
 	// FieldExceptionDates holds the string denoting the exception_dates field in the database.
 	FieldExceptionDates = "exception_dates"
-	// FieldMetadata holds the string denoting the metadata field in the database.
-	FieldMetadata = "metadata"
-	// FieldStatus holds the string denoting the status field in the database.
-	FieldStatus = "status"
-	// FieldCreatedBy holds the string denoting the created_by field in the database.
-	FieldCreatedBy = "created_by"
-	// FieldUpdatedBy holds the string denoting the updated_by field in the database.
-	FieldUpdatedBy = "updated_by"
-	// FieldCreatedAt holds the string denoting the created_at field in the database.
-	FieldCreatedAt = "created_at"
-	// FieldUpdatedAt holds the string denoting the updated_at field in the database.
-	FieldUpdatedAt = "updated_at"
 	// EdgeEvent holds the string denoting the event edge name in mutations.
 	EdgeEvent = "event"
 	// Table holds the table name of the eventoccurrence in the database.
@@ -61,6 +60,12 @@ const (
 // Columns holds all SQL columns for eventoccurrence fields.
 var Columns = []string{
 	FieldID,
+	FieldStatus,
+	FieldCreatedAt,
+	FieldUpdatedAt,
+	FieldCreatedBy,
+	FieldUpdatedBy,
+	FieldMetadata,
 	FieldEventID,
 	FieldRecurrenceType,
 	FieldStartTime,
@@ -70,12 +75,6 @@ var Columns = []string{
 	FieldDayOfMonth,
 	FieldMonthOfYear,
 	FieldExceptionDates,
-	FieldMetadata,
-	FieldStatus,
-	FieldCreatedBy,
-	FieldUpdatedBy,
-	FieldCreatedAt,
-	FieldUpdatedAt,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -89,84 +88,29 @@ func ValidColumn(column string) bool {
 }
 
 var (
-	// EventIDValidator is a validator for the "event_id" field. It is called by the builders before save.
-	EventIDValidator func(string) error
-	// DayOfWeekValidator is a validator for the "day_of_week" field. It is called by the builders before save.
-	DayOfWeekValidator func(int) error
-	// DayOfMonthValidator is a validator for the "day_of_month" field. It is called by the builders before save.
-	DayOfMonthValidator func(int) error
-	// MonthOfYearValidator is a validator for the "month_of_year" field. It is called by the builders before save.
-	MonthOfYearValidator func(int) error
-	// CreatedByValidator is a validator for the "created_by" field. It is called by the builders before save.
-	CreatedByValidator func(string) error
-	// UpdatedByValidator is a validator for the "updated_by" field. It is called by the builders before save.
-	UpdatedByValidator func(string) error
+	// DefaultStatus holds the default value on creation for the "status" field.
+	DefaultStatus string
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() time.Time
 	// DefaultUpdatedAt holds the default value on creation for the "updated_at" field.
 	DefaultUpdatedAt func() time.Time
 	// UpdateDefaultUpdatedAt holds the default value on update for the "updated_at" field.
 	UpdateDefaultUpdatedAt func() time.Time
+	// DefaultMetadata holds the default value on creation for the "metadata" field.
+	DefaultMetadata map[string]string
+	// EventIDValidator is a validator for the "event_id" field. It is called by the builders before save.
+	EventIDValidator func(string) error
+	// RecurrenceTypeValidator is a validator for the "recurrence_type" field. It is called by the builders before save.
+	RecurrenceTypeValidator func(string) error
+	// DayOfWeekValidator is a validator for the "day_of_week" field. It is called by the builders before save.
+	DayOfWeekValidator func(int) error
+	// DayOfMonthValidator is a validator for the "day_of_month" field. It is called by the builders before save.
+	DayOfMonthValidator func(int) error
+	// MonthOfYearValidator is a validator for the "month_of_year" field. It is called by the builders before save.
+	MonthOfYearValidator func(int) error
 	// IDValidator is a validator for the "id" field. It is called by the builders before save.
 	IDValidator func(string) error
 )
-
-// RecurrenceType defines the type for the "recurrence_type" enum field.
-type RecurrenceType string
-
-// RecurrenceTypeNONE is the default value of the RecurrenceType enum.
-const DefaultRecurrenceType = RecurrenceTypeNONE
-
-// RecurrenceType values.
-const (
-	RecurrenceTypeNONE    RecurrenceType = "NONE"
-	RecurrenceTypeDAILY   RecurrenceType = "DAILY"
-	RecurrenceTypeWEEKLY  RecurrenceType = "WEEKLY"
-	RecurrenceTypeMONTHLY RecurrenceType = "MONTHLY"
-	RecurrenceTypeYEARLY  RecurrenceType = "YEARLY"
-)
-
-func (rt RecurrenceType) String() string {
-	return string(rt)
-}
-
-// RecurrenceTypeValidator is a validator for the "recurrence_type" field enum values. It is called by the builders before save.
-func RecurrenceTypeValidator(rt RecurrenceType) error {
-	switch rt {
-	case RecurrenceTypeNONE, RecurrenceTypeDAILY, RecurrenceTypeWEEKLY, RecurrenceTypeMONTHLY, RecurrenceTypeYEARLY:
-		return nil
-	default:
-		return fmt.Errorf("eventoccurrence: invalid enum value for recurrence_type field: %q", rt)
-	}
-}
-
-// Status defines the type for the "status" enum field.
-type Status string
-
-// StatusActive is the default value of the Status enum.
-const DefaultStatus = StatusActive
-
-// Status values.
-const (
-	StatusActive   Status = "active"
-	StatusPaused   Status = "paused"
-	StatusArchived Status = "archived"
-	StatusDeleted  Status = "deleted"
-)
-
-func (s Status) String() string {
-	return string(s)
-}
-
-// StatusValidator is a validator for the "status" field enum values. It is called by the builders before save.
-func StatusValidator(s Status) error {
-	switch s {
-	case StatusActive, StatusPaused, StatusArchived, StatusDeleted:
-		return nil
-	default:
-		return fmt.Errorf("eventoccurrence: invalid enum value for status field: %q", s)
-	}
-}
 
 // OrderOption defines the ordering options for the EventOccurrence queries.
 type OrderOption func(*sql.Selector)
@@ -174,6 +118,31 @@ type OrderOption func(*sql.Selector)
 // ByID orders the results by the id field.
 func ByID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldID, opts...).ToFunc()
+}
+
+// ByStatus orders the results by the status field.
+func ByStatus(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldStatus, opts...).ToFunc()
+}
+
+// ByCreatedAt orders the results by the created_at field.
+func ByCreatedAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCreatedAt, opts...).ToFunc()
+}
+
+// ByUpdatedAt orders the results by the updated_at field.
+func ByUpdatedAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldUpdatedAt, opts...).ToFunc()
+}
+
+// ByCreatedBy orders the results by the created_by field.
+func ByCreatedBy(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCreatedBy, opts...).ToFunc()
+}
+
+// ByUpdatedBy orders the results by the updated_by field.
+func ByUpdatedBy(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldUpdatedBy, opts...).ToFunc()
 }
 
 // ByEventID orders the results by the event_id field.
@@ -214,31 +183,6 @@ func ByDayOfMonth(opts ...sql.OrderTermOption) OrderOption {
 // ByMonthOfYear orders the results by the month_of_year field.
 func ByMonthOfYear(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldMonthOfYear, opts...).ToFunc()
-}
-
-// ByStatus orders the results by the status field.
-func ByStatus(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldStatus, opts...).ToFunc()
-}
-
-// ByCreatedBy orders the results by the created_by field.
-func ByCreatedBy(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldCreatedBy, opts...).ToFunc()
-}
-
-// ByUpdatedBy orders the results by the updated_by field.
-func ByUpdatedBy(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldUpdatedBy, opts...).ToFunc()
-}
-
-// ByCreatedAt orders the results by the created_at field.
-func ByCreatedAt(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldCreatedAt, opts...).ToFunc()
-}
-
-// ByUpdatedAt orders the results by the updated_at field.
-func ByUpdatedAt(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldUpdatedAt, opts...).ToFunc()
 }
 
 // ByEventField orders the results by event field.

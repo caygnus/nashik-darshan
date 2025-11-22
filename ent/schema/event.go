@@ -1,18 +1,25 @@
 package schema
 
 import (
-	"time"
-
 	"entgo.io/ent"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
+	mixinpkg "github.com/omkar273/nashikdarshan/ent/mixin"
 	"github.com/shopspring/decimal"
 )
 
 // Event holds the schema definition for the Event entity.
 type Event struct {
 	ent.Schema
+}
+
+// Mixin of the Event
+func (Event) Mixin() []ent.Mixin {
+	return []ent.Mixin{
+		mixinpkg.BaseMixin{},
+		mixinpkg.MetadataMixin{},
+	}
 }
 
 // Fields of the Event.
@@ -31,8 +38,8 @@ func (Event) Fields() []ent.Field {
 			Comment("URL-friendly unique identifier"),
 
 		// Core Info
-		field.Enum("type").
-			Values("AARTI", "FESTIVAL", "CULTURAL", "WORKSHOP", "SPECIAL_DARSHAN", "OTHER").
+		field.String("type").
+			NotEmpty().
 			Comment("Event category for filtering and display"),
 
 		field.String("title").
@@ -70,21 +77,16 @@ func (Event) Fields() []ent.Field {
 		field.String("cover_image_url").
 			Optional().
 			Nillable().
-			MaxLen(500).
 			Comment("Event banner/poster image"),
 
 		field.JSON("images", []string{}).
 			Optional().
 			Comment("Additional event images"),
 
-		// Metadata
+		// Tags
 		field.JSON("tags", []string{}).
 			Optional().
 			Comment("Searchable tags: morning, evening, spiritual, etc"),
-
-		field.JSON("metadata", map[string]interface{}{}).
-			Optional().
-			Comment("Flexible data: stream_url, booking_link, contact, fee, etc"),
 
 		// Location (for citywide events without place_id)
 		field.Other("latitude", &decimal.Decimal{}).
@@ -119,31 +121,6 @@ func (Event) Fields() []ent.Field {
 			Default(0).
 			NonNegative().
 			Comment("Users who marked interested"),
-
-		// Lifecycle
-		field.Enum("status").
-			Values("draft", "published", "archived", "deleted").
-			Default("draft").
-			Comment("Event visibility status"),
-
-		// Audit
-		field.String("created_by").
-			NotEmpty().
-			Comment("User ID who created"),
-
-		field.String("updated_by").
-			NotEmpty().
-			Comment("User ID who last updated"),
-
-		field.Time("created_at").
-			Default(time.Now).
-			Immutable().
-			Comment("Creation timestamp"),
-
-		field.Time("updated_at").
-			Default(time.Now).
-			UpdateDefault(time.Now).
-			Comment("Last update timestamp"),
 	}
 }
 

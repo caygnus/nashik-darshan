@@ -20,10 +20,22 @@ type Event struct {
 	// ID of the ent.
 	// Unique event identifier with prefix evt_
 	ID string `json:"id,omitempty"`
+	// Status holds the value of the "status" field.
+	Status string `json:"status,omitempty"`
+	// CreatedAt holds the value of the "created_at" field.
+	CreatedAt time.Time `json:"created_at,omitempty"`
+	// UpdatedAt holds the value of the "updated_at" field.
+	UpdatedAt time.Time `json:"updated_at,omitempty"`
+	// CreatedBy holds the value of the "created_by" field.
+	CreatedBy string `json:"created_by,omitempty"`
+	// UpdatedBy holds the value of the "updated_by" field.
+	UpdatedBy string `json:"updated_by,omitempty"`
+	// Metadata holds the value of the "metadata" field.
+	Metadata map[string]string `json:"metadata,omitempty"`
 	// URL-friendly unique identifier
 	Slug string `json:"slug,omitempty"`
 	// Event category for filtering and display
-	Type event.Type `json:"type,omitempty"`
+	Type string `json:"type,omitempty"`
 	// Event name
 	Title string `json:"title,omitempty"`
 	// Brief tagline
@@ -42,8 +54,6 @@ type Event struct {
 	Images []string `json:"images,omitempty"`
 	// Searchable tags: morning, evening, spiritual, etc
 	Tags []string `json:"tags,omitempty"`
-	// Flexible data: stream_url, booking_link, contact, fee, etc
-	Metadata map[string]interface{} `json:"metadata,omitempty"`
 	// Latitude for standalone events
 	Latitude *decimal.Decimal `json:"latitude,omitempty"`
 	// Longitude for standalone events
@@ -54,16 +64,6 @@ type Event struct {
 	ViewCount int `json:"view_count,omitempty"`
 	// Users who marked interested
 	InterestedCount int `json:"interested_count,omitempty"`
-	// Event visibility status
-	Status event.Status `json:"status,omitempty"`
-	// User ID who created
-	CreatedBy string `json:"created_by,omitempty"`
-	// User ID who last updated
-	UpdatedBy string `json:"updated_by,omitempty"`
-	// Creation timestamp
-	CreatedAt time.Time `json:"created_at,omitempty"`
-	// Last update timestamp
-	UpdatedAt time.Time `json:"updated_at,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the EventQuery when eager-loading is set.
 	Edges        EventEdges `json:"edges"`
@@ -95,13 +95,13 @@ func (*Event) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case event.FieldLatitude, event.FieldLongitude:
 			values[i] = &sql.NullScanner{S: new(decimal.Decimal)}
-		case event.FieldImages, event.FieldTags, event.FieldMetadata:
+		case event.FieldMetadata, event.FieldImages, event.FieldTags:
 			values[i] = new([]byte)
 		case event.FieldViewCount, event.FieldInterestedCount:
 			values[i] = new(sql.NullInt64)
-		case event.FieldID, event.FieldSlug, event.FieldType, event.FieldTitle, event.FieldSubtitle, event.FieldDescription, event.FieldPlaceID, event.FieldCoverImageURL, event.FieldLocationName, event.FieldStatus, event.FieldCreatedBy, event.FieldUpdatedBy:
+		case event.FieldID, event.FieldStatus, event.FieldCreatedBy, event.FieldUpdatedBy, event.FieldSlug, event.FieldType, event.FieldTitle, event.FieldSubtitle, event.FieldDescription, event.FieldPlaceID, event.FieldCoverImageURL, event.FieldLocationName:
 			values[i] = new(sql.NullString)
-		case event.FieldStartDate, event.FieldEndDate, event.FieldCreatedAt, event.FieldUpdatedAt:
+		case event.FieldCreatedAt, event.FieldUpdatedAt, event.FieldStartDate, event.FieldEndDate:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -124,6 +124,44 @@ func (_m *Event) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.ID = value.String
 			}
+		case event.FieldStatus:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field status", values[i])
+			} else if value.Valid {
+				_m.Status = value.String
+			}
+		case event.FieldCreatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field created_at", values[i])
+			} else if value.Valid {
+				_m.CreatedAt = value.Time
+			}
+		case event.FieldUpdatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
+			} else if value.Valid {
+				_m.UpdatedAt = value.Time
+			}
+		case event.FieldCreatedBy:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by", values[i])
+			} else if value.Valid {
+				_m.CreatedBy = value.String
+			}
+		case event.FieldUpdatedBy:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+			} else if value.Valid {
+				_m.UpdatedBy = value.String
+			}
+		case event.FieldMetadata:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field metadata", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.Metadata); err != nil {
+					return fmt.Errorf("unmarshal field metadata: %w", err)
+				}
+			}
 		case event.FieldSlug:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field slug", values[i])
@@ -134,7 +172,7 @@ func (_m *Event) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field type", values[i])
 			} else if value.Valid {
-				_m.Type = event.Type(value.String)
+				_m.Type = value.String
 			}
 		case event.FieldTitle:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -199,14 +237,6 @@ func (_m *Event) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
-		case event.FieldMetadata:
-			if value, ok := values[i].(*[]byte); !ok {
-				return fmt.Errorf("unexpected type %T for field metadata", values[i])
-			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &_m.Metadata); err != nil {
-					return fmt.Errorf("unmarshal field metadata: %w", err)
-				}
-			}
 		case event.FieldLatitude:
 			if value, ok := values[i].(*sql.NullScanner); !ok {
 				return fmt.Errorf("unexpected type %T for field latitude", values[i])
@@ -237,36 +267,6 @@ func (_m *Event) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field interested_count", values[i])
 			} else if value.Valid {
 				_m.InterestedCount = int(value.Int64)
-			}
-		case event.FieldStatus:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field status", values[i])
-			} else if value.Valid {
-				_m.Status = event.Status(value.String)
-			}
-		case event.FieldCreatedBy:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field created_by", values[i])
-			} else if value.Valid {
-				_m.CreatedBy = value.String
-			}
-		case event.FieldUpdatedBy:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
-			} else if value.Valid {
-				_m.UpdatedBy = value.String
-			}
-		case event.FieldCreatedAt:
-			if value, ok := values[i].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field created_at", values[i])
-			} else if value.Valid {
-				_m.CreatedAt = value.Time
-			}
-		case event.FieldUpdatedAt:
-			if value, ok := values[i].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
-			} else if value.Valid {
-				_m.UpdatedAt = value.Time
 			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
@@ -309,11 +309,29 @@ func (_m *Event) String() string {
 	var builder strings.Builder
 	builder.WriteString("Event(")
 	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
+	builder.WriteString("status=")
+	builder.WriteString(_m.Status)
+	builder.WriteString(", ")
+	builder.WriteString("created_at=")
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("updated_at=")
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("created_by=")
+	builder.WriteString(_m.CreatedBy)
+	builder.WriteString(", ")
+	builder.WriteString("updated_by=")
+	builder.WriteString(_m.UpdatedBy)
+	builder.WriteString(", ")
+	builder.WriteString("metadata=")
+	builder.WriteString(fmt.Sprintf("%v", _m.Metadata))
+	builder.WriteString(", ")
 	builder.WriteString("slug=")
 	builder.WriteString(_m.Slug)
 	builder.WriteString(", ")
 	builder.WriteString("type=")
-	builder.WriteString(fmt.Sprintf("%v", _m.Type))
+	builder.WriteString(_m.Type)
 	builder.WriteString(", ")
 	builder.WriteString("title=")
 	builder.WriteString(_m.Title)
@@ -352,9 +370,6 @@ func (_m *Event) String() string {
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
 	builder.WriteString(", ")
-	builder.WriteString("metadata=")
-	builder.WriteString(fmt.Sprintf("%v", _m.Metadata))
-	builder.WriteString(", ")
 	if v := _m.Latitude; v != nil {
 		builder.WriteString("latitude=")
 		builder.WriteString(fmt.Sprintf("%v", *v))
@@ -375,21 +390,6 @@ func (_m *Event) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("interested_count=")
 	builder.WriteString(fmt.Sprintf("%v", _m.InterestedCount))
-	builder.WriteString(", ")
-	builder.WriteString("status=")
-	builder.WriteString(fmt.Sprintf("%v", _m.Status))
-	builder.WriteString(", ")
-	builder.WriteString("created_by=")
-	builder.WriteString(_m.CreatedBy)
-	builder.WriteString(", ")
-	builder.WriteString("updated_by=")
-	builder.WriteString(_m.UpdatedBy)
-	builder.WriteString(", ")
-	builder.WriteString("created_at=")
-	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
-	builder.WriteString(", ")
-	builder.WriteString("updated_at=")
-	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteByte(')')
 	return builder.String()
 }

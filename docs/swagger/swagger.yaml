@@ -51,7 +51,6 @@ definitions:
         maxLength: 10000
         type: string
       end_date:
-        description: YYYY-MM-DD
         type: string
       images:
         items:
@@ -74,10 +73,6 @@ definitions:
         minLength: 3
         type: string
       start_date:
-        description: YYYY-MM-DD
-        type: string
-      status:
-        description: draft, published, archived
         type: string
       subtitle:
         maxLength: 500
@@ -91,10 +86,9 @@ definitions:
         minLength: 2
         type: string
       type:
-        type: string
+        $ref: '#/definitions/types.EventType'
     required:
     - slug
-    - start_date
     - title
     - type
     type: object
@@ -168,6 +162,8 @@ definitions:
       end_time:
         description: HH:MM format
         type: string
+      event_id:
+        type: string
       exception_dates:
         description: '["2025-12-25", ...]'
         items:
@@ -180,16 +176,13 @@ definitions:
         description: 1-12 for YEARLY
         type: integer
       recurrence_type:
-        description: NONE, DAILY, WEEKLY, MONTHLY, YEARLY
-        type: string
+        $ref: '#/definitions/types.RecurrenceType'
       start_time:
         description: HH:MM format
         type: string
-      status:
-        description: active, paused, archived
-        type: string
     required:
     - end_time
+    - event_id
     - recurrence_type
     - start_time
     type: object
@@ -322,8 +315,7 @@ definitions:
       longitude:
         type: number
       metadata:
-        additionalProperties: true
-        type: object
+        $ref: '#/definitions/types.Metadata'
       occurrences:
         description: Relations (populated when needed)
         items:
@@ -359,27 +351,6 @@ definitions:
       view_count:
         description: Stats
         type: integer
-    type: object
-  dto.ExpandedOccurrenceResponse:
-    properties:
-      days_until:
-        type: integer
-      end_time:
-        description: Full datetime
-        type: string
-      event_id:
-        type: string
-      is_today:
-        type: boolean
-      is_upcoming:
-        type: boolean
-      occurrence_id:
-        type: string
-      start_time:
-        description: Full datetime
-        type: string
-      title:
-        type: string
     type: object
   dto.FeedRequest:
     properties:
@@ -623,9 +594,9 @@ definitions:
         description: Identity
         type: string
       metadata:
-        additionalProperties: true
+        allOf:
+        - $ref: '#/definitions/types.Metadata'
         description: Metadata
-        type: object
       month_of_year:
         description: 1-12 (renamed from Month)
         type: integer
@@ -850,7 +821,6 @@ definitions:
         maxLength: 10000
         type: string
       end_date:
-        description: YYYY-MM-DD
         type: string
       images:
         items:
@@ -869,9 +839,6 @@ definitions:
       place_id:
         type: string
       start_date:
-        description: YYYY-MM-DD
-        type: string
-      status:
         type: string
       subtitle:
         maxLength: 500
@@ -885,7 +852,7 @@ definitions:
         minLength: 2
         type: string
       type:
-        type: string
+        $ref: '#/definitions/types.EventType'
     type: object
   dto.UpdateHotelRequest:
     properties:
@@ -956,11 +923,9 @@ definitions:
       month_of_year:
         type: integer
       recurrence_type:
-        type: string
+        $ref: '#/definitions/types.RecurrenceType'
       start_time:
         description: HH:MM format
-        type: string
-      status:
         type: string
     type: object
   dto.UpdatePlaceImageRequest:
@@ -1078,9 +1043,9 @@ definitions:
         description: Identity
         type: string
       metadata:
-        additionalProperties: true
+        allOf:
+        - $ref: '#/definitions/types.Metadata'
         description: Metadata
-        type: object
       month_of_year:
         description: 1-12 (renamed from Month)
         type: integer
@@ -1147,7 +1112,6 @@ definitions:
     - CULTURAL
     - WORKSHOP
     - SPECIAL_DARSHAN
-    - OTHER
     type: string
     x-enum-varnames:
     - EventTypeAarti
@@ -1155,7 +1119,6 @@ definitions:
     - EventTypeCultural
     - EventTypeWorkshop
     - EventTypeSpecialDarshan
-    - EventTypeOther
   types.FeedSectionType:
     enum:
     - latest
@@ -1188,18 +1151,6 @@ definitions:
     additionalProperties:
       type: string
     type: object
-  types.OccurrenceStatus:
-    enum:
-    - active
-    - paused
-    - archived
-    - deleted
-    type: string
-    x-enum-varnames:
-    - OccurrenceActive
-    - OccurrencePaused
-    - OccurrenceArchived
-    - OccurrenceDeleted
   types.PaginationResponse:
     properties:
       limit:
@@ -1534,11 +1485,13 @@ paths:
     get:
       consumes:
       - application/json
-      description: Get a paginated list of events with filtering and pagination
+      description: Get a paginated list of events with filtering and pagination. Use
+        expand=true with from_date and to_date to get expanded occurrences.
       parameters:
-      - in: query
+      - description: If true, expand occurrences in date range
+        in: query
         name: expand
-        type: string
+        type: boolean
       - description: ISO date YYYY-MM-DD
         in: query
         name: from_date
@@ -1597,7 +1550,6 @@ paths:
         - CULTURAL
         - WORKSHOP
         - SPECIAL_DARSHAN
-        - OTHER
         in: query
         name: type
         type: string
@@ -1607,7 +1559,18 @@ paths:
         - EventTypeCultural
         - EventTypeWorkshop
         - EventTypeSpecialDarshan
-        - EventTypeOther
+      - description: Expand occurrences in date range
+        in: query
+        name: expand
+        type: boolean
+      - description: Start date for expansion (YYYY-MM-DD)
+        in: query
+        name: from_date
+        type: string
+      - description: End date for expansion (YYYY-MM-DD)
+        in: query
+        name: to_date
+        type: string
       produces:
       - application/json
       responses:
@@ -1661,52 +1624,6 @@ paths:
       summary: Create a new event
       tags:
       - Event
-  /events/{eventId}/expanded:
-    get:
-      consumes:
-      - application/json
-      description: Get expanded concrete instances of event occurrences for a date
-        range
-      parameters:
-      - description: Event ID
-        in: path
-        name: eventId
-        required: true
-        type: string
-      - description: Start date (YYYY-MM-DD)
-        in: query
-        name: from_date
-        required: true
-        type: string
-      - description: End date (YYYY-MM-DD)
-        in: query
-        name: to_date
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            items:
-              $ref: '#/definitions/dto.ExpandedOccurrenceResponse'
-            type: array
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/ierr.ErrorResponse'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/ierr.ErrorResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/ierr.ErrorResponse'
-      summary: Get expanded occurrences
-      tags:
-      - Event
   /events/{eventId}/occurrences:
     get:
       consumes:
@@ -1736,46 +1653,6 @@ paths:
           schema:
             $ref: '#/definitions/ierr.ErrorResponse'
       summary: List occurrences for event
-      tags:
-      - Event
-    post:
-      consumes:
-      - application/json
-      description: Create a new occurrence for an event
-      parameters:
-      - description: Event ID
-        in: path
-        name: eventId
-        required: true
-        type: string
-      - description: Create occurrence request
-        in: body
-        name: request
-        required: true
-        schema:
-          $ref: '#/definitions/dto.CreateOccurrenceRequest'
-      produces:
-      - application/json
-      responses:
-        "201":
-          description: Created
-          schema:
-            $ref: '#/definitions/dto.OccurrenceResponse'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/ierr.ErrorResponse'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/ierr.ErrorResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/ierr.ErrorResponse'
-      security:
-      - Authorization: []
-      summary: Create event occurrence
       tags:
       - Event
   /events/{id}:
@@ -1931,6 +1808,139 @@ paths:
           schema:
             $ref: '#/definitions/ierr.ErrorResponse'
       summary: Increment event view count
+      tags:
+      - Event
+  /events/occurrences:
+    post:
+      consumes:
+      - application/json
+      description: Create a new occurrence for an event
+      parameters:
+      - description: Create occurrence request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateOccurrenceRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/dto.OccurrenceResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ierr.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/ierr.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ierr.ErrorResponse'
+      security:
+      - Authorization: []
+      summary: Create event occurrence
+      tags:
+      - Event
+  /events/occurrences/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Soft delete an event occurrence
+      parameters:
+      - description: Occurrence ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/ierr.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ierr.ErrorResponse'
+      security:
+      - Authorization: []
+      summary: Delete occurrence
+      tags:
+      - Event
+    get:
+      consumes:
+      - application/json
+      description: Get an event occurrence by its ID
+      parameters:
+      - description: Occurrence ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.OccurrenceResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/ierr.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ierr.ErrorResponse'
+      summary: Get occurrence by ID
+      tags:
+      - Event
+    put:
+      consumes:
+      - application/json
+      description: Update an existing event occurrence
+      parameters:
+      - description: Occurrence ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Update occurrence request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateOccurrenceRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.OccurrenceResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ierr.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/ierr.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ierr.ErrorResponse'
+      security:
+      - Authorization: []
+      summary: Update occurrence
       tags:
       - Event
   /events/slug/{slug}:
@@ -2265,103 +2275,6 @@ paths:
       summary: Get hotel by slug
       tags:
       - Hotel
-  /occurrences/{id}:
-    delete:
-      consumes:
-      - application/json
-      description: Soft delete an event occurrence
-      parameters:
-      - description: Occurrence ID
-        in: path
-        name: id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "204":
-          description: No Content
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/ierr.ErrorResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/ierr.ErrorResponse'
-      security:
-      - Authorization: []
-      summary: Delete occurrence
-      tags:
-      - Event
-    get:
-      consumes:
-      - application/json
-      description: Get an event occurrence by its ID
-      parameters:
-      - description: Occurrence ID
-        in: path
-        name: id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/dto.OccurrenceResponse'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/ierr.ErrorResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/ierr.ErrorResponse'
-      summary: Get occurrence by ID
-      tags:
-      - Event
-    put:
-      consumes:
-      - application/json
-      description: Update an existing event occurrence
-      parameters:
-      - description: Occurrence ID
-        in: path
-        name: id
-        required: true
-        type: string
-      - description: Update occurrence request
-        in: body
-        name: request
-        required: true
-        schema:
-          $ref: '#/definitions/dto.UpdateOccurrenceRequest'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/dto.OccurrenceResponse'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/ierr.ErrorResponse'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/ierr.ErrorResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/ierr.ErrorResponse'
-      security:
-      - Authorization: []
-      summary: Update occurrence
-      tags:
-      - Event
   /places:
     get:
       consumes:

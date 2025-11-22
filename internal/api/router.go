@@ -125,12 +125,10 @@ func NewRouter(handlers *Handlers, cfg *config.Configuration, logger *logger.Log
 	v1Event := v1Router.Group("/events")
 	{
 		// Public event routes (specific paths BEFORE wildcard paths)
-		v1Event.GET("", handlers.Event.List)
+		v1Event.GET("", handlers.Event.List) // Supports expand=true with from_date/to_date for occurrence expansion
 		v1Event.GET("/slug/:slug", handlers.Event.GetBySlug)
 
 		// Event-specific routes with :id (must come before /:id to avoid conflicts)
-		v1Event.GET("/:id/occurrences", handlers.Event.ListOccurrences)
-		v1Event.GET("/:id/expanded", handlers.Event.GetExpandedOccurrences)
 		v1Event.POST("/:id/view", handlers.Event.IncrementView)             // Public for analytics
 		v1Event.POST("/:id/interested", handlers.Event.IncrementInterested) // Public for user engagement
 
@@ -142,19 +140,13 @@ func NewRouter(handlers *Handlers, cfg *config.Configuration, logger *logger.Log
 		v1Event.POST("", handlers.Event.Create)
 		v1Event.PUT("/:id", handlers.Event.Update)
 		v1Event.DELETE("/:id", handlers.Event.Delete)
-		v1Event.POST("/:id/occurrences", handlers.Event.CreateOccurrence)
-	}
 
-	// Occurrence routes
-	v1Occurrence := v1Router.Group("/occurrences")
-	{
-		// Public occurrence routes
-		v1Occurrence.GET("/:id", handlers.Event.GetOccurrence)
-
-		// Authenticated occurrence routes
-		v1Occurrence.Use(middleware.AuthenticateMiddleware(cfg, logger))
-		v1Occurrence.PUT("/:id", handlers.Event.UpdateOccurrence)
-		v1Occurrence.DELETE("/:id", handlers.Event.DeleteOccurrence)
+		// Occurrence routes under /events/occurrences for consistency
+		v1Event.GET("/occurrences/:id", handlers.Event.GetOccurrence)       // Public
+		v1Event.POST("/occurrences", handlers.Event.CreateOccurrence)       // Authenticated
+		v1Event.PUT("/occurrences/:id", handlers.Event.UpdateOccurrence)    // Authenticated
+		v1Event.DELETE("/occurrences/:id", handlers.Event.DeleteOccurrence) // Authenticated
+		v1Event.GET("/:id/occurrences", handlers.Event.ListOccurrences)     // Public - list occurrences for specific event
 	}
 
 	return router

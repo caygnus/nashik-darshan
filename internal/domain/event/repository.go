@@ -20,7 +20,8 @@ type Repository interface {
 	// EventOccurrence CRUD
 	CreateOccurrence(ctx context.Context, occurrence *EventOccurrence) error
 	GetOccurrence(ctx context.Context, id string) (*EventOccurrence, error)
-	ListOccurrencesByEvent(ctx context.Context, eventID string) ([]*EventOccurrence, error)
+	ListOccurrences(ctx context.Context, filter *types.OccurrenceFilter) ([]*EventOccurrence, error)
+	ListOccurrencesByEvent(ctx context.Context, eventID string) ([]*EventOccurrence, error) // Deprecated: Use ListOccurrences with filter
 	UpdateOccurrence(ctx context.Context, occurrence *EventOccurrence) error
 	DeleteOccurrence(ctx context.Context, id string) error
 

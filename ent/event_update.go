@@ -31,14 +31,66 @@ func (_u *EventUpdate) Where(ps ...predicate.Event) *EventUpdate {
 	return _u
 }
 
+// SetStatus sets the "status" field.
+func (_u *EventUpdate) SetStatus(v string) *EventUpdate {
+	_u.mutation.SetStatus(v)
+	return _u
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (_u *EventUpdate) SetNillableStatus(v *string) *EventUpdate {
+	if v != nil {
+		_u.SetStatus(*v)
+	}
+	return _u
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (_u *EventUpdate) SetUpdatedAt(v time.Time) *EventUpdate {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (_u *EventUpdate) SetUpdatedBy(v string) *EventUpdate {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (_u *EventUpdate) SetNillableUpdatedBy(v *string) *EventUpdate {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (_u *EventUpdate) ClearUpdatedBy() *EventUpdate {
+	_u.mutation.ClearUpdatedBy()
+	return _u
+}
+
+// SetMetadata sets the "metadata" field.
+func (_u *EventUpdate) SetMetadata(v map[string]string) *EventUpdate {
+	_u.mutation.SetMetadata(v)
+	return _u
+}
+
+// ClearMetadata clears the value of the "metadata" field.
+func (_u *EventUpdate) ClearMetadata() *EventUpdate {
+	_u.mutation.ClearMetadata()
+	return _u
+}
+
 // SetType sets the "type" field.
-func (_u *EventUpdate) SetType(v event.Type) *EventUpdate {
+func (_u *EventUpdate) SetType(v string) *EventUpdate {
 	_u.mutation.SetType(v)
 	return _u
 }
 
 // SetNillableType sets the "type" field if the given value is not nil.
-func (_u *EventUpdate) SetNillableType(v *event.Type) *EventUpdate {
+func (_u *EventUpdate) SetNillableType(v *string) *EventUpdate {
 	if v != nil {
 		_u.SetType(*v)
 	}
@@ -209,18 +261,6 @@ func (_u *EventUpdate) ClearTags() *EventUpdate {
 	return _u
 }
 
-// SetMetadata sets the "metadata" field.
-func (_u *EventUpdate) SetMetadata(v map[string]interface{}) *EventUpdate {
-	_u.mutation.SetMetadata(v)
-	return _u
-}
-
-// ClearMetadata clears the value of the "metadata" field.
-func (_u *EventUpdate) ClearMetadata() *EventUpdate {
-	_u.mutation.ClearMetadata()
-	return _u
-}
-
 // SetLatitude sets the "latitude" field.
 func (_u *EventUpdate) SetLatitude(v *decimal.Decimal) *EventUpdate {
 	_u.mutation.SetLatitude(v)
@@ -304,54 +344,6 @@ func (_u *EventUpdate) SetNillableInterestedCount(v *int) *EventUpdate {
 // AddInterestedCount adds value to the "interested_count" field.
 func (_u *EventUpdate) AddInterestedCount(v int) *EventUpdate {
 	_u.mutation.AddInterestedCount(v)
-	return _u
-}
-
-// SetStatus sets the "status" field.
-func (_u *EventUpdate) SetStatus(v event.Status) *EventUpdate {
-	_u.mutation.SetStatus(v)
-	return _u
-}
-
-// SetNillableStatus sets the "status" field if the given value is not nil.
-func (_u *EventUpdate) SetNillableStatus(v *event.Status) *EventUpdate {
-	if v != nil {
-		_u.SetStatus(*v)
-	}
-	return _u
-}
-
-// SetCreatedBy sets the "created_by" field.
-func (_u *EventUpdate) SetCreatedBy(v string) *EventUpdate {
-	_u.mutation.SetCreatedBy(v)
-	return _u
-}
-
-// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (_u *EventUpdate) SetNillableCreatedBy(v *string) *EventUpdate {
-	if v != nil {
-		_u.SetCreatedBy(*v)
-	}
-	return _u
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (_u *EventUpdate) SetUpdatedBy(v string) *EventUpdate {
-	_u.mutation.SetUpdatedBy(v)
-	return _u
-}
-
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (_u *EventUpdate) SetNillableUpdatedBy(v *string) *EventUpdate {
-	if v != nil {
-		_u.SetUpdatedBy(*v)
-	}
-	return _u
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (_u *EventUpdate) SetUpdatedAt(v time.Time) *EventUpdate {
-	_u.mutation.SetUpdatedAt(v)
 	return _u
 }
 
@@ -449,11 +441,6 @@ func (_u *EventUpdate) check() error {
 			return &ValidationError{Name: "subtitle", err: fmt.Errorf(`ent: validator failed for field "Event.subtitle": %w`, err)}
 		}
 	}
-	if v, ok := _u.mutation.CoverImageURL(); ok {
-		if err := event.CoverImageURLValidator(v); err != nil {
-			return &ValidationError{Name: "cover_image_url", err: fmt.Errorf(`ent: validator failed for field "Event.cover_image_url": %w`, err)}
-		}
-	}
 	if v, ok := _u.mutation.LocationName(); ok {
 		if err := event.LocationNameValidator(v); err != nil {
 			return &ValidationError{Name: "location_name", err: fmt.Errorf(`ent: validator failed for field "Event.location_name": %w`, err)}
@@ -467,21 +454,6 @@ func (_u *EventUpdate) check() error {
 	if v, ok := _u.mutation.InterestedCount(); ok {
 		if err := event.InterestedCountValidator(v); err != nil {
 			return &ValidationError{Name: "interested_count", err: fmt.Errorf(`ent: validator failed for field "Event.interested_count": %w`, err)}
-		}
-	}
-	if v, ok := _u.mutation.Status(); ok {
-		if err := event.StatusValidator(v); err != nil {
-			return &ValidationError{Name: "status", err: fmt.Errorf(`ent: validator failed for field "Event.status": %w`, err)}
-		}
-	}
-	if v, ok := _u.mutation.CreatedBy(); ok {
-		if err := event.CreatedByValidator(v); err != nil {
-			return &ValidationError{Name: "created_by", err: fmt.Errorf(`ent: validator failed for field "Event.created_by": %w`, err)}
-		}
-	}
-	if v, ok := _u.mutation.UpdatedBy(); ok {
-		if err := event.UpdatedByValidator(v); err != nil {
-			return &ValidationError{Name: "updated_by", err: fmt.Errorf(`ent: validator failed for field "Event.updated_by": %w`, err)}
 		}
 	}
 	return nil
@@ -499,8 +471,29 @@ func (_u *EventUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			}
 		}
 	}
+	if value, ok := _u.mutation.Status(); ok {
+		_spec.SetField(event.FieldStatus, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.UpdatedAt(); ok {
+		_spec.SetField(event.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if _u.mutation.CreatedByCleared() {
+		_spec.ClearField(event.FieldCreatedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.UpdatedBy(); ok {
+		_spec.SetField(event.FieldUpdatedBy, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByCleared() {
+		_spec.ClearField(event.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.Metadata(); ok {
+		_spec.SetField(event.FieldMetadata, field.TypeJSON, value)
+	}
+	if _u.mutation.MetadataCleared() {
+		_spec.ClearField(event.FieldMetadata, field.TypeJSON)
+	}
 	if value, ok := _u.mutation.GetType(); ok {
-		_spec.SetField(event.FieldType, field.TypeEnum, value)
+		_spec.SetField(event.FieldType, field.TypeString, value)
 	}
 	if value, ok := _u.mutation.Title(); ok {
 		_spec.SetField(event.FieldTitle, field.TypeString, value)
@@ -560,12 +553,6 @@ func (_u *EventUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(event.FieldTags, field.TypeJSON)
 	}
-	if value, ok := _u.mutation.Metadata(); ok {
-		_spec.SetField(event.FieldMetadata, field.TypeJSON, value)
-	}
-	if _u.mutation.MetadataCleared() {
-		_spec.ClearField(event.FieldMetadata, field.TypeJSON)
-	}
 	if value, ok := _u.mutation.Latitude(); ok {
 		_spec.SetField(event.FieldLatitude, field.TypeOther, value)
 	}
@@ -595,18 +582,6 @@ func (_u *EventUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if value, ok := _u.mutation.AddedInterestedCount(); ok {
 		_spec.AddField(event.FieldInterestedCount, field.TypeInt, value)
-	}
-	if value, ok := _u.mutation.Status(); ok {
-		_spec.SetField(event.FieldStatus, field.TypeEnum, value)
-	}
-	if value, ok := _u.mutation.CreatedBy(); ok {
-		_spec.SetField(event.FieldCreatedBy, field.TypeString, value)
-	}
-	if value, ok := _u.mutation.UpdatedBy(); ok {
-		_spec.SetField(event.FieldUpdatedBy, field.TypeString, value)
-	}
-	if value, ok := _u.mutation.UpdatedAt(); ok {
-		_spec.SetField(event.FieldUpdatedAt, field.TypeTime, value)
 	}
 	if _u.mutation.OccurrencesCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -673,14 +648,66 @@ type EventUpdateOne struct {
 	mutation *EventMutation
 }
 
+// SetStatus sets the "status" field.
+func (_u *EventUpdateOne) SetStatus(v string) *EventUpdateOne {
+	_u.mutation.SetStatus(v)
+	return _u
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (_u *EventUpdateOne) SetNillableStatus(v *string) *EventUpdateOne {
+	if v != nil {
+		_u.SetStatus(*v)
+	}
+	return _u
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (_u *EventUpdateOne) SetUpdatedAt(v time.Time) *EventUpdateOne {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (_u *EventUpdateOne) SetUpdatedBy(v string) *EventUpdateOne {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (_u *EventUpdateOne) SetNillableUpdatedBy(v *string) *EventUpdateOne {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (_u *EventUpdateOne) ClearUpdatedBy() *EventUpdateOne {
+	_u.mutation.ClearUpdatedBy()
+	return _u
+}
+
+// SetMetadata sets the "metadata" field.
+func (_u *EventUpdateOne) SetMetadata(v map[string]string) *EventUpdateOne {
+	_u.mutation.SetMetadata(v)
+	return _u
+}
+
+// ClearMetadata clears the value of the "metadata" field.
+func (_u *EventUpdateOne) ClearMetadata() *EventUpdateOne {
+	_u.mutation.ClearMetadata()
+	return _u
+}
+
 // SetType sets the "type" field.
-func (_u *EventUpdateOne) SetType(v event.Type) *EventUpdateOne {
+func (_u *EventUpdateOne) SetType(v string) *EventUpdateOne {
 	_u.mutation.SetType(v)
 	return _u
 }
 
 // SetNillableType sets the "type" field if the given value is not nil.
-func (_u *EventUpdateOne) SetNillableType(v *event.Type) *EventUpdateOne {
+func (_u *EventUpdateOne) SetNillableType(v *string) *EventUpdateOne {
 	if v != nil {
 		_u.SetType(*v)
 	}
@@ -851,18 +878,6 @@ func (_u *EventUpdateOne) ClearTags() *EventUpdateOne {
 	return _u
 }
 
-// SetMetadata sets the "metadata" field.
-func (_u *EventUpdateOne) SetMetadata(v map[string]interface{}) *EventUpdateOne {
-	_u.mutation.SetMetadata(v)
-	return _u
-}
-
-// ClearMetadata clears the value of the "metadata" field.
-func (_u *EventUpdateOne) ClearMetadata() *EventUpdateOne {
-	_u.mutation.ClearMetadata()
-	return _u
-}
-
 // SetLatitude sets the "latitude" field.
 func (_u *EventUpdateOne) SetLatitude(v *decimal.Decimal) *EventUpdateOne {
 	_u.mutation.SetLatitude(v)
@@ -946,54 +961,6 @@ func (_u *EventUpdateOne) SetNillableInterestedCount(v *int) *EventUpdateOne {
 // AddInterestedCount adds value to the "interested_count" field.
 func (_u *EventUpdateOne) AddInterestedCount(v int) *EventUpdateOne {
 	_u.mutation.AddInterestedCount(v)
-	return _u
-}
-
-// SetStatus sets the "status" field.
-func (_u *EventUpdateOne) SetStatus(v event.Status) *EventUpdateOne {
-	_u.mutation.SetStatus(v)
-	return _u
-}
-
-// SetNillableStatus sets the "status" field if the given value is not nil.
-func (_u *EventUpdateOne) SetNillableStatus(v *event.Status) *EventUpdateOne {
-	if v != nil {
-		_u.SetStatus(*v)
-	}
-	return _u
-}
-
-// SetCreatedBy sets the "created_by" field.
-func (_u *EventUpdateOne) SetCreatedBy(v string) *EventUpdateOne {
-	_u.mutation.SetCreatedBy(v)
-	return _u
-}
-
-// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (_u *EventUpdateOne) SetNillableCreatedBy(v *string) *EventUpdateOne {
-	if v != nil {
-		_u.SetCreatedBy(*v)
-	}
-	return _u
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (_u *EventUpdateOne) SetUpdatedBy(v string) *EventUpdateOne {
-	_u.mutation.SetUpdatedBy(v)
-	return _u
-}
-
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (_u *EventUpdateOne) SetNillableUpdatedBy(v *string) *EventUpdateOne {
-	if v != nil {
-		_u.SetUpdatedBy(*v)
-	}
-	return _u
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (_u *EventUpdateOne) SetUpdatedAt(v time.Time) *EventUpdateOne {
-	_u.mutation.SetUpdatedAt(v)
 	return _u
 }
 
@@ -1104,11 +1071,6 @@ func (_u *EventUpdateOne) check() error {
 			return &ValidationError{Name: "subtitle", err: fmt.Errorf(`ent: validator failed for field "Event.subtitle": %w`, err)}
 		}
 	}
-	if v, ok := _u.mutation.CoverImageURL(); ok {
-		if err := event.CoverImageURLValidator(v); err != nil {
-			return &ValidationError{Name: "cover_image_url", err: fmt.Errorf(`ent: validator failed for field "Event.cover_image_url": %w`, err)}
-		}
-	}
 	if v, ok := _u.mutation.LocationName(); ok {
 		if err := event.LocationNameValidator(v); err != nil {
 			return &ValidationError{Name: "location_name", err: fmt.Errorf(`ent: validator failed for field "Event.location_name": %w`, err)}
@@ -1122,21 +1084,6 @@ func (_u *EventUpdateOne) check() error {
 	if v, ok := _u.mutation.InterestedCount(); ok {
 		if err := event.InterestedCountValidator(v); err != nil {
 			return &ValidationError{Name: "interested_count", err: fmt.Errorf(`ent: validator failed for field "Event.interested_count": %w`, err)}
-		}
-	}
-	if v, ok := _u.mutation.Status(); ok {
-		if err := event.StatusValidator(v); err != nil {
-			return &ValidationError{Name: "status", err: fmt.Errorf(`ent: validator failed for field "Event.status": %w`, err)}
-		}
-	}
-	if v, ok := _u.mutation.CreatedBy(); ok {
-		if err := event.CreatedByValidator(v); err != nil {
-			return &ValidationError{Name: "created_by", err: fmt.Errorf(`ent: validator failed for field "Event.created_by": %w`, err)}
-		}
-	}
-	if v, ok := _u.mutation.UpdatedBy(); ok {
-		if err := event.UpdatedByValidator(v); err != nil {
-			return &ValidationError{Name: "updated_by", err: fmt.Errorf(`ent: validator failed for field "Event.updated_by": %w`, err)}
 		}
 	}
 	return nil
@@ -1171,8 +1118,29 @@ func (_u *EventUpdateOne) sqlSave(ctx context.Context) (_node *Event, err error)
 			}
 		}
 	}
+	if value, ok := _u.mutation.Status(); ok {
+		_spec.SetField(event.FieldStatus, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.UpdatedAt(); ok {
+		_spec.SetField(event.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if _u.mutation.CreatedByCleared() {
+		_spec.ClearField(event.FieldCreatedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.UpdatedBy(); ok {
+		_spec.SetField(event.FieldUpdatedBy, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByCleared() {
+		_spec.ClearField(event.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.Metadata(); ok {
+		_spec.SetField(event.FieldMetadata, field.TypeJSON, value)
+	}
+	if _u.mutation.MetadataCleared() {
+		_spec.ClearField(event.FieldMetadata, field.TypeJSON)
+	}
 	if value, ok := _u.mutation.GetType(); ok {
-		_spec.SetField(event.FieldType, field.TypeEnum, value)
+		_spec.SetField(event.FieldType, field.TypeString, value)
 	}
 	if value, ok := _u.mutation.Title(); ok {
 		_spec.SetField(event.FieldTitle, field.TypeString, value)
@@ -1232,12 +1200,6 @@ func (_u *EventUpdateOne) sqlSave(ctx context.Context) (_node *Event, err error)
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(event.FieldTags, field.TypeJSON)
 	}
-	if value, ok := _u.mutation.Metadata(); ok {
-		_spec.SetField(event.FieldMetadata, field.TypeJSON, value)
-	}
-	if _u.mutation.MetadataCleared() {
-		_spec.ClearField(event.FieldMetadata, field.TypeJSON)
-	}
 	if value, ok := _u.mutation.Latitude(); ok {
 		_spec.SetField(event.FieldLatitude, field.TypeOther, value)
 	}
@@ -1267,18 +1229,6 @@ func (_u *EventUpdateOne) sqlSave(ctx context.Context) (_node *Event, err error)
 	}
 	if value, ok := _u.mutation.AddedInterestedCount(); ok {
 		_spec.AddField(event.FieldInterestedCount, field.TypeInt, value)
-	}
-	if value, ok := _u.mutation.Status(); ok {
-		_spec.SetField(event.FieldStatus, field.TypeEnum, value)
-	}
-	if value, ok := _u.mutation.CreatedBy(); ok {
-		_spec.SetField(event.FieldCreatedBy, field.TypeString, value)
-	}
-	if value, ok := _u.mutation.UpdatedBy(); ok {
-		_spec.SetField(event.FieldUpdatedBy, field.TypeString, value)
-	}
-	if value, ok := _u.mutation.UpdatedAt(); ok {
-		_spec.SetField(event.FieldUpdatedAt, field.TypeTime, value)
 	}
 	if _u.mutation.OccurrencesCleared() {
 		edge := &sqlgraph.EdgeSpec{

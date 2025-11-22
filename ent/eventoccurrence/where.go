@@ -65,9 +65,39 @@ func IDContainsFold(id string) predicate.EventOccurrence {
 	return predicate.EventOccurrence(sql.FieldContainsFold(FieldID, id))
 }
 
+// Status applies equality check predicate on the "status" field. It's identical to StatusEQ.
+func Status(v string) predicate.EventOccurrence {
+	return predicate.EventOccurrence(sql.FieldEQ(FieldStatus, v))
+}
+
+// CreatedAt applies equality check predicate on the "created_at" field. It's identical to CreatedAtEQ.
+func CreatedAt(v time.Time) predicate.EventOccurrence {
+	return predicate.EventOccurrence(sql.FieldEQ(FieldCreatedAt, v))
+}
+
+// UpdatedAt applies equality check predicate on the "updated_at" field. It's identical to UpdatedAtEQ.
+func UpdatedAt(v time.Time) predicate.EventOccurrence {
+	return predicate.EventOccurrence(sql.FieldEQ(FieldUpdatedAt, v))
+}
+
+// CreatedBy applies equality check predicate on the "created_by" field. It's identical to CreatedByEQ.
+func CreatedBy(v string) predicate.EventOccurrence {
+	return predicate.EventOccurrence(sql.FieldEQ(FieldCreatedBy, v))
+}
+
+// UpdatedBy applies equality check predicate on the "updated_by" field. It's identical to UpdatedByEQ.
+func UpdatedBy(v string) predicate.EventOccurrence {
+	return predicate.EventOccurrence(sql.FieldEQ(FieldUpdatedBy, v))
+}
+
 // EventID applies equality check predicate on the "event_id" field. It's identical to EventIDEQ.
 func EventID(v string) predicate.EventOccurrence {
 	return predicate.EventOccurrence(sql.FieldEQ(FieldEventID, v))
+}
+
+// RecurrenceType applies equality check predicate on the "recurrence_type" field. It's identical to RecurrenceTypeEQ.
+func RecurrenceType(v string) predicate.EventOccurrence {
+	return predicate.EventOccurrence(sql.FieldEQ(FieldRecurrenceType, v))
 }
 
 // StartTime applies equality check predicate on the "start_time" field. It's identical to StartTimeEQ.
@@ -100,24 +130,309 @@ func MonthOfYear(v int) predicate.EventOccurrence {
 	return predicate.EventOccurrence(sql.FieldEQ(FieldMonthOfYear, v))
 }
 
-// CreatedBy applies equality check predicate on the "created_by" field. It's identical to CreatedByEQ.
-func CreatedBy(v string) predicate.EventOccurrence {
-	return predicate.EventOccurrence(sql.FieldEQ(FieldCreatedBy, v))
+// StatusEQ applies the EQ predicate on the "status" field.
+func StatusEQ(v string) predicate.EventOccurrence {
+	return predicate.EventOccurrence(sql.FieldEQ(FieldStatus, v))
 }
 
-// UpdatedBy applies equality check predicate on the "updated_by" field. It's identical to UpdatedByEQ.
-func UpdatedBy(v string) predicate.EventOccurrence {
-	return predicate.EventOccurrence(sql.FieldEQ(FieldUpdatedBy, v))
+// StatusNEQ applies the NEQ predicate on the "status" field.
+func StatusNEQ(v string) predicate.EventOccurrence {
+	return predicate.EventOccurrence(sql.FieldNEQ(FieldStatus, v))
 }
 
-// CreatedAt applies equality check predicate on the "created_at" field. It's identical to CreatedAtEQ.
-func CreatedAt(v time.Time) predicate.EventOccurrence {
+// StatusIn applies the In predicate on the "status" field.
+func StatusIn(vs ...string) predicate.EventOccurrence {
+	return predicate.EventOccurrence(sql.FieldIn(FieldStatus, vs...))
+}
+
+// StatusNotIn applies the NotIn predicate on the "status" field.
+func StatusNotIn(vs ...string) predicate.EventOccurrence {
+	return predicate.EventOccurrence(sql.FieldNotIn(FieldStatus, vs...))
+}
+
+// StatusGT applies the GT predicate on the "status" field.
+func StatusGT(v string) predicate.EventOccurrence {
+	return predicate.EventOccurrence(sql.FieldGT(FieldStatus, v))
+}
+
+// StatusGTE applies the GTE predicate on the "status" field.
+func StatusGTE(v string) predicate.EventOccurrence {
+	return predicate.EventOccurrence(sql.FieldGTE(FieldStatus, v))
+}
+
+// StatusLT applies the LT predicate on the "status" field.
+func StatusLT(v string) predicate.EventOccurrence {
+	return predicate.EventOccurrence(sql.FieldLT(FieldStatus, v))
+}
+
+// StatusLTE applies the LTE predicate on the "status" field.
+func StatusLTE(v string) predicate.EventOccurrence {
+	return predicate.EventOccurrence(sql.FieldLTE(FieldStatus, v))
+}
+
+// StatusContains applies the Contains predicate on the "status" field.
+func StatusContains(v string) predicate.EventOccurrence {
+	return predicate.EventOccurrence(sql.FieldContains(FieldStatus, v))
+}
+
+// StatusHasPrefix applies the HasPrefix predicate on the "status" field.
+func StatusHasPrefix(v string) predicate.EventOccurrence {
+	return predicate.EventOccurrence(sql.FieldHasPrefix(FieldStatus, v))
+}
+
+// StatusHasSuffix applies the HasSuffix predicate on the "status" field.
+func StatusHasSuffix(v string) predicate.EventOccurrence {
+	return predicate.EventOccurrence(sql.FieldHasSuffix(FieldStatus, v))
+}
+
+// StatusEqualFold applies the EqualFold predicate on the "status" field.
+func StatusEqualFold(v string) predicate.EventOccurrence {
+	return predicate.EventOccurrence(sql.FieldEqualFold(FieldStatus, v))
+}
+
+// StatusContainsFold applies the ContainsFold predicate on the "status" field.
+func StatusContainsFold(v string) predicate.EventOccurrence {
+	return predicate.EventOccurrence(sql.FieldContainsFold(FieldStatus, v))
+}
+
+// CreatedAtEQ applies the EQ predicate on the "created_at" field.
+func CreatedAtEQ(v time.Time) predicate.EventOccurrence {
 	return predicate.EventOccurrence(sql.FieldEQ(FieldCreatedAt, v))
 }
 
-// UpdatedAt applies equality check predicate on the "updated_at" field. It's identical to UpdatedAtEQ.
-func UpdatedAt(v time.Time) predicate.EventOccurrence {
+// CreatedAtNEQ applies the NEQ predicate on the "created_at" field.
+func CreatedAtNEQ(v time.Time) predicate.EventOccurrence {
+	return predicate.EventOccurrence(sql.FieldNEQ(FieldCreatedAt, v))
+}
+
+// CreatedAtIn applies the In predicate on the "created_at" field.
+func CreatedAtIn(vs ...time.Time) predicate.EventOccurrence {
+	return predicate.EventOccurrence(sql.FieldIn(FieldCreatedAt, vs...))
+}
+
+// CreatedAtNotIn applies the NotIn predicate on the "created_at" field.
+func CreatedAtNotIn(vs ...time.Time) predicate.EventOccurrence {
+	return predicate.EventOccurrence(sql.FieldNotIn(FieldCreatedAt, vs...))
+}
+
+// CreatedAtGT applies the GT predicate on the "created_at" field.
+func CreatedAtGT(v time.Time) predicate.EventOccurrence {
+	return predicate.EventOccurrence(sql.FieldGT(FieldCreatedAt, v))
+}
+
+// CreatedAtGTE applies the GTE predicate on the "created_at" field.
+func CreatedAtGTE(v time.Time) predicate.EventOccurrence {
+	return predicate.EventOccurrence(sql.FieldGTE(FieldCreatedAt, v))
+}
+
+// CreatedAtLT applies the LT predicate on the "created_at" field.
+func CreatedAtLT(v time.Time) predicate.EventOccurrence {
+	return predicate.EventOccurrence(sql.FieldLT(FieldCreatedAt, v))
+}
+
+// CreatedAtLTE applies the LTE predicate on the "created_at" field.
+func CreatedAtLTE(v time.Time) predicate.EventOccurrence {
+	return predicate.EventOccurrence(sql.FieldLTE(FieldCreatedAt, v))
+}
+
+// UpdatedAtEQ applies the EQ predicate on the "updated_at" field.
+func UpdatedAtEQ(v time.Time) predicate.EventOccurrence {
 	return predicate.EventOccurrence(sql.FieldEQ(FieldUpdatedAt, v))
+}
+
+// UpdatedAtNEQ applies the NEQ predicate on the "updated_at" field.
+func UpdatedAtNEQ(v time.Time) predicate.EventOccurrence {
+	return predicate.EventOccurrence(sql.FieldNEQ(FieldUpdatedAt, v))
+}
+
+// UpdatedAtIn applies the In predicate on the "updated_at" field.
+func UpdatedAtIn(vs ...time.Time) predicate.EventOccurrence {
+	return predicate.EventOccurrence(sql.FieldIn(FieldUpdatedAt, vs...))
+}
+
+// UpdatedAtNotIn applies the NotIn predicate on the "updated_at" field.
+func UpdatedAtNotIn(vs ...time.Time) predicate.EventOccurrence {
+	return predicate.EventOccurrence(sql.FieldNotIn(FieldUpdatedAt, vs...))
+}
+
+// UpdatedAtGT applies the GT predicate on the "updated_at" field.
+func UpdatedAtGT(v time.Time) predicate.EventOccurrence {
+	return predicate.EventOccurrence(sql.FieldGT(FieldUpdatedAt, v))
+}
+
+// UpdatedAtGTE applies the GTE predicate on the "updated_at" field.
+func UpdatedAtGTE(v time.Time) predicate.EventOccurrence {
+	return predicate.EventOccurrence(sql.FieldGTE(FieldUpdatedAt, v))
+}
+
+// UpdatedAtLT applies the LT predicate on the "updated_at" field.
+func UpdatedAtLT(v time.Time) predicate.EventOccurrence {
+	return predicate.EventOccurrence(sql.FieldLT(FieldUpdatedAt, v))
+}
+
+// UpdatedAtLTE applies the LTE predicate on the "updated_at" field.
+func UpdatedAtLTE(v time.Time) predicate.EventOccurrence {
+	return predicate.EventOccurrence(sql.FieldLTE(FieldUpdatedAt, v))
+}
+
+// CreatedByEQ applies the EQ predicate on the "created_by" field.
+func CreatedByEQ(v string) predicate.EventOccurrence {
+	return predicate.EventOccurrence(sql.FieldEQ(FieldCreatedBy, v))
+}
+
+// CreatedByNEQ applies the NEQ predicate on the "created_by" field.
+func CreatedByNEQ(v string) predicate.EventOccurrence {
+	return predicate.EventOccurrence(sql.FieldNEQ(FieldCreatedBy, v))
+}
+
+// CreatedByIn applies the In predicate on the "created_by" field.
+func CreatedByIn(vs ...string) predicate.EventOccurrence {
+	return predicate.EventOccurrence(sql.FieldIn(FieldCreatedBy, vs...))
+}
+
+// CreatedByNotIn applies the NotIn predicate on the "created_by" field.
+func CreatedByNotIn(vs ...string) predicate.EventOccurrence {
+	return predicate.EventOccurrence(sql.FieldNotIn(FieldCreatedBy, vs...))
+}
+
+// CreatedByGT applies the GT predicate on the "created_by" field.
+func CreatedByGT(v string) predicate.EventOccurrence {
+	return predicate.EventOccurrence(sql.FieldGT(FieldCreatedBy, v))
+}
+
+// CreatedByGTE applies the GTE predicate on the "created_by" field.
+func CreatedByGTE(v string) predicate.EventOccurrence {
+	return predicate.EventOccurrence(sql.FieldGTE(FieldCreatedBy, v))
+}
+
+// CreatedByLT applies the LT predicate on the "created_by" field.
+func CreatedByLT(v string) predicate.EventOccurrence {
+	return predicate.EventOccurrence(sql.FieldLT(FieldCreatedBy, v))
+}
+
+// CreatedByLTE applies the LTE predicate on the "created_by" field.
+func CreatedByLTE(v string) predicate.EventOccurrence {
+	return predicate.EventOccurrence(sql.FieldLTE(FieldCreatedBy, v))
+}
+
+// CreatedByContains applies the Contains predicate on the "created_by" field.
+func CreatedByContains(v string) predicate.EventOccurrence {
+	return predicate.EventOccurrence(sql.FieldContains(FieldCreatedBy, v))
+}
+
+// CreatedByHasPrefix applies the HasPrefix predicate on the "created_by" field.
+func CreatedByHasPrefix(v string) predicate.EventOccurrence {
+	return predicate.EventOccurrence(sql.FieldHasPrefix(FieldCreatedBy, v))
+}
+
+// CreatedByHasSuffix applies the HasSuffix predicate on the "created_by" field.
+func CreatedByHasSuffix(v string) predicate.EventOccurrence {
+	return predicate.EventOccurrence(sql.FieldHasSuffix(FieldCreatedBy, v))
+}
+
+// CreatedByIsNil applies the IsNil predicate on the "created_by" field.
+func CreatedByIsNil() predicate.EventOccurrence {
+	return predicate.EventOccurrence(sql.FieldIsNull(FieldCreatedBy))
+}
+
+// CreatedByNotNil applies the NotNil predicate on the "created_by" field.
+func CreatedByNotNil() predicate.EventOccurrence {
+	return predicate.EventOccurrence(sql.FieldNotNull(FieldCreatedBy))
+}
+
+// CreatedByEqualFold applies the EqualFold predicate on the "created_by" field.
+func CreatedByEqualFold(v string) predicate.EventOccurrence {
+	return predicate.EventOccurrence(sql.FieldEqualFold(FieldCreatedBy, v))
+}
+
+// CreatedByContainsFold applies the ContainsFold predicate on the "created_by" field.
+func CreatedByContainsFold(v string) predicate.EventOccurrence {
+	return predicate.EventOccurrence(sql.FieldContainsFold(FieldCreatedBy, v))
+}
+
+// UpdatedByEQ applies the EQ predicate on the "updated_by" field.
+func UpdatedByEQ(v string) predicate.EventOccurrence {
+	return predicate.EventOccurrence(sql.FieldEQ(FieldUpdatedBy, v))
+}
+
+// UpdatedByNEQ applies the NEQ predicate on the "updated_by" field.
+func UpdatedByNEQ(v string) predicate.EventOccurrence {
+	return predicate.EventOccurrence(sql.FieldNEQ(FieldUpdatedBy, v))
+}
+
+// UpdatedByIn applies the In predicate on the "updated_by" field.
+func UpdatedByIn(vs ...string) predicate.EventOccurrence {
+	return predicate.EventOccurrence(sql.FieldIn(FieldUpdatedBy, vs...))
+}
+
+// UpdatedByNotIn applies the NotIn predicate on the "updated_by" field.
+func UpdatedByNotIn(vs ...string) predicate.EventOccurrence {
+	return predicate.EventOccurrence(sql.FieldNotIn(FieldUpdatedBy, vs...))
+}
+
+// UpdatedByGT applies the GT predicate on the "updated_by" field.
+func UpdatedByGT(v string) predicate.EventOccurrence {
+	return predicate.EventOccurrence(sql.FieldGT(FieldUpdatedBy, v))
+}
+
+// UpdatedByGTE applies the GTE predicate on the "updated_by" field.
+func UpdatedByGTE(v string) predicate.EventOccurrence {
+	return predicate.EventOccurrence(sql.FieldGTE(FieldUpdatedBy, v))
+}
+
+// UpdatedByLT applies the LT predicate on the "updated_by" field.
+func UpdatedByLT(v string) predicate.EventOccurrence {
+	return predicate.EventOccurrence(sql.FieldLT(FieldUpdatedBy, v))
+}
+
+// UpdatedByLTE applies the LTE predicate on the "updated_by" field.
+func UpdatedByLTE(v string) predicate.EventOccurrence {
+	return predicate.EventOccurrence(sql.FieldLTE(FieldUpdatedBy, v))
+}
+
+// UpdatedByContains applies the Contains predicate on the "updated_by" field.
+func UpdatedByContains(v string) predicate.EventOccurrence {
+	return predicate.EventOccurrence(sql.FieldContains(FieldUpdatedBy, v))
+}
+
+// UpdatedByHasPrefix applies the HasPrefix predicate on the "updated_by" field.
+func UpdatedByHasPrefix(v string) predicate.EventOccurrence {
+	return predicate.EventOccurrence(sql.FieldHasPrefix(FieldUpdatedBy, v))
+}
+
+// UpdatedByHasSuffix applies the HasSuffix predicate on the "updated_by" field.
+func UpdatedByHasSuffix(v string) predicate.EventOccurrence {
+	return predicate.EventOccurrence(sql.FieldHasSuffix(FieldUpdatedBy, v))
+}
+
+// UpdatedByIsNil applies the IsNil predicate on the "updated_by" field.
+func UpdatedByIsNil() predicate.EventOccurrence {
+	return predicate.EventOccurrence(sql.FieldIsNull(FieldUpdatedBy))
+}
+
+// UpdatedByNotNil applies the NotNil predicate on the "updated_by" field.
+func UpdatedByNotNil() predicate.EventOccurrence {
+	return predicate.EventOccurrence(sql.FieldNotNull(FieldUpdatedBy))
+}
+
+// UpdatedByEqualFold applies the EqualFold predicate on the "updated_by" field.
+func UpdatedByEqualFold(v string) predicate.EventOccurrence {
+	return predicate.EventOccurrence(sql.FieldEqualFold(FieldUpdatedBy, v))
+}
+
+// UpdatedByContainsFold applies the ContainsFold predicate on the "updated_by" field.
+func UpdatedByContainsFold(v string) predicate.EventOccurrence {
+	return predicate.EventOccurrence(sql.FieldContainsFold(FieldUpdatedBy, v))
+}
+
+// MetadataIsNil applies the IsNil predicate on the "metadata" field.
+func MetadataIsNil() predicate.EventOccurrence {
+	return predicate.EventOccurrence(sql.FieldIsNull(FieldMetadata))
+}
+
+// MetadataNotNil applies the NotNil predicate on the "metadata" field.
+func MetadataNotNil() predicate.EventOccurrence {
+	return predicate.EventOccurrence(sql.FieldNotNull(FieldMetadata))
 }
 
 // EventIDEQ applies the EQ predicate on the "event_id" field.
@@ -186,23 +501,68 @@ func EventIDContainsFold(v string) predicate.EventOccurrence {
 }
 
 // RecurrenceTypeEQ applies the EQ predicate on the "recurrence_type" field.
-func RecurrenceTypeEQ(v RecurrenceType) predicate.EventOccurrence {
+func RecurrenceTypeEQ(v string) predicate.EventOccurrence {
 	return predicate.EventOccurrence(sql.FieldEQ(FieldRecurrenceType, v))
 }
 
 // RecurrenceTypeNEQ applies the NEQ predicate on the "recurrence_type" field.
-func RecurrenceTypeNEQ(v RecurrenceType) predicate.EventOccurrence {
+func RecurrenceTypeNEQ(v string) predicate.EventOccurrence {
 	return predicate.EventOccurrence(sql.FieldNEQ(FieldRecurrenceType, v))
 }
 
 // RecurrenceTypeIn applies the In predicate on the "recurrence_type" field.
-func RecurrenceTypeIn(vs ...RecurrenceType) predicate.EventOccurrence {
+func RecurrenceTypeIn(vs ...string) predicate.EventOccurrence {
 	return predicate.EventOccurrence(sql.FieldIn(FieldRecurrenceType, vs...))
 }
 
 // RecurrenceTypeNotIn applies the NotIn predicate on the "recurrence_type" field.
-func RecurrenceTypeNotIn(vs ...RecurrenceType) predicate.EventOccurrence {
+func RecurrenceTypeNotIn(vs ...string) predicate.EventOccurrence {
 	return predicate.EventOccurrence(sql.FieldNotIn(FieldRecurrenceType, vs...))
+}
+
+// RecurrenceTypeGT applies the GT predicate on the "recurrence_type" field.
+func RecurrenceTypeGT(v string) predicate.EventOccurrence {
+	return predicate.EventOccurrence(sql.FieldGT(FieldRecurrenceType, v))
+}
+
+// RecurrenceTypeGTE applies the GTE predicate on the "recurrence_type" field.
+func RecurrenceTypeGTE(v string) predicate.EventOccurrence {
+	return predicate.EventOccurrence(sql.FieldGTE(FieldRecurrenceType, v))
+}
+
+// RecurrenceTypeLT applies the LT predicate on the "recurrence_type" field.
+func RecurrenceTypeLT(v string) predicate.EventOccurrence {
+	return predicate.EventOccurrence(sql.FieldLT(FieldRecurrenceType, v))
+}
+
+// RecurrenceTypeLTE applies the LTE predicate on the "recurrence_type" field.
+func RecurrenceTypeLTE(v string) predicate.EventOccurrence {
+	return predicate.EventOccurrence(sql.FieldLTE(FieldRecurrenceType, v))
+}
+
+// RecurrenceTypeContains applies the Contains predicate on the "recurrence_type" field.
+func RecurrenceTypeContains(v string) predicate.EventOccurrence {
+	return predicate.EventOccurrence(sql.FieldContains(FieldRecurrenceType, v))
+}
+
+// RecurrenceTypeHasPrefix applies the HasPrefix predicate on the "recurrence_type" field.
+func RecurrenceTypeHasPrefix(v string) predicate.EventOccurrence {
+	return predicate.EventOccurrence(sql.FieldHasPrefix(FieldRecurrenceType, v))
+}
+
+// RecurrenceTypeHasSuffix applies the HasSuffix predicate on the "recurrence_type" field.
+func RecurrenceTypeHasSuffix(v string) predicate.EventOccurrence {
+	return predicate.EventOccurrence(sql.FieldHasSuffix(FieldRecurrenceType, v))
+}
+
+// RecurrenceTypeEqualFold applies the EqualFold predicate on the "recurrence_type" field.
+func RecurrenceTypeEqualFold(v string) predicate.EventOccurrence {
+	return predicate.EventOccurrence(sql.FieldEqualFold(FieldRecurrenceType, v))
+}
+
+// RecurrenceTypeContainsFold applies the ContainsFold predicate on the "recurrence_type" field.
+func RecurrenceTypeContainsFold(v string) predicate.EventOccurrence {
+	return predicate.EventOccurrence(sql.FieldContainsFold(FieldRecurrenceType, v))
 }
 
 // StartTimeEQ applies the EQ predicate on the "start_time" field.
@@ -245,6 +605,16 @@ func StartTimeLTE(v time.Time) predicate.EventOccurrence {
 	return predicate.EventOccurrence(sql.FieldLTE(FieldStartTime, v))
 }
 
+// StartTimeIsNil applies the IsNil predicate on the "start_time" field.
+func StartTimeIsNil() predicate.EventOccurrence {
+	return predicate.EventOccurrence(sql.FieldIsNull(FieldStartTime))
+}
+
+// StartTimeNotNil applies the NotNil predicate on the "start_time" field.
+func StartTimeNotNil() predicate.EventOccurrence {
+	return predicate.EventOccurrence(sql.FieldNotNull(FieldStartTime))
+}
+
 // EndTimeEQ applies the EQ predicate on the "end_time" field.
 func EndTimeEQ(v time.Time) predicate.EventOccurrence {
 	return predicate.EventOccurrence(sql.FieldEQ(FieldEndTime, v))
@@ -283,6 +653,16 @@ func EndTimeLT(v time.Time) predicate.EventOccurrence {
 // EndTimeLTE applies the LTE predicate on the "end_time" field.
 func EndTimeLTE(v time.Time) predicate.EventOccurrence {
 	return predicate.EventOccurrence(sql.FieldLTE(FieldEndTime, v))
+}
+
+// EndTimeIsNil applies the IsNil predicate on the "end_time" field.
+func EndTimeIsNil() predicate.EventOccurrence {
+	return predicate.EventOccurrence(sql.FieldIsNull(FieldEndTime))
+}
+
+// EndTimeNotNil applies the NotNil predicate on the "end_time" field.
+func EndTimeNotNil() predicate.EventOccurrence {
+	return predicate.EventOccurrence(sql.FieldNotNull(FieldEndTime))
 }
 
 // DurationMinutesEQ applies the EQ predicate on the "duration_minutes" field.
@@ -493,246 +873,6 @@ func ExceptionDatesIsNil() predicate.EventOccurrence {
 // ExceptionDatesNotNil applies the NotNil predicate on the "exception_dates" field.
 func ExceptionDatesNotNil() predicate.EventOccurrence {
 	return predicate.EventOccurrence(sql.FieldNotNull(FieldExceptionDates))
-}
-
-// MetadataIsNil applies the IsNil predicate on the "metadata" field.
-func MetadataIsNil() predicate.EventOccurrence {
-	return predicate.EventOccurrence(sql.FieldIsNull(FieldMetadata))
-}
-
-// MetadataNotNil applies the NotNil predicate on the "metadata" field.
-func MetadataNotNil() predicate.EventOccurrence {
-	return predicate.EventOccurrence(sql.FieldNotNull(FieldMetadata))
-}
-
-// StatusEQ applies the EQ predicate on the "status" field.
-func StatusEQ(v Status) predicate.EventOccurrence {
-	return predicate.EventOccurrence(sql.FieldEQ(FieldStatus, v))
-}
-
-// StatusNEQ applies the NEQ predicate on the "status" field.
-func StatusNEQ(v Status) predicate.EventOccurrence {
-	return predicate.EventOccurrence(sql.FieldNEQ(FieldStatus, v))
-}
-
-// StatusIn applies the In predicate on the "status" field.
-func StatusIn(vs ...Status) predicate.EventOccurrence {
-	return predicate.EventOccurrence(sql.FieldIn(FieldStatus, vs...))
-}
-
-// StatusNotIn applies the NotIn predicate on the "status" field.
-func StatusNotIn(vs ...Status) predicate.EventOccurrence {
-	return predicate.EventOccurrence(sql.FieldNotIn(FieldStatus, vs...))
-}
-
-// CreatedByEQ applies the EQ predicate on the "created_by" field.
-func CreatedByEQ(v string) predicate.EventOccurrence {
-	return predicate.EventOccurrence(sql.FieldEQ(FieldCreatedBy, v))
-}
-
-// CreatedByNEQ applies the NEQ predicate on the "created_by" field.
-func CreatedByNEQ(v string) predicate.EventOccurrence {
-	return predicate.EventOccurrence(sql.FieldNEQ(FieldCreatedBy, v))
-}
-
-// CreatedByIn applies the In predicate on the "created_by" field.
-func CreatedByIn(vs ...string) predicate.EventOccurrence {
-	return predicate.EventOccurrence(sql.FieldIn(FieldCreatedBy, vs...))
-}
-
-// CreatedByNotIn applies the NotIn predicate on the "created_by" field.
-func CreatedByNotIn(vs ...string) predicate.EventOccurrence {
-	return predicate.EventOccurrence(sql.FieldNotIn(FieldCreatedBy, vs...))
-}
-
-// CreatedByGT applies the GT predicate on the "created_by" field.
-func CreatedByGT(v string) predicate.EventOccurrence {
-	return predicate.EventOccurrence(sql.FieldGT(FieldCreatedBy, v))
-}
-
-// CreatedByGTE applies the GTE predicate on the "created_by" field.
-func CreatedByGTE(v string) predicate.EventOccurrence {
-	return predicate.EventOccurrence(sql.FieldGTE(FieldCreatedBy, v))
-}
-
-// CreatedByLT applies the LT predicate on the "created_by" field.
-func CreatedByLT(v string) predicate.EventOccurrence {
-	return predicate.EventOccurrence(sql.FieldLT(FieldCreatedBy, v))
-}
-
-// CreatedByLTE applies the LTE predicate on the "created_by" field.
-func CreatedByLTE(v string) predicate.EventOccurrence {
-	return predicate.EventOccurrence(sql.FieldLTE(FieldCreatedBy, v))
-}
-
-// CreatedByContains applies the Contains predicate on the "created_by" field.
-func CreatedByContains(v string) predicate.EventOccurrence {
-	return predicate.EventOccurrence(sql.FieldContains(FieldCreatedBy, v))
-}
-
-// CreatedByHasPrefix applies the HasPrefix predicate on the "created_by" field.
-func CreatedByHasPrefix(v string) predicate.EventOccurrence {
-	return predicate.EventOccurrence(sql.FieldHasPrefix(FieldCreatedBy, v))
-}
-
-// CreatedByHasSuffix applies the HasSuffix predicate on the "created_by" field.
-func CreatedByHasSuffix(v string) predicate.EventOccurrence {
-	return predicate.EventOccurrence(sql.FieldHasSuffix(FieldCreatedBy, v))
-}
-
-// CreatedByEqualFold applies the EqualFold predicate on the "created_by" field.
-func CreatedByEqualFold(v string) predicate.EventOccurrence {
-	return predicate.EventOccurrence(sql.FieldEqualFold(FieldCreatedBy, v))
-}
-
-// CreatedByContainsFold applies the ContainsFold predicate on the "created_by" field.
-func CreatedByContainsFold(v string) predicate.EventOccurrence {
-	return predicate.EventOccurrence(sql.FieldContainsFold(FieldCreatedBy, v))
-}
-
-// UpdatedByEQ applies the EQ predicate on the "updated_by" field.
-func UpdatedByEQ(v string) predicate.EventOccurrence {
-	return predicate.EventOccurrence(sql.FieldEQ(FieldUpdatedBy, v))
-}
-
-// UpdatedByNEQ applies the NEQ predicate on the "updated_by" field.
-func UpdatedByNEQ(v string) predicate.EventOccurrence {
-	return predicate.EventOccurrence(sql.FieldNEQ(FieldUpdatedBy, v))
-}
-
-// UpdatedByIn applies the In predicate on the "updated_by" field.
-func UpdatedByIn(vs ...string) predicate.EventOccurrence {
-	return predicate.EventOccurrence(sql.FieldIn(FieldUpdatedBy, vs...))
-}
-
-// UpdatedByNotIn applies the NotIn predicate on the "updated_by" field.
-func UpdatedByNotIn(vs ...string) predicate.EventOccurrence {
-	return predicate.EventOccurrence(sql.FieldNotIn(FieldUpdatedBy, vs...))
-}
-
-// UpdatedByGT applies the GT predicate on the "updated_by" field.
-func UpdatedByGT(v string) predicate.EventOccurrence {
-	return predicate.EventOccurrence(sql.FieldGT(FieldUpdatedBy, v))
-}
-
-// UpdatedByGTE applies the GTE predicate on the "updated_by" field.
-func UpdatedByGTE(v string) predicate.EventOccurrence {
-	return predicate.EventOccurrence(sql.FieldGTE(FieldUpdatedBy, v))
-}
-
-// UpdatedByLT applies the LT predicate on the "updated_by" field.
-func UpdatedByLT(v string) predicate.EventOccurrence {
-	return predicate.EventOccurrence(sql.FieldLT(FieldUpdatedBy, v))
-}
-
-// UpdatedByLTE applies the LTE predicate on the "updated_by" field.
-func UpdatedByLTE(v string) predicate.EventOccurrence {
-	return predicate.EventOccurrence(sql.FieldLTE(FieldUpdatedBy, v))
-}
-
-// UpdatedByContains applies the Contains predicate on the "updated_by" field.
-func UpdatedByContains(v string) predicate.EventOccurrence {
-	return predicate.EventOccurrence(sql.FieldContains(FieldUpdatedBy, v))
-}
-
-// UpdatedByHasPrefix applies the HasPrefix predicate on the "updated_by" field.
-func UpdatedByHasPrefix(v string) predicate.EventOccurrence {
-	return predicate.EventOccurrence(sql.FieldHasPrefix(FieldUpdatedBy, v))
-}
-
-// UpdatedByHasSuffix applies the HasSuffix predicate on the "updated_by" field.
-func UpdatedByHasSuffix(v string) predicate.EventOccurrence {
-	return predicate.EventOccurrence(sql.FieldHasSuffix(FieldUpdatedBy, v))
-}
-
-// UpdatedByEqualFold applies the EqualFold predicate on the "updated_by" field.
-func UpdatedByEqualFold(v string) predicate.EventOccurrence {
-	return predicate.EventOccurrence(sql.FieldEqualFold(FieldUpdatedBy, v))
-}
-
-// UpdatedByContainsFold applies the ContainsFold predicate on the "updated_by" field.
-func UpdatedByContainsFold(v string) predicate.EventOccurrence {
-	return predicate.EventOccurrence(sql.FieldContainsFold(FieldUpdatedBy, v))
-}
-
-// CreatedAtEQ applies the EQ predicate on the "created_at" field.
-func CreatedAtEQ(v time.Time) predicate.EventOccurrence {
-	return predicate.EventOccurrence(sql.FieldEQ(FieldCreatedAt, v))
-}
-
-// CreatedAtNEQ applies the NEQ predicate on the "created_at" field.
-func CreatedAtNEQ(v time.Time) predicate.EventOccurrence {
-	return predicate.EventOccurrence(sql.FieldNEQ(FieldCreatedAt, v))
-}
-
-// CreatedAtIn applies the In predicate on the "created_at" field.
-func CreatedAtIn(vs ...time.Time) predicate.EventOccurrence {
-	return predicate.EventOccurrence(sql.FieldIn(FieldCreatedAt, vs...))
-}
-
-// CreatedAtNotIn applies the NotIn predicate on the "created_at" field.
-func CreatedAtNotIn(vs ...time.Time) predicate.EventOccurrence {
-	return predicate.EventOccurrence(sql.FieldNotIn(FieldCreatedAt, vs...))
-}
-
-// CreatedAtGT applies the GT predicate on the "created_at" field.
-func CreatedAtGT(v time.Time) predicate.EventOccurrence {
-	return predicate.EventOccurrence(sql.FieldGT(FieldCreatedAt, v))
-}
-
-// CreatedAtGTE applies the GTE predicate on the "created_at" field.
-func CreatedAtGTE(v time.Time) predicate.EventOccurrence {
-	return predicate.EventOccurrence(sql.FieldGTE(FieldCreatedAt, v))
-}
-
-// CreatedAtLT applies the LT predicate on the "created_at" field.
-func CreatedAtLT(v time.Time) predicate.EventOccurrence {
-	return predicate.EventOccurrence(sql.FieldLT(FieldCreatedAt, v))
-}
-
-// CreatedAtLTE applies the LTE predicate on the "created_at" field.
-func CreatedAtLTE(v time.Time) predicate.EventOccurrence {
-	return predicate.EventOccurrence(sql.FieldLTE(FieldCreatedAt, v))
-}
-
-// UpdatedAtEQ applies the EQ predicate on the "updated_at" field.
-func UpdatedAtEQ(v time.Time) predicate.EventOccurrence {
-	return predicate.EventOccurrence(sql.FieldEQ(FieldUpdatedAt, v))
-}
-
-// UpdatedAtNEQ applies the NEQ predicate on the "updated_at" field.
-func UpdatedAtNEQ(v time.Time) predicate.EventOccurrence {
-	return predicate.EventOccurrence(sql.FieldNEQ(FieldUpdatedAt, v))
-}
-
-// UpdatedAtIn applies the In predicate on the "updated_at" field.
-func UpdatedAtIn(vs ...time.Time) predicate.EventOccurrence {
-	return predicate.EventOccurrence(sql.FieldIn(FieldUpdatedAt, vs...))
-}
-
-// UpdatedAtNotIn applies the NotIn predicate on the "updated_at" field.
-func UpdatedAtNotIn(vs ...time.Time) predicate.EventOccurrence {
-	return predicate.EventOccurrence(sql.FieldNotIn(FieldUpdatedAt, vs...))
-}
-
-// UpdatedAtGT applies the GT predicate on the "updated_at" field.
-func UpdatedAtGT(v time.Time) predicate.EventOccurrence {
-	return predicate.EventOccurrence(sql.FieldGT(FieldUpdatedAt, v))
-}
-
-// UpdatedAtGTE applies the GTE predicate on the "updated_at" field.
-func UpdatedAtGTE(v time.Time) predicate.EventOccurrence {
-	return predicate.EventOccurrence(sql.FieldGTE(FieldUpdatedAt, v))
-}
-
-// UpdatedAtLT applies the LT predicate on the "updated_at" field.
-func UpdatedAtLT(v time.Time) predicate.EventOccurrence {
-	return predicate.EventOccurrence(sql.FieldLT(FieldUpdatedAt, v))
-}
-
-// UpdatedAtLTE applies the LTE predicate on the "updated_at" field.
-func UpdatedAtLTE(v time.Time) predicate.EventOccurrence {
-	return predicate.EventOccurrence(sql.FieldLTE(FieldUpdatedAt, v))
 }
 
 // HasEvent applies the HasEdge predicate on the "event" edge.

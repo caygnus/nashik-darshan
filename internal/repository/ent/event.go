@@ -2,11 +2,14 @@ package ent
 
 import (
 	"context"
+	"encoding/json"
 	"time"
 
+	entsql "entgo.io/ent/dialect/sql"
 	"github.com/omkar273/nashikdarshan/ent"
 	"github.com/omkar273/nashikdarshan/ent/event"
 	"github.com/omkar273/nashikdarshan/ent/eventoccurrence"
+	"github.com/omkar273/nashikdarshan/ent/predicate"
 	domain "github.com/omkar273/nashikdarshan/internal/domain/event"
 	ierr "github.com/omkar273/nashikdarshan/internal/errors"
 	"github.com/omkar273/nashikdarshan/internal/logger"
@@ -44,10 +47,10 @@ func (r *EventRepository) Create(ctx context.Context, e *domain.Event) error {
 	create := client.Event.Create().
 		SetID(e.ID).
 		SetSlug(e.Slug).
-		SetType(event.Type(e.Type)).
+		SetType(string(e.Type)).
 		SetTitle(e.Title).
 		SetStartDate(e.StartDate).
-		SetStatus(event.Status(e.Status)).
+		SetStatus(string(e.Status)).
 		SetCreatedAt(now).
 		SetUpdatedAt(now).
 		SetCreatedBy(types.GetUserID(ctx)).
@@ -74,8 +77,8 @@ func (r *EventRepository) Create(ctx context.Context, e *domain.Event) error {
 	if len(e.Tags) > 0 {
 		create = create.SetTags(e.Tags)
 	}
-	if len(e.Metadata) > 0 {
-		create = create.SetMetadata(e.Metadata)
+	if e.Metadata != nil {
+		create = create.SetMetadata(e.Metadata.ToMap())
 	}
 	if e.Latitude != nil {
 		create = create.SetLatitude(e.Latitude)
@@ -156,7 +159,7 @@ func (r *EventRepository) GetBySlug(ctx context.Context, slug string) (*domain.E
 	entEvent, err := client.Event.Query().
 		Where(
 			event.Slug(slug),
-			event.StatusEQ(event.StatusPublished),
+			event.StatusEQ(string(types.StatusPublished)),
 		).
 		WithOccurrences().
 		Only(ctx)
@@ -230,10 +233,10 @@ func (r *EventRepository) Update(ctx context.Context, e *domain.Event) error {
 	)
 
 	update := client.Event.UpdateOneID(e.ID).
-		SetType(event.Type(e.Type)).
+		SetType(string(e.Type)).
 		SetTitle(e.Title).
 		SetStartDate(e.StartDate).
-		SetStatus(event.Status(e.Status)).
+		SetStatus(string(e.Status)).
 		SetUpdatedAt(time.Now().UTC()).
 		SetUpdatedBy(types.GetUserID(ctx))
 
@@ -272,8 +275,8 @@ func (r *EventRepository) Update(ctx context.Context, e *domain.Event) error {
 	} else {
 		update = update.ClearTags()
 	}
-	if len(e.Metadata) > 0 {
-		update = update.SetMetadata(e.Metadata)
+	if e.Metadata != nil {
+		update = update.SetMetadata(e.Metadata.ToMap())
 	} else {
 		update = update.ClearMetadata()
 	}
@@ -332,7 +335,7 @@ func (r *EventRepository) Delete(ctx context.Context, id string) error {
 	r.log.Debugw("deleting event (soft)", "event_id", id)
 
 	_, err := client.Event.UpdateOneID(id).
-		SetStatus(event.StatusArchived).
+		SetStatus(string(types.StatusArchived)).
 		SetUpdatedAt(time.Now().UTC()).
 		SetUpdatedBy(types.GetUserID(ctx)).
 		Save(ctx)
@@ -372,15 +375,19 @@ func (r *EventRepository) CreateOccurrence(ctx context.Context, occ *domain.Even
 	create := client.EventOccurrence.Create().
 		SetID(occ.ID).
 		SetEventID(occ.EventID).
-		SetRecurrenceType(eventoccurrence.RecurrenceType(occ.RecurrenceType)).
-		SetStartTime(occ.StartTime).
-		SetEndTime(occ.EndTime).
-		SetStatus(eventoccurrence.Status(occ.Status)).
+		SetRecurrenceType(string(occ.RecurrenceType)).
+		SetStatus(string(occ.Status)).
 		SetCreatedAt(now).
 		SetUpdatedAt(now).
 		SetCreatedBy(types.GetUserID(ctx)).
 		SetUpdatedBy(types.GetUserID(ctx))
 
+	if occ.StartTime != nil {
+		create = create.SetStartTime(*occ.StartTime)
+	}
+	if occ.EndTime != nil {
+		create = create.SetEndTime(*occ.EndTime)
+	}
 	if occ.DurationMinutes != nil {
 		create = create.SetDurationMinutes(*occ.DurationMinutes)
 	}
@@ -396,8 +403,8 @@ func (r *EventRepository) CreateOccurrence(ctx context.Context, occ *domain.Even
 	if len(occ.ExceptionDates) > 0 {
 		create = create.SetExceptionDates(occ.ExceptionDates)
 	}
-	if len(occ.Metadata) > 0 {
-		create = create.SetMetadata(occ.Metadata)
+	if occ.Metadata != nil {
+		create = create.SetMetadata(occ.Metadata.ToMap())
 	}
 
 	_, err := create.Save(ctx)
@@ -445,28 +452,59 @@ func (r *EventRepository) GetOccurrence(ctx context.Context, id string) (*domain
 	return domain.OccurrenceFromEnt(entOcc), nil
 }
 
-func (r *EventRepository) ListOccurrencesByEvent(ctx context.Context, eventID string) ([]*domain.EventOccurrence, error) {
+func (r *EventRepository) ListOccurrences(ctx context.Context, filter *types.OccurrenceFilter) ([]*domain.EventOccurrence, error) {
 	client := r.client.Querier(ctx)
 
-	r.log.Debugw("listing occurrences by event", "event_id", eventID)
+	r.log.Debugw("listing occurrences",
+		"event_id", filter.EventID,
+		"limit", filter.GetLimit(),
+		"offset", filter.GetOffset(),
+	)
 
-	occurrences, err := client.EventOccurrence.Query().
-		Where(
-			eventoccurrence.EventID(eventID),
-			eventoccurrence.StatusEQ(eventoccurrence.StatusActive),
-		).
-		All(ctx)
+	query := client.EventOccurrence.Query()
 
+	// Apply status filter (default: only published)
+	if filter.Status != nil {
+		query = query.Where(eventoccurrence.StatusEQ(string(*filter.Status)))
+	} else {
+		query = query.Where(eventoccurrence.StatusEQ(string(types.StatusPublished)))
+	}
+
+	// Filter by event ID if specified
+	if filter.EventID != nil {
+		query = query.Where(eventoccurrence.EventID(*filter.EventID))
+	}
+
+	// Apply pagination
+	query = query.
+		Offset(filter.GetOffset()).
+		Limit(filter.GetLimit())
+
+	// Apply sorting (default: by ID for consistent ordering)
+	query = query.Order(ent.Asc(eventoccurrence.FieldID))
+
+	occurrences, err := query.All(ctx)
 	if err != nil {
 		return nil, ierr.WithError(err).
 			WithHint("Failed to list event occurrences").
 			WithReportableDetails(map[string]any{
-				"event_id": eventID,
+				"event_id": filter.EventID,
 			}).
 			Mark(ierr.ErrDatabase)
 	}
 
 	return domain.OccurrenceFromEntList(occurrences), nil
+}
+
+// ListOccurrencesByEvent lists occurrences for a specific event
+// Deprecated: Use ListOccurrences with filter instead
+func (r *EventRepository) ListOccurrencesByEvent(ctx context.Context, eventID string) ([]*domain.EventOccurrence, error) {
+	// Delegate to ListOccurrences with filter
+	filter := &types.OccurrenceFilter{
+		QueryFilter: types.NewDefaultQueryFilter(),
+		EventID:     &eventID,
+	}
+	return r.ListOccurrences(ctx, filter)
 }
 
 func (r *EventRepository) UpdateOccurrence(ctx context.Context, occ *domain.EventOccurrence) error {
@@ -478,13 +516,21 @@ func (r *EventRepository) UpdateOccurrence(ctx context.Context, occ *domain.Even
 	)
 
 	update := client.EventOccurrence.UpdateOneID(occ.ID).
-		SetRecurrenceType(eventoccurrence.RecurrenceType(occ.RecurrenceType)).
-		SetStartTime(occ.StartTime).
-		SetEndTime(occ.EndTime).
-		SetStatus(eventoccurrence.Status(occ.Status)).
+		SetRecurrenceType(string(occ.RecurrenceType)).
+		SetStatus(string(occ.Status)).
 		SetUpdatedAt(time.Now().UTC()).
 		SetUpdatedBy(types.GetUserID(ctx))
 
+	if occ.StartTime != nil {
+		update = update.SetStartTime(*occ.StartTime)
+	} else {
+		update = update.ClearStartTime()
+	}
+	if occ.EndTime != nil {
+		update = update.SetEndTime(*occ.EndTime)
+	} else {
+		update = update.ClearEndTime()
+	}
 	if occ.DurationMinutes != nil {
 		update = update.SetDurationMinutes(*occ.DurationMinutes)
 	} else {
@@ -510,8 +556,8 @@ func (r *EventRepository) UpdateOccurrence(ctx context.Context, occ *domain.Even
 	} else {
 		update = update.ClearExceptionDates()
 	}
-	if len(occ.Metadata) > 0 {
-		update = update.SetMetadata(occ.Metadata)
+	if occ.Metadata != nil {
+		update = update.SetMetadata(occ.Metadata.ToMap())
 	} else {
 		update = update.ClearMetadata()
 	}
@@ -544,7 +590,7 @@ func (r *EventRepository) DeleteOccurrence(ctx context.Context, id string) error
 	r.log.Debugw("deleting event occurrence (soft)", "occurrence_id", id)
 
 	_, err := client.EventOccurrence.UpdateOneID(id).
-		SetStatus(eventoccurrence.StatusArchived).
+		SetStatus(string(types.StatusArchived)).
 		SetUpdatedAt(time.Now().UTC()).
 		SetUpdatedBy(types.GetUserID(ctx)).
 		Save(ctx)
@@ -640,17 +686,25 @@ func (opts EventQueryOptions) ApplyBaseFilters(ctx context.Context, query *ent.E
 		return query
 	}
 
-	// Status filter
+	// Status filter only - base filter handles status
 	if filter.Status != nil {
-		query = query.Where(event.StatusEQ(event.Status(*filter.Status)))
+		query = query.Where(event.StatusEQ(string(*filter.Status)))
 	} else {
 		// Default: exclude deleted
-		query = query.Where(event.StatusNEQ(event.StatusDeleted))
+		query = query.Where(event.StatusNEQ(string(types.StatusDeleted)))
+	}
+
+	return query
+}
+
+func (opts EventQueryOptions) ApplyEntityQueryOptions(ctx context.Context, filter *types.EventFilter, query *ent.EventQuery) *ent.EventQuery {
+	if filter == nil {
+		return query
 	}
 
 	// Type filter
 	if filter.Type != nil {
-		query = query.Where(event.TypeEQ(event.Type(*filter.Type)))
+		query = query.Where(event.TypeEQ(string(*filter.Type)))
 	}
 
 	// Place filter
@@ -676,19 +730,25 @@ func (opts EventQueryOptions) ApplyBaseFilters(ctx context.Context, query *ent.E
 		}
 	}
 
-	// Tags filter - since Tags is JSON array, we need to check if contains any
+	// Tags filter - check if event has any of the requested tags
+	// PostgreSQL JSONB @> operator: checks if left array contains right array element
 	if len(filter.Tags) > 0 {
-		// JSON contains check - this is database-specific
-		// For now, fetch all and filter in memory (service layer should do this)
-		// Or implement custom SQL predicate
-	}
-
-	return query
-}
-
-func (opts EventQueryOptions) ApplyEntityQueryOptions(ctx context.Context, filter *types.EventFilter, query *ent.EventQuery) *ent.EventQuery {
-	if filter == nil {
-		return query
+		// Build OR predicates for each tag
+		tagPredicates := make([]predicate.Event, 0, len(filter.Tags))
+		for _, tag := range filter.Tags {
+			// Convert single tag to JSON array format: ["tag"]
+			tagJSON, err := json.Marshal([]string{tag})
+			if err == nil {
+				// Use custom SQL predicate with CAST: tags @> CAST('["tag"]' AS jsonb)
+				tagPredicates = append(tagPredicates, predicate.Event(func(s *entsql.Selector) {
+					s.Where(entsql.ExprP("tags @> CAST(? AS jsonb)", string(tagJSON)))
+				}))
+			}
+		}
+		// Apply OR condition - event must have at least one of the tags
+		if len(tagPredicates) > 0 {
+			query = query.Where(event.Or(tagPredicates...))
+		}
 	}
 
 	// Pagination

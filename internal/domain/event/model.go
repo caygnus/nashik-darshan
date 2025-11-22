@@ -32,8 +32,8 @@ type Event struct {
 	Images        []string `json:"images,omitempty"`
 
 	// Metadata
-	Tags     []string               `json:"tags,omitempty"`
-	Metadata map[string]interface{} `json:"metadata,omitempty"`
+	Tags     []string        `json:"tags,omitempty"`
+	Metadata *types.Metadata `json:"metadata,omitempty"`
 
 	// Location (for citywide)
 	Latitude     *decimal.Decimal `json:"latitude,omitempty"`
@@ -44,13 +44,10 @@ type Event struct {
 	ViewCount       int `json:"view_count"`
 	InterestedCount int `json:"interested_count"`
 
-	// Lifecycle
-	Status types.Status `json:"status"`
-
 	// Relations (populated when needed)
 	Occurrences []EventOccurrence `json:"occurrences,omitempty"`
 
-	// Audit
+	// Audit (includes Status)
 	types.BaseModel
 }
 
@@ -64,9 +61,9 @@ type EventOccurrence struct {
 	RecurrenceType types.RecurrenceType `json:"recurrence_type"`
 
 	// Time
-	StartTime       time.Time `json:"start_time"`
-	EndTime         time.Time `json:"end_time"`
-	DurationMinutes *int      `json:"duration_minutes,omitempty"`
+	StartTime       *time.Time `json:"start_time,omitempty"`
+	EndTime         *time.Time `json:"end_time,omitempty"`
+	DurationMinutes *int       `json:"duration_minutes,omitempty"`
 
 	// Day specifics
 	DayOfWeek   *int `json:"day_of_week,omitempty"`   // 0-6
@@ -77,12 +74,9 @@ type EventOccurrence struct {
 	ExceptionDates []string `json:"exception_dates,omitempty"`
 
 	// Metadata
-	Metadata map[string]interface{} `json:"metadata,omitempty"`
+	Metadata *types.Metadata `json:"metadata,omitempty"`
 
-	// Lifecycle
-	Status types.OccurrenceStatus `json:"status"`
-
-	// Audit
+	// Audit (includes Status)
 	types.BaseModel
 }
 
@@ -117,14 +111,14 @@ func FromEnt(e *ent.Event) *Event {
 		CoverImageURL:   e.CoverImageURL,
 		Images:          e.Images,
 		Tags:            e.Tags,
-		Metadata:        e.Metadata,
+		Metadata:        types.NewMetadataFromMap(e.Metadata),
 		Latitude:        e.Latitude,
 		Longitude:       e.Longitude,
 		LocationName:    e.LocationName,
 		ViewCount:       e.ViewCount,
 		InterestedCount: e.InterestedCount,
-		Status:          types.Status(e.Status),
 		BaseModel: types.BaseModel{
+			Status:    types.Status(e.Status),
 			CreatedBy: e.CreatedBy,
 			UpdatedBy: e.UpdatedBy,
 			CreatedAt: e.CreatedAt,
@@ -134,9 +128,10 @@ func FromEnt(e *ent.Event) *Event {
 
 	// Convert occurrences if loaded
 	if e.Edges.Occurrences != nil {
-		event.Occurrences = make([]EventOccurrence, len(e.Edges.Occurrences))
-		for i, occ := range e.Edges.Occurrences {
-			event.Occurrences[i] = *OccurrenceFromEnt(occ)
+		occurrences := OccurrenceFromEntList(e.Edges.Occurrences)
+		event.Occurrences = make([]EventOccurrence, len(occurrences))
+		for i, occ := range occurrences {
+			event.Occurrences[i] = *occ
 		}
 	}
 
@@ -160,9 +155,9 @@ func OccurrenceFromEnt(e *ent.EventOccurrence) *EventOccurrence {
 		DayOfMonth:      e.DayOfMonth,
 		MonthOfYear:     e.MonthOfYear,
 		ExceptionDates:  e.ExceptionDates,
-		Metadata:        e.Metadata,
-		Status:          types.OccurrenceStatus(e.Status),
+		Metadata:        types.NewMetadataFromMap(e.Metadata),
 		BaseModel: types.BaseModel{
+			Status:    types.Status(e.Status),
 			CreatedBy: e.CreatedBy,
 			UpdatedBy: e.UpdatedBy,
 			CreatedAt: e.CreatedAt,

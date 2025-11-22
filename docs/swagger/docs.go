@@ -397,7 +397,7 @@ const docTemplate = `{
         },
         "/events": {
             "get": {
-                "description": "Get a paginated list of events with filtering and pagination",
+                "description": "Get a paginated list of events with filtering and pagination. Use expand=true with from_date and to_date to get expanded occurrences.",
                 "consumes": [
                     "application/json"
                 ],
@@ -410,7 +410,8 @@ const docTemplate = `{
                 "summary": "List events",
                 "parameters": [
                     {
-                        "type": "string",
+                        "type": "boolean",
+                        "description": "If true, expand occurrences in date range",
                         "name": "expand",
                         "in": "query"
                     },
@@ -494,8 +495,7 @@ const docTemplate = `{
                             "FESTIVAL",
                             "CULTURAL",
                             "WORKSHOP",
-                            "SPECIAL_DARSHAN",
-                            "OTHER"
+                            "SPECIAL_DARSHAN"
                         ],
                         "type": "string",
                         "x-enum-varnames": [
@@ -503,10 +503,27 @@ const docTemplate = `{
                             "EventTypeFestival",
                             "EventTypeCultural",
                             "EventTypeWorkshop",
-                            "EventTypeSpecialDarshan",
-                            "EventTypeOther"
+                            "EventTypeSpecialDarshan"
                         ],
                         "name": "type",
+                        "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "Expand occurrences in date range",
+                        "name": "expand",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Start date for expansion (YYYY-MM-DD)",
+                        "name": "from_date",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "End date for expansion (YYYY-MM-DD)",
+                        "name": "to_date",
                         "in": "query"
                     }
                 ],
@@ -587,6 +604,213 @@ const docTemplate = `{
                 }
             }
         },
+        "/events/occurrences": {
+            "post": {
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ],
+                "description": "Create a new occurrence for an event",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Event"
+                ],
+                "summary": "Create event occurrence",
+                "parameters": [
+                    {
+                        "description": "Create occurrence request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.CreateOccurrenceRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/dto.OccurrenceResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ierr.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/ierr.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/ierr.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/events/occurrences/{id}": {
+            "get": {
+                "description": "Get an event occurrence by its ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Event"
+                ],
+                "summary": "Get occurrence by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Occurrence ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.OccurrenceResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/ierr.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/ierr.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ],
+                "description": "Update an existing event occurrence",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Event"
+                ],
+                "summary": "Update occurrence",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Occurrence ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Update occurrence request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.UpdateOccurrenceRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.OccurrenceResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ierr.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/ierr.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/ierr.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ],
+                "description": "Soft delete an event occurrence",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Event"
+                ],
+                "summary": "Delete occurrence",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Occurrence ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/ierr.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/ierr.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/events/slug/{slug}": {
             "get": {
                 "description": "Get an event by its slug",
@@ -614,73 +838,6 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/dto.EventResponse"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/events/{eventId}/expanded": {
-            "get": {
-                "description": "Get expanded concrete instances of event occurrences for a date range",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Event"
-                ],
-                "summary": "Get expanded occurrences",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Event ID",
-                        "name": "eventId",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "Start date (YYYY-MM-DD)",
-                        "name": "from_date",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "End date (YYYY-MM-DD)",
-                        "name": "to_date",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/dto.ExpandedOccurrenceResponse"
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
                         }
                     },
                     "404": {
@@ -728,68 +885,6 @@ const docTemplate = `{
                             "items": {
                                 "$ref": "#/definitions/dto.OccurrenceResponse"
                             }
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
-                        }
-                    }
-                }
-            },
-            "post": {
-                "security": [
-                    {
-                        "Authorization": []
-                    }
-                ],
-                "description": "Create a new occurrence for an event",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Event"
-                ],
-                "summary": "Create event occurrence",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Event ID",
-                        "name": "eventId",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "description": "Create occurrence request",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/dto.CreateOccurrenceRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "description": "Created",
-                        "schema": {
-                            "$ref": "#/definitions/dto.OccurrenceResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
                         }
                     },
                     "404": {
@@ -1481,156 +1576,6 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "description": "Hotel ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "204": {
-                        "description": "No Content"
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/occurrences/{id}": {
-            "get": {
-                "description": "Get an event occurrence by its ID",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Event"
-                ],
-                "summary": "Get occurrence by ID",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Occurrence ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/dto.OccurrenceResponse"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
-                        }
-                    }
-                }
-            },
-            "put": {
-                "security": [
-                    {
-                        "Authorization": []
-                    }
-                ],
-                "description": "Update an existing event occurrence",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Event"
-                ],
-                "summary": "Update occurrence",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Occurrence ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "description": "Update occurrence request",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/dto.UpdateOccurrenceRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/dto.OccurrenceResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
-                        }
-                    }
-                }
-            },
-            "delete": {
-                "security": [
-                    {
-                        "Authorization": []
-                    }
-                ],
-                "description": "Soft delete an event occurrence",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Event"
-                ],
-                "summary": "Delete occurrence",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Occurrence ID",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -2800,7 +2745,6 @@ const docTemplate = `{
             "type": "object",
             "required": [
                 "slug",
-                "start_date",
                 "title",
                 "type"
             ],
@@ -2814,7 +2758,6 @@ const docTemplate = `{
                     "maxLength": 10000
                 },
                 "end_date": {
-                    "description": "YYYY-MM-DD",
                     "type": "string"
                 },
                 "images": {
@@ -2846,11 +2789,6 @@ const docTemplate = `{
                     "minLength": 3
                 },
                 "start_date": {
-                    "description": "YYYY-MM-DD",
-                    "type": "string"
-                },
-                "status": {
-                    "description": "draft, published, archived",
                     "type": "string"
                 },
                 "subtitle": {
@@ -2869,7 +2807,7 @@ const docTemplate = `{
                     "minLength": 2
                 },
                 "type": {
-                    "type": "string"
+                    "$ref": "#/definitions/types.EventType"
                 }
             }
         },
@@ -2957,6 +2895,7 @@ const docTemplate = `{
             "type": "object",
             "required": [
                 "end_time",
+                "event_id",
                 "recurrence_type",
                 "start_time"
             ],
@@ -2971,6 +2910,9 @@ const docTemplate = `{
                 },
                 "end_time": {
                     "description": "HH:MM format",
+                    "type": "string"
+                },
+                "event_id": {
                     "type": "string"
                 },
                 "exception_dates": {
@@ -2989,15 +2931,10 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "recurrence_type": {
-                    "description": "NONE, DAILY, WEEKLY, MONTHLY, YEARLY",
-                    "type": "string"
+                    "$ref": "#/definitions/types.RecurrenceType"
                 },
                 "start_time": {
                     "description": "HH:MM format",
-                    "type": "string"
-                },
-                "status": {
-                    "description": "active, paused, archived",
                     "type": "string"
                 }
             }
@@ -3184,8 +3121,7 @@ const docTemplate = `{
                     "type": "number"
                 },
                 "metadata": {
-                    "type": "object",
-                    "additionalProperties": true
+                    "$ref": "#/definitions/types.Metadata"
                 },
                 "occurrences": {
                     "description": "Relations (populated when needed)",
@@ -3238,37 +3174,6 @@ const docTemplate = `{
                 "view_count": {
                     "description": "Stats",
                     "type": "integer"
-                }
-            }
-        },
-        "dto.ExpandedOccurrenceResponse": {
-            "type": "object",
-            "properties": {
-                "days_until": {
-                    "type": "integer"
-                },
-                "end_time": {
-                    "description": "Full datetime",
-                    "type": "string"
-                },
-                "event_id": {
-                    "type": "string"
-                },
-                "is_today": {
-                    "type": "boolean"
-                },
-                "is_upcoming": {
-                    "type": "boolean"
-                },
-                "occurrence_id": {
-                    "type": "string"
-                },
-                "start_time": {
-                    "description": "Full datetime",
-                    "type": "string"
-                },
-                "title": {
-                    "type": "string"
                 }
             }
         },
@@ -3631,8 +3536,11 @@ const docTemplate = `{
                 },
                 "metadata": {
                     "description": "Metadata",
-                    "type": "object",
-                    "additionalProperties": true
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/types.Metadata"
+                        }
+                    ]
                 },
                 "month_of_year": {
                     "description": "1-12 (renamed from Month)",
@@ -3968,7 +3876,6 @@ const docTemplate = `{
                     "maxLength": 10000
                 },
                 "end_date": {
-                    "description": "YYYY-MM-DD",
                     "type": "string"
                 },
                 "images": {
@@ -3995,10 +3902,6 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "start_date": {
-                    "description": "YYYY-MM-DD",
-                    "type": "string"
-                },
-                "status": {
                     "type": "string"
                 },
                 "subtitle": {
@@ -4017,7 +3920,7 @@ const docTemplate = `{
                     "minLength": 2
                 },
                 "type": {
-                    "type": "string"
+                    "$ref": "#/definitions/types.EventType"
                 }
             }
         },
@@ -4117,13 +4020,10 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "recurrence_type": {
-                    "type": "string"
+                    "$ref": "#/definitions/types.RecurrenceType"
                 },
                 "start_time": {
                     "description": "HH:MM format",
-                    "type": "string"
-                },
-                "status": {
                     "type": "string"
                 }
             }
@@ -4291,8 +4191,11 @@ const docTemplate = `{
                 },
                 "metadata": {
                     "description": "Metadata",
-                    "type": "object",
-                    "additionalProperties": true
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/types.Metadata"
+                        }
+                    ]
                 },
                 "month_of_year": {
                     "description": "1-12 (renamed from Month)",
@@ -4392,16 +4295,14 @@ const docTemplate = `{
                 "FESTIVAL",
                 "CULTURAL",
                 "WORKSHOP",
-                "SPECIAL_DARSHAN",
-                "OTHER"
+                "SPECIAL_DARSHAN"
             ],
             "x-enum-varnames": [
                 "EventTypeAarti",
                 "EventTypeFestival",
                 "EventTypeCultural",
                 "EventTypeWorkshop",
-                "EventTypeSpecialDarshan",
-                "EventTypeOther"
+                "EventTypeSpecialDarshan"
             ]
         },
         "types.FeedSectionType": {
@@ -4449,21 +4350,6 @@ const docTemplate = `{
             "additionalProperties": {
                 "type": "string"
             }
-        },
-        "types.OccurrenceStatus": {
-            "type": "string",
-            "enum": [
-                "active",
-                "paused",
-                "archived",
-                "deleted"
-            ],
-            "x-enum-varnames": [
-                "OccurrenceActive",
-                "OccurrencePaused",
-                "OccurrenceArchived",
-                "OccurrenceDeleted"
-            ]
         },
         "types.PaginationResponse": {
             "type": "object",

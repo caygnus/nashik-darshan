@@ -2,9 +2,10 @@ package service
 
 import (
 	"context"
+	"time"
 
 	"github.com/omkar273/nashikdarshan/internal/api/dto"
-	eventdomain "github.com/omkar273/nashikdarshan/internal/domain/event"
+	ierr "github.com/omkar273/nashikdarshan/internal/errors"
 	"github.com/omkar273/nashikdarshan/internal/types"
 )
 
@@ -18,14 +19,11 @@ type EventService interface {
 	List(ctx context.Context, filter *types.EventFilter) (*dto.ListEventsResponse, error)
 
 	// Occurrence operations
-	CreateOccurrence(ctx context.Context, eventID string, req *dto.CreateOccurrenceRequest) (*dto.OccurrenceResponse, error)
+	CreateOccurrence(ctx context.Context, req *dto.CreateOccurrenceRequest) (*dto.OccurrenceResponse, error)
 	GetOccurrence(ctx context.Context, id string) (*dto.OccurrenceResponse, error)
 	UpdateOccurrence(ctx context.Context, id string, req *dto.UpdateOccurrenceRequest) (*dto.OccurrenceResponse, error)
 	DeleteOccurrence(ctx context.Context, id string) error
 	ListOccurrences(ctx context.Context, eventID string) ([]*dto.OccurrenceResponse, error)
-
-	// Expanded occurrences (computed from recurrence rules)
-	GetExpandedOccurrences(ctx context.Context, eventID string, fromDate, toDate string) ([]*eventdomain.ExpandedOccurrence, error)
 
 	// Stats
 	IncrementView(ctx context.Context, id string) error
@@ -33,18 +31,22 @@ type EventService interface {
 }
 
 type eventService struct {
-	eventRepo eventdomain.Repository
-	expander  *EventExpander
 	ServiceParams
+	timezone *time.Location
 }
 
 // NewEventService creates a new event service
-// Note: Expects ServiceParams to include EventRepo
-func NewEventService(params ServiceParams, eventRepo eventdomain.Repository) EventService {
+func NewEventService(params ServiceParams) EventService {
+	// Load IST timezone (Asia/Kolkata)
+	ist, err := time.LoadLocation("Asia/Kolkata")
+	if err != nil {
+		// Fallback to UTC+5:30 if timezone database not available
+		ist = time.FixedZone("IST", 5*60*60+30*60)
+	}
+
 	return &eventService{
 		ServiceParams: params,
-		eventRepo:     eventRepo,
-		expander:      NewEventExpander(),
+		timezone:      ist,
 	}
 }
 
@@ -59,7 +61,7 @@ func (s *eventService) Create(ctx context.Context, req *dto.CreateEventRequest) 
 		return nil, err
 	}
 
-	err = s.eventRepo.Create(ctx, event)
+	err = s.EventRepo.Create(ctx, event)
 	if err != nil {
 		return nil, err
 	}
@@ -69,7 +71,7 @@ func (s *eventService) Create(ctx context.Context, req *dto.CreateEventRequest) 
 
 // Get retrieves an event by ID
 func (s *eventService) Get(ctx context.Context, id string) (*dto.EventResponse, error) {
-	event, err := s.eventRepo.Get(ctx, id)
+	event, err := s.EventRepo.Get(ctx, id)
 	if err != nil {
 		return nil, err
 	}
@@ -79,7 +81,7 @@ func (s *eventService) Get(ctx context.Context, id string) (*dto.EventResponse, 
 
 // GetBySlug retrieves an event by slug
 func (s *eventService) GetBySlug(ctx context.Context, slug string) (*dto.EventResponse, error) {
-	event, err := s.eventRepo.GetBySlug(ctx, slug)
+	event, err := s.EventRepo.GetBySlug(ctx, slug)
 	if err != nil {
 		return nil, err
 	}
@@ -93,7 +95,7 @@ func (s *eventService) Update(ctx context.Context, id string, req *dto.UpdateEve
 		return nil, err
 	}
 
-	event, err := s.eventRepo.Get(ctx, id)
+	event, err := s.EventRepo.Get(ctx, id)
 	if err != nil {
 		return nil, err
 	}
@@ -103,7 +105,7 @@ func (s *eventService) Update(ctx context.Context, id string, req *dto.UpdateEve
 		return nil, err
 	}
 
-	err = s.eventRepo.Update(ctx, event)
+	err = s.EventRepo.Update(ctx, event)
 	if err != nil {
 		return nil, err
 	}
@@ -113,12 +115,22 @@ func (s *eventService) Update(ctx context.Context, id string, req *dto.UpdateEve
 
 // Delete soft deletes an event
 func (s *eventService) Delete(ctx context.Context, id string) error {
-	_, err := s.eventRepo.Get(ctx, id)
+	event, err := s.EventRepo.Get(ctx, id)
 	if err != nil {
 		return err
 	}
 
-	return s.eventRepo.Delete(ctx, id)
+	// Only allow deleting published events
+	if event.Status != types.StatusPublished {
+		return ierr.NewError("Can only delete events with published status").
+			WithReportableDetails(map[string]any{
+				"event_id": id,
+				"status":   event.Status,
+			}).
+			Mark(ierr.ErrValidation)
+	}
+
+	return s.EventRepo.Delete(ctx, id)
 }
 
 // List retrieves a paginated list of events
@@ -127,12 +139,12 @@ func (s *eventService) List(ctx context.Context, filter *types.EventFilter) (*dt
 		filter = types.NewEventFilter()
 	}
 
-	events, err := s.eventRepo.List(ctx, filter)
+	events, err := s.EventRepo.List(ctx, filter)
 	if err != nil {
 		return nil, err
 	}
 
-	total, err := s.eventRepo.Count(ctx, filter)
+	total, err := s.EventRepo.Count(ctx, filter)
 	if err != nil {
 		return nil, err
 	}
@@ -145,23 +157,23 @@ func (s *eventService) List(ctx context.Context, filter *types.EventFilter) (*dt
 }
 
 // CreateOccurrence creates a new occurrence for an event
-func (s *eventService) CreateOccurrence(ctx context.Context, eventID string, req *dto.CreateOccurrenceRequest) (*dto.OccurrenceResponse, error) {
+func (s *eventService) CreateOccurrence(ctx context.Context, req *dto.CreateOccurrenceRequest) (*dto.OccurrenceResponse, error) {
 	if err := req.Validate(); err != nil {
 		return nil, err
 	}
 
 	// Verify event exists
-	_, err := s.eventRepo.Get(ctx, eventID)
+	_, err := s.EventRepo.Get(ctx, req.EventID)
 	if err != nil {
 		return nil, err
 	}
 
-	occurrence, err := req.ToOccurrence(ctx, eventID)
+	occurrence, err := req.ToOccurrence(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	err = s.eventRepo.CreateOccurrence(ctx, occurrence)
+	err = s.EventRepo.CreateOccurrence(ctx, occurrence)
 	if err != nil {
 		return nil, err
 	}
@@ -171,7 +183,7 @@ func (s *eventService) CreateOccurrence(ctx context.Context, eventID string, req
 
 // GetOccurrence retrieves an occurrence by ID
 func (s *eventService) GetOccurrence(ctx context.Context, id string) (*dto.OccurrenceResponse, error) {
-	occurrence, err := s.eventRepo.GetOccurrence(ctx, id)
+	occurrence, err := s.EventRepo.GetOccurrence(ctx, id)
 	if err != nil {
 		return nil, err
 	}
@@ -185,7 +197,7 @@ func (s *eventService) UpdateOccurrence(ctx context.Context, id string, req *dto
 		return nil, err
 	}
 
-	occurrence, err := s.eventRepo.GetOccurrence(ctx, id)
+	occurrence, err := s.EventRepo.GetOccurrence(ctx, id)
 	if err != nil {
 		return nil, err
 	}
@@ -195,7 +207,7 @@ func (s *eventService) UpdateOccurrence(ctx context.Context, id string, req *dto
 		return nil, err
 	}
 
-	err = s.eventRepo.UpdateOccurrence(ctx, occurrence)
+	err = s.EventRepo.UpdateOccurrence(ctx, occurrence)
 	if err != nil {
 		return nil, err
 	}
@@ -205,17 +217,17 @@ func (s *eventService) UpdateOccurrence(ctx context.Context, id string, req *dto
 
 // DeleteOccurrence soft deletes an occurrence
 func (s *eventService) DeleteOccurrence(ctx context.Context, id string) error {
-	_, err := s.eventRepo.GetOccurrence(ctx, id)
+	_, err := s.EventRepo.GetOccurrence(ctx, id)
 	if err != nil {
 		return err
 	}
 
-	return s.eventRepo.DeleteOccurrence(ctx, id)
+	return s.EventRepo.DeleteOccurrence(ctx, id)
 }
 
 // ListOccurrences lists all occurrences for an event
 func (s *eventService) ListOccurrences(ctx context.Context, eventID string) ([]*dto.OccurrenceResponse, error) {
-	occurrences, err := s.eventRepo.ListOccurrencesByEvent(ctx, eventID)
+	occurrences, err := s.EventRepo.ListOccurrencesByEvent(ctx, eventID)
 	if err != nil {
 		return nil, err
 	}
@@ -228,33 +240,12 @@ func (s *eventService) ListOccurrences(ctx context.Context, eventID string) ([]*
 	return responses, nil
 }
 
-// GetExpandedOccurrences expands recurrence rules into concrete instances
-func (s *eventService) GetExpandedOccurrences(ctx context.Context, eventID string, fromDate, toDate string) ([]*eventdomain.ExpandedOccurrence, error) {
-	event, err := s.eventRepo.Get(ctx, eventID)
-	if err != nil {
-		return nil, err
-	}
-
-	occurrences, err := s.eventRepo.ListOccurrencesByEvent(ctx, eventID)
-	if err != nil {
-		return nil, err
-	}
-
-	// Use expander to compute concrete instances
-	expanded, err := s.expander.ExpandOccurrences(event, occurrences, fromDate, toDate)
-	if err != nil {
-		return nil, err
-	}
-
-	return expanded, nil
-}
-
 // IncrementView increments the view count
 func (s *eventService) IncrementView(ctx context.Context, id string) error {
-	return s.eventRepo.IncrementViewCount(ctx, id)
+	return s.EventRepo.IncrementViewCount(ctx, id)
 }
 
 // IncrementInterested increments the interested count
 func (s *eventService) IncrementInterested(ctx context.Context, id string) error {
-	return s.eventRepo.IncrementInterestedCount(ctx, id)
+	return s.EventRepo.IncrementInterestedCount(ctx, id)
 }

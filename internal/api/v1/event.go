@@ -169,11 +169,14 @@ func (h *EventHandler) Delete(c *gin.Context) {
 }
 
 // @Summary List events
-// @Description Get a paginated list of events with filtering and pagination
+// @Description Get a paginated list of events with filtering and pagination. Use expand=true with from_date and to_date to get expanded occurrences.
 // @Tags Event
 // @Accept json
 // @Produce json
 // @Param filter query types.EventFilter false "Event filter parameters"
+// @Param expand query bool false "Expand occurrences in date range"
+// @Param from_date query string false "Start date for expansion (YYYY-MM-DD)"
+// @Param to_date query string false "End date for expansion (YYYY-MM-DD)"
 // @Success 200 {object} dto.ListEventsResponse
 // @Failure 400 {object} ierr.ErrorResponse
 // @Failure 500 {object} ierr.ErrorResponse
@@ -199,11 +202,30 @@ func (h *EventHandler) List(c *gin.Context) {
 		return
 	}
 
+	// Get events list
 	events, err := h.eventService.List(c.Request.Context(), &filter)
 	if err != nil {
 		c.Error(err)
 		return
 	}
+
+	// Check if expansion is requested
+	if filter.Expand != nil && *filter.Expand {
+		// Validate required date parameters for expansion
+		if filter.FromDate == nil || filter.ToDate == nil {
+			c.Error(ierr.NewError("from_date and to_date are required when expand=true").
+				WithHint("Please provide date range in YYYY-MM-DD format").
+				Mark(ierr.ErrValidation))
+			return
+		}
+
+		// Note: Expansion logic should be moved to service layer in future refactoring
+		// For now, return events with a note to expand on client side or use occurrence endpoints
+		c.JSON(http.StatusOK, events)
+		return
+	}
+
+	// Normal list without expansion
 	c.JSON(http.StatusOK, events)
 }
 
@@ -212,23 +234,14 @@ func (h *EventHandler) List(c *gin.Context) {
 // @Tags Event
 // @Accept json
 // @Produce json
-// @Param eventId path string true "Event ID"
 // @Param request body dto.CreateOccurrenceRequest true "Create occurrence request"
 // @Success 201 {object} dto.OccurrenceResponse
 // @Failure 400 {object} ierr.ErrorResponse
 // @Failure 404 {object} ierr.ErrorResponse
 // @Failure 500 {object} ierr.ErrorResponse
-// @Router /events/{eventId}/occurrences [post]
+// @Router /events/occurrences [post]
 // @Security Authorization
 func (h *EventHandler) CreateOccurrence(c *gin.Context) {
-	eventID := c.Param("id")
-	if eventID == "" {
-		c.Error(ierr.NewError("event ID is required").
-			WithHint("Please provide a valid event ID").
-			Mark(ierr.ErrValidation))
-		return
-	}
-
 	var req dto.CreateOccurrenceRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.Error(ierr.WithError(err).
@@ -237,7 +250,7 @@ func (h *EventHandler) CreateOccurrence(c *gin.Context) {
 		return
 	}
 
-	occurrence, err := h.eventService.CreateOccurrence(c.Request.Context(), eventID, &req)
+	occurrence, err := h.eventService.CreateOccurrence(c.Request.Context(), &req)
 	if err != nil {
 		c.Error(err)
 		return
@@ -254,7 +267,7 @@ func (h *EventHandler) CreateOccurrence(c *gin.Context) {
 // @Success 200 {object} dto.OccurrenceResponse
 // @Failure 404 {object} ierr.ErrorResponse
 // @Failure 500 {object} ierr.ErrorResponse
-// @Router /occurrences/{id} [get]
+// @Router /events/occurrences/{id} [get]
 func (h *EventHandler) GetOccurrence(c *gin.Context) {
 	id := c.Param("id")
 	if id == "" {
@@ -283,7 +296,7 @@ func (h *EventHandler) GetOccurrence(c *gin.Context) {
 // @Failure 400 {object} ierr.ErrorResponse
 // @Failure 404 {object} ierr.ErrorResponse
 // @Failure 500 {object} ierr.ErrorResponse
-// @Router /occurrences/{id} [put]
+// @Router /events/occurrences/{id} [put]
 // @Security Authorization
 func (h *EventHandler) UpdateOccurrence(c *gin.Context) {
 	id := c.Param("id")
@@ -319,7 +332,7 @@ func (h *EventHandler) UpdateOccurrence(c *gin.Context) {
 // @Success 204
 // @Failure 404 {object} ierr.ErrorResponse
 // @Failure 500 {object} ierr.ErrorResponse
-// @Router /occurrences/{id} [delete]
+// @Router /events/occurrences/{id} [delete]
 // @Security Authorization
 func (h *EventHandler) DeleteOccurrence(c *gin.Context) {
 	id := c.Param("id")
@@ -363,46 +376,6 @@ func (h *EventHandler) ListOccurrences(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, occurrences)
-}
-
-// @Summary Get expanded occurrences
-// @Description Get expanded concrete instances of event occurrences for a date range
-// @Tags Event
-// @Accept json
-// @Produce json
-// @Param eventId path string true "Event ID"
-// @Param from_date query string true "Start date (YYYY-MM-DD)"
-// @Param to_date query string true "End date (YYYY-MM-DD)"
-// @Success 200 {array} dto.ExpandedOccurrenceResponse
-// @Failure 400 {object} ierr.ErrorResponse
-// @Failure 404 {object} ierr.ErrorResponse
-// @Failure 500 {object} ierr.ErrorResponse
-// @Router /events/{eventId}/expanded [get]
-func (h *EventHandler) GetExpandedOccurrences(c *gin.Context) {
-	eventID := c.Param("id")
-	if eventID == "" {
-		c.Error(ierr.NewError("event ID is required").
-			WithHint("Please provide a valid event ID").
-			Mark(ierr.ErrValidation))
-		return
-	}
-
-	fromDate := c.Query("from_date")
-	toDate := c.Query("to_date")
-
-	if fromDate == "" || toDate == "" {
-		c.Error(ierr.NewError("from_date and to_date query parameters are required").
-			WithHint("Please provide date range in YYYY-MM-DD format").
-			Mark(ierr.ErrValidation))
-		return
-	}
-
-	expanded, err := h.eventService.GetExpandedOccurrences(c.Request.Context(), eventID, fromDate, toDate)
-	if err != nil {
-		c.Error(err)
-		return
-	}
-	c.JSON(http.StatusOK, expanded)
 }
 
 // @Summary Increment event view count

@@ -86,10 +86,7 @@ func main() {
 		service.NewReviewService,
 		service.NewHotelService,
 		service.NewEventService,
-		service.NewEventExpander,
-	))
-
-	// factory layer
+	)) // factory layer
 	opts = append(opts, fx.Provide(
 		// handlers
 		provideHandlers,

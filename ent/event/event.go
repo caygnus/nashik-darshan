@@ -3,7 +3,6 @@
 package event
 
 import (
-	"fmt"
 	"time"
 
 	"entgo.io/ent/dialect/sql"
@@ -15,6 +14,18 @@ const (
 	Label = "event"
 	// FieldID holds the string denoting the id field in the database.
 	FieldID = "id"
+	// FieldStatus holds the string denoting the status field in the database.
+	FieldStatus = "status"
+	// FieldCreatedAt holds the string denoting the created_at field in the database.
+	FieldCreatedAt = "created_at"
+	// FieldUpdatedAt holds the string denoting the updated_at field in the database.
+	FieldUpdatedAt = "updated_at"
+	// FieldCreatedBy holds the string denoting the created_by field in the database.
+	FieldCreatedBy = "created_by"
+	// FieldUpdatedBy holds the string denoting the updated_by field in the database.
+	FieldUpdatedBy = "updated_by"
+	// FieldMetadata holds the string denoting the metadata field in the database.
+	FieldMetadata = "metadata"
 	// FieldSlug holds the string denoting the slug field in the database.
 	FieldSlug = "slug"
 	// FieldType holds the string denoting the type field in the database.
@@ -37,8 +48,6 @@ const (
 	FieldImages = "images"
 	// FieldTags holds the string denoting the tags field in the database.
 	FieldTags = "tags"
-	// FieldMetadata holds the string denoting the metadata field in the database.
-	FieldMetadata = "metadata"
 	// FieldLatitude holds the string denoting the latitude field in the database.
 	FieldLatitude = "latitude"
 	// FieldLongitude holds the string denoting the longitude field in the database.
@@ -49,16 +58,6 @@ const (
 	FieldViewCount = "view_count"
 	// FieldInterestedCount holds the string denoting the interested_count field in the database.
 	FieldInterestedCount = "interested_count"
-	// FieldStatus holds the string denoting the status field in the database.
-	FieldStatus = "status"
-	// FieldCreatedBy holds the string denoting the created_by field in the database.
-	FieldCreatedBy = "created_by"
-	// FieldUpdatedBy holds the string denoting the updated_by field in the database.
-	FieldUpdatedBy = "updated_by"
-	// FieldCreatedAt holds the string denoting the created_at field in the database.
-	FieldCreatedAt = "created_at"
-	// FieldUpdatedAt holds the string denoting the updated_at field in the database.
-	FieldUpdatedAt = "updated_at"
 	// EdgeOccurrences holds the string denoting the occurrences edge name in mutations.
 	EdgeOccurrences = "occurrences"
 	// Table holds the table name of the event in the database.
@@ -75,6 +74,12 @@ const (
 // Columns holds all SQL columns for event fields.
 var Columns = []string{
 	FieldID,
+	FieldStatus,
+	FieldCreatedAt,
+	FieldUpdatedAt,
+	FieldCreatedBy,
+	FieldUpdatedBy,
+	FieldMetadata,
 	FieldSlug,
 	FieldType,
 	FieldTitle,
@@ -86,17 +91,11 @@ var Columns = []string{
 	FieldCoverImageURL,
 	FieldImages,
 	FieldTags,
-	FieldMetadata,
 	FieldLatitude,
 	FieldLongitude,
 	FieldLocationName,
 	FieldViewCount,
 	FieldInterestedCount,
-	FieldStatus,
-	FieldCreatedBy,
-	FieldUpdatedBy,
-	FieldCreatedAt,
-	FieldUpdatedAt,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -110,14 +109,24 @@ func ValidColumn(column string) bool {
 }
 
 var (
+	// DefaultStatus holds the default value on creation for the "status" field.
+	DefaultStatus string
+	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
+	DefaultCreatedAt func() time.Time
+	// DefaultUpdatedAt holds the default value on creation for the "updated_at" field.
+	DefaultUpdatedAt func() time.Time
+	// UpdateDefaultUpdatedAt holds the default value on update for the "updated_at" field.
+	UpdateDefaultUpdatedAt func() time.Time
+	// DefaultMetadata holds the default value on creation for the "metadata" field.
+	DefaultMetadata map[string]string
 	// SlugValidator is a validator for the "slug" field. It is called by the builders before save.
 	SlugValidator func(string) error
+	// TypeValidator is a validator for the "type" field. It is called by the builders before save.
+	TypeValidator func(string) error
 	// TitleValidator is a validator for the "title" field. It is called by the builders before save.
 	TitleValidator func(string) error
 	// SubtitleValidator is a validator for the "subtitle" field. It is called by the builders before save.
 	SubtitleValidator func(string) error
-	// CoverImageURLValidator is a validator for the "cover_image_url" field. It is called by the builders before save.
-	CoverImageURLValidator func(string) error
 	// LocationNameValidator is a validator for the "location_name" field. It is called by the builders before save.
 	LocationNameValidator func(string) error
 	// DefaultViewCount holds the default value on creation for the "view_count" field.
@@ -128,74 +137,9 @@ var (
 	DefaultInterestedCount int
 	// InterestedCountValidator is a validator for the "interested_count" field. It is called by the builders before save.
 	InterestedCountValidator func(int) error
-	// CreatedByValidator is a validator for the "created_by" field. It is called by the builders before save.
-	CreatedByValidator func(string) error
-	// UpdatedByValidator is a validator for the "updated_by" field. It is called by the builders before save.
-	UpdatedByValidator func(string) error
-	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
-	DefaultCreatedAt func() time.Time
-	// DefaultUpdatedAt holds the default value on creation for the "updated_at" field.
-	DefaultUpdatedAt func() time.Time
-	// UpdateDefaultUpdatedAt holds the default value on update for the "updated_at" field.
-	UpdateDefaultUpdatedAt func() time.Time
 	// IDValidator is a validator for the "id" field. It is called by the builders before save.
 	IDValidator func(string) error
 )
-
-// Type defines the type for the "type" enum field.
-type Type string
-
-// Type values.
-const (
-	TypeAARTI           Type = "AARTI"
-	TypeFESTIVAL        Type = "FESTIVAL"
-	TypeCULTURAL        Type = "CULTURAL"
-	TypeWORKSHOP        Type = "WORKSHOP"
-	TypeSPECIAL_DARSHAN Type = "SPECIAL_DARSHAN"
-	TypeOTHER           Type = "OTHER"
-)
-
-func (_type Type) String() string {
-	return string(_type)
-}
-
-// TypeValidator is a validator for the "type" field enum values. It is called by the builders before save.
-func TypeValidator(_type Type) error {
-	switch _type {
-	case TypeAARTI, TypeFESTIVAL, TypeCULTURAL, TypeWORKSHOP, TypeSPECIAL_DARSHAN, TypeOTHER:
-		return nil
-	default:
-		return fmt.Errorf("event: invalid enum value for type field: %q", _type)
-	}
-}
-
-// Status defines the type for the "status" enum field.
-type Status string
-
-// StatusDraft is the default value of the Status enum.
-const DefaultStatus = StatusDraft
-
-// Status values.
-const (
-	StatusDraft     Status = "draft"
-	StatusPublished Status = "published"
-	StatusArchived  Status = "archived"
-	StatusDeleted   Status = "deleted"
-)
-
-func (s Status) String() string {
-	return string(s)
-}
-
-// StatusValidator is a validator for the "status" field enum values. It is called by the builders before save.
-func StatusValidator(s Status) error {
-	switch s {
-	case StatusDraft, StatusPublished, StatusArchived, StatusDeleted:
-		return nil
-	default:
-		return fmt.Errorf("event: invalid enum value for status field: %q", s)
-	}
-}
 
 // OrderOption defines the ordering options for the Event queries.
 type OrderOption func(*sql.Selector)
@@ -203,6 +147,31 @@ type OrderOption func(*sql.Selector)
 // ByID orders the results by the id field.
 func ByID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldID, opts...).ToFunc()
+}
+
+// ByStatus orders the results by the status field.
+func ByStatus(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldStatus, opts...).ToFunc()
+}
+
+// ByCreatedAt orders the results by the created_at field.
+func ByCreatedAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCreatedAt, opts...).ToFunc()
+}
+
+// ByUpdatedAt orders the results by the updated_at field.
+func ByUpdatedAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldUpdatedAt, opts...).ToFunc()
+}
+
+// ByCreatedBy orders the results by the created_by field.
+func ByCreatedBy(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCreatedBy, opts...).ToFunc()
+}
+
+// ByUpdatedBy orders the results by the updated_by field.
+func ByUpdatedBy(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldUpdatedBy, opts...).ToFunc()
 }
 
 // BySlug orders the results by the slug field.
@@ -273,31 +242,6 @@ func ByViewCount(opts ...sql.OrderTermOption) OrderOption {
 // ByInterestedCount orders the results by the interested_count field.
 func ByInterestedCount(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldInterestedCount, opts...).ToFunc()
-}
-
-// ByStatus orders the results by the status field.
-func ByStatus(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldStatus, opts...).ToFunc()
-}
-
-// ByCreatedBy orders the results by the created_by field.
-func ByCreatedBy(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldCreatedBy, opts...).ToFunc()
-}
-
-// ByUpdatedBy orders the results by the updated_by field.
-func ByUpdatedBy(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldUpdatedBy, opts...).ToFunc()
-}
-
-// ByCreatedAt orders the results by the created_at field.
-func ByCreatedAt(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldCreatedAt, opts...).ToFunc()
-}
-
-// ByUpdatedAt orders the results by the updated_at field.
-func ByUpdatedAt(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldUpdatedAt, opts...).ToFunc()
 }
 
 // ByOccurrencesCount orders the results by occurrences count.

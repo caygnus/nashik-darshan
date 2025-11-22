@@ -21,6 +21,82 @@ type EventOccurrenceCreate struct {
 	hooks    []Hook
 }
 
+// SetStatus sets the "status" field.
+func (_c *EventOccurrenceCreate) SetStatus(v string) *EventOccurrenceCreate {
+	_c.mutation.SetStatus(v)
+	return _c
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (_c *EventOccurrenceCreate) SetNillableStatus(v *string) *EventOccurrenceCreate {
+	if v != nil {
+		_c.SetStatus(*v)
+	}
+	return _c
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (_c *EventOccurrenceCreate) SetCreatedAt(v time.Time) *EventOccurrenceCreate {
+	_c.mutation.SetCreatedAt(v)
+	return _c
+}
+
+// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
+func (_c *EventOccurrenceCreate) SetNillableCreatedAt(v *time.Time) *EventOccurrenceCreate {
+	if v != nil {
+		_c.SetCreatedAt(*v)
+	}
+	return _c
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (_c *EventOccurrenceCreate) SetUpdatedAt(v time.Time) *EventOccurrenceCreate {
+	_c.mutation.SetUpdatedAt(v)
+	return _c
+}
+
+// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
+func (_c *EventOccurrenceCreate) SetNillableUpdatedAt(v *time.Time) *EventOccurrenceCreate {
+	if v != nil {
+		_c.SetUpdatedAt(*v)
+	}
+	return _c
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (_c *EventOccurrenceCreate) SetCreatedBy(v string) *EventOccurrenceCreate {
+	_c.mutation.SetCreatedBy(v)
+	return _c
+}
+
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (_c *EventOccurrenceCreate) SetNillableCreatedBy(v *string) *EventOccurrenceCreate {
+	if v != nil {
+		_c.SetCreatedBy(*v)
+	}
+	return _c
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (_c *EventOccurrenceCreate) SetUpdatedBy(v string) *EventOccurrenceCreate {
+	_c.mutation.SetUpdatedBy(v)
+	return _c
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (_c *EventOccurrenceCreate) SetNillableUpdatedBy(v *string) *EventOccurrenceCreate {
+	if v != nil {
+		_c.SetUpdatedBy(*v)
+	}
+	return _c
+}
+
+// SetMetadata sets the "metadata" field.
+func (_c *EventOccurrenceCreate) SetMetadata(v map[string]string) *EventOccurrenceCreate {
+	_c.mutation.SetMetadata(v)
+	return _c
+}
+
 // SetEventID sets the "event_id" field.
 func (_c *EventOccurrenceCreate) SetEventID(v string) *EventOccurrenceCreate {
 	_c.mutation.SetEventID(v)
@@ -28,16 +104,8 @@ func (_c *EventOccurrenceCreate) SetEventID(v string) *EventOccurrenceCreate {
 }
 
 // SetRecurrenceType sets the "recurrence_type" field.
-func (_c *EventOccurrenceCreate) SetRecurrenceType(v eventoccurrence.RecurrenceType) *EventOccurrenceCreate {
+func (_c *EventOccurrenceCreate) SetRecurrenceType(v string) *EventOccurrenceCreate {
 	_c.mutation.SetRecurrenceType(v)
-	return _c
-}
-
-// SetNillableRecurrenceType sets the "recurrence_type" field if the given value is not nil.
-func (_c *EventOccurrenceCreate) SetNillableRecurrenceType(v *eventoccurrence.RecurrenceType) *EventOccurrenceCreate {
-	if v != nil {
-		_c.SetRecurrenceType(*v)
-	}
 	return _c
 }
 
@@ -47,9 +115,25 @@ func (_c *EventOccurrenceCreate) SetStartTime(v time.Time) *EventOccurrenceCreat
 	return _c
 }
 
+// SetNillableStartTime sets the "start_time" field if the given value is not nil.
+func (_c *EventOccurrenceCreate) SetNillableStartTime(v *time.Time) *EventOccurrenceCreate {
+	if v != nil {
+		_c.SetStartTime(*v)
+	}
+	return _c
+}
+
 // SetEndTime sets the "end_time" field.
 func (_c *EventOccurrenceCreate) SetEndTime(v time.Time) *EventOccurrenceCreate {
 	_c.mutation.SetEndTime(v)
+	return _c
+}
+
+// SetNillableEndTime sets the "end_time" field if the given value is not nil.
+func (_c *EventOccurrenceCreate) SetNillableEndTime(v *time.Time) *EventOccurrenceCreate {
+	if v != nil {
+		_c.SetEndTime(*v)
+	}
 	return _c
 }
 
@@ -115,66 +199,6 @@ func (_c *EventOccurrenceCreate) SetExceptionDates(v []string) *EventOccurrenceC
 	return _c
 }
 
-// SetMetadata sets the "metadata" field.
-func (_c *EventOccurrenceCreate) SetMetadata(v map[string]interface{}) *EventOccurrenceCreate {
-	_c.mutation.SetMetadata(v)
-	return _c
-}
-
-// SetStatus sets the "status" field.
-func (_c *EventOccurrenceCreate) SetStatus(v eventoccurrence.Status) *EventOccurrenceCreate {
-	_c.mutation.SetStatus(v)
-	return _c
-}
-
-// SetNillableStatus sets the "status" field if the given value is not nil.
-func (_c *EventOccurrenceCreate) SetNillableStatus(v *eventoccurrence.Status) *EventOccurrenceCreate {
-	if v != nil {
-		_c.SetStatus(*v)
-	}
-	return _c
-}
-
-// SetCreatedBy sets the "created_by" field.
-func (_c *EventOccurrenceCreate) SetCreatedBy(v string) *EventOccurrenceCreate {
-	_c.mutation.SetCreatedBy(v)
-	return _c
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (_c *EventOccurrenceCreate) SetUpdatedBy(v string) *EventOccurrenceCreate {
-	_c.mutation.SetUpdatedBy(v)
-	return _c
-}
-
-// SetCreatedAt sets the "created_at" field.
-func (_c *EventOccurrenceCreate) SetCreatedAt(v time.Time) *EventOccurrenceCreate {
-	_c.mutation.SetCreatedAt(v)
-	return _c
-}
-
-// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (_c *EventOccurrenceCreate) SetNillableCreatedAt(v *time.Time) *EventOccurrenceCreate {
-	if v != nil {
-		_c.SetCreatedAt(*v)
-	}
-	return _c
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (_c *EventOccurrenceCreate) SetUpdatedAt(v time.Time) *EventOccurrenceCreate {
-	_c.mutation.SetUpdatedAt(v)
-	return _c
-}
-
-// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (_c *EventOccurrenceCreate) SetNillableUpdatedAt(v *time.Time) *EventOccurrenceCreate {
-	if v != nil {
-		_c.SetUpdatedAt(*v)
-	}
-	return _c
-}
-
 // SetID sets the "id" field.
 func (_c *EventOccurrenceCreate) SetID(v string) *EventOccurrenceCreate {
 	_c.mutation.SetID(v)
@@ -221,10 +245,6 @@ func (_c *EventOccurrenceCreate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (_c *EventOccurrenceCreate) defaults() {
-	if _, ok := _c.mutation.RecurrenceType(); !ok {
-		v := eventoccurrence.DefaultRecurrenceType
-		_c.mutation.SetRecurrenceType(v)
-	}
 	if _, ok := _c.mutation.Status(); !ok {
 		v := eventoccurrence.DefaultStatus
 		_c.mutation.SetStatus(v)
@@ -237,10 +257,23 @@ func (_c *EventOccurrenceCreate) defaults() {
 		v := eventoccurrence.DefaultUpdatedAt()
 		_c.mutation.SetUpdatedAt(v)
 	}
+	if _, ok := _c.mutation.Metadata(); !ok {
+		v := eventoccurrence.DefaultMetadata
+		_c.mutation.SetMetadata(v)
+	}
 }
 
 // check runs all checks and user-defined validators on the builder.
 func (_c *EventOccurrenceCreate) check() error {
+	if _, ok := _c.mutation.Status(); !ok {
+		return &ValidationError{Name: "status", err: errors.New(`ent: missing required field "EventOccurrence.status"`)}
+	}
+	if _, ok := _c.mutation.CreatedAt(); !ok {
+		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "EventOccurrence.created_at"`)}
+	}
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
+		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "EventOccurrence.updated_at"`)}
+	}
 	if _, ok := _c.mutation.EventID(); !ok {
 		return &ValidationError{Name: "event_id", err: errors.New(`ent: missing required field "EventOccurrence.event_id"`)}
 	}
@@ -257,12 +290,6 @@ func (_c *EventOccurrenceCreate) check() error {
 			return &ValidationError{Name: "recurrence_type", err: fmt.Errorf(`ent: validator failed for field "EventOccurrence.recurrence_type": %w`, err)}
 		}
 	}
-	if _, ok := _c.mutation.StartTime(); !ok {
-		return &ValidationError{Name: "start_time", err: errors.New(`ent: missing required field "EventOccurrence.start_time"`)}
-	}
-	if _, ok := _c.mutation.EndTime(); !ok {
-		return &ValidationError{Name: "end_time", err: errors.New(`ent: missing required field "EventOccurrence.end_time"`)}
-	}
 	if v, ok := _c.mutation.DayOfWeek(); ok {
 		if err := eventoccurrence.DayOfWeekValidator(v); err != nil {
 			return &ValidationError{Name: "day_of_week", err: fmt.Errorf(`ent: validator failed for field "EventOccurrence.day_of_week": %w`, err)}
@@ -277,36 +304,6 @@ func (_c *EventOccurrenceCreate) check() error {
 		if err := eventoccurrence.MonthOfYearValidator(v); err != nil {
 			return &ValidationError{Name: "month_of_year", err: fmt.Errorf(`ent: validator failed for field "EventOccurrence.month_of_year": %w`, err)}
 		}
-	}
-	if _, ok := _c.mutation.Status(); !ok {
-		return &ValidationError{Name: "status", err: errors.New(`ent: missing required field "EventOccurrence.status"`)}
-	}
-	if v, ok := _c.mutation.Status(); ok {
-		if err := eventoccurrence.StatusValidator(v); err != nil {
-			return &ValidationError{Name: "status", err: fmt.Errorf(`ent: validator failed for field "EventOccurrence.status": %w`, err)}
-		}
-	}
-	if _, ok := _c.mutation.CreatedBy(); !ok {
-		return &ValidationError{Name: "created_by", err: errors.New(`ent: missing required field "EventOccurrence.created_by"`)}
-	}
-	if v, ok := _c.mutation.CreatedBy(); ok {
-		if err := eventoccurrence.CreatedByValidator(v); err != nil {
-			return &ValidationError{Name: "created_by", err: fmt.Errorf(`ent: validator failed for field "EventOccurrence.created_by": %w`, err)}
-		}
-	}
-	if _, ok := _c.mutation.UpdatedBy(); !ok {
-		return &ValidationError{Name: "updated_by", err: errors.New(`ent: missing required field "EventOccurrence.updated_by"`)}
-	}
-	if v, ok := _c.mutation.UpdatedBy(); ok {
-		if err := eventoccurrence.UpdatedByValidator(v); err != nil {
-			return &ValidationError{Name: "updated_by", err: fmt.Errorf(`ent: validator failed for field "EventOccurrence.updated_by": %w`, err)}
-		}
-	}
-	if _, ok := _c.mutation.CreatedAt(); !ok {
-		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "EventOccurrence.created_at"`)}
-	}
-	if _, ok := _c.mutation.UpdatedAt(); !ok {
-		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "EventOccurrence.updated_at"`)}
 	}
 	if v, ok := _c.mutation.ID(); ok {
 		if err := eventoccurrence.IDValidator(v); err != nil {
@@ -351,17 +348,41 @@ func (_c *EventOccurrenceCreate) createSpec() (*EventOccurrence, *sqlgraph.Creat
 		_node.ID = id
 		_spec.ID.Value = id
 	}
+	if value, ok := _c.mutation.Status(); ok {
+		_spec.SetField(eventoccurrence.FieldStatus, field.TypeString, value)
+		_node.Status = value
+	}
+	if value, ok := _c.mutation.CreatedAt(); ok {
+		_spec.SetField(eventoccurrence.FieldCreatedAt, field.TypeTime, value)
+		_node.CreatedAt = value
+	}
+	if value, ok := _c.mutation.UpdatedAt(); ok {
+		_spec.SetField(eventoccurrence.FieldUpdatedAt, field.TypeTime, value)
+		_node.UpdatedAt = value
+	}
+	if value, ok := _c.mutation.CreatedBy(); ok {
+		_spec.SetField(eventoccurrence.FieldCreatedBy, field.TypeString, value)
+		_node.CreatedBy = value
+	}
+	if value, ok := _c.mutation.UpdatedBy(); ok {
+		_spec.SetField(eventoccurrence.FieldUpdatedBy, field.TypeString, value)
+		_node.UpdatedBy = value
+	}
+	if value, ok := _c.mutation.Metadata(); ok {
+		_spec.SetField(eventoccurrence.FieldMetadata, field.TypeJSON, value)
+		_node.Metadata = value
+	}
 	if value, ok := _c.mutation.RecurrenceType(); ok {
-		_spec.SetField(eventoccurrence.FieldRecurrenceType, field.TypeEnum, value)
+		_spec.SetField(eventoccurrence.FieldRecurrenceType, field.TypeString, value)
 		_node.RecurrenceType = value
 	}
 	if value, ok := _c.mutation.StartTime(); ok {
 		_spec.SetField(eventoccurrence.FieldStartTime, field.TypeTime, value)
-		_node.StartTime = value
+		_node.StartTime = &value
 	}
 	if value, ok := _c.mutation.EndTime(); ok {
 		_spec.SetField(eventoccurrence.FieldEndTime, field.TypeTime, value)
-		_node.EndTime = value
+		_node.EndTime = &value
 	}
 	if value, ok := _c.mutation.DurationMinutes(); ok {
 		_spec.SetField(eventoccurrence.FieldDurationMinutes, field.TypeInt, value)
@@ -382,30 +403,6 @@ func (_c *EventOccurrenceCreate) createSpec() (*EventOccurrence, *sqlgraph.Creat
 	if value, ok := _c.mutation.ExceptionDates(); ok {
 		_spec.SetField(eventoccurrence.FieldExceptionDates, field.TypeJSON, value)
 		_node.ExceptionDates = value
-	}
-	if value, ok := _c.mutation.Metadata(); ok {
-		_spec.SetField(eventoccurrence.FieldMetadata, field.TypeJSON, value)
-		_node.Metadata = value
-	}
-	if value, ok := _c.mutation.Status(); ok {
-		_spec.SetField(eventoccurrence.FieldStatus, field.TypeEnum, value)
-		_node.Status = value
-	}
-	if value, ok := _c.mutation.CreatedBy(); ok {
-		_spec.SetField(eventoccurrence.FieldCreatedBy, field.TypeString, value)
-		_node.CreatedBy = value
-	}
-	if value, ok := _c.mutation.UpdatedBy(); ok {
-		_spec.SetField(eventoccurrence.FieldUpdatedBy, field.TypeString, value)
-		_node.UpdatedBy = value
-	}
-	if value, ok := _c.mutation.CreatedAt(); ok {
-		_spec.SetField(eventoccurrence.FieldCreatedAt, field.TypeTime, value)
-		_node.CreatedAt = value
-	}
-	if value, ok := _c.mutation.UpdatedAt(); ok {
-		_spec.SetField(eventoccurrence.FieldUpdatedAt, field.TypeTime, value)
-		_node.UpdatedAt = value
 	}
 	if nodes := _c.mutation.EventIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
