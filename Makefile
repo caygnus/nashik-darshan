@@ -456,12 +456,14 @@ publish-ts-sdk: verify-sdks
 	@echo "📤 Publishing TypeScript SDK to npm (public)..."
 	@bash -c 'set -e; \
 	cd $(SDK_TS_DIR); \
-	# Load NPM_TOKEN from .env if it exists \
+	# Load NPM_TOKEN from .env if it exists (should be caygnus org token) \
 	if [ -f ../../.env ]; then \
 		export $$(grep -v "^#" ../../.env | grep "^NPM_TOKEN=" | head -1); \
 		if [ -n "$$NPM_TOKEN" ]; then \
 			echo "✓ Using NPM_TOKEN from .env file"; \
-			echo "//registry.npmjs.org/:_authToken=$$NPM_TOKEN" > .npmrc; \
+			# Configure npmrc for @caygnus scope \
+			echo "@caygnus:registry=https://registry.npmjs.org/" > .npmrc; \
+			echo "//registry.npmjs.org/:_authToken=$$NPM_TOKEN" >> .npmrc; \
 			if npm publish --access public; then \
 				rm -f .npmrc; \
 				echo "✅ TypeScript SDK published to npm (public)"; \
@@ -469,6 +471,7 @@ publish-ts-sdk: verify-sdks
 			else \
 				rm -f .npmrc; \
 				echo "❌ npm publish failed. Check your token and package permissions."; \
+				echo "   Make sure NPM_TOKEN is from the @caygnus organization account."; \
 				exit 1; \
 			fi; \
 		fi; \
@@ -476,7 +479,8 @@ publish-ts-sdk: verify-sdks
 	# Check environment variable \
 	if [ -n "$$NPM_TOKEN" ]; then \
 		echo "✓ Using NPM_TOKEN from environment"; \
-		echo "//registry.npmjs.org/:_authToken=$$NPM_TOKEN" > .npmrc; \
+		echo "@caygnus:registry=https://registry.npmjs.org/" > .npmrc; \
+		echo "//registry.npmjs.org/:_authToken=$$NPM_TOKEN" >> .npmrc; \
 		if npm publish --access public; then \
 			rm -f .npmrc; \
 			echo "✅ TypeScript SDK published to npm (public)"; \
@@ -484,25 +488,39 @@ publish-ts-sdk: verify-sdks
 		else \
 			rm -f .npmrc; \
 			echo "❌ npm publish failed. Check your token and package permissions."; \
+			echo "   Make sure NPM_TOKEN is from the @caygnus organization account."; \
 			exit 1; \
 		fi; \
 	fi; \
 	# Fallback to npm login if token not found \
 	echo "⚠️  NPM_TOKEN not found in .env or environment, checking npm login..."; \
-	if npm whoami &>/dev/null; then \
-		echo "✓ Using npm login credentials (user: $$(npm whoami))"; \
+	CURRENT_USER=$$(npm whoami 2>/dev/null || echo ""); \
+	if [ -n "$$CURRENT_USER" ]; then \
+		echo "✓ Currently logged in as: $$CURRENT_USER"; \
+		echo "📦 Attempting to publish to @caygnus organization..."; \
 		if npm publish --access public; then \
 			echo "✅ TypeScript SDK published to npm (public)"; \
 			exit 0; \
 		else \
-			echo "❌ npm publish failed. Check your authentication and package permissions."; \
-			exit 1; \
+			EXIT_CODE=$$?; \
+			echo ""; \
+			echo "❌ npm publish failed. You are logged in as '$$CURRENT_USER' but need @caygnus access."; \
+			echo ""; \
+			echo "Solution: Get an access token from the @caygnus organization account:"; \
+			echo "  1. Log in to npmjs.com with your @caygnus organization account"; \
+			echo "  2. Go to: https://www.npmjs.com/settings/caygnus/access-tokens"; \
+			echo "  3. Create a new 'Automation' token with 'Publish' permissions"; \
+			echo "  4. Add it to your .env file: NPM_TOKEN=your_token_here"; \
+			echo ""; \
+			echo "Or switch npm accounts:"; \
+			echo "  npm logout && npm login (use caygnus account credentials)"; \
+			exit $$EXIT_CODE; \
 		fi; \
 	else \
 		echo "❌ Not authenticated. Options:"; \
-		echo "   1. Add NPM_TOKEN=your_token to .env file (recommended), or"; \
+		echo "   1. Add NPM_TOKEN=your_caygnus_token to .env file (recommended), or"; \
 		echo "   2. Set NPM_TOKEN environment variable, or"; \
-		echo "   3. Run: npm login"; \
+		echo "   3. Run: npm login (use your @caygnus organization account)"; \
 		exit 1; \
 	fi'
 
