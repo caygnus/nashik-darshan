@@ -4,7 +4,6 @@
 
 import 'dart:async';
 
-import 'package:built_value/json_object.dart';
 import 'package:built_value/serializer.dart';
 import 'package:dio/dio.dart';
 
@@ -17,7 +16,6 @@ import 'package:nashik_darshan_sdk/src/model/dto_place_image_response.dart';
 import 'package:nashik_darshan_sdk/src/model/dto_place_response.dart';
 import 'package:nashik_darshan_sdk/src/model/dto_update_place_image_request.dart';
 import 'package:nashik_darshan_sdk/src/model/dto_update_place_request.dart';
-import 'package:nashik_darshan_sdk/src/model/ierr_error_response.dart';
 
 class PlaceApi {
 
