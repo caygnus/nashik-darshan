@@ -1,0 +1,20 @@
+# OpenAPI Generator Ignore File for Dart SDK
+# Files and directories listed here will be preserved during regeneration
+
+# Preserve custom configurations (IMPORTANT: These files are customized for publishing)
+pubspec.yaml
+analysis_options.yaml
+README.md
+.gitignore
+
+# Preserve custom source files (if any)
+# lib/custom/
+
+# Preserve examples directory
+example/
+
+# Preserve test files (if customized)
+# test/custom/
+
+# Ignore generated git push script
+git_push.sh

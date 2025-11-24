@@ -412,28 +412,90 @@ This command:
 2. Converts to OpenAPI 3.0
 3. Fixes any reference issues
 
+### SDK Generation
+
+The project includes automated SDK generation for TypeScript and Dart. SDKs are generated from the OpenAPI specification and can be published to npm and pub.dev.
+
+**Quick Start:**
+```bash
+# Generate both SDKs
+make generate-sdks
+
+# Publish SDKs (after updating versions)
+make version-sdks VERSION=1.0.1
+make publish-sdks
+```
+
+**For detailed SDK documentation, see:**
+- [`sdks/README.md`](./sdks/README.md) - SDK generation guide
+- [`sdks/PUBLISHING.md`](./sdks/PUBLISHING.md) - Publishing instructions
+- [`sdks/ARCHITECTURE.md`](./sdks/ARCHITECTURE.md) - Architecture decisions
+
+**Generated SDKs:**
+- **TypeScript SDK**: `@caygnus/nashik-darshan-sdk` (npm)
+- **Dart SDK**: `nashik_darshan_sdk` (pub.dev)
+
 ## Development Workflow
+
+> 📖 **For a comprehensive developer guide, see [DEVELOPER_GUIDE.md](./DEVELOPER_GUIDE.md)**
 
 ### Available Make Commands
 
+#### 🏗️ Code Generation
 ```bash
-# Code Generation
 make generate-ent          # Generate Ent ORM code from schema
-make swagger              # Generate API documentation
+make swagger              # Generate API documentation (Swagger 2.0 + OpenAPI 3.0)
+make swagger-2-0          # Generate Swagger 2.0 only
+make swagger-3-0          # Convert to OpenAPI 3.0
+make swagger-clean        # Clean generated swagger files
+```
 
-# Database
+#### 🗄️ Database
+```bash
 make migrate-ent          # Run database migrations
+```
 
-# Development
+#### 🚀 Development
+```bash
 make run                  # Start development server
 make build                # Build production binary
+```
 
-# Code Quality
+#### 📦 SDK Generation & Publishing
+```bash
+# SDK Generation
+make generate-sdks       # Generate both TypeScript and Dart SDKs
+make generate-ts-sdk      # Generate TypeScript SDK only
+make generate-dart-sdk    # Generate Dart SDK only
+make clean-sdks           # Clean generated SDK directories
+make verify-sdks          # Verify generated SDKs are complete
+
+# SDK Version Management
+make version-sdks VERSION=1.0.1    # Update both SDK versions
+make version-ts-sdk VERSION=1.0.1  # Update TypeScript SDK version
+make version-dart-sdk VERSION=1.0.1 # Update Dart SDK version
+
+# SDK Publishing
+make publish-sdks                 # Publish both SDKs to registries
+make publish-ts-sdk               # Publish TypeScript SDK to npm
+make publish-dart-sdk              # Publish Dart SDK to pub.dev
+make publish-ts-sdk-dry-run       # Test TypeScript SDK publish (dry-run)
+make publish-dart-sdk-dry-run      # Test Dart SDK publish (dry-run)
+
+# SDK Setup & Dependencies
+make install-deps          # Install openapi-generator-cli if missing
+make check-env             # Verify all required tools are installed
+```
+
+#### 🧹 Code Quality
+```bash
 make lint-fix             # Auto-fix linting issues
 make install-hooks        # Install git pre-commit hooks
 make run-hooks            # Manually run git hooks
+```
 
-# Security
+#### 🔐 Security
+```bash
 make generate-dev-keys    # Generate unencrypted RSA keys (dev only)
 make generate-keys        # Generate encrypted RSA keys (production)
 ```
@@ -463,6 +525,7 @@ After modifying API handlers or DTOs:
 
 ```bash
 make swagger              # Update documentation
+make generate-sdks        # Regenerate SDKs with latest API changes
 ```
 
 #### 4. Code Quality
