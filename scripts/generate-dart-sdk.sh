@@ -93,18 +93,10 @@ main() {
         log_success "LICENSE file copied to SDK directory"
     fi
     
-    # Copy README.md if it exists (preserved by .openapi-generator-ignore)
-    # We preserve our custom README.md which has correct import paths
-    if [ -f "$PROJECT_ROOT/sdks/dart/README.md" ]; then
-        cp "$PROJECT_ROOT/sdks/dart/README.md" "$SDK_DIR/README.md"
-        log_success "README.md preserved (custom version with correct imports)"
-    fi
-    
-    # Copy CHANGELOG.md if it exists (preserved by .openapi-generator-ignore)
-    if [ -f "$PROJECT_ROOT/sdks/dart/CHANGELOG.md" ]; then
-        cp "$PROJECT_ROOT/sdks/dart/CHANGELOG.md" "$SDK_DIR/CHANGELOG.md"
-        log_success "CHANGELOG.md preserved"
-    fi
+    # Copy README.md and CHANGELOG.md AFTER generation to preserve custom versions
+    # These are listed in .openapi-generator-ignore but we copy them explicitly
+    # to ensure they're always up-to-date with our custom versions
+    # (The ignore file prevents generator from overwriting, but we want to ensure they exist)
     echo ""
 
     # Step 4: Generate SDK
