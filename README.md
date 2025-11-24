@@ -353,7 +353,7 @@ See the [Getting Started](#getting-started) section for a minimal example.
 All configuration values can be set via environment variables with the `CAYGNUS_` prefix:
 
 ```bash
-export CAYGNUS_SERVER_ADDRESS=":8080"   
+export CAYGNUS_SERVER_ADDRESS=":8080"
 export CAYGNUS_POSTGRES_HOST="localhost"
 export CAYGNUS_POSTGRES_PORT=5432
 # ... etc
@@ -401,8 +401,8 @@ All API endpoints are versioned under `/api/v1/`:
 - `/api/v1/health` - Health check
 - `/api/v1/places` - Places management
 - `/api/v1/categories` - Categories
+- `/api/v1/hotels` - Hotels management
 - `/api/v1/reviews` - Reviews
-- `/api/v1/feed` - Feed system
 - `/api/v1/users` - User management
 - `/api/v1/auth` - Authentication
 
@@ -1045,14 +1045,14 @@ nashik-darshan-v2-be/
 │   │   │   ├── auth.go
 │   │   │   ├── place.go
 │   │   │   ├── review.go
-│   │   │   ├── feed.go
 │   │   │   ├── category.go
+│   │   │   ├── hotel.go
 │   │   │   └── user.go
 │   │   ├── v1/                   # API version 1 handlers
 │   │   │   ├── place.go
 │   │   │   ├── review.go
-│   │   │   ├── feed.go
 │   │   │   ├── category.go
+│   │   │   ├── hotel.go
 │   │   │   ├── user.go
 │   │   │   ├── auth.go
 │   │   │   └── health.go
@@ -1096,6 +1096,7 @@ nashik-darshan-v2-be/
 │   │   │   ├── place.go
 │   │   │   ├── review.go
 │   │   │   ├── category.go
+│   │   │   ├── hotel.go
 │   │   │   ├── user.go
 │   │   │   └── queryoptions.go   # Query builders
 │   │   └── factory.go            # Repository factory
@@ -1113,8 +1114,8 @@ nashik-darshan-v2-be/
 │   ├── service/                  # Service layer (business logic)
 │   │   ├── place.go              # Place service
 │   │   ├── review.go             # Review service
-│   │   ├── feed.go               # Feed service
 │   │   ├── category.go           # Category service
+│   │   ├── hotel.go              # Hotel service
 │   │   ├── user.go               # User service
 │   │   ├── auth.go               # Auth service
 │   │   ├── onboarding.go         # Onboarding service
@@ -1123,8 +1124,8 @@ nashik-darshan-v2-be/
 │   ├── types/                    # Shared type definitions
 │   │   ├── place.go              # Place types & filters
 │   │   ├── review.go             # Review types
-│   │   ├── feed.go               # Feed types
 │   │   ├── category.go           # Category types
+│   │   ├── hotel.go              # Hotel types
 │   │   ├── user.go               # User types
 │   │   ├── filter.go             # Base filter types
 │   │   ├── pagination.go         # Pagination types
@@ -1145,8 +1146,7 @@ nashik-darshan-v2-be/
 │   └── GEOGRAPHY_COMPARISON.md   # Technical documentation
 │
 ├── scripts/                      # Utility scripts
-│   ├── generate-keys.sh          # Production key generation
-│   ├── generate-dev-keys.sh      # Development key generation
+│   ├── assert.sh                 # Environment assertion script
 │   ├── fix_swagger_refs.sh       # Swagger post-processing
 │   ├── internal/
 │   │   └── generate_ent.go       # Ent code generation
