@@ -268,6 +268,12 @@ setup-sdk-dirs:
 		cp sdks/LICENSE $(SDK_DART_DIR)/LICENSE; \
 		echo "✓ LICENSE file copied to SDK directories"; \
 	fi
+	@if [ -f $(SDK_TS_DIR)/README.md ]; then \
+		echo "✓ README.md already exists in TypeScript SDK"; \
+	elif [ -f sdks/ts/README.md ]; then \
+		cp sdks/ts/README.md $(SDK_TS_DIR)/README.md; \
+		echo "✓ README.md copied to TypeScript SDK directory"; \
+	fi
 	@echo "✅ SDK directories ready"
 
 # generate-ts-sdk: Generate TypeScript SDK only
