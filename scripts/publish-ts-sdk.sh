@@ -122,21 +122,23 @@ main() {
     log_step "Step 4/5: Configuring npm authentication"
     cd "$SDK_DIR"
     
-    # Create temporary .npmrc
-    NPMRC_FILE="$SDK_DIR/.npmrc"
-    
+    # Use npm's standard authentication methods (no .npmrc file creation)
     if [ -n "$NPM_TOKEN" ]; then
-        # Configure scope-specific authentication for @caygnus
+        # Export token as environment variable (npm reads NPM_TOKEN automatically)
+        export NPM_TOKEN
+        log_success "Using NPM_TOKEN from $AUTH_METHOD (via environment variable)"
+        log_info "npm will automatically use NPM_TOKEN environment variable for authentication"
+        
+        # Configure scope registry if needed (user-level, not project-level)
         if [[ "$PACKAGE_NAME" == @caygnus/* ]]; then
-            echo "@caygnus:registry=https://registry.npmjs.org/" > "$NPMRC_FILE"
-            echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> "$NPMRC_FILE"
-            log_success "Configured @caygnus scope authentication using $AUTH_METHOD"
-        else
-            echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > "$NPMRC_FILE"
-            log_success "Configured npm authentication using $AUTH_METHOD"
+            # Only set if not already configured (user-level config)
+            if ! npm config get @caygnus:registry &>/dev/null || [ "$(npm config get @caygnus:registry)" = "undefined" ]; then
+                npm config set @caygnus:registry https://registry.npmjs.org/ --location=user
+                log_info "Configured @caygnus scope registry (user-level)"
+            fi
         fi
     else
-        log_info "Using existing npm login credentials"
+        log_info "Using existing npm login credentials from ~/.npmrc"
     fi
     echo ""
 
@@ -155,6 +157,7 @@ main() {
     echo ""
 
     # Actual publish
+    # npm automatically uses NPM_TOKEN environment variable if set
     log_info "Publishing package (this may take a moment)..."
     if npm publish --access public 2>&1 | tee /tmp/npm-publish-ts.log; then
         echo ""
@@ -179,19 +182,18 @@ main() {
             log_error "403 Forbidden - Check your permissions for this package"
         elif grep -q "401" /tmp/npm-publish-ts.log 2>/dev/null; then
             log_error "401 Unauthorized - Check your authentication token"
+            if [ -n "$NPM_TOKEN" ]; then
+                log_error "NPM_TOKEN is set but authentication failed. Verify the token is valid."
+            fi
         fi
         
         if [ -f /tmp/npm-publish-ts.log ]; then
             log_error "Full log saved to: /tmp/npm-publish-ts.log"
         fi
         
-        # Cleanup
-        rm -f "$NPMRC_FILE"
         exit $EXIT_CODE
     fi
 
-    # Cleanup
-    rm -f "$NPMRC_FILE"
     echo ""
 
     log_success "TypeScript SDK publishing complete!"

@@ -57,6 +57,11 @@ sdks/**/.idea/
 sdks/**/.vscode/
 sdks/**/.DS_Store
 
+# Never commit .npmrc files (may contain tokens)
+sdks/**/.npmrc
+**/.npmrc
+!.npmrc.example
+
 # SDK test coverage
 sdks/**/coverage/
 sdks/**/.coverage
