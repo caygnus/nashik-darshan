@@ -513,62 +513,13 @@ publish-ts-sdk: verify-sdks
 # publish-dart-sdk: Publish Dart SDK to pub.dev
 # Usage: make publish-dart-sdk
 # What it does: Publishes nashik_darshan_sdk to pub.dev (public)
-# Command: dart pub publish (in sdks/dart directory)
+# Command: scripts/publish-dart-sdk.sh
 # When to use: After updating version and verifying SDK is complete
 # Authentication: Checks .env for PUB_CREDENTIALS first, falls back to pub token
 # Note: SDKs are published as public packages
 .PHONY: publish-dart-sdk
 publish-dart-sdk: verify-sdks
-	@echo "📤 Publishing Dart SDK to pub.dev (public)..."
-	@bash -c 'set -e; \
-	cd $(SDK_DART_DIR); \
-	# Load PUB_CREDENTIALS from .env if it exists \
-	if [ -f ../../.env ]; then \
-		export $$(grep -v "^#" ../../.env | grep "^PUB_CREDENTIALS=" | head -1); \
-		if [ -n "$$PUB_CREDENTIALS" ]; then \
-			echo "✓ Using PUB_CREDENTIALS from .env file"; \
-			mkdir -p ~/.pub-cache; \
-			echo "$$PUB_CREDENTIALS" > ~/.pub-cache/credentials.json; \
-			if dart pub publish --force; then \
-				echo "✅ Dart SDK published to pub.dev (public)"; \
-				exit 0; \
-			else \
-				echo "❌ dart pub publish failed. Check your credentials."; \
-				exit 1; \
-			fi; \
-		fi; \
-	fi; \
-	# Check environment variable \
-	if [ -n "$$PUB_CREDENTIALS" ]; then \
-		echo "✓ Using PUB_CREDENTIALS from environment"; \
-		mkdir -p ~/.pub-cache; \
-		echo "$$PUB_CREDENTIALS" > ~/.pub-cache/credentials.json; \
-		if dart pub publish --force; then \
-			echo "✅ Dart SDK published to pub.dev (public)"; \
-			exit 0; \
-		else \
-			echo "❌ dart pub publish failed. Check your credentials."; \
-			exit 1; \
-		fi; \
-	fi; \
-	# Fallback to pub token if credentials not found \
-	echo "⚠️  PUB_CREDENTIALS not found in .env or environment, checking pub token..."; \
-	if dart pub token list 2>/dev/null | grep -q "pub.dev"; then \
-		echo "✓ Using existing pub.dev token"; \
-		if dart pub publish --force; then \
-			echo "✅ Dart SDK published to pub.dev (public)"; \
-			exit 0; \
-		else \
-			echo "❌ dart pub publish failed. Check your token and package permissions."; \
-			exit 1; \
-		fi; \
-	else \
-		echo "❌ Not authenticated. Options:"; \
-		echo "   1. Add PUB_CREDENTIALS=your_credentials to .env file (recommended), or"; \
-		echo "   2. Set PUB_CREDENTIALS environment variable, or"; \
-		echo "   3. Run: dart pub token add https://pub.dev"; \
-		exit 1; \
-	fi'
+	@bash scripts/publish-dart-sdk.sh
 
 # publish-sdks: Publish both SDKs to their respective registries
 # Usage: make publish-sdks
