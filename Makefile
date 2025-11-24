@@ -273,34 +273,20 @@ setup-sdk-dirs:
 # generate-ts-sdk: Generate TypeScript SDK only
 # Usage: make generate-ts-sdk
 # What it does: Generates TypeScript SDK from OpenAPI spec using typescript-axios generator
-# Command: openapi-generator-cli generate -i docs/swagger/swagger.yaml -g typescript-axios -o sdks/ts
+# Command: scripts/generate-ts-sdk.sh
 # When to use: When you only need the TypeScript SDK
 .PHONY: generate-ts-sdk
 generate-ts-sdk: check-env setup-sdk-dirs
-	@echo "🔧 Generating TypeScript SDK..."
-	@bash -c 'set -e; \
-	mkdir -p $(SDK_TS_DIR); \
-	openapi-generator-cli generate \
-		-i $(OPENAPI_SPEC) \
-		-g typescript-axios \
-		-o $(SDK_TS_DIR) || (echo "❌ TypeScript SDK generation failed" && exit 1)'
-	@echo "✅ TypeScript SDK generated at $(SDK_TS_DIR)"
+	@bash scripts/generate-ts-sdk.sh
 
 # generate-dart-sdk: Generate Dart SDK only
 # Usage: make generate-dart-sdk
 # What it does: Generates Dart SDK from OpenAPI spec using dart-dio generator
-# Command: openapi-generator-cli generate -i docs/swagger/swagger.yaml -g dart-dio -o sdks/dart
+# Command: scripts/generate-dart-sdk.sh
 # When to use: When you only need the Dart SDK
 .PHONY: generate-dart-sdk
 generate-dart-sdk: check-env setup-sdk-dirs
-	@echo "🔧 Generating Dart SDK..."
-	@bash -c 'set -e; \
-	mkdir -p $(SDK_DART_DIR); \
-	openapi-generator-cli generate \
-		-i $(OPENAPI_SPEC) \
-		-g dart-dio \
-		-o $(SDK_DART_DIR) || (echo "❌ Dart SDK generation failed" && exit 1)'
-	@echo "✅ Dart SDK generated at $(SDK_DART_DIR)"
+	@bash scripts/generate-dart-sdk.sh
 
 # generate-sdks: Generate both TypeScript and Dart SDKs
 # Usage: make generate-sdks

@@ -11,10 +11,12 @@ You need an npm access token from the **@caygnus organization account** (not you
 #### Option 1: Use Access Token (Recommended)
 
 1. **Log in to npmjs.com with your @caygnus organization account**
+
    - Visit: https://www.npmjs.com/login
    - Use your @caygnus organization credentials
 
 2. **Create an Access Token**
+
    - Go to: https://www.npmjs.com/settings/caygnus/access-tokens
    - Click "Generate New Token"
    - Select "Automation" type
@@ -49,6 +51,7 @@ You need pub.dev credentials for publishing.
 #### Option 1: Use Credentials JSON (Recommended)
 
 1. **Get your pub.dev credentials**
+
    - Visit: https://pub.dev/help/account
    - Follow instructions to get your credentials JSON
 
@@ -118,6 +121,7 @@ make publish-dart-sdk-dry-run
 ### npm 404 Error When Publishing
 
 If you see:
+
 ```
 npm error 404 Not Found - PUT https://registry.npmjs.org/@caygnus%2fnashik-darshan-sdk
 ```
@@ -125,17 +129,20 @@ npm error 404 Not Found - PUT https://registry.npmjs.org/@caygnus%2fnashik-darsh
 **Cause:** You're logged in with the wrong npm account.
 
 **Solution:**
+
 1. Make sure `NPM_TOKEN` in your `.env` file is from the **@caygnus organization account**
 2. Or switch npm accounts: `npm logout && npm login` (use @caygnus credentials)
 
 ### Authentication Issues
 
 **For npm:**
+
 - Verify token is from @caygnus organization: https://www.npmjs.com/settings/caygnus/access-tokens
 - Check token has "Publish" permissions
 - Ensure token hasn't expired
 
 **For pub.dev:**
+
 - Verify credentials JSON is valid
 - Check token hasn't expired
 - Ensure you have publish permissions
@@ -143,6 +150,7 @@ npm error 404 Not Found - PUT https://registry.npmjs.org/@caygnus%2fnashik-darsh
 ### Package Already Exists
 
 If you get an error that the package already exists:
+
 - Update the version number in `sdks/version.json`
 - Run `make version-sdks` to update both SDKs
 - Try publishing again
@@ -159,7 +167,8 @@ NPM_TOKEN=npm_your_token_here
 PUB_CREDENTIALS='{"accessToken":"your_token_here"}'
 ```
 
-**Important:** 
+**Important:**
+
 - Never commit `.env` to git (it's in `.gitignore`)
 - Use `.env.example` as a template
 - Keep tokens secure and rotate them regularly
@@ -177,10 +186,12 @@ Versions are tracked in `sdks/version.json`. This file is committed to git and s
 After successful publishing:
 
 1. **Verify on npm/pub.dev**
+
    - npm: https://www.npmjs.com/package/@caygnus/nashik-darshan-sdk
    - pub.dev: https://pub.dev/packages/nashik_darshan_sdk
 
 2. **Update Documentation**
+
    - Update installation instructions if needed
    - Update changelog/release notes
 
@@ -195,6 +206,7 @@ After successful publishing:
 For automated publishing via GitHub Actions, see `.github/workflows/publish-sdks.yml`.
 
 The workflow uses secrets:
+
 - `NPM_TOKEN`: npm access token from @caygnus organization
 - `PUB_CREDENTIALS`: pub.dev credentials JSON
 
