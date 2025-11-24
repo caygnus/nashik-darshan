@@ -512,9 +512,11 @@ make clean-sdks           # Clean generated SDK directories
 make verify-sdks          # Verify generated SDKs are complete
 
 # SDK Version Management
-make version-sdks VERSION=1.0.1    # Update both SDK versions
-make version-ts-sdk VERSION=1.0.1  # Update TypeScript SDK version
-make version-dart-sdk VERSION=1.0.1 # Update Dart SDK version
+make show-sdk-version                 # Show current SDK versions from sdks/version.json
+make version-sdks [VERSION=1.0.1]    # Update both SDK versions (reads from sdks/version.json if VERSION not provided)
+make version-ts-sdk [VERSION=1.0.1]  # Update TypeScript SDK version (reads from sdks/version.json if VERSION not provided)
+make version-dart-sdk [VERSION=1.0.1] # Update Dart SDK version (reads from sdks/version.json if VERSION not provided)
+# Note: Versions are tracked in sdks/version.json - edit that file or pass VERSION via CLI
 
 # SDK Publishing
 make publish-sdks                 # Publish both SDKs to registries

@@ -80,3 +80,6 @@ sdks/ts/*.tsbuildinfo
 # Dart specific
 sdks/dart/.dart_tool/
 sdks/dart/pubspec.lock
+
+# Keep version.json for version tracking
+!sdks/version.json

@@ -207,6 +207,9 @@ OPENAPI_SPEC := docs/swagger/swagger.yaml
 SDK_TS_DIR := sdks/ts
 SDK_DART_DIR := sdks/dart
 
+# SDK version tracking file
+SDK_VERSION_FILE := sdks/version.json
+
 # install-deps: Install SDK generation dependencies
 # Usage: make install-deps
 # What it does: Installs openapi-generator-cli globally via npm if missing
@@ -316,6 +319,21 @@ clean-sdks:
 	@rm -rf $(SDK_TS_DIR) $(SDK_DART_DIR)
 	@echo "✅ SDK directories cleaned"
 
+# show-sdk-version: Display current SDK versions from version.json
+# Usage: make show-sdk-version
+# What it does: Shows current versions tracked in sdks/version.json
+# Command: Reads and displays version.json contents
+# When to use: To check current SDK versions before updating
+.PHONY: show-sdk-version
+show-sdk-version:
+	@echo "📦 Current SDK Versions:"
+	@if [ -f $(SDK_VERSION_FILE) ]; then \
+		node -e "const fs=require('fs'); const v=JSON.parse(fs.readFileSync('$(SDK_VERSION_FILE)')); console.log('  Version:', v.version); console.log('  TypeScript:', v.typescript || v.version); console.log('  Dart:', v.dart || v.version); console.log('  Last Updated:', v.last_updated || 'N/A');"; \
+	else \
+		echo "  ❌ $(SDK_VERSION_FILE) not found"; \
+		echo "  Create it or use: make version-sdks VERSION=1.0.0"; \
+	fi
+
 # verify-sdks: Verify generated SDKs are complete
 # Usage: make verify-sdks
 # What it does: Checks if SDK directories exist and contain required files
@@ -342,55 +360,84 @@ verify-sdks:
 	echo "✅ SDK verification complete"'
 
 # version-ts-sdk: Update TypeScript SDK version
-# Usage: make version-ts-sdk VERSION=1.0.1
-# What it does: Updates version in sdks/ts/package.json
-# Command: npm version or node script to update package.json
+# Usage: make version-ts-sdk [VERSION=1.0.1]
+# What it does: Updates version in sdks/ts/package.json and sdks/version.json
+# Command: Reads from sdks/version.json if VERSION not provided, otherwise uses VERSION
 # When to use: Before publishing a new TypeScript SDK version
+# Note: If VERSION is not provided, reads from sdks/version.json
 .PHONY: version-ts-sdk
 version-ts-sdk:
-	@echo "📦 Updating TypeScript SDK version..."
-	@if [ -z "$(VERSION)" ]; then \
-		echo "❌ VERSION is required. Usage: make version-ts-sdk VERSION=1.0.1"; \
-		exit 1; \
-	fi
 	@bash -c 'set -e; \
+	if [ -z "$(VERSION)" ]; then \
+		if [ -f $(SDK_VERSION_FILE) ]; then \
+			VERSION=$$(node -e "const fs=require(\"fs\"); const v=JSON.parse(fs.readFileSync(\"$(SDK_VERSION_FILE)\")); console.log(v.typescript || v.version);"); \
+			echo "📦 Using version from $(SDK_VERSION_FILE): $$VERSION"; \
+		else \
+			echo "❌ VERSION is required. Usage: make version-ts-sdk VERSION=1.0.1"; \
+			echo "   Or create $(SDK_VERSION_FILE) with version information"; \
+			exit 1; \
+		fi; \
+	else \
+		VERSION="$(VERSION)"; \
+	fi; \
+	echo "📦 Updating TypeScript SDK version to $$VERSION..."; \
 	cd $(SDK_TS_DIR); \
-	npm version $(VERSION) --no-git-tag-version || \
-	(node -e "const fs=require(\"fs\"); const pkg=JSON.parse(fs.readFileSync(\"package.json\")); pkg.version=\"$(VERSION)\"; fs.writeFileSync(\"package.json\", JSON.stringify(pkg, null, 2));")'
-	@echo "✅ TypeScript SDK version updated to $(VERSION)"
+	node -e "const fs=require(\"fs\"); const pkg=JSON.parse(fs.readFileSync(\"package.json\")); pkg.version=\"$$VERSION\"; fs.writeFileSync(\"package.json\", JSON.stringify(pkg, null, 2));"; \
+	node -e "const fs=require(\"fs\"); const v=JSON.parse(fs.readFileSync(\"../version.json\")); v.typescript=\"$$VERSION\"; v.version=\"$$VERSION\"; v.last_updated=new Date().toISOString(); fs.writeFileSync(\"../version.json\", JSON.stringify(v, null, 2));"; \
+	echo "✅ TypeScript SDK version updated to $$VERSION"'
 
 # version-dart-sdk: Update Dart SDK version
-# Usage: make version-dart-sdk VERSION=1.0.1
-# What it does: Updates version in sdks/dart/pubspec.yaml
-# Command: sed to replace version in pubspec.yaml
+# Usage: make version-dart-sdk [VERSION=1.0.1]
+# What it does: Updates version in sdks/dart/pubspec.yaml and sdks/version.json
+# Command: Reads from sdks/version.json if VERSION not provided, otherwise uses VERSION
 # When to use: Before publishing a new Dart SDK version
+# Note: If VERSION is not provided, reads from sdks/version.json
 .PHONY: version-dart-sdk
 version-dart-sdk:
-	@echo "📦 Updating Dart SDK version..."
-	@if [ -z "$(VERSION)" ]; then \
-		echo "❌ VERSION is required. Usage: make version-dart-sdk VERSION=1.0.1"; \
-		exit 1; \
-	fi
 	@bash -c 'set -e; \
+	if [ -z "$(VERSION)" ]; then \
+		if [ -f $(SDK_VERSION_FILE) ]; then \
+			VERSION=$$(node -e "const fs=require(\"fs\"); const v=JSON.parse(fs.readFileSync(\"$(SDK_VERSION_FILE)\")); console.log(v.dart || v.version);"); \
+			echo "📦 Using version from $(SDK_VERSION_FILE): $$VERSION"; \
+		else \
+			echo "❌ VERSION is required. Usage: make version-dart-sdk VERSION=1.0.1"; \
+			echo "   Or create $(SDK_VERSION_FILE) with version information"; \
+			exit 1; \
+		fi; \
+	else \
+		VERSION="$(VERSION)"; \
+	fi; \
+	echo "📦 Updating Dart SDK version to $$VERSION..."; \
 	cd $(SDK_DART_DIR); \
-	sed -i.bak "s/^version: .*/version: $(VERSION)/" pubspec.yaml && rm -f pubspec.yaml.bak'
-	@echo "✅ Dart SDK version updated to $(VERSION)"
+	sed -i.bak "s/^version: .*/version: $$VERSION/" pubspec.yaml && rm -f pubspec.yaml.bak; \
+	node -e "const fs=require(\"fs\"); const v=JSON.parse(fs.readFileSync(\"../version.json\")); v.dart=\"$$VERSION\"; v.version=\"$$VERSION\"; v.last_updated=new Date().toISOString(); fs.writeFileSync(\"../version.json\", JSON.stringify(v, null, 2));"; \
+	echo "✅ Dart SDK version updated to $$VERSION"'
 
 # version-sdks: Update both SDK versions to the same version
-# Usage: make version-sdks VERSION=1.0.1
-# What it does: Updates version in both TypeScript and Dart SDKs
+# Usage: make version-sdks [VERSION=1.0.1]
+# What it does: Updates version in both TypeScript and Dart SDKs and sdks/version.json
 # Commands: Runs version-ts-sdk and version-dart-sdk
 # When to use: Before publishing both SDKs with the same version number
+# Note: If VERSION is not provided, reads from sdks/version.json
 .PHONY: version-sdks
 version-sdks:
-	@echo "📦 Updating SDK versions..."
-	@if [ -z "$(VERSION)" ]; then \
-		echo "❌ VERSION is required. Usage: make version-sdks VERSION=1.0.1"; \
-		exit 1; \
-	fi
-	@$(MAKE) version-ts-sdk VERSION=$(VERSION)
-	@$(MAKE) version-dart-sdk VERSION=$(VERSION)
-	@echo "✅ All SDK versions updated to $(VERSION)"
+	@bash -c 'set -e; \
+	if [ -z "$(VERSION)" ]; then \
+		if [ -f $(SDK_VERSION_FILE) ]; then \
+			VERSION=$$(node -e "const fs=require(\"fs\"); const v=JSON.parse(fs.readFileSync(\"$(SDK_VERSION_FILE)\")); console.log(v.version);"); \
+			echo "📦 Using version from $(SDK_VERSION_FILE): $$VERSION"; \
+		else \
+			echo "❌ VERSION is required. Usage: make version-sdks VERSION=1.0.1"; \
+			echo "   Or create $(SDK_VERSION_FILE) with version information"; \
+			exit 1; \
+		fi; \
+	else \
+		VERSION="$(VERSION)"; \
+	fi; \
+	echo "📦 Updating both SDK versions to $$VERSION..."; \
+	$(MAKE) version-ts-sdk VERSION=$$VERSION; \
+	$(MAKE) version-dart-sdk VERSION=$$VERSION; \
+	echo "✅ All SDK versions updated to $$VERSION"'
 
 # publish-ts-sdk: Publish TypeScript SDK to npm
 # Usage: make publish-ts-sdk

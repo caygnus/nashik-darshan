@@ -83,7 +83,17 @@ make generate-sdks
 
 ### Step 3: Update Versions
 
-Update version numbers for both SDKs:
+Update version numbers for both SDKs. You can either:
+
+**Option 1: Update version.json file (Recommended)**
+
+```bash
+# Edit sdks/version.json and set the version
+# Then run without VERSION parameter:
+make version-sdks
+```
+
+**Option 2: Pass version via command line**
 
 ```bash
 # Update both SDKs to the same version
@@ -93,6 +103,12 @@ make version-sdks VERSION=1.0.1
 make version-ts-sdk VERSION=1.0.1
 make version-dart-sdk VERSION=1.0.1
 ```
+
+**Version Tracking:**
+
+- Versions are tracked in `sdks/version.json`
+- If VERSION is not provided, the command reads from `version.json`
+- This makes version management simpler - just update the JSON file
 
 **Version Format**: Follow [Semantic Versioning](https://semver.org/):
 

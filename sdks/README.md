@@ -24,12 +24,19 @@ make generate-sdks
 See [PUBLISHING.md](./PUBLISHING.md) for detailed publishing instructions.
 
 ```bash
-# Update versions
-make version-sdks VERSION=1.0.1
+# Update versions (reads from sdks/version.json if VERSION not provided)
+make version-sdks
+# Or specify version: make version-sdks VERSION=1.0.1
 
 # Publish both SDKs
 make publish-sdks
 ```
+
+**Version Management:**
+
+- Versions are tracked in `sdks/version.json`
+- Edit `sdks/version.json` to update version, or pass `VERSION=1.0.1` via CLI
+- This makes version management simple and centralized
 
 ## Generation Workflow
 

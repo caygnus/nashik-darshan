@@ -151,11 +151,13 @@ make run
 
 ### SDK Version Management
 
-| Command                               | Description                   | Example                               |
-| ------------------------------------- | ----------------------------- | ------------------------------------- |
-| `make version-sdks VERSION=x.y.z`     | Update both SDK versions      | `make version-sdks VERSION=1.0.1`     |
-| `make version-ts-sdk VERSION=x.y.z`   | Update TypeScript SDK version | `make version-ts-sdk VERSION=1.0.1`   |
-| `make version-dart-sdk VERSION=x.y.z` | Update Dart SDK version       | `make version-dart-sdk VERSION=1.0.1` |
+| Command                                 | Description                   | Example                                                          |
+| --------------------------------------- | ----------------------------- | ---------------------------------------------------------------- |
+| `make version-sdks [VERSION=x.y.z]`     | Update both SDK versions      | `make version-sdks` or `make version-sdks VERSION=1.0.1`         |
+| `make version-ts-sdk [VERSION=x.y.z]`   | Update TypeScript SDK version | `make version-ts-sdk` or `make version-ts-sdk VERSION=1.0.1`     |
+| `make version-dart-sdk [VERSION=x.y.z]` | Update Dart SDK version       | `make version-dart-sdk` or `make version-dart-sdk VERSION=1.0.1` |
+
+**Note:** Versions are tracked in `sdks/version.json`. If VERSION is not provided, the command reads from this file. This makes version management simpler - just edit `sdks/version.json` or pass VERSION via CLI.
 
 ### SDK Publishing
 
