@@ -30,8 +30,9 @@ generate-ent:
 # generate-keys: Generate encrypted RSA key pair for production
 # Usage: make generate-keys
 # What it does: Creates encrypted RSA keys for production use
-# Command: ./scripts/generate-keys.sh
+# Command: ./scripts/generate-keys.sh (script must be created)
 # When to use: Before deploying to production
+# Note: Script does not exist yet - needs to be implemented
 .PHONY: generate-keys
 generate-keys:
 	@echo "Generating encrypted RSA key pair for production..."
@@ -41,8 +42,9 @@ generate-keys:
 # generate-dev-keys: Generate unencrypted RSA key pair for development
 # Usage: make generate-dev-keys
 # What it does: Creates unencrypted RSA keys for local development
-# Command: ./scripts/generate-dev-keys.sh
+# Command: ./scripts/generate-dev-keys.sh (script must be created)
 # When to use: First time setup or local development
+# Note: Script does not exist yet - needs to be implemented
 .PHONY: generate-dev-keys
 generate-dev-keys:
 	@echo "Generating unencrypted RSA key pair for development..."
