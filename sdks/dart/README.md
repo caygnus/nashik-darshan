@@ -496,7 +496,7 @@ dev_dependencies:
 
 ```dart
 // lib/core/api/api_client.dart
-import 'package:nashik_darshan_sdk/openapi.dart';
+import 'package:nashik_darshan_sdk/nashik_darshan_sdk.dart';
 import 'package:dio/dio.dart';
 
 class ApiClient {
@@ -646,7 +646,7 @@ class PlaceModel with _$PlaceModel {
 
 ```dart
 // lib/features/places/data/datasources/places_remote_datasource.dart
-import 'package:nashik_darshan_sdk/openapi.dart';
+import 'package:nashik_darshan_sdk/nashik_darshan_sdk.dart';
 import 'package:nashik_darshan_sdk/api/place_api.dart';
 import 'package:nashik_darshan_sdk/model/dto_list_places_response.dart';
 import '../models/place_model.dart';
