@@ -157,6 +157,55 @@ main() {
         log_info "No package import fixes needed - all files already use correct package name"
     fi
 
+    # Rename openapi.dart to match package name (pub.dev requirement)
+    log_step "Renaming main library file to match package name..."
+    if [ -f "$SDK_DIR/lib/openapi.dart" ]; then
+        mv "$SDK_DIR/lib/openapi.dart" "$SDK_DIR/lib/nashik_darshan_sdk.dart"
+        log_success "Renamed lib/openapi.dart to lib/nashik_darshan_sdk.dart"
+        
+        # Update the export in the file itself if it exists
+        if grep -q "export 'package:openapi" "$SDK_DIR/lib/nashik_darshan_sdk.dart" 2>/dev/null; then
+            if [[ "$OSTYPE" == "darwin"* ]]; then
+                sed -i '' 's/export '\''package:openapi/export '\''package:nashik_darshan_sdk/g' "$SDK_DIR/lib/nashik_darshan_sdk.dart"
+            else
+                sed -i 's/export '\''package:openapi/export '\''package:nashik_darshan_sdk/g' "$SDK_DIR/lib/nashik_darshan_sdk.dart"
+            fi
+        fi
+    else
+        log_warn "lib/openapi.dart not found (may have been renamed already)"
+    fi
+    echo ""
+
+    # Run build_runner to generate .g.dart files (required for built_value)
+    log_step "Generating code with build_runner..."
+    cd "$SDK_DIR"
+    
+    if ! command -v dart &> /dev/null; then
+        log_warn "Dart not found. Skipping build_runner. Run 'dart pub run build_runner build' manually."
+    else
+        log_info "Running: dart pub get"
+        if dart pub get 2>&1 | tee /tmp/dart-pub-get.log; then
+            log_success "Dependencies installed"
+        else
+            log_warn "dart pub get had issues, but continuing..."
+        fi
+        
+        log_info "Running: dart pub run build_runner build --delete-conflicting-outputs"
+        if dart pub run build_runner build --delete-conflicting-outputs 2>&1 | tee /tmp/build-runner.log; then
+            log_success "Code generation completed"
+        else
+            EXIT_CODE=$?
+            log_warn "build_runner had issues (exit code: $EXIT_CODE)"
+            log_warn "You may need to run 'dart pub run build_runner build' manually"
+            if [ -f /tmp/build-runner.log ]; then
+                log_warn "Build runner log saved to: /tmp/build-runner.log"
+            fi
+        fi
+    fi
+    
+    cd "$PROJECT_ROOT"
+    echo ""
+
     # Verify generated files
     echo ""
     log_step "Verifying generated SDK files"
@@ -169,6 +218,14 @@ main() {
     
     FILE_COUNT=$(find "$SDK_DIR/lib" -type f -name "*.dart" 2>/dev/null | wc -l | tr -d ' ' || echo "0")
     log_success "Generated $FILE_COUNT Dart files"
+    
+    # Check for generated .g.dart files
+    G_FILE_COUNT=$(find "$SDK_DIR/lib" -type f -name "*.g.dart" 2>/dev/null | wc -l | tr -d ' ' || echo "0")
+    if [ "$G_FILE_COUNT" -gt 0 ]; then
+        log_success "Generated $G_FILE_COUNT .g.dart files"
+    else
+        log_warn "No .g.dart files found. Run 'dart pub run build_runner build' if needed."
+    fi
     
     # Show directory structure
     echo ""
