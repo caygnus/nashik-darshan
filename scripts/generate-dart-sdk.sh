@@ -87,11 +87,9 @@ main() {
     mkdir -p "$SDK_DIR"
     log_success "SDK directory ready: $SDK_DIR"
     
-    # Copy LICENSE if it exists
-    if [ -f "$PROJECT_ROOT/sdks/LICENSE" ]; then
-        cp "$PROJECT_ROOT/sdks/LICENSE" "$SDK_DIR/LICENSE"
-        log_success "LICENSE file copied to SDK directory"
-    fi
+    # Copy LICENSE - use Dart-specific MIT license (not the proprietary one)
+    # We copy it AFTER generation to ensure it's not overwritten
+    # The .openapi-generator-ignore should prevent overwriting, but we ensure it's correct
     
     # Copy README.md and CHANGELOG.md AFTER generation to preserve custom versions
     # These are listed in .openapi-generator-ignore but we copy them explicitly
