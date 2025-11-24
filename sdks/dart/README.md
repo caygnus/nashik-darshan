@@ -30,7 +30,7 @@ import 'package:nashik_darshan_sdk/openapi.dart';
 
 // Initialize the SDK
 final openapi = Openapi(
-  basePathOverride: 'https://api.nashikdarshan.com/api/v1', // Your API base URL
+  basePathOverride: 'https://api.example.com/api/v1', // Your API base URL
 );
 
 // Access API clients
@@ -50,7 +50,7 @@ final dio = Dio();
 dio.options.headers['Authorization'] = 'Bearer your-access-token-here';
 
 final openapi = Openapi(
-  basePathOverride: 'https://api.nashikdarshan.com/api/v1',
+  basePathOverride: 'https://api.example.com/api/v1',
   dio: dio,
 );
 ```
@@ -62,7 +62,7 @@ import 'package:nashik_darshan_sdk/openapi.dart';
 import 'package:nashik_darshan_sdk/api/auth_api.dart';
 
 final openapi = Openapi(
-  basePathOverride: 'https://api.nashikdarshan.com/api/v1',
+  basePathOverride: 'https://api.example.com/api/v1',
 );
 
 final authApi = openapi.getAuthApi();
@@ -90,7 +90,7 @@ import 'package:nashik_darshan_sdk/openapi.dart';
 import 'package:nashik_darshan_sdk/api/place_api.dart';
 
 final openapi = Openapi(
-  basePathOverride: 'https://api.nashikdarshan.com/api/v1',
+  basePathOverride: 'https://api.example.com/api/v1',
 );
 
 final placeApi = openapi.getPlaceApi();
@@ -102,7 +102,7 @@ try {
     offset: 0,
     status: 'published',
   );
-  
+
   print('Total places: ${response.data.pagination?.total}');
   response.data.items?.forEach((place) {
     print('${place.title} - ${place.placeType}');
@@ -119,7 +119,7 @@ import 'package:nashik_darshan_sdk/openapi.dart';
 import 'package:nashik_darshan_sdk/api/place_api.dart';
 
 final openapi = Openapi(
-  basePathOverride: 'https://api.nashikdarshan.com/api/v1',
+  basePathOverride: 'https://api.example.com/api/v1',
 );
 
 final placeApi = openapi.getPlaceApi();
@@ -132,7 +132,7 @@ try {
     minRating: 4.0,
     limit: 20,
   );
-  
+
   response.data.items?.forEach((place) {
     print('${place.title} - Rating: ${place.ratingAvg}/5');
   });
@@ -148,7 +148,7 @@ import 'package:nashik_darshan_sdk/openapi.dart';
 import 'package:nashik_darshan_sdk/api/feed_api.dart';
 
 final openapi = Openapi(
-  basePathOverride: 'https://api.nashikdarshan.com/api/v1',
+  basePathOverride: 'https://api.example.com/api/v1',
 );
 
 final feedApi = openapi.getFeedApi();
@@ -175,7 +175,7 @@ final feedRequest = DtoFeedRequest((b) => b
 
 try {
   final response = await feedApi.feedPost(feedRequest);
-  
+
   response.data.sections?.forEach((section) {
     print('Section: ${section.type}');
     section.items?.forEach((item) {
@@ -258,8 +258,8 @@ For production, configure the API base URL via environment variables:
 ```dart
 import 'dart:io';
 
-final apiUrl = Platform.environment['NASHIK_DARSHAN_API_URL'] ?? 
-               'https://api.nashikdarshan.com/api/v1';
+final apiUrl = Platform.environment['NASHIK_DARSHAN_API_URL'] ??
+               'https://api.example.com/api/v1';
 
 final openapi = Openapi(
   basePathOverride: apiUrl,
