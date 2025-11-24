@@ -1147,7 +1147,9 @@ nashik-darshan-v2-be/
 │   │   ├── swagger.json         # Swagger 2.0 spec
 │   │   ├── swagger-3-0.json     # OpenAPI 3.0 spec
 │   │   └── swagger.yaml         # YAML spec
-│   └── GEOGRAPHY_COMPARISON.md   # Technical documentation
+│   └── prds/                      # Product requirement documents
+│       ├── events.md
+│       └── HOTELS_API_REFERENCE.md
 │
 ├── scripts/                      # Utility scripts
 │   ├── assert.sh                 # Environment assertion script
