@@ -15,21 +15,21 @@ import (
 
 // CreateEventRequest represents a request to create an event
 type CreateEventRequest struct {
-	Slug          string                 `json:"slug" binding:"required,min=3,max=100"`
-	Type          types.EventType        `json:"type" binding:"required"`
-	Title         string                 `json:"title" binding:"required,min=2,max=255"`
-	Subtitle      *string                `json:"subtitle,omitempty" binding:"omitempty,max=500"`
-	Description   *string                `json:"description,omitempty" binding:"omitempty,max=10000"`
-	PlaceID       *string                `json:"place_id,omitempty"`
-	StartDate     time.Time              `json:"start_date"` // Required, defaults to now() if zero value
-	EndDate       *time.Time             `json:"end_date,omitempty"`
-	CoverImageURL *string                `json:"cover_image_url,omitempty" binding:"omitempty,url,max=500"`
-	Images        []string               `json:"images,omitempty"`
-	Tags          []string               `json:"tags,omitempty"`
-	Metadata      map[string]interface{} `json:"metadata,omitempty"`
-	Latitude      *decimal.Decimal       `json:"latitude,omitempty"`
-	Longitude     *decimal.Decimal       `json:"longitude,omitempty"`
-	LocationName  *string                `json:"location_name,omitempty" binding:"omitempty,max=255"`
+	Slug          string            `json:"slug" binding:"required,min=3,max=100"`
+	Type          types.EventType   `json:"type" binding:"required"`
+	Title         string            `json:"title" binding:"required,min=2,max=255"`
+	Subtitle      *string           `json:"subtitle,omitempty" binding:"omitempty,max=500"`
+	Description   *string           `json:"description,omitempty" binding:"omitempty,max=10000"`
+	PlaceID       *string           `json:"place_id,omitempty"`
+	StartDate     time.Time         `json:"start_date"` // Required, defaults to now() if zero value
+	EndDate       *time.Time        `json:"end_date,omitempty"`
+	CoverImageURL *string           `json:"cover_image_url,omitempty" binding:"omitempty,url,max=500"`
+	Images        []string          `json:"images,omitempty"`
+	Tags          []string          `json:"tags,omitempty"`
+	Metadata      map[string]string `json:"metadata,omitempty"`
+	Latitude      *decimal.Decimal  `json:"latitude,omitempty"`
+	Longitude     *decimal.Decimal  `json:"longitude,omitempty"`
+	LocationName  *string           `json:"location_name,omitempty" binding:"omitempty,max=255"`
 }
 
 // Validate validates the CreateEventRequest
@@ -110,14 +110,12 @@ func (req *CreateEventRequest) ToEvent(ctx context.Context) (*eventdomain.Event,
 	// Status is always draft for new events (handled internally)
 	baseModel.Status = types.StatusDraft
 
-	// Convert metadata from map[string]interface{} to *types.Metadata
+	// Convert metadata from map[string]string to *types.Metadata
 	var metadata *types.Metadata
 	if req.Metadata != nil {
 		md := make(types.Metadata)
 		for k, v := range req.Metadata {
-			if strVal, ok := v.(string); ok {
-				md[k] = strVal
-			}
+			md[k] = v
 		}
 		metadata = &md
 	}
@@ -147,20 +145,20 @@ func (req *CreateEventRequest) ToEvent(ctx context.Context) (*eventdomain.Event,
 
 // UpdateEventRequest represents a request to update an event
 type UpdateEventRequest struct {
-	Type          *types.EventType       `json:"type,omitempty"`
-	Title         *string                `json:"title,omitempty" binding:"omitempty,min=2,max=255"`
-	Subtitle      *string                `json:"subtitle,omitempty" binding:"omitempty,max=500"`
-	Description   *string                `json:"description,omitempty" binding:"omitempty,max=10000"`
-	PlaceID       *string                `json:"place_id,omitempty"`
-	StartDate     *time.Time             `json:"start_date,omitempty"`
-	EndDate       *time.Time             `json:"end_date,omitempty"`
-	CoverImageURL *string                `json:"cover_image_url,omitempty" binding:"omitempty,url"`
-	Images        []string               `json:"images,omitempty"`
-	Tags          []string               `json:"tags,omitempty"`
-	Metadata      map[string]interface{} `json:"metadata,omitempty"`
-	Latitude      *decimal.Decimal       `json:"latitude,omitempty"`
-	Longitude     *decimal.Decimal       `json:"longitude,omitempty"`
-	LocationName  *string                `json:"location_name,omitempty" binding:"omitempty,max=255"`
+	Type          *types.EventType  `json:"type,omitempty"`
+	Title         *string           `json:"title,omitempty" binding:"omitempty,min=2,max=255"`
+	Subtitle      *string           `json:"subtitle,omitempty" binding:"omitempty,max=500"`
+	Description   *string           `json:"description,omitempty" binding:"omitempty,max=10000"`
+	PlaceID       *string           `json:"place_id,omitempty"`
+	StartDate     *time.Time        `json:"start_date,omitempty"`
+	EndDate       *time.Time        `json:"end_date,omitempty"`
+	CoverImageURL *string           `json:"cover_image_url,omitempty" binding:"omitempty,url"`
+	Images        []string          `json:"images,omitempty"`
+	Tags          []string          `json:"tags,omitempty"`
+	Metadata      map[string]string `json:"metadata,omitempty"`
+	Latitude      *decimal.Decimal  `json:"latitude,omitempty"`
+	Longitude     *decimal.Decimal  `json:"longitude,omitempty"`
+	LocationName  *string           `json:"location_name,omitempty" binding:"omitempty,max=255"`
 }
 
 // Validate validates the UpdateEventRequest
@@ -239,9 +237,7 @@ func (req *UpdateEventRequest) ApplyToEvent(ctx context.Context, event *eventdom
 	if req.Metadata != nil {
 		md := make(types.Metadata)
 		for k, v := range req.Metadata {
-			if strVal, ok := v.(string); ok {
-				md[k] = strVal
-			}
+			md[k] = v
 		}
 		event.Metadata = &md
 	}
@@ -288,15 +284,15 @@ func NewListEventsResponse(events []*eventdomain.Event, total, limit, offset int
 
 // CreateOccurrenceRequest represents a request to create an occurrence
 type CreateOccurrenceRequest struct {
-	EventID        string                 `json:"event_id" binding:"required"`
-	RecurrenceType types.RecurrenceType   `json:"recurrence_type" binding:"required"`
-	StartTime      *time.Time             `json:"start_time,omitempty"`      // ISO 8601 format, optional/nillable
-	EndTime        *time.Time             `json:"end_time,omitempty"`        // ISO 8601 format, optional/nillable
-	DayOfWeek      *int                   `json:"day_of_week,omitempty"`     // 0-6 for WEEKLY
-	DayOfMonth     *int                   `json:"day_of_month,omitempty"`    // 1-31 for MONTHLY/YEARLY
-	MonthOfYear    *int                   `json:"month_of_year,omitempty"`   // 1-12 for YEARLY
-	ExceptionDates []string               `json:"exception_dates,omitempty"` // ["2025-12-25", ...]
-	Metadata       map[string]interface{} `json:"metadata,omitempty"`
+	EventID        string               `json:"event_id" binding:"required"`
+	RecurrenceType types.RecurrenceType `json:"recurrence_type" binding:"required"`
+	StartTime      *time.Time           `json:"start_time,omitempty"`      // ISO 8601 format, optional/nillable
+	EndTime        *time.Time           `json:"end_time,omitempty"`        // ISO 8601 format, optional/nillable
+	DayOfWeek      *int                 `json:"day_of_week,omitempty"`     // 0-6 for WEEKLY
+	DayOfMonth     *int                 `json:"day_of_month,omitempty"`    // 1-31 for MONTHLY/YEARLY
+	MonthOfYear    *int                 `json:"month_of_year,omitempty"`   // 1-12 for YEARLY
+	ExceptionDates []string             `json:"exception_dates,omitempty"` // ["2025-12-25", ...]
+	Metadata       map[string]string    `json:"metadata,omitempty"`
 }
 
 // Validate validates the CreateOccurrenceRequest
@@ -411,14 +407,12 @@ func (req *CreateOccurrenceRequest) ToOccurrence(ctx context.Context) (*eventdom
 	// Status is always published for new occurrences (active/published state)
 	baseModel.Status = types.StatusPublished
 
-	// Convert metadata from map[string]interface{} to *types.Metadata
+	// Convert metadata from map[string]string to *types.Metadata
 	var metadata *types.Metadata
 	if req.Metadata != nil {
 		md := make(types.Metadata)
 		for k, v := range req.Metadata {
-			if strVal, ok := v.(string); ok {
-				md[k] = strVal
-			}
+			md[k] = v
 		}
 		metadata = &md
 	}
@@ -441,14 +435,14 @@ func (req *CreateOccurrenceRequest) ToOccurrence(ctx context.Context) (*eventdom
 
 // UpdateOccurrenceRequest represents a request to update an occurrence
 type UpdateOccurrenceRequest struct {
-	RecurrenceType *types.RecurrenceType  `json:"recurrence_type,omitempty"`
-	StartTime      *time.Time             `json:"start_time,omitempty"` // ISO 8601 format, optional/nillable
-	EndTime        *time.Time             `json:"end_time,omitempty"`   // ISO 8601 format, optional/nillable
-	DayOfWeek      *int                   `json:"day_of_week,omitempty"`
-	DayOfMonth     *int                   `json:"day_of_month,omitempty"`
-	MonthOfYear    *int                   `json:"month_of_year,omitempty"`
-	ExceptionDates []string               `json:"exception_dates,omitempty"`
-	Metadata       map[string]interface{} `json:"metadata,omitempty"`
+	RecurrenceType *types.RecurrenceType `json:"recurrence_type,omitempty"`
+	StartTime      *time.Time            `json:"start_time,omitempty"` // ISO 8601 format, optional/nillable
+	EndTime        *time.Time            `json:"end_time,omitempty"`   // ISO 8601 format, optional/nillable
+	DayOfWeek      *int                  `json:"day_of_week,omitempty"`
+	DayOfMonth     *int                  `json:"day_of_month,omitempty"`
+	MonthOfYear    *int                  `json:"month_of_year,omitempty"`
+	ExceptionDates []string              `json:"exception_dates,omitempty"`
+	Metadata       map[string]string     `json:"metadata,omitempty"`
 }
 
 // Validate validates the UpdateOccurrenceRequest
@@ -536,9 +530,7 @@ func (req *UpdateOccurrenceRequest) ApplyToOccurrence(ctx context.Context, occ *
 	if req.Metadata != nil {
 		md := make(types.Metadata)
 		for k, v := range req.Metadata {
-			if strVal, ok := v.(string); ok {
-				md[k] = strVal
-			}
+			md[k] = v
 		}
 		occ.Metadata = &md
 	}
