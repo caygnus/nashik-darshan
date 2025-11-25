@@ -679,49 +679,113 @@ func (r *EventRepository) IncrementInterestedCount(ctx context.Context, id strin
 
 // ========== Query Options ==========
 
-type EventQueryOptions struct{}
+// EventQuery type alias for better readability
+type EventQuery = *ent.EventQuery
 
-func (opts EventQueryOptions) ApplyBaseFilters(ctx context.Context, query *ent.EventQuery, filter *types.EventFilter) *ent.EventQuery {
+// EventQueryOptions implements query options for event queries
+type EventQueryOptions struct {
+	QueryOptionsHelper
+}
+
+// Ensure EventQueryOptions implements EntityQueryOptions interface
+var _ EntityQueryOptions[EventQuery, *types.EventFilter] = (*EventQueryOptions)(nil)
+
+func (o EventQueryOptions) ApplyStatusFilter(query EventQuery, status string) EventQuery {
+	if status == "" {
+		return query.Where(event.StatusNotIn(string(types.StatusDeleted)))
+	}
+	return query.Where(event.Status(status))
+}
+
+func (o EventQueryOptions) ApplySortFilter(query EventQuery, field string, order string) EventQuery {
+	field, order = o.ValidateSort(field, order)
+	fieldName := o.GetFieldName(field)
+
+	// Apply sorting with secondary sort by ID for consistency
+	if order == types.OrderDesc {
+		return query.Order(ent.Desc(fieldName), ent.Asc(event.FieldID))
+	}
+	return query.Order(ent.Asc(fieldName), ent.Asc(event.FieldID))
+}
+
+func (o EventQueryOptions) ApplyPaginationFilter(query EventQuery, limit int, offset int) EventQuery {
+	limit, offset = o.ValidatePagination(limit, offset)
+	return query.Offset(offset).Limit(limit)
+}
+
+func (o EventQueryOptions) GetFieldName(field string) string {
+	switch field {
+	case "created_at":
+		return event.FieldCreatedAt
+	case "updated_at":
+		return event.FieldUpdatedAt
+	case "date_asc", "start_date":
+		return event.FieldStartDate
+	case "date_desc", "end_date":
+		return event.FieldStartDate
+	case "views_desc", "view_count":
+		return event.FieldViewCount
+	case "interested_desc", "interested_count":
+		return event.FieldInterestedCount
+	case "title":
+		return event.FieldTitle
+	default:
+		return event.FieldStartDate // Default to start date
+	}
+}
+
+func (o EventQueryOptions) ApplyBaseFilters(
+	_ context.Context,
+	query EventQuery,
+	filter *types.EventFilter,
+) EventQuery {
 	if filter == nil {
-		return query
+		return query.Where(event.StatusNotIn(string(types.StatusDeleted)))
 	}
 
-	// Status filter only - base filter handles status
-	if filter.Status != nil {
-		query = query.Where(event.StatusEQ(string(*filter.Status)))
-	} else {
-		// Default: exclude deleted
-		query = query.Where(event.StatusNEQ(string(types.StatusDeleted)))
+	// Apply status filter
+	query = o.ApplyStatusFilter(query, filter.GetStatus())
+
+	// Apply pagination
+	if !filter.IsUnlimited() {
+		query = o.ApplyPaginationFilter(query, filter.GetLimit(), filter.GetOffset())
 	}
+
+	// Apply sorting
+	query = o.ApplySortFilter(query, filter.GetSort(), filter.GetOrder())
 
 	return query
 }
 
-func (opts EventQueryOptions) ApplyEntityQueryOptions(ctx context.Context, filter *types.EventFilter, query *ent.EventQuery) *ent.EventQuery {
-	if filter == nil {
+func (o EventQueryOptions) ApplyEntityQueryOptions(
+	_ context.Context,
+	f *types.EventFilter,
+	query EventQuery,
+) EventQuery {
+	if f == nil {
 		return query
 	}
 
 	// Type filter
-	if filter.Type != nil {
-		query = query.Where(event.TypeEQ(string(*filter.Type)))
+	if f.Type != nil {
+		query = query.Where(event.TypeEQ(string(*f.Type)))
 	}
 
 	// Place filter
-	if filter.PlaceID != nil {
-		query = query.Where(event.PlaceID(*filter.PlaceID))
+	if f.PlaceID != nil {
+		query = query.Where(event.PlaceID(*f.PlaceID))
 	}
 
 	// Date range filter - using FromDate and ToDate from filter (string format)
-	if filter.FromDate != nil {
+	if f.FromDate != nil {
 		// Parse ISO date string to time.Time
-		fromDate, err := time.Parse("2006-01-02", *filter.FromDate)
+		fromDate, err := time.Parse("2006-01-02", *f.FromDate)
 		if err == nil {
 			query = query.Where(event.StartDateGTE(fromDate))
 		}
 	}
-	if filter.ToDate != nil {
-		toDate, err := time.Parse("2006-01-02", *filter.ToDate)
+	if f.ToDate != nil {
+		toDate, err := time.Parse("2006-01-02", *f.ToDate)
 		if err == nil {
 			query = query.Where(event.Or(
 				event.EndDateIsNil(),
@@ -732,15 +796,14 @@ func (opts EventQueryOptions) ApplyEntityQueryOptions(ctx context.Context, filte
 
 	// Tags filter - check if event has any of the requested tags
 	// PostgreSQL JSONB @> operator: checks if left array contains right array element
-	if len(filter.Tags) > 0 {
+	if len(f.Tags) > 0 {
 		// Build OR predicates for each tag
-		tagPredicates := make([]predicate.Event, 0, len(filter.Tags))
-		for _, tag := range filter.Tags {
+		tagPredicates := make([]predicate.Event, 0, len(f.Tags))
+		for _, tag := range f.Tags {
 			// Convert single tag to JSON array format: ["tag"]
 			tagJSON, err := json.Marshal([]string{tag})
 			if err == nil {
-				// Use SQL function syntax: tags @> to_jsonb(?::text)
-				// This avoids the CAST syntax that was causing issues
+				// Use SQL function syntax: tags @> '["tag"]'::jsonb
 				tagPredicates = append(tagPredicates, predicate.Event(func(s *entsql.Selector) {
 					s.Where(entsql.P(func(b *entsql.Builder) {
 						b.WriteString("tags @> ")
@@ -755,26 +818,6 @@ func (opts EventQueryOptions) ApplyEntityQueryOptions(ctx context.Context, filte
 		if len(tagPredicates) > 0 {
 			query = query.Where(event.Or(tagPredicates...))
 		}
-	}
-
-	// Pagination
-	query = query.
-		Offset(filter.GetOffset()).
-		Limit(filter.GetLimit())
-
-	// Sorting
-	switch filter.GetSort() {
-	case "date_asc":
-		query = query.Order(ent.Asc(event.FieldStartDate), ent.Asc(event.FieldID))
-	case "date_desc":
-		query = query.Order(ent.Desc(event.FieldStartDate), ent.Asc(event.FieldID))
-	case "views_desc":
-		query = query.Order(ent.Desc(event.FieldViewCount), ent.Asc(event.FieldID))
-	case "interested_desc":
-		query = query.Order(ent.Desc(event.FieldInterestedCount), ent.Asc(event.FieldID))
-	default:
-		// Default: upcoming events first, then by date
-		query = query.Order(ent.Asc(event.FieldStartDate), ent.Asc(event.FieldID))
 	}
 
 	return query
