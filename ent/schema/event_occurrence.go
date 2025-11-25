@@ -98,10 +98,15 @@ func (EventOccurrence) Edges() []ent.Edge {
 // Indexes of the EventOccurrence.
 func (EventOccurrence) Indexes() []ent.Index {
 	return []ent.Index{
+		// Primary lookups with status (queries always filter by status)
 		index.Fields("event_id", "status"),
 		index.Fields("recurrence_type", "status"),
-		index.Fields("day_of_week"),
-		index.Fields("day_of_month"),
-		index.Fields("created_at"),
+
+		// Day-based queries with status for recurrence pattern matching
+		index.Fields("day_of_week", "status"),
+		index.Fields("day_of_month", "status"),
+
+		// Composite for yearly recurrences (month + day + status)
+		index.Fields("month_of_year", "day_of_month", "status"),
 	}
 }

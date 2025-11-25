@@ -135,11 +135,22 @@ func (Event) Edges() []ent.Edge {
 // Indexes of the Event.
 func (Event) Indexes() []ent.Index {
 	return []ent.Index{
+		// Primary lookup
 		index.Fields("slug").Unique(),
+
+		// Common filter combinations
 		index.Fields("place_id", "status"),
 		index.Fields("type", "status"),
+
+		// Date range queries
 		index.Fields("start_date", "end_date"),
 		index.Fields("status", "start_date"),
-		index.Fields("created_at"),
+
+		// Sorting by popularity (used in queries: views_desc, interested_desc)
+		index.Fields("status", "view_count"),
+		index.Fields("status", "interested_count"),
+
+		// Note: For JSONB tags, create GIN index manually:
+		// CREATE INDEX idx_events_tags_gin ON events USING GIN (tags);
 	}
 }
