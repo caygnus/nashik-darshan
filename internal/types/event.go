@@ -92,9 +92,3 @@ func (f *OccurrenceFilter) Validate() error {
 	}
 	return nil
 }
-
-// UUID_PREFIX_EVENT is the prefix for event IDs
-const UUID_PREFIX_EVENT = "evt"
-
-// UUID_PREFIX_OCCURRENCE is the prefix for occurrence IDs
-const UUID_PREFIX_OCCURRENCE = "occ"
