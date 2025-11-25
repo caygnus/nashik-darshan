@@ -82,19 +82,24 @@ var (
 				Columns: []*schema.Column{EventsColumns[8], EventsColumns[1]},
 			},
 			{
-				Name:    "event_start_date_end_date",
-				Unique:  false,
-				Columns: []*schema.Column{EventsColumns[13], EventsColumns[14]},
-			},
-			{
 				Name:    "event_status_start_date",
 				Unique:  false,
 				Columns: []*schema.Column{EventsColumns[1], EventsColumns[13]},
 			},
 			{
-				Name:    "event_created_at",
+				Name:    "event_start_date_end_date",
 				Unique:  false,
-				Columns: []*schema.Column{EventsColumns[2]},
+				Columns: []*schema.Column{EventsColumns[13], EventsColumns[14]},
+			},
+			{
+				Name:    "event_status_view_count",
+				Unique:  false,
+				Columns: []*schema.Column{EventsColumns[1], EventsColumns[21]},
+			},
+			{
+				Name:    "event_status_interested_count",
+				Unique:  false,
+				Columns: []*schema.Column{EventsColumns[1], EventsColumns[22]},
 			},
 		},
 	}
@@ -142,19 +147,19 @@ var (
 				Columns: []*schema.Column{EventOccurrencesColumns[7], EventOccurrencesColumns[1]},
 			},
 			{
-				Name:    "eventoccurrence_day_of_week",
+				Name:    "eventoccurrence_day_of_week_status",
 				Unique:  false,
-				Columns: []*schema.Column{EventOccurrencesColumns[11]},
+				Columns: []*schema.Column{EventOccurrencesColumns[11], EventOccurrencesColumns[1]},
 			},
 			{
-				Name:    "eventoccurrence_day_of_month",
+				Name:    "eventoccurrence_day_of_month_status",
 				Unique:  false,
-				Columns: []*schema.Column{EventOccurrencesColumns[12]},
+				Columns: []*schema.Column{EventOccurrencesColumns[12], EventOccurrencesColumns[1]},
 			},
 			{
-				Name:    "eventoccurrence_created_at",
+				Name:    "eventoccurrence_month_of_year_day_of_month_status",
 				Unique:  false,
-				Columns: []*schema.Column{EventOccurrencesColumns[2]},
+				Columns: []*schema.Column{EventOccurrencesColumns[13], EventOccurrencesColumns[12], EventOccurrencesColumns[1]},
 			},
 		},
 	}

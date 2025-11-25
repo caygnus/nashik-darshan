@@ -135,22 +135,35 @@ func (Event) Edges() []ent.Edge {
 // Indexes of the Event.
 func (Event) Indexes() []ent.Index {
 	return []ent.Index{
-		// Primary lookup
+		// Primary lookup - unique constraint
 		index.Fields("slug").Unique(),
 
-		// Common filter combinations
+		// Filter combinations: Most selective field FIRST (PostgreSQL optimization)
+		// Query pattern: WHERE place_id = ? AND status = ?
 		index.Fields("place_id", "status"),
+
+		// Query pattern: WHERE type = ? AND status = ?
 		index.Fields("type", "status"),
 
-		// Date range queries
-		index.Fields("start_date", "end_date"),
+		// Query pattern: WHERE status = ? AND start_date >= ? (filtering + sorting)
+		// Status first because it filters more rows (published/draft/archived)
 		index.Fields("status", "start_date"),
 
-		// Sorting by popularity (used in queries: views_desc, interested_desc)
+		// Date range queries: WHERE start_date >= ? AND (end_date IS NULL OR end_date <= ?)
+		index.Fields("start_date", "end_date"),
+
+		// Sorting queries with filter: WHERE status = ? ORDER BY view_count DESC
+		// Status first (filter) then sort column (view_count DESC benefits from this)
 		index.Fields("status", "view_count"),
+
+		// Sorting queries with filter: WHERE status = ? ORDER BY interested_count DESC
 		index.Fields("status", "interested_count"),
 
-		// Note: For JSONB tags, create GIN index manually:
+		// Note: For JSONB tags containment queries (@> operator), create GIN index manually:
 		// CREATE INDEX idx_events_tags_gin ON events USING GIN (tags);
+		//
+		// Consider partial indexes for production:
+		// CREATE INDEX idx_events_published ON events (start_date, view_count) WHERE status = 'PUBLISHED';
+		// CREATE INDEX idx_events_active_type ON events (type, start_date) WHERE status = 'PUBLISHED';
 	}
 }

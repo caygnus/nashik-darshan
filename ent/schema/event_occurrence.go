@@ -98,15 +98,29 @@ func (EventOccurrence) Edges() []ent.Edge {
 // Indexes of the EventOccurrence.
 func (EventOccurrence) Indexes() []ent.Index {
 	return []ent.Index{
-		// Primary lookups with status (queries always filter by status)
+		// Primary lookup: Most selective field first (event_id narrows down rows significantly)
+		// Query pattern: WHERE event_id = ? AND status = ?
 		index.Fields("event_id", "status"),
+
+		// Recurrence type queries: WHERE recurrence_type = ? AND status = ?
+		// recurrence_type first (fewer distinct values but combined with status is selective)
 		index.Fields("recurrence_type", "status"),
 
-		// Day-based queries with status for recurrence pattern matching
+		// Weekly recurrence: WHERE day_of_week = ? AND status = ? (7 possible values)
+		// Status second to further filter after day_of_week
 		index.Fields("day_of_week", "status"),
+
+		// Monthly recurrence: WHERE day_of_month = ? AND status = ? (31 possible values)
+		// day_of_month first (more selective than status with 31 distinct values)
 		index.Fields("day_of_month", "status"),
 
-		// Composite for yearly recurrences (month + day + status)
+		// Yearly recurrence: WHERE month_of_year = ? AND day_of_month = ? AND status = ?
+		// Order: month (12 values) -> day (31 values) -> status (3-4 values)
+		// This follows PostgreSQL left-to-right index scan optimization
 		index.Fields("month_of_year", "day_of_month", "status"),
+
+		// Consider partial indexes for production to reduce index size:
+		// CREATE INDEX idx_occ_event_published ON event_occurrences (event_id) WHERE status = 'PUBLISHED';
+		// CREATE INDEX idx_occ_weekly_published ON event_occurrences (day_of_week, start_time) WHERE status = 'PUBLISHED' AND recurrence_type = 'WEEKLY';
 	}
 }
