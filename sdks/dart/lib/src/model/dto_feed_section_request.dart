@@ -62,7 +62,7 @@ abstract class DtoFeedSectionRequest implements Built<DtoFeedSectionRequest, Dto
 
   @BuiltValueField(wireName: r'status')
   TypesStatus? get status;
-  // enum statusEnum {  published,  deleted,  archived,  inactive,  pending,  };
+  // enum statusEnum {  published,  deleted,  archived,  inactive,  pending,  draft,  };
 
   @BuiltValueField(wireName: r'type')
   TypesFeedSectionType get type;

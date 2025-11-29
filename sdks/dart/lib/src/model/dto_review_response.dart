@@ -73,7 +73,7 @@ abstract class DtoReviewResponse implements Built<DtoReviewResponse, DtoReviewRe
 
   @BuiltValueField(wireName: r'status')
   TypesStatus? get status;
-  // enum statusEnum {  published,  deleted,  archived,  inactive,  pending,  };
+  // enum statusEnum {  published,  deleted,  archived,  inactive,  pending,  draft,  };
 
   @BuiltValueField(wireName: r'tags')
   BuiltList<String>? get tags;

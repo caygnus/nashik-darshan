@@ -54,7 +54,7 @@ abstract class DtoMeResponse implements Built<DtoMeResponse, DtoMeResponseBuilde
 
   @BuiltValueField(wireName: r'status')
   TypesStatus? get status;
-  // enum statusEnum {  published,  deleted,  archived,  inactive,  pending,  };
+  // enum statusEnum {  published,  deleted,  archived,  inactive,  pending,  draft,  };
 
   @BuiltValueField(wireName: r'updated_at')
   String? get updatedAt;

@@ -94,7 +94,7 @@ abstract class DtoPlaceResponse implements Built<DtoPlaceResponse, DtoPlaceRespo
 
   @BuiltValueField(wireName: r'status')
   TypesStatus? get status;
-  // enum statusEnum {  published,  deleted,  archived,  inactive,  pending,  };
+  // enum statusEnum {  published,  deleted,  archived,  inactive,  pending,  draft,  };
 
   @BuiltValueField(wireName: r'subtitle')
   String? get subtitle;

@@ -11,7 +11,8 @@ import 'package:nashik_darshan_sdk/src/auth/bearer_auth.dart';
 import 'package:nashik_darshan_sdk/src/auth/oauth.dart';
 import 'package:nashik_darshan_sdk/src/api/auth_api.dart';
 import 'package:nashik_darshan_sdk/src/api/category_api.dart';
-import 'package:nashik_darshan_sdk/src/api/feed_api.dart';
+import 'package:nashik_darshan_sdk/src/api/event_api.dart';
+import 'package:nashik_darshan_sdk/src/api/hotel_api.dart';
 import 'package:nashik_darshan_sdk/src/api/place_api.dart';
 import 'package:nashik_darshan_sdk/src/api/reviews_api.dart';
 import 'package:nashik_darshan_sdk/src/api/user_api.dart';
@@ -82,10 +83,16 @@ class Openapi {
     return CategoryApi(dio, serializers);
   }
 
-  /// Get FeedApi instance, base route and serializer can be overridden by a given but be careful,
+  /// Get EventApi instance, base route and serializer can be overridden by a given but be careful,
   /// by doing that all interceptors will not be executed
-  FeedApi getFeedApi() {
-    return FeedApi(dio, serializers);
+  EventApi getEventApi() {
+    return EventApi(dio, serializers);
+  }
+
+  /// Get HotelApi instance, base route and serializer can be overridden by a given but be careful,
+  /// by doing that all interceptors will not be executed
+  HotelApi getHotelApi() {
+    return HotelApi(dio, serializers);
   }
 
   /// Get PlaceApi instance, base route and serializer can be overridden by a given but be careful,

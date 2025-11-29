@@ -52,7 +52,7 @@ abstract class DtoFeedRequest implements Built<DtoFeedRequest, DtoFeedRequestBui
 
   @BuiltValueField(wireName: r'status')
   TypesStatus? get status;
-  // enum statusEnum {  published,  deleted,  archived,  inactive,  pending,  };
+  // enum statusEnum {  published,  deleted,  archived,  inactive,  pending,  draft,  };
 
   DtoFeedRequest._();
 

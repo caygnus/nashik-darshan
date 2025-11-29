@@ -9,18 +9,26 @@ part of 'serializers.dart';
 Serializers _$serializers = (Serializers().toBuilder()
       ..add(DtoCategoryResponse.serializer)
       ..add(DtoCreateCategoryRequest.serializer)
+      ..add(DtoCreateEventRequest.serializer)
+      ..add(DtoCreateHotelRequest.serializer)
+      ..add(DtoCreateOccurrenceRequest.serializer)
       ..add(DtoCreatePlaceImageRequest.serializer)
       ..add(DtoCreatePlaceRequest.serializer)
       ..add(DtoCreateReviewRequest.serializer)
+      ..add(DtoEventResponse.serializer)
       ..add(DtoFeedRequest.serializer)
       ..add(DtoFeedRequestOrderEnum.serializer)
       ..add(DtoFeedResponse.serializer)
       ..add(DtoFeedSectionRequest.serializer)
       ..add(DtoFeedSectionRequestOrderEnum.serializer)
       ..add(DtoFeedSectionResponse.serializer)
+      ..add(DtoHotelResponse.serializer)
       ..add(DtoListCategoriesResponse.serializer)
+      ..add(DtoListEventsResponse.serializer)
+      ..add(DtoListHotelsResponse.serializer)
       ..add(DtoListPlacesResponse.serializer)
       ..add(DtoMeResponse.serializer)
+      ..add(DtoOccurrenceResponse.serializer)
       ..add(DtoPlaceImageResponse.serializer)
       ..add(DtoPlaceResponse.serializer)
       ..add(DtoRatingStatsResponse.serializer)
@@ -28,17 +36,23 @@ Serializers _$serializers = (Serializers().toBuilder()
       ..add(DtoSignupRequest.serializer)
       ..add(DtoSignupResponse.serializer)
       ..add(DtoUpdateCategoryRequest.serializer)
+      ..add(DtoUpdateEventRequest.serializer)
+      ..add(DtoUpdateHotelRequest.serializer)
+      ..add(DtoUpdateOccurrenceRequest.serializer)
       ..add(DtoUpdatePlaceImageRequest.serializer)
       ..add(DtoUpdatePlaceRequest.serializer)
       ..add(DtoUpdateReviewRequest.serializer)
       ..add(DtoUpdateUserRequest.serializer)
+      ..add(EventEventOccurrence.serializer)
       ..add(IerrErrorDetail.serializer)
       ..add(IerrErrorResponse.serializer)
       ..add(PlacePlaceImage.serializer)
+      ..add(TypesEventType.serializer)
       ..add(TypesFeedSectionType.serializer)
       ..add(TypesListResponseDtoReviewResponse.serializer)
       ..add(TypesLocation.serializer)
       ..add(TypesPaginationResponse.serializer)
+      ..add(TypesRecurrenceType.serializer)
       ..add(TypesReviewEntityType.serializer)
       ..add(TypesStatus.serializer)
       ..add(TypesUserRole.serializer)
@@ -47,6 +61,9 @@ Serializers _$serializers = (Serializers().toBuilder()
               BuiltList, const [const FullType(DtoCategoryResponse)]),
           () => ListBuilder<DtoCategoryResponse>())
       ..addBuilderFactory(
+          const FullType(BuiltList, const [const FullType(DtoEventResponse)]),
+          () => ListBuilder<DtoEventResponse>())
+      ..addBuilderFactory(
           const FullType(
               BuiltList, const [const FullType(DtoFeedSectionRequest)]),
           () => ListBuilder<DtoFeedSectionRequest>())
@@ -54,6 +71,9 @@ Serializers _$serializers = (Serializers().toBuilder()
           const FullType(
               BuiltList, const [const FullType(DtoFeedSectionResponse)]),
           () => ListBuilder<DtoFeedSectionResponse>())
+      ..addBuilderFactory(
+          const FullType(BuiltList, const [const FullType(DtoHotelResponse)]),
+          () => ListBuilder<DtoHotelResponse>())
       ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(DtoPlaceResponse)]),
           () => ListBuilder<DtoPlaceResponse>())
@@ -82,9 +102,79 @@ Serializers _$serializers = (Serializers().toBuilder()
           const FullType(BuiltList, const [const FullType(String)]),
           () => ListBuilder<String>())
       ..addBuilderFactory(
+          const FullType(BuiltList, const [const FullType(String)]),
+          () => ListBuilder<String>())
+      ..addBuilderFactory(
+          const FullType(
+              BuiltMap, const [const FullType(String), const FullType(String)]),
+          () => MapBuilder<String, String>())
+      ..addBuilderFactory(
+          const FullType(BuiltList, const [const FullType(String)]),
+          () => ListBuilder<String>())
+      ..addBuilderFactory(
+          const FullType(
+              BuiltMap, const [const FullType(String), const FullType(String)]),
+          () => MapBuilder<String, String>())
+      ..addBuilderFactory(
+          const FullType(BuiltList, const [const FullType(String)]),
+          () => ListBuilder<String>())
+      ..addBuilderFactory(
+          const FullType(
+              BuiltMap, const [const FullType(String), const FullType(String)]),
+          () => MapBuilder<String, String>())
+      ..addBuilderFactory(
+          const FullType(BuiltList, const [const FullType(String)]),
+          () => ListBuilder<String>())
+      ..addBuilderFactory(
+          const FullType(
+              BuiltMap, const [const FullType(String), const FullType(String)]),
+          () => MapBuilder<String, String>())
+      ..addBuilderFactory(
+          const FullType(BuiltList, const [const FullType(String)]),
+          () => ListBuilder<String>())
+      ..addBuilderFactory(
+          const FullType(
+              BuiltMap, const [const FullType(String), const FullType(String)]),
+          () => MapBuilder<String, String>())
+      ..addBuilderFactory(
+          const FullType(
+              BuiltList, const [const FullType(EventEventOccurrence)]),
+          () => ListBuilder<EventEventOccurrence>())
+      ..addBuilderFactory(
+          const FullType(BuiltList, const [const FullType(String)]),
+          () => ListBuilder<String>())
+      ..addBuilderFactory(
+          const FullType(BuiltList, const [const FullType(String)]),
+          () => ListBuilder<String>())
+      ..addBuilderFactory(
+          const FullType(
+              BuiltMap, const [const FullType(String), const FullType(String)]),
+          () => MapBuilder<String, String>())
+      ..addBuilderFactory(
+          const FullType(BuiltList, const [const FullType(String)]),
+          () => ListBuilder<String>())
+      ..addBuilderFactory(
+          const FullType(BuiltList, const [const FullType(String)]),
+          () => ListBuilder<String>())
+      ..addBuilderFactory(
+          const FullType(
+              BuiltMap, const [const FullType(String), const FullType(String)]),
+          () => MapBuilder<String, String>())
+      ..addBuilderFactory(
+          const FullType(BuiltList, const [const FullType(String)]),
+          () => ListBuilder<String>())
+      ..addBuilderFactory(
           const FullType(BuiltMap,
               const [const FullType(String), const FullType(JsonObject)]),
           () => MapBuilder<String, JsonObject>())
+      ..addBuilderFactory(
+          const FullType(
+              BuiltMap, const [const FullType(String), const FullType(String)]),
+          () => MapBuilder<String, String>())
+      ..addBuilderFactory(
+          const FullType(
+              BuiltMap, const [const FullType(String), const FullType(String)]),
+          () => MapBuilder<String, String>())
       ..addBuilderFactory(
           const FullType(
               BuiltMap, const [const FullType(String), const FullType(String)]),
@@ -147,6 +237,14 @@ Serializers _$serializers = (Serializers().toBuilder()
           const FullType(
               BuiltList, const [const FullType(DtoPlaceImageResponse)]),
           () => ListBuilder<DtoPlaceImageResponse>())
+      ..addBuilderFactory(
+          const FullType(
+              BuiltMap, const [const FullType(String), const FullType(String)]),
+          () => MapBuilder<String, String>())
+      ..addBuilderFactory(
+          const FullType(
+              BuiltMap, const [const FullType(String), const FullType(String)]),
+          () => MapBuilder<String, String>())
       ..addBuilderFactory(
           const FullType(
               BuiltMap, const [const FullType(String), const FullType(int)]),

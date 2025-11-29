@@ -49,7 +49,7 @@ abstract class PlacePlaceImage implements Built<PlacePlaceImage, PlacePlaceImage
 
   @BuiltValueField(wireName: r'status')
   TypesStatus? get status;
-  // enum statusEnum {  published,  deleted,  archived,  inactive,  pending,  };
+  // enum statusEnum {  published,  deleted,  archived,  inactive,  pending,  draft,  };
 
   @BuiltValueField(wireName: r'updated_at')
   String? get updatedAt;

@@ -48,7 +48,7 @@ abstract class DtoCategoryResponse implements Built<DtoCategoryResponse, DtoCate
 
   @BuiltValueField(wireName: r'status')
   TypesStatus? get status;
-  // enum statusEnum {  published,  deleted,  archived,  inactive,  pending,  };
+  // enum statusEnum {  published,  deleted,  archived,  inactive,  pending,  draft,  };
 
   @BuiltValueField(wireName: r'updated_at')
   String? get updatedAt;

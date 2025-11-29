@@ -21,6 +21,8 @@ class TypesStatus extends EnumClass {
   static const TypesStatus StatusInactive = _$StatusInactive;
   @BuiltValueEnumConst(wireName: r'pending')
   static const TypesStatus StatusPending = _$StatusPending;
+  @BuiltValueEnumConst(wireName: r'draft')
+  static const TypesStatus StatusDraft = _$StatusDraft;
 
   static Serializer<TypesStatus> get serializer => _$typesStatusSerializer;
 

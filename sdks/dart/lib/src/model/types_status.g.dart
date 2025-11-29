@@ -11,6 +11,7 @@ const TypesStatus _$StatusDeleted = const TypesStatus._('StatusDeleted');
 const TypesStatus _$StatusArchived = const TypesStatus._('StatusArchived');
 const TypesStatus _$StatusInactive = const TypesStatus._('StatusInactive');
 const TypesStatus _$StatusPending = const TypesStatus._('StatusPending');
+const TypesStatus _$StatusDraft = const TypesStatus._('StatusDraft');
 
 TypesStatus _$valueOf(String name) {
   switch (name) {
@@ -24,6 +25,8 @@ TypesStatus _$valueOf(String name) {
       return _$StatusInactive;
     case 'StatusPending':
       return _$StatusPending;
+    case 'StatusDraft':
+      return _$StatusDraft;
     default:
       throw ArgumentError(name);
   }
@@ -36,6 +39,7 @@ final BuiltSet<TypesStatus> _$values =
   _$StatusArchived,
   _$StatusInactive,
   _$StatusPending,
+  _$StatusDraft,
 ]);
 
 class _$TypesStatusMeta {
@@ -45,6 +49,7 @@ class _$TypesStatusMeta {
   TypesStatus get StatusArchived => _$StatusArchived;
   TypesStatus get StatusInactive => _$StatusInactive;
   TypesStatus get StatusPending => _$StatusPending;
+  TypesStatus get StatusDraft => _$StatusDraft;
   TypesStatus valueOf(String name) => _$valueOf(name);
   BuiltSet<TypesStatus> get values => _$values;
 }
@@ -63,6 +68,7 @@ class _$TypesStatusSerializer implements PrimitiveSerializer<TypesStatus> {
     'StatusArchived': 'archived',
     'StatusInactive': 'inactive',
     'StatusPending': 'pending',
+    'StatusDraft': 'draft',
   };
   static const Map<Object, String> _fromWire = const <Object, String>{
     'published': 'StatusPublished',
@@ -70,6 +76,7 @@ class _$TypesStatusSerializer implements PrimitiveSerializer<TypesStatus> {
     'archived': 'StatusArchived',
     'inactive': 'StatusInactive',
     'pending': 'StatusPending',
+    'draft': 'StatusDraft',
   };
 
   @override

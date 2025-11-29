@@ -9,17 +9,62 @@ All URIs are relative to *http://localhost:8080/api/v1*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
+[**feedPost**](PlaceApi.md#feedpost) | **POST** /feed | Get feed data
 [**placesGet**](PlaceApi.md#placesget) | **GET** /places | List places
 [**placesIdDelete**](PlaceApi.md#placesiddelete) | **DELETE** /places/{id} | Delete a place
 [**placesIdGet**](PlaceApi.md#placesidget) | **GET** /places/{id} | Get place by ID
 [**placesIdImagesGet**](PlaceApi.md#placesidimagesget) | **GET** /places/{id}/images | Get place images
 [**placesIdImagesPost**](PlaceApi.md#placesidimagespost) | **POST** /places/{id}/images | Add image to place
 [**placesIdPut**](PlaceApi.md#placesidput) | **PUT** /places/{id} | Update a place
+[**placesIdViewPost**](PlaceApi.md#placesidviewpost) | **POST** /places/{id}/view | Increment view count for a place
 [**placesImagesImageIdDelete**](PlaceApi.md#placesimagesimageiddelete) | **DELETE** /places/images/{image_id} | Delete place image
 [**placesImagesImageIdPut**](PlaceApi.md#placesimagesimageidput) | **PUT** /places/images/{image_id} | Update place image
 [**placesPost**](PlaceApi.md#placespost) | **POST** /places | Create a new place
 [**placesSlugSlugGet**](PlaceApi.md#placesslugslugget) | **GET** /places/slug/{slug} | Get place by slug
 
+
+# **feedPost**
+> DtoFeedResponse feedPost(request)
+
+Get feed data
+
+Get feed data with multiple sections (trending, popular, latest, nearby)
+
+### Example
+```dart
+import 'package:openapi/api.dart';
+
+final api = Openapi().getPlaceApi();
+final DtoFeedRequest request = ; // DtoFeedRequest | Feed request with sections
+
+try {
+    final response = api.feedPost(request);
+    print(response);
+} catch on DioException (e) {
+    print('Exception when calling PlaceApi->feedPost: $e\n');
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **request** | [**DtoFeedRequest**](DtoFeedRequest.md)| Feed request with sections | 
+
+### Return type
+
+[**DtoFeedResponse**](DtoFeedResponse.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **placesGet**
 > DtoListPlacesResponse placesGet(limit, offset, status, sort, order, slug, placeTypes, categories, amenities, minRating, maxRating, latitude, longitude, radiusKm, searchQuery)
@@ -318,6 +363,48 @@ Name | Type | Description  | Notes
 ### HTTP request headers
 
  - **Content-Type**: application/json
+ - **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **placesIdViewPost**
+> placesIdViewPost(id)
+
+Increment view count for a place
+
+Increment the view count for a specific place
+
+### Example
+```dart
+import 'package:openapi/api.dart';
+
+final api = Openapi().getPlaceApi();
+final String id = id_example; // String | Place ID
+
+try {
+    api.placesIdViewPost(id);
+} catch on DioException (e) {
+    print('Exception when calling PlaceApi->placesIdViewPost: $e\n');
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **id** | **String**| Place ID | 
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
  - **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)

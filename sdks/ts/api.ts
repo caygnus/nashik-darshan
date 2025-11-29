@@ -126,6 +126,277 @@ export interface DtoCreateCategoryRequest {
 /**
  * 
  * @export
+ * @interface DtoCreateEventRequest
+ */
+export interface DtoCreateEventRequest {
+    /**
+     * 
+     * @type {string}
+     * @memberof DtoCreateEventRequest
+     */
+    'cover_image_url'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof DtoCreateEventRequest
+     */
+    'description'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof DtoCreateEventRequest
+     */
+    'end_date'?: string;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof DtoCreateEventRequest
+     */
+    'images'?: Array<string>;
+    /**
+     * 
+     * @type {number}
+     * @memberof DtoCreateEventRequest
+     */
+    'latitude'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof DtoCreateEventRequest
+     */
+    'location_name'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof DtoCreateEventRequest
+     */
+    'longitude'?: number;
+    /**
+     * 
+     * @type {{ [key: string]: string; }}
+     * @memberof DtoCreateEventRequest
+     */
+    'metadata'?: { [key: string]: string; };
+    /**
+     * 
+     * @type {string}
+     * @memberof DtoCreateEventRequest
+     */
+    'place_id'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof DtoCreateEventRequest
+     */
+    'slug': string;
+    /**
+     * Required, defaults to now() if zero value
+     * @type {string}
+     * @memberof DtoCreateEventRequest
+     */
+    'start_date'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof DtoCreateEventRequest
+     */
+    'subtitle'?: string;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof DtoCreateEventRequest
+     */
+    'tags'?: Array<string>;
+    /**
+     * 
+     * @type {string}
+     * @memberof DtoCreateEventRequest
+     */
+    'title': string;
+    /**
+     * 
+     * @type {TypesEventType}
+     * @memberof DtoCreateEventRequest
+     */
+    'type': TypesEventType;
+}
+
+
+/**
+ * 
+ * @export
+ * @interface DtoCreateHotelRequest
+ */
+export interface DtoCreateHotelRequest {
+    /**
+     * 
+     * @type {{ [key: string]: string; }}
+     * @memberof DtoCreateHotelRequest
+     */
+    'address'?: { [key: string]: string; };
+    /**
+     * 
+     * @type {string}
+     * @memberof DtoCreateHotelRequest
+     */
+    'check_in_time'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof DtoCreateHotelRequest
+     */
+    'check_out_time'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof DtoCreateHotelRequest
+     */
+    'currency'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof DtoCreateHotelRequest
+     */
+    'description'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof DtoCreateHotelRequest
+     */
+    'email'?: string;
+    /**
+     * 
+     * @type {TypesLocation}
+     * @memberof DtoCreateHotelRequest
+     */
+    'location': TypesLocation;
+    /**
+     * 
+     * @type {string}
+     * @memberof DtoCreateHotelRequest
+     */
+    'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof DtoCreateHotelRequest
+     */
+    'phone'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof DtoCreateHotelRequest
+     */
+    'price_max'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof DtoCreateHotelRequest
+     */
+    'price_min'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof DtoCreateHotelRequest
+     */
+    'primary_image_url'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof DtoCreateHotelRequest
+     */
+    'room_count'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof DtoCreateHotelRequest
+     */
+    'slug': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof DtoCreateHotelRequest
+     */
+    'star_rating': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof DtoCreateHotelRequest
+     */
+    'thumbnail_url'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof DtoCreateHotelRequest
+     */
+    'website'?: string;
+}
+/**
+ * 
+ * @export
+ * @interface DtoCreateOccurrenceRequest
+ */
+export interface DtoCreateOccurrenceRequest {
+    /**
+     * 1-31 for MONTHLY/YEARLY
+     * @type {number}
+     * @memberof DtoCreateOccurrenceRequest
+     */
+    'day_of_month'?: number;
+    /**
+     * 0-6 for WEEKLY
+     * @type {number}
+     * @memberof DtoCreateOccurrenceRequest
+     */
+    'day_of_week'?: number;
+    /**
+     * ISO 8601 format, optional/nillable
+     * @type {string}
+     * @memberof DtoCreateOccurrenceRequest
+     */
+    'end_time'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof DtoCreateOccurrenceRequest
+     */
+    'event_id': string;
+    /**
+     * [\"2025-12-25\", ...]
+     * @type {Array<string>}
+     * @memberof DtoCreateOccurrenceRequest
+     */
+    'exception_dates'?: Array<string>;
+    /**
+     * 
+     * @type {{ [key: string]: string; }}
+     * @memberof DtoCreateOccurrenceRequest
+     */
+    'metadata'?: { [key: string]: string; };
+    /**
+     * 1-12 for YEARLY
+     * @type {number}
+     * @memberof DtoCreateOccurrenceRequest
+     */
+    'month_of_year'?: number;
+    /**
+     * 
+     * @type {TypesRecurrenceType}
+     * @memberof DtoCreateOccurrenceRequest
+     */
+    'recurrence_type': TypesRecurrenceType;
+    /**
+     * ISO 8601 format, optional/nillable
+     * @type {string}
+     * @memberof DtoCreateOccurrenceRequest
+     */
+    'start_time'?: string;
+}
+
+
+/**
+ * 
+ * @export
  * @interface DtoCreatePlaceImageRequest
  */
 export interface DtoCreatePlaceImageRequest {
@@ -281,6 +552,159 @@ export interface DtoCreateReviewRequest {
      * @memberof DtoCreateReviewRequest
      */
     'title'?: string;
+}
+
+
+/**
+ * 
+ * @export
+ * @interface DtoEventResponse
+ */
+export interface DtoEventResponse {
+    /**
+     * Media
+     * @type {string}
+     * @memberof DtoEventResponse
+     */
+    'cover_image_url'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof DtoEventResponse
+     */
+    'created_at'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof DtoEventResponse
+     */
+    'created_by'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof DtoEventResponse
+     */
+    'description'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof DtoEventResponse
+     */
+    'end_date'?: string;
+    /**
+     * Identity
+     * @type {string}
+     * @memberof DtoEventResponse
+     */
+    'id'?: string;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof DtoEventResponse
+     */
+    'images'?: Array<string>;
+    /**
+     * 
+     * @type {number}
+     * @memberof DtoEventResponse
+     */
+    'interested_count'?: number;
+    /**
+     * Location (for citywide)
+     * @type {number}
+     * @memberof DtoEventResponse
+     */
+    'latitude'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof DtoEventResponse
+     */
+    'location_name'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof DtoEventResponse
+     */
+    'longitude'?: number;
+    /**
+     * 
+     * @type {{ [key: string]: string; }}
+     * @memberof DtoEventResponse
+     */
+    'metadata'?: { [key: string]: string; };
+    /**
+     * Relations (populated when needed)
+     * @type {Array<EventEventOccurrence>}
+     * @memberof DtoEventResponse
+     */
+    'occurrences'?: Array<EventEventOccurrence>;
+    /**
+     * Association
+     * @type {string}
+     * @memberof DtoEventResponse
+     */
+    'place_id'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof DtoEventResponse
+     */
+    'slug'?: string;
+    /**
+     * Validity
+     * @type {string}
+     * @memberof DtoEventResponse
+     */
+    'start_date'?: string;
+    /**
+     * 
+     * @type {TypesStatus}
+     * @memberof DtoEventResponse
+     */
+    'status'?: TypesStatus;
+    /**
+     * 
+     * @type {string}
+     * @memberof DtoEventResponse
+     */
+    'subtitle'?: string;
+    /**
+     * Metadata
+     * @type {Array<string>}
+     * @memberof DtoEventResponse
+     */
+    'tags'?: Array<string>;
+    /**
+     * 
+     * @type {string}
+     * @memberof DtoEventResponse
+     */
+    'title'?: string;
+    /**
+     * Core
+     * @type {TypesEventType}
+     * @memberof DtoEventResponse
+     */
+    'type'?: TypesEventType;
+    /**
+     * 
+     * @type {string}
+     * @memberof DtoEventResponse
+     */
+    'updated_at'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof DtoEventResponse
+     */
+    'updated_by'?: string;
+    /**
+     * Stats
+     * @type {number}
+     * @memberof DtoEventResponse
+     */
+    'view_count'?: number;
 }
 
 
@@ -483,6 +907,189 @@ export interface DtoFeedSectionResponse {
 /**
  * 
  * @export
+ * @interface DtoHotelResponse
+ */
+export interface DtoHotelResponse {
+    /**
+     * 
+     * @type {{ [key: string]: string; }}
+     * @memberof DtoHotelResponse
+     */
+    'address'?: { [key: string]: string; };
+    /**
+     * 
+     * @type {string}
+     * @memberof DtoHotelResponse
+     */
+    'check_in_time'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof DtoHotelResponse
+     */
+    'check_out_time'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof DtoHotelResponse
+     */
+    'created_at'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof DtoHotelResponse
+     */
+    'created_by'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof DtoHotelResponse
+     */
+    'currency'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof DtoHotelResponse
+     */
+    'description'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof DtoHotelResponse
+     */
+    'email'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof DtoHotelResponse
+     */
+    'id'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof DtoHotelResponse
+     */
+    'last_viewed_at'?: string;
+    /**
+     * 
+     * @type {TypesLocation}
+     * @memberof DtoHotelResponse
+     */
+    'location'?: TypesLocation;
+    /**
+     * 
+     * @type {{ [key: string]: string; }}
+     * @memberof DtoHotelResponse
+     */
+    'metadata'?: { [key: string]: string; };
+    /**
+     * 
+     * @type {string}
+     * @memberof DtoHotelResponse
+     */
+    'name'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof DtoHotelResponse
+     */
+    'phone'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof DtoHotelResponse
+     */
+    'popularity_score'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof DtoHotelResponse
+     */
+    'price_max'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof DtoHotelResponse
+     */
+    'price_min'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof DtoHotelResponse
+     */
+    'primary_image_url'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof DtoHotelResponse
+     */
+    'rating_avg'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof DtoHotelResponse
+     */
+    'rating_count'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof DtoHotelResponse
+     */
+    'room_count'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof DtoHotelResponse
+     */
+    'slug'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof DtoHotelResponse
+     */
+    'star_rating'?: number;
+    /**
+     * 
+     * @type {TypesStatus}
+     * @memberof DtoHotelResponse
+     */
+    'status'?: TypesStatus;
+    /**
+     * 
+     * @type {string}
+     * @memberof DtoHotelResponse
+     */
+    'thumbnail_url'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof DtoHotelResponse
+     */
+    'updated_at'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof DtoHotelResponse
+     */
+    'updated_by'?: string;
+    /**
+     * Engagement fields
+     * @type {number}
+     * @memberof DtoHotelResponse
+     */
+    'view_count'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof DtoHotelResponse
+     */
+    'website'?: string;
+}
+
+
+/**
+ * 
+ * @export
  * @interface DtoListCategoriesResponse
  */
 export interface DtoListCategoriesResponse {
@@ -496,6 +1103,44 @@ export interface DtoListCategoriesResponse {
      * 
      * @type {TypesPaginationResponse}
      * @memberof DtoListCategoriesResponse
+     */
+    'pagination'?: TypesPaginationResponse;
+}
+/**
+ * 
+ * @export
+ * @interface DtoListEventsResponse
+ */
+export interface DtoListEventsResponse {
+    /**
+     * 
+     * @type {Array<DtoEventResponse>}
+     * @memberof DtoListEventsResponse
+     */
+    'items'?: Array<DtoEventResponse>;
+    /**
+     * 
+     * @type {TypesPaginationResponse}
+     * @memberof DtoListEventsResponse
+     */
+    'pagination'?: TypesPaginationResponse;
+}
+/**
+ * 
+ * @export
+ * @interface DtoListHotelsResponse
+ */
+export interface DtoListHotelsResponse {
+    /**
+     * 
+     * @type {Array<DtoHotelResponse>}
+     * @memberof DtoListHotelsResponse
+     */
+    'items'?: Array<DtoHotelResponse>;
+    /**
+     * 
+     * @type {TypesPaginationResponse}
+     * @memberof DtoListHotelsResponse
      */
     'pagination'?: TypesPaginationResponse;
 }
@@ -588,6 +1233,111 @@ export interface DtoMeResponse {
      * 
      * @type {string}
      * @memberof DtoMeResponse
+     */
+    'updated_by'?: string;
+}
+
+
+/**
+ * 
+ * @export
+ * @interface DtoOccurrenceResponse
+ */
+export interface DtoOccurrenceResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof DtoOccurrenceResponse
+     */
+    'created_at'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof DtoOccurrenceResponse
+     */
+    'created_by'?: string;
+    /**
+     * 1-31
+     * @type {number}
+     * @memberof DtoOccurrenceResponse
+     */
+    'day_of_month'?: number;
+    /**
+     * Day specifics
+     * @type {number}
+     * @memberof DtoOccurrenceResponse
+     */
+    'day_of_week'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof DtoOccurrenceResponse
+     */
+    'duration_minutes'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof DtoOccurrenceResponse
+     */
+    'end_time'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof DtoOccurrenceResponse
+     */
+    'event_id'?: string;
+    /**
+     * Exceptions
+     * @type {Array<string>}
+     * @memberof DtoOccurrenceResponse
+     */
+    'exception_dates'?: Array<string>;
+    /**
+     * Identity
+     * @type {string}
+     * @memberof DtoOccurrenceResponse
+     */
+    'id'?: string;
+    /**
+     * Metadata
+     * @type {{ [key: string]: string; }}
+     * @memberof DtoOccurrenceResponse
+     */
+    'metadata'?: { [key: string]: string; };
+    /**
+     * 1-12 (renamed from Month)
+     * @type {number}
+     * @memberof DtoOccurrenceResponse
+     */
+    'month_of_year'?: number;
+    /**
+     * Recurrence
+     * @type {TypesRecurrenceType}
+     * @memberof DtoOccurrenceResponse
+     */
+    'recurrence_type'?: TypesRecurrenceType;
+    /**
+     * Time
+     * @type {string}
+     * @memberof DtoOccurrenceResponse
+     */
+    'start_time'?: string;
+    /**
+     * 
+     * @type {TypesStatus}
+     * @memberof DtoOccurrenceResponse
+     */
+    'status'?: TypesStatus;
+    /**
+     * 
+     * @type {string}
+     * @memberof DtoOccurrenceResponse
+     */
+    'updated_at'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof DtoOccurrenceResponse
      */
     'updated_by'?: string;
 }
@@ -1103,6 +1853,259 @@ export interface DtoUpdateCategoryRequest {
 /**
  * 
  * @export
+ * @interface DtoUpdateEventRequest
+ */
+export interface DtoUpdateEventRequest {
+    /**
+     * 
+     * @type {string}
+     * @memberof DtoUpdateEventRequest
+     */
+    'cover_image_url'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof DtoUpdateEventRequest
+     */
+    'description'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof DtoUpdateEventRequest
+     */
+    'end_date'?: string;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof DtoUpdateEventRequest
+     */
+    'images'?: Array<string>;
+    /**
+     * 
+     * @type {number}
+     * @memberof DtoUpdateEventRequest
+     */
+    'latitude'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof DtoUpdateEventRequest
+     */
+    'location_name'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof DtoUpdateEventRequest
+     */
+    'longitude'?: number;
+    /**
+     * 
+     * @type {{ [key: string]: string; }}
+     * @memberof DtoUpdateEventRequest
+     */
+    'metadata'?: { [key: string]: string; };
+    /**
+     * 
+     * @type {string}
+     * @memberof DtoUpdateEventRequest
+     */
+    'place_id'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof DtoUpdateEventRequest
+     */
+    'start_date'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof DtoUpdateEventRequest
+     */
+    'subtitle'?: string;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof DtoUpdateEventRequest
+     */
+    'tags'?: Array<string>;
+    /**
+     * 
+     * @type {string}
+     * @memberof DtoUpdateEventRequest
+     */
+    'title'?: string;
+    /**
+     * 
+     * @type {TypesEventType}
+     * @memberof DtoUpdateEventRequest
+     */
+    'type'?: TypesEventType;
+}
+
+
+/**
+ * 
+ * @export
+ * @interface DtoUpdateHotelRequest
+ */
+export interface DtoUpdateHotelRequest {
+    /**
+     * 
+     * @type {{ [key: string]: string; }}
+     * @memberof DtoUpdateHotelRequest
+     */
+    'address'?: { [key: string]: string; };
+    /**
+     * 
+     * @type {string}
+     * @memberof DtoUpdateHotelRequest
+     */
+    'check_in_time'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof DtoUpdateHotelRequest
+     */
+    'check_out_time'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof DtoUpdateHotelRequest
+     */
+    'currency'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof DtoUpdateHotelRequest
+     */
+    'description'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof DtoUpdateHotelRequest
+     */
+    'email'?: string;
+    /**
+     * 
+     * @type {TypesLocation}
+     * @memberof DtoUpdateHotelRequest
+     */
+    'location'?: TypesLocation;
+    /**
+     * 
+     * @type {string}
+     * @memberof DtoUpdateHotelRequest
+     */
+    'name'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof DtoUpdateHotelRequest
+     */
+    'phone'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof DtoUpdateHotelRequest
+     */
+    'price_max'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof DtoUpdateHotelRequest
+     */
+    'price_min'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof DtoUpdateHotelRequest
+     */
+    'primary_image_url'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof DtoUpdateHotelRequest
+     */
+    'room_count'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof DtoUpdateHotelRequest
+     */
+    'star_rating'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof DtoUpdateHotelRequest
+     */
+    'thumbnail_url'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof DtoUpdateHotelRequest
+     */
+    'website'?: string;
+}
+/**
+ * 
+ * @export
+ * @interface DtoUpdateOccurrenceRequest
+ */
+export interface DtoUpdateOccurrenceRequest {
+    /**
+     * 
+     * @type {number}
+     * @memberof DtoUpdateOccurrenceRequest
+     */
+    'day_of_month'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof DtoUpdateOccurrenceRequest
+     */
+    'day_of_week'?: number;
+    /**
+     * ISO 8601 format, optional/nillable
+     * @type {string}
+     * @memberof DtoUpdateOccurrenceRequest
+     */
+    'end_time'?: string;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof DtoUpdateOccurrenceRequest
+     */
+    'exception_dates'?: Array<string>;
+    /**
+     * 
+     * @type {{ [key: string]: string; }}
+     * @memberof DtoUpdateOccurrenceRequest
+     */
+    'metadata'?: { [key: string]: string; };
+    /**
+     * 
+     * @type {number}
+     * @memberof DtoUpdateOccurrenceRequest
+     */
+    'month_of_year'?: number;
+    /**
+     * 
+     * @type {TypesRecurrenceType}
+     * @memberof DtoUpdateOccurrenceRequest
+     */
+    'recurrence_type'?: TypesRecurrenceType;
+    /**
+     * ISO 8601 format, optional/nillable
+     * @type {string}
+     * @memberof DtoUpdateOccurrenceRequest
+     */
+    'start_time'?: string;
+}
+
+
+/**
+ * 
+ * @export
  * @interface DtoUpdatePlaceImageRequest
  */
 export interface DtoUpdatePlaceImageRequest {
@@ -1269,6 +2272,111 @@ export interface DtoUpdateUserRequest {
 /**
  * 
  * @export
+ * @interface EventEventOccurrence
+ */
+export interface EventEventOccurrence {
+    /**
+     * 
+     * @type {string}
+     * @memberof EventEventOccurrence
+     */
+    'created_at'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof EventEventOccurrence
+     */
+    'created_by'?: string;
+    /**
+     * 1-31
+     * @type {number}
+     * @memberof EventEventOccurrence
+     */
+    'day_of_month'?: number;
+    /**
+     * Day specifics
+     * @type {number}
+     * @memberof EventEventOccurrence
+     */
+    'day_of_week'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof EventEventOccurrence
+     */
+    'duration_minutes'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof EventEventOccurrence
+     */
+    'end_time'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof EventEventOccurrence
+     */
+    'event_id'?: string;
+    /**
+     * Exceptions
+     * @type {Array<string>}
+     * @memberof EventEventOccurrence
+     */
+    'exception_dates'?: Array<string>;
+    /**
+     * Identity
+     * @type {string}
+     * @memberof EventEventOccurrence
+     */
+    'id'?: string;
+    /**
+     * Metadata
+     * @type {{ [key: string]: string; }}
+     * @memberof EventEventOccurrence
+     */
+    'metadata'?: { [key: string]: string; };
+    /**
+     * 1-12 (renamed from Month)
+     * @type {number}
+     * @memberof EventEventOccurrence
+     */
+    'month_of_year'?: number;
+    /**
+     * Recurrence
+     * @type {TypesRecurrenceType}
+     * @memberof EventEventOccurrence
+     */
+    'recurrence_type'?: TypesRecurrenceType;
+    /**
+     * Time
+     * @type {string}
+     * @memberof EventEventOccurrence
+     */
+    'start_time'?: string;
+    /**
+     * 
+     * @type {TypesStatus}
+     * @memberof EventEventOccurrence
+     */
+    'status'?: TypesStatus;
+    /**
+     * 
+     * @type {string}
+     * @memberof EventEventOccurrence
+     */
+    'updated_at'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof EventEventOccurrence
+     */
+    'updated_by'?: string;
+}
+
+
+/**
+ * 
+ * @export
  * @interface IerrErrorDetail
  */
 export interface IerrErrorDetail {
@@ -1391,6 +2499,23 @@ export interface PlacePlaceImage {
  * @enum {string}
  */
 
+export const TypesEventType = {
+    EventTypeAarti: 'AARTI',
+    EventTypeFestival: 'FESTIVAL',
+    EventTypeCultural: 'CULTURAL',
+    EventTypeWorkshop: 'WORKSHOP',
+    EventTypeSpecialDarshan: 'SPECIAL_DARSHAN'
+} as const;
+
+export type TypesEventType = typeof TypesEventType[keyof typeof TypesEventType];
+
+
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+
 export const TypesFeedSectionType = {
     SectionTypeLatest: 'latest',
     SectionTypeTrending: 'trending',
@@ -1470,6 +2595,38 @@ export interface TypesPaginationResponse {
  * @enum {string}
  */
 
+export const TypesRecurrenceType = {
+    /**
+    * One-time event
+    */
+    RecurrenceNone: 'NONE',
+    /**
+    * Every day
+    */
+    RecurrenceDaily: 'DAILY',
+    /**
+    * Specific day each week
+    */
+    RecurrenceWeekly: 'WEEKLY',
+    /**
+    * Specific date each month
+    */
+    RecurrenceMonthly: 'MONTHLY',
+    /**
+    * Specific date each year
+    */
+    RecurrenceYearly: 'YEARLY'
+} as const;
+
+export type TypesRecurrenceType = typeof TypesRecurrenceType[keyof typeof TypesRecurrenceType];
+
+
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+
 export const TypesReviewEntityType = {
     EntityTypePlace: 'place',
     EntityTypeHotel: 'hotel',
@@ -1493,7 +2650,8 @@ export const TypesStatus = {
     StatusDeleted: 'deleted',
     StatusArchived: 'archived',
     StatusInactive: 'inactive',
-    StatusPending: 'pending'
+    StatusPending: 'pending',
+    StatusDraft: 'draft'
 } as const;
 
 export type TypesStatus = typeof TypesStatus[keyof typeof TypesStatus];
@@ -2147,10 +3305,1744 @@ export class CategoryApi extends BaseAPI {
 
 
 /**
- * FeedApi - axios parameter creator
+ * EventApi - axios parameter creator
  * @export
  */
-export const FeedApiAxiosParamCreator = function (configuration?: Configuration) {
+export const EventApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * Get all occurrences for a specific event
+         * @summary List occurrences for event
+         * @param {string} eventId Event ID
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        eventsEventIdOccurrencesGet: async (eventId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'eventId' is not null or undefined
+            assertParamExists('eventsEventIdOccurrencesGet', 'eventId', eventId)
+            const localVarPath = `/events/{eventId}/occurrences`
+                .replace(`{${"eventId"}}`, encodeURIComponent(String(eventId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Get a paginated list of events with filtering and pagination. Use expand=true with from_date and to_date to get expanded occurrences.
+         * @summary List events
+         * @param {boolean} [expand] If true, expand occurrences in date range
+         * @param {string} [fromDate] ISO date YYYY-MM-DD
+         * @param {number} [limit] 
+         * @param {number} [offset] 
+         * @param {EventsGetOrderEnum} [order] 
+         * @param {string} [placeId] 
+         * @param {string} [sort] 
+         * @param {EventsGetStatusEnum} [status] 
+         * @param {Array<string>} [tags] 
+         * @param {string} [toDate] ISO date YYYY-MM-DD
+         * @param {EventsGetTypeEnum} [type] 
+         * @param {boolean} [expand2] Expand occurrences in date range
+         * @param {string} [fromDate2] Start date for expansion (YYYY-MM-DD)
+         * @param {string} [toDate2] End date for expansion (YYYY-MM-DD)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        eventsGet: async (expand?: boolean, fromDate?: string, limit?: number, offset?: number, order?: EventsGetOrderEnum, placeId?: string, sort?: string, status?: EventsGetStatusEnum, tags?: Array<string>, toDate?: string, type?: EventsGetTypeEnum, expand2?: boolean, fromDate2?: string, toDate2?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/events`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (expand !== undefined) {
+                localVarQueryParameter['expand'] = expand;
+            }
+
+            if (fromDate !== undefined) {
+                localVarQueryParameter['from_date'] = fromDate;
+            }
+
+            if (limit !== undefined) {
+                localVarQueryParameter['limit'] = limit;
+            }
+
+            if (offset !== undefined) {
+                localVarQueryParameter['offset'] = offset;
+            }
+
+            if (order !== undefined) {
+                localVarQueryParameter['order'] = order;
+            }
+
+            if (placeId !== undefined) {
+                localVarQueryParameter['place_id'] = placeId;
+            }
+
+            if (sort !== undefined) {
+                localVarQueryParameter['sort'] = sort;
+            }
+
+            if (status !== undefined) {
+                localVarQueryParameter['status'] = status;
+            }
+
+            if (tags) {
+                localVarQueryParameter['tags'] = tags.join(COLLECTION_FORMATS.csv);
+            }
+
+            if (toDate !== undefined) {
+                localVarQueryParameter['to_date'] = toDate;
+            }
+
+            if (type !== undefined) {
+                localVarQueryParameter['type'] = type;
+            }
+
+            if (expand2 !== undefined) {
+                localVarQueryParameter['expand'] = expand2;
+            }
+
+            if (fromDate2 !== undefined) {
+                localVarQueryParameter['from_date'] = fromDate2;
+            }
+
+            if (toDate2 !== undefined) {
+                localVarQueryParameter['to_date'] = toDate2;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Soft delete an event
+         * @summary Delete an event
+         * @param {string} id Event ID
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        eventsIdDelete: async (id: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('eventsIdDelete', 'id', id)
+            const localVarPath = `/events/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication Authorization required
+            await setApiKeyToObject(localVarHeaderParameter, "Authorization", configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Get an event by its ID
+         * @summary Get event by ID
+         * @param {string} id Event ID
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        eventsIdGet: async (id: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('eventsIdGet', 'id', id)
+            const localVarPath = `/events/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Increment the interested count for an event (user marked as interested)
+         * @summary Increment event interested count
+         * @param {string} id Event ID
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        eventsIdInterestedPost: async (id: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('eventsIdInterestedPost', 'id', id)
+            const localVarPath = `/events/{id}/interested`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Update an existing event
+         * @summary Update an event
+         * @param {string} id Event ID
+         * @param {DtoUpdateEventRequest} request Update event request
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        eventsIdPut: async (id: string, request: DtoUpdateEventRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('eventsIdPut', 'id', id)
+            // verify required parameter 'request' is not null or undefined
+            assertParamExists('eventsIdPut', 'request', request)
+            const localVarPath = `/events/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication Authorization required
+            await setApiKeyToObject(localVarHeaderParameter, "Authorization", configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(request, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Increment the view count for an event (analytics)
+         * @summary Increment event view count
+         * @param {string} id Event ID
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        eventsIdViewPost: async (id: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('eventsIdViewPost', 'id', id)
+            const localVarPath = `/events/{id}/view`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Soft delete an event occurrence
+         * @summary Delete occurrence
+         * @param {string} id Occurrence ID
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        eventsOccurrencesIdDelete: async (id: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('eventsOccurrencesIdDelete', 'id', id)
+            const localVarPath = `/events/occurrences/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication Authorization required
+            await setApiKeyToObject(localVarHeaderParameter, "Authorization", configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Get an event occurrence by its ID
+         * @summary Get occurrence by ID
+         * @param {string} id Occurrence ID
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        eventsOccurrencesIdGet: async (id: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('eventsOccurrencesIdGet', 'id', id)
+            const localVarPath = `/events/occurrences/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Update an existing event occurrence
+         * @summary Update occurrence
+         * @param {string} id Occurrence ID
+         * @param {DtoUpdateOccurrenceRequest} request Update occurrence request
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        eventsOccurrencesIdPut: async (id: string, request: DtoUpdateOccurrenceRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('eventsOccurrencesIdPut', 'id', id)
+            // verify required parameter 'request' is not null or undefined
+            assertParamExists('eventsOccurrencesIdPut', 'request', request)
+            const localVarPath = `/events/occurrences/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication Authorization required
+            await setApiKeyToObject(localVarHeaderParameter, "Authorization", configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(request, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Create a new occurrence for an event
+         * @summary Create event occurrence
+         * @param {DtoCreateOccurrenceRequest} request Create occurrence request
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        eventsOccurrencesPost: async (request: DtoCreateOccurrenceRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'request' is not null or undefined
+            assertParamExists('eventsOccurrencesPost', 'request', request)
+            const localVarPath = `/events/occurrences`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication Authorization required
+            await setApiKeyToObject(localVarHeaderParameter, "Authorization", configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(request, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Create a new event with the provided details
+         * @summary Create a new event
+         * @param {DtoCreateEventRequest} request Create event request
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        eventsPost: async (request: DtoCreateEventRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'request' is not null or undefined
+            assertParamExists('eventsPost', 'request', request)
+            const localVarPath = `/events`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication Authorization required
+            await setApiKeyToObject(localVarHeaderParameter, "Authorization", configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(request, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Get an event by its slug
+         * @summary Get event by slug
+         * @param {string} slug Event slug
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        eventsSlugSlugGet: async (slug: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'slug' is not null or undefined
+            assertParamExists('eventsSlugSlugGet', 'slug', slug)
+            const localVarPath = `/events/slug/{slug}`
+                .replace(`{${"slug"}}`, encodeURIComponent(String(slug)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * EventApi - functional programming interface
+ * @export
+ */
+export const EventApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = EventApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * Get all occurrences for a specific event
+         * @summary List occurrences for event
+         * @param {string} eventId Event ID
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async eventsEventIdOccurrencesGet(eventId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<DtoOccurrenceResponse>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.eventsEventIdOccurrencesGet(eventId, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['EventApi.eventsEventIdOccurrencesGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Get a paginated list of events with filtering and pagination. Use expand=true with from_date and to_date to get expanded occurrences.
+         * @summary List events
+         * @param {boolean} [expand] If true, expand occurrences in date range
+         * @param {string} [fromDate] ISO date YYYY-MM-DD
+         * @param {number} [limit] 
+         * @param {number} [offset] 
+         * @param {EventsGetOrderEnum} [order] 
+         * @param {string} [placeId] 
+         * @param {string} [sort] 
+         * @param {EventsGetStatusEnum} [status] 
+         * @param {Array<string>} [tags] 
+         * @param {string} [toDate] ISO date YYYY-MM-DD
+         * @param {EventsGetTypeEnum} [type] 
+         * @param {boolean} [expand2] Expand occurrences in date range
+         * @param {string} [fromDate2] Start date for expansion (YYYY-MM-DD)
+         * @param {string} [toDate2] End date for expansion (YYYY-MM-DD)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async eventsGet(expand?: boolean, fromDate?: string, limit?: number, offset?: number, order?: EventsGetOrderEnum, placeId?: string, sort?: string, status?: EventsGetStatusEnum, tags?: Array<string>, toDate?: string, type?: EventsGetTypeEnum, expand2?: boolean, fromDate2?: string, toDate2?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DtoListEventsResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.eventsGet(expand, fromDate, limit, offset, order, placeId, sort, status, tags, toDate, type, expand2, fromDate2, toDate2, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['EventApi.eventsGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Soft delete an event
+         * @summary Delete an event
+         * @param {string} id Event ID
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async eventsIdDelete(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.eventsIdDelete(id, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['EventApi.eventsIdDelete']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Get an event by its ID
+         * @summary Get event by ID
+         * @param {string} id Event ID
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async eventsIdGet(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DtoEventResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.eventsIdGet(id, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['EventApi.eventsIdGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Increment the interested count for an event (user marked as interested)
+         * @summary Increment event interested count
+         * @param {string} id Event ID
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async eventsIdInterestedPost(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.eventsIdInterestedPost(id, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['EventApi.eventsIdInterestedPost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Update an existing event
+         * @summary Update an event
+         * @param {string} id Event ID
+         * @param {DtoUpdateEventRequest} request Update event request
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async eventsIdPut(id: string, request: DtoUpdateEventRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DtoEventResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.eventsIdPut(id, request, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['EventApi.eventsIdPut']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Increment the view count for an event (analytics)
+         * @summary Increment event view count
+         * @param {string} id Event ID
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async eventsIdViewPost(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.eventsIdViewPost(id, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['EventApi.eventsIdViewPost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Soft delete an event occurrence
+         * @summary Delete occurrence
+         * @param {string} id Occurrence ID
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async eventsOccurrencesIdDelete(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.eventsOccurrencesIdDelete(id, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['EventApi.eventsOccurrencesIdDelete']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Get an event occurrence by its ID
+         * @summary Get occurrence by ID
+         * @param {string} id Occurrence ID
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async eventsOccurrencesIdGet(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DtoOccurrenceResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.eventsOccurrencesIdGet(id, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['EventApi.eventsOccurrencesIdGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Update an existing event occurrence
+         * @summary Update occurrence
+         * @param {string} id Occurrence ID
+         * @param {DtoUpdateOccurrenceRequest} request Update occurrence request
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async eventsOccurrencesIdPut(id: string, request: DtoUpdateOccurrenceRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DtoOccurrenceResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.eventsOccurrencesIdPut(id, request, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['EventApi.eventsOccurrencesIdPut']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Create a new occurrence for an event
+         * @summary Create event occurrence
+         * @param {DtoCreateOccurrenceRequest} request Create occurrence request
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async eventsOccurrencesPost(request: DtoCreateOccurrenceRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DtoOccurrenceResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.eventsOccurrencesPost(request, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['EventApi.eventsOccurrencesPost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Create a new event with the provided details
+         * @summary Create a new event
+         * @param {DtoCreateEventRequest} request Create event request
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async eventsPost(request: DtoCreateEventRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DtoEventResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.eventsPost(request, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['EventApi.eventsPost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Get an event by its slug
+         * @summary Get event by slug
+         * @param {string} slug Event slug
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async eventsSlugSlugGet(slug: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DtoEventResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.eventsSlugSlugGet(slug, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['EventApi.eventsSlugSlugGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * EventApi - factory interface
+ * @export
+ */
+export const EventApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = EventApiFp(configuration)
+    return {
+        /**
+         * Get all occurrences for a specific event
+         * @summary List occurrences for event
+         * @param {string} eventId Event ID
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        eventsEventIdOccurrencesGet(eventId: string, options?: RawAxiosRequestConfig): AxiosPromise<Array<DtoOccurrenceResponse>> {
+            return localVarFp.eventsEventIdOccurrencesGet(eventId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Get a paginated list of events with filtering and pagination. Use expand=true with from_date and to_date to get expanded occurrences.
+         * @summary List events
+         * @param {boolean} [expand] If true, expand occurrences in date range
+         * @param {string} [fromDate] ISO date YYYY-MM-DD
+         * @param {number} [limit] 
+         * @param {number} [offset] 
+         * @param {EventsGetOrderEnum} [order] 
+         * @param {string} [placeId] 
+         * @param {string} [sort] 
+         * @param {EventsGetStatusEnum} [status] 
+         * @param {Array<string>} [tags] 
+         * @param {string} [toDate] ISO date YYYY-MM-DD
+         * @param {EventsGetTypeEnum} [type] 
+         * @param {boolean} [expand2] Expand occurrences in date range
+         * @param {string} [fromDate2] Start date for expansion (YYYY-MM-DD)
+         * @param {string} [toDate2] End date for expansion (YYYY-MM-DD)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        eventsGet(expand?: boolean, fromDate?: string, limit?: number, offset?: number, order?: EventsGetOrderEnum, placeId?: string, sort?: string, status?: EventsGetStatusEnum, tags?: Array<string>, toDate?: string, type?: EventsGetTypeEnum, expand2?: boolean, fromDate2?: string, toDate2?: string, options?: RawAxiosRequestConfig): AxiosPromise<DtoListEventsResponse> {
+            return localVarFp.eventsGet(expand, fromDate, limit, offset, order, placeId, sort, status, tags, toDate, type, expand2, fromDate2, toDate2, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Soft delete an event
+         * @summary Delete an event
+         * @param {string} id Event ID
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        eventsIdDelete(id: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.eventsIdDelete(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Get an event by its ID
+         * @summary Get event by ID
+         * @param {string} id Event ID
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        eventsIdGet(id: string, options?: RawAxiosRequestConfig): AxiosPromise<DtoEventResponse> {
+            return localVarFp.eventsIdGet(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Increment the interested count for an event (user marked as interested)
+         * @summary Increment event interested count
+         * @param {string} id Event ID
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        eventsIdInterestedPost(id: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.eventsIdInterestedPost(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Update an existing event
+         * @summary Update an event
+         * @param {string} id Event ID
+         * @param {DtoUpdateEventRequest} request Update event request
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        eventsIdPut(id: string, request: DtoUpdateEventRequest, options?: RawAxiosRequestConfig): AxiosPromise<DtoEventResponse> {
+            return localVarFp.eventsIdPut(id, request, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Increment the view count for an event (analytics)
+         * @summary Increment event view count
+         * @param {string} id Event ID
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        eventsIdViewPost(id: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.eventsIdViewPost(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Soft delete an event occurrence
+         * @summary Delete occurrence
+         * @param {string} id Occurrence ID
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        eventsOccurrencesIdDelete(id: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.eventsOccurrencesIdDelete(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Get an event occurrence by its ID
+         * @summary Get occurrence by ID
+         * @param {string} id Occurrence ID
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        eventsOccurrencesIdGet(id: string, options?: RawAxiosRequestConfig): AxiosPromise<DtoOccurrenceResponse> {
+            return localVarFp.eventsOccurrencesIdGet(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Update an existing event occurrence
+         * @summary Update occurrence
+         * @param {string} id Occurrence ID
+         * @param {DtoUpdateOccurrenceRequest} request Update occurrence request
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        eventsOccurrencesIdPut(id: string, request: DtoUpdateOccurrenceRequest, options?: RawAxiosRequestConfig): AxiosPromise<DtoOccurrenceResponse> {
+            return localVarFp.eventsOccurrencesIdPut(id, request, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Create a new occurrence for an event
+         * @summary Create event occurrence
+         * @param {DtoCreateOccurrenceRequest} request Create occurrence request
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        eventsOccurrencesPost(request: DtoCreateOccurrenceRequest, options?: RawAxiosRequestConfig): AxiosPromise<DtoOccurrenceResponse> {
+            return localVarFp.eventsOccurrencesPost(request, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Create a new event with the provided details
+         * @summary Create a new event
+         * @param {DtoCreateEventRequest} request Create event request
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        eventsPost(request: DtoCreateEventRequest, options?: RawAxiosRequestConfig): AxiosPromise<DtoEventResponse> {
+            return localVarFp.eventsPost(request, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Get an event by its slug
+         * @summary Get event by slug
+         * @param {string} slug Event slug
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        eventsSlugSlugGet(slug: string, options?: RawAxiosRequestConfig): AxiosPromise<DtoEventResponse> {
+            return localVarFp.eventsSlugSlugGet(slug, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * EventApi - object-oriented interface
+ * @export
+ * @class EventApi
+ * @extends {BaseAPI}
+ */
+export class EventApi extends BaseAPI {
+    /**
+     * Get all occurrences for a specific event
+     * @summary List occurrences for event
+     * @param {string} eventId Event ID
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof EventApi
+     */
+    public eventsEventIdOccurrencesGet(eventId: string, options?: RawAxiosRequestConfig) {
+        return EventApiFp(this.configuration).eventsEventIdOccurrencesGet(eventId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Get a paginated list of events with filtering and pagination. Use expand=true with from_date and to_date to get expanded occurrences.
+     * @summary List events
+     * @param {boolean} [expand] If true, expand occurrences in date range
+     * @param {string} [fromDate] ISO date YYYY-MM-DD
+     * @param {number} [limit] 
+     * @param {number} [offset] 
+     * @param {EventsGetOrderEnum} [order] 
+     * @param {string} [placeId] 
+     * @param {string} [sort] 
+     * @param {EventsGetStatusEnum} [status] 
+     * @param {Array<string>} [tags] 
+     * @param {string} [toDate] ISO date YYYY-MM-DD
+     * @param {EventsGetTypeEnum} [type] 
+     * @param {boolean} [expand2] Expand occurrences in date range
+     * @param {string} [fromDate2] Start date for expansion (YYYY-MM-DD)
+     * @param {string} [toDate2] End date for expansion (YYYY-MM-DD)
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof EventApi
+     */
+    public eventsGet(expand?: boolean, fromDate?: string, limit?: number, offset?: number, order?: EventsGetOrderEnum, placeId?: string, sort?: string, status?: EventsGetStatusEnum, tags?: Array<string>, toDate?: string, type?: EventsGetTypeEnum, expand2?: boolean, fromDate2?: string, toDate2?: string, options?: RawAxiosRequestConfig) {
+        return EventApiFp(this.configuration).eventsGet(expand, fromDate, limit, offset, order, placeId, sort, status, tags, toDate, type, expand2, fromDate2, toDate2, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Soft delete an event
+     * @summary Delete an event
+     * @param {string} id Event ID
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof EventApi
+     */
+    public eventsIdDelete(id: string, options?: RawAxiosRequestConfig) {
+        return EventApiFp(this.configuration).eventsIdDelete(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Get an event by its ID
+     * @summary Get event by ID
+     * @param {string} id Event ID
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof EventApi
+     */
+    public eventsIdGet(id: string, options?: RawAxiosRequestConfig) {
+        return EventApiFp(this.configuration).eventsIdGet(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Increment the interested count for an event (user marked as interested)
+     * @summary Increment event interested count
+     * @param {string} id Event ID
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof EventApi
+     */
+    public eventsIdInterestedPost(id: string, options?: RawAxiosRequestConfig) {
+        return EventApiFp(this.configuration).eventsIdInterestedPost(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Update an existing event
+     * @summary Update an event
+     * @param {string} id Event ID
+     * @param {DtoUpdateEventRequest} request Update event request
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof EventApi
+     */
+    public eventsIdPut(id: string, request: DtoUpdateEventRequest, options?: RawAxiosRequestConfig) {
+        return EventApiFp(this.configuration).eventsIdPut(id, request, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Increment the view count for an event (analytics)
+     * @summary Increment event view count
+     * @param {string} id Event ID
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof EventApi
+     */
+    public eventsIdViewPost(id: string, options?: RawAxiosRequestConfig) {
+        return EventApiFp(this.configuration).eventsIdViewPost(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Soft delete an event occurrence
+     * @summary Delete occurrence
+     * @param {string} id Occurrence ID
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof EventApi
+     */
+    public eventsOccurrencesIdDelete(id: string, options?: RawAxiosRequestConfig) {
+        return EventApiFp(this.configuration).eventsOccurrencesIdDelete(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Get an event occurrence by its ID
+     * @summary Get occurrence by ID
+     * @param {string} id Occurrence ID
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof EventApi
+     */
+    public eventsOccurrencesIdGet(id: string, options?: RawAxiosRequestConfig) {
+        return EventApiFp(this.configuration).eventsOccurrencesIdGet(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Update an existing event occurrence
+     * @summary Update occurrence
+     * @param {string} id Occurrence ID
+     * @param {DtoUpdateOccurrenceRequest} request Update occurrence request
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof EventApi
+     */
+    public eventsOccurrencesIdPut(id: string, request: DtoUpdateOccurrenceRequest, options?: RawAxiosRequestConfig) {
+        return EventApiFp(this.configuration).eventsOccurrencesIdPut(id, request, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Create a new occurrence for an event
+     * @summary Create event occurrence
+     * @param {DtoCreateOccurrenceRequest} request Create occurrence request
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof EventApi
+     */
+    public eventsOccurrencesPost(request: DtoCreateOccurrenceRequest, options?: RawAxiosRequestConfig) {
+        return EventApiFp(this.configuration).eventsOccurrencesPost(request, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Create a new event with the provided details
+     * @summary Create a new event
+     * @param {DtoCreateEventRequest} request Create event request
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof EventApi
+     */
+    public eventsPost(request: DtoCreateEventRequest, options?: RawAxiosRequestConfig) {
+        return EventApiFp(this.configuration).eventsPost(request, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Get an event by its slug
+     * @summary Get event by slug
+     * @param {string} slug Event slug
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof EventApi
+     */
+    public eventsSlugSlugGet(slug: string, options?: RawAxiosRequestConfig) {
+        return EventApiFp(this.configuration).eventsSlugSlugGet(slug, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+/**
+ * @export
+ */
+export const EventsGetOrderEnum = {
+    Asc: 'asc',
+    Desc: 'desc'
+} as const;
+export type EventsGetOrderEnum = typeof EventsGetOrderEnum[keyof typeof EventsGetOrderEnum];
+/**
+ * @export
+ */
+export const EventsGetStatusEnum = {
+    StatusPublished: 'published',
+    StatusDeleted: 'deleted',
+    StatusArchived: 'archived',
+    StatusInactive: 'inactive',
+    StatusPending: 'pending',
+    StatusDraft: 'draft'
+} as const;
+export type EventsGetStatusEnum = typeof EventsGetStatusEnum[keyof typeof EventsGetStatusEnum];
+/**
+ * @export
+ */
+export const EventsGetTypeEnum = {
+    EventTypeAarti: 'AARTI',
+    EventTypeFestival: 'FESTIVAL',
+    EventTypeCultural: 'CULTURAL',
+    EventTypeWorkshop: 'WORKSHOP',
+    EventTypeSpecialDarshan: 'SPECIAL_DARSHAN'
+} as const;
+export type EventsGetTypeEnum = typeof EventsGetTypeEnum[keyof typeof EventsGetTypeEnum];
+
+
+/**
+ * HotelApi - axios parameter creator
+ * @export
+ */
+export const HotelApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * Get a paginated list of hotels with filtering and pagination
+         * @summary List hotels
+         * @param {string} [endTime] 
+         * @param {string} [expand] 
+         * @param {string} [lastViewedAfter] Trending filter
+         * @param {number} [latitude] Geospatial filters
+         * @param {number} [limit] 
+         * @param {number} [longitude] 
+         * @param {number} [maxPrice] 
+         * @param {number} [minPrice] Price range filters
+         * @param {number} [offset] 
+         * @param {HotelsGetOrderEnum} [order] 
+         * @param {number} [radiusM] radius in meters
+         * @param {string} [searchQuery] Search
+         * @param {Array<string>} [slug] Custom filters
+         * @param {string} [sort] 
+         * @param {Array<number>} [starRating] 
+         * @param {string} [startTime] 
+         * @param {HotelsGetStatusEnum} [status] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        hotelsGet: async (endTime?: string, expand?: string, lastViewedAfter?: string, latitude?: number, limit?: number, longitude?: number, maxPrice?: number, minPrice?: number, offset?: number, order?: HotelsGetOrderEnum, radiusM?: number, searchQuery?: string, slug?: Array<string>, sort?: string, starRating?: Array<number>, startTime?: string, status?: HotelsGetStatusEnum, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/hotels`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (endTime !== undefined) {
+                localVarQueryParameter['end_time'] = endTime;
+            }
+
+            if (expand !== undefined) {
+                localVarQueryParameter['expand'] = expand;
+            }
+
+            if (lastViewedAfter !== undefined) {
+                localVarQueryParameter['last_viewed_after'] = lastViewedAfter;
+            }
+
+            if (latitude !== undefined) {
+                localVarQueryParameter['latitude'] = latitude;
+            }
+
+            if (limit !== undefined) {
+                localVarQueryParameter['limit'] = limit;
+            }
+
+            if (longitude !== undefined) {
+                localVarQueryParameter['longitude'] = longitude;
+            }
+
+            if (maxPrice !== undefined) {
+                localVarQueryParameter['max_price'] = maxPrice;
+            }
+
+            if (minPrice !== undefined) {
+                localVarQueryParameter['min_price'] = minPrice;
+            }
+
+            if (offset !== undefined) {
+                localVarQueryParameter['offset'] = offset;
+            }
+
+            if (order !== undefined) {
+                localVarQueryParameter['order'] = order;
+            }
+
+            if (radiusM !== undefined) {
+                localVarQueryParameter['radius_m'] = radiusM;
+            }
+
+            if (searchQuery !== undefined) {
+                localVarQueryParameter['search_query'] = searchQuery;
+            }
+
+            if (slug) {
+                localVarQueryParameter['slug'] = slug.join(COLLECTION_FORMATS.csv);
+            }
+
+            if (sort !== undefined) {
+                localVarQueryParameter['sort'] = sort;
+            }
+
+            if (starRating) {
+                localVarQueryParameter['star_rating'] = starRating.join(COLLECTION_FORMATS.csv);
+            }
+
+            if (startTime !== undefined) {
+                localVarQueryParameter['start_time'] = startTime;
+            }
+
+            if (status !== undefined) {
+                localVarQueryParameter['status'] = status;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Soft delete a hotel
+         * @summary Delete a hotel
+         * @param {string} id Hotel ID
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        hotelsIdDelete: async (id: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('hotelsIdDelete', 'id', id)
+            const localVarPath = `/hotels/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication Authorization required
+            await setApiKeyToObject(localVarHeaderParameter, "Authorization", configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Get a hotel by its ID
+         * @summary Get hotel by ID
+         * @param {string} id Hotel ID
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        hotelsIdGet: async (id: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('hotelsIdGet', 'id', id)
+            const localVarPath = `/hotels/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Update an existing hotel
+         * @summary Update a hotel
+         * @param {string} id Hotel ID
+         * @param {DtoUpdateHotelRequest} request Update hotel request
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        hotelsIdPut: async (id: string, request: DtoUpdateHotelRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('hotelsIdPut', 'id', id)
+            // verify required parameter 'request' is not null or undefined
+            assertParamExists('hotelsIdPut', 'request', request)
+            const localVarPath = `/hotels/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication Authorization required
+            await setApiKeyToObject(localVarHeaderParameter, "Authorization", configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(request, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Create a new hotel with the provided details
+         * @summary Create a new hotel
+         * @param {DtoCreateHotelRequest} request Create hotel request
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        hotelsPost: async (request: DtoCreateHotelRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'request' is not null or undefined
+            assertParamExists('hotelsPost', 'request', request)
+            const localVarPath = `/hotels`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication Authorization required
+            await setApiKeyToObject(localVarHeaderParameter, "Authorization", configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(request, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Get a hotel by its slug
+         * @summary Get hotel by slug
+         * @param {string} slug Hotel slug
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        hotelsSlugSlugGet: async (slug: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'slug' is not null or undefined
+            assertParamExists('hotelsSlugSlugGet', 'slug', slug)
+            const localVarPath = `/hotels/slug/{slug}`
+                .replace(`{${"slug"}}`, encodeURIComponent(String(slug)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * HotelApi - functional programming interface
+ * @export
+ */
+export const HotelApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = HotelApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * Get a paginated list of hotels with filtering and pagination
+         * @summary List hotels
+         * @param {string} [endTime] 
+         * @param {string} [expand] 
+         * @param {string} [lastViewedAfter] Trending filter
+         * @param {number} [latitude] Geospatial filters
+         * @param {number} [limit] 
+         * @param {number} [longitude] 
+         * @param {number} [maxPrice] 
+         * @param {number} [minPrice] Price range filters
+         * @param {number} [offset] 
+         * @param {HotelsGetOrderEnum} [order] 
+         * @param {number} [radiusM] radius in meters
+         * @param {string} [searchQuery] Search
+         * @param {Array<string>} [slug] Custom filters
+         * @param {string} [sort] 
+         * @param {Array<number>} [starRating] 
+         * @param {string} [startTime] 
+         * @param {HotelsGetStatusEnum} [status] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async hotelsGet(endTime?: string, expand?: string, lastViewedAfter?: string, latitude?: number, limit?: number, longitude?: number, maxPrice?: number, minPrice?: number, offset?: number, order?: HotelsGetOrderEnum, radiusM?: number, searchQuery?: string, slug?: Array<string>, sort?: string, starRating?: Array<number>, startTime?: string, status?: HotelsGetStatusEnum, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DtoListHotelsResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.hotelsGet(endTime, expand, lastViewedAfter, latitude, limit, longitude, maxPrice, minPrice, offset, order, radiusM, searchQuery, slug, sort, starRating, startTime, status, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['HotelApi.hotelsGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Soft delete a hotel
+         * @summary Delete a hotel
+         * @param {string} id Hotel ID
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async hotelsIdDelete(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.hotelsIdDelete(id, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['HotelApi.hotelsIdDelete']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Get a hotel by its ID
+         * @summary Get hotel by ID
+         * @param {string} id Hotel ID
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async hotelsIdGet(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DtoHotelResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.hotelsIdGet(id, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['HotelApi.hotelsIdGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Update an existing hotel
+         * @summary Update a hotel
+         * @param {string} id Hotel ID
+         * @param {DtoUpdateHotelRequest} request Update hotel request
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async hotelsIdPut(id: string, request: DtoUpdateHotelRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DtoHotelResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.hotelsIdPut(id, request, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['HotelApi.hotelsIdPut']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Create a new hotel with the provided details
+         * @summary Create a new hotel
+         * @param {DtoCreateHotelRequest} request Create hotel request
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async hotelsPost(request: DtoCreateHotelRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DtoHotelResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.hotelsPost(request, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['HotelApi.hotelsPost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Get a hotel by its slug
+         * @summary Get hotel by slug
+         * @param {string} slug Hotel slug
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async hotelsSlugSlugGet(slug: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DtoHotelResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.hotelsSlugSlugGet(slug, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['HotelApi.hotelsSlugSlugGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * HotelApi - factory interface
+ * @export
+ */
+export const HotelApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = HotelApiFp(configuration)
+    return {
+        /**
+         * Get a paginated list of hotels with filtering and pagination
+         * @summary List hotels
+         * @param {string} [endTime] 
+         * @param {string} [expand] 
+         * @param {string} [lastViewedAfter] Trending filter
+         * @param {number} [latitude] Geospatial filters
+         * @param {number} [limit] 
+         * @param {number} [longitude] 
+         * @param {number} [maxPrice] 
+         * @param {number} [minPrice] Price range filters
+         * @param {number} [offset] 
+         * @param {HotelsGetOrderEnum} [order] 
+         * @param {number} [radiusM] radius in meters
+         * @param {string} [searchQuery] Search
+         * @param {Array<string>} [slug] Custom filters
+         * @param {string} [sort] 
+         * @param {Array<number>} [starRating] 
+         * @param {string} [startTime] 
+         * @param {HotelsGetStatusEnum} [status] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        hotelsGet(endTime?: string, expand?: string, lastViewedAfter?: string, latitude?: number, limit?: number, longitude?: number, maxPrice?: number, minPrice?: number, offset?: number, order?: HotelsGetOrderEnum, radiusM?: number, searchQuery?: string, slug?: Array<string>, sort?: string, starRating?: Array<number>, startTime?: string, status?: HotelsGetStatusEnum, options?: RawAxiosRequestConfig): AxiosPromise<DtoListHotelsResponse> {
+            return localVarFp.hotelsGet(endTime, expand, lastViewedAfter, latitude, limit, longitude, maxPrice, minPrice, offset, order, radiusM, searchQuery, slug, sort, starRating, startTime, status, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Soft delete a hotel
+         * @summary Delete a hotel
+         * @param {string} id Hotel ID
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        hotelsIdDelete(id: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.hotelsIdDelete(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Get a hotel by its ID
+         * @summary Get hotel by ID
+         * @param {string} id Hotel ID
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        hotelsIdGet(id: string, options?: RawAxiosRequestConfig): AxiosPromise<DtoHotelResponse> {
+            return localVarFp.hotelsIdGet(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Update an existing hotel
+         * @summary Update a hotel
+         * @param {string} id Hotel ID
+         * @param {DtoUpdateHotelRequest} request Update hotel request
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        hotelsIdPut(id: string, request: DtoUpdateHotelRequest, options?: RawAxiosRequestConfig): AxiosPromise<DtoHotelResponse> {
+            return localVarFp.hotelsIdPut(id, request, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Create a new hotel with the provided details
+         * @summary Create a new hotel
+         * @param {DtoCreateHotelRequest} request Create hotel request
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        hotelsPost(request: DtoCreateHotelRequest, options?: RawAxiosRequestConfig): AxiosPromise<DtoHotelResponse> {
+            return localVarFp.hotelsPost(request, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Get a hotel by its slug
+         * @summary Get hotel by slug
+         * @param {string} slug Hotel slug
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        hotelsSlugSlugGet(slug: string, options?: RawAxiosRequestConfig): AxiosPromise<DtoHotelResponse> {
+            return localVarFp.hotelsSlugSlugGet(slug, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * HotelApi - object-oriented interface
+ * @export
+ * @class HotelApi
+ * @extends {BaseAPI}
+ */
+export class HotelApi extends BaseAPI {
+    /**
+     * Get a paginated list of hotels with filtering and pagination
+     * @summary List hotels
+     * @param {string} [endTime] 
+     * @param {string} [expand] 
+     * @param {string} [lastViewedAfter] Trending filter
+     * @param {number} [latitude] Geospatial filters
+     * @param {number} [limit] 
+     * @param {number} [longitude] 
+     * @param {number} [maxPrice] 
+     * @param {number} [minPrice] Price range filters
+     * @param {number} [offset] 
+     * @param {HotelsGetOrderEnum} [order] 
+     * @param {number} [radiusM] radius in meters
+     * @param {string} [searchQuery] Search
+     * @param {Array<string>} [slug] Custom filters
+     * @param {string} [sort] 
+     * @param {Array<number>} [starRating] 
+     * @param {string} [startTime] 
+     * @param {HotelsGetStatusEnum} [status] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof HotelApi
+     */
+    public hotelsGet(endTime?: string, expand?: string, lastViewedAfter?: string, latitude?: number, limit?: number, longitude?: number, maxPrice?: number, minPrice?: number, offset?: number, order?: HotelsGetOrderEnum, radiusM?: number, searchQuery?: string, slug?: Array<string>, sort?: string, starRating?: Array<number>, startTime?: string, status?: HotelsGetStatusEnum, options?: RawAxiosRequestConfig) {
+        return HotelApiFp(this.configuration).hotelsGet(endTime, expand, lastViewedAfter, latitude, limit, longitude, maxPrice, minPrice, offset, order, radiusM, searchQuery, slug, sort, starRating, startTime, status, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Soft delete a hotel
+     * @summary Delete a hotel
+     * @param {string} id Hotel ID
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof HotelApi
+     */
+    public hotelsIdDelete(id: string, options?: RawAxiosRequestConfig) {
+        return HotelApiFp(this.configuration).hotelsIdDelete(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Get a hotel by its ID
+     * @summary Get hotel by ID
+     * @param {string} id Hotel ID
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof HotelApi
+     */
+    public hotelsIdGet(id: string, options?: RawAxiosRequestConfig) {
+        return HotelApiFp(this.configuration).hotelsIdGet(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Update an existing hotel
+     * @summary Update a hotel
+     * @param {string} id Hotel ID
+     * @param {DtoUpdateHotelRequest} request Update hotel request
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof HotelApi
+     */
+    public hotelsIdPut(id: string, request: DtoUpdateHotelRequest, options?: RawAxiosRequestConfig) {
+        return HotelApiFp(this.configuration).hotelsIdPut(id, request, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Create a new hotel with the provided details
+     * @summary Create a new hotel
+     * @param {DtoCreateHotelRequest} request Create hotel request
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof HotelApi
+     */
+    public hotelsPost(request: DtoCreateHotelRequest, options?: RawAxiosRequestConfig) {
+        return HotelApiFp(this.configuration).hotelsPost(request, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Get a hotel by its slug
+     * @summary Get hotel by slug
+     * @param {string} slug Hotel slug
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof HotelApi
+     */
+    public hotelsSlugSlugGet(slug: string, options?: RawAxiosRequestConfig) {
+        return HotelApiFp(this.configuration).hotelsSlugSlugGet(slug, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+/**
+ * @export
+ */
+export const HotelsGetOrderEnum = {
+    Asc: 'asc',
+    Desc: 'desc'
+} as const;
+export type HotelsGetOrderEnum = typeof HotelsGetOrderEnum[keyof typeof HotelsGetOrderEnum];
+/**
+ * @export
+ */
+export const HotelsGetStatusEnum = {
+    StatusPublished: 'published',
+    StatusDeleted: 'deleted',
+    StatusArchived: 'archived',
+    StatusInactive: 'inactive',
+    StatusPending: 'pending',
+    StatusDraft: 'draft'
+} as const;
+export type HotelsGetStatusEnum = typeof HotelsGetStatusEnum[keyof typeof HotelsGetStatusEnum];
+
+
+/**
+ * PlaceApi - axios parameter creator
+ * @export
+ */
+export const PlaceApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
          * Get feed data with multiple sections (trending, popular, latest, nearby)
@@ -2188,149 +5080,6 @@ export const FeedApiAxiosParamCreator = function (configuration?: Configuration)
                 options: localVarRequestOptions,
             };
         },
-        /**
-         * Increment the view count for a specific place
-         * @summary Increment view count for a place
-         * @param {string} id Place ID
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        placesIdViewPost: async (id: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'id' is not null or undefined
-            assertParamExists('placesIdViewPost', 'id', id)
-            const localVarPath = `/places/{id}/view`
-                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-    }
-};
-
-/**
- * FeedApi - functional programming interface
- * @export
- */
-export const FeedApiFp = function(configuration?: Configuration) {
-    const localVarAxiosParamCreator = FeedApiAxiosParamCreator(configuration)
-    return {
-        /**
-         * Get feed data with multiple sections (trending, popular, latest, nearby)
-         * @summary Get feed data
-         * @param {DtoFeedRequest} request Feed request with sections
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async feedPost(request: DtoFeedRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DtoFeedResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.feedPost(request, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['FeedApi.feedPost']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * Increment the view count for a specific place
-         * @summary Increment view count for a place
-         * @param {string} id Place ID
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async placesIdViewPost(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.placesIdViewPost(id, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['FeedApi.placesIdViewPost']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-    }
-};
-
-/**
- * FeedApi - factory interface
- * @export
- */
-export const FeedApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
-    const localVarFp = FeedApiFp(configuration)
-    return {
-        /**
-         * Get feed data with multiple sections (trending, popular, latest, nearby)
-         * @summary Get feed data
-         * @param {DtoFeedRequest} request Feed request with sections
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        feedPost(request: DtoFeedRequest, options?: RawAxiosRequestConfig): AxiosPromise<DtoFeedResponse> {
-            return localVarFp.feedPost(request, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * Increment the view count for a specific place
-         * @summary Increment view count for a place
-         * @param {string} id Place ID
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        placesIdViewPost(id: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
-            return localVarFp.placesIdViewPost(id, options).then((request) => request(axios, basePath));
-        },
-    };
-};
-
-/**
- * FeedApi - object-oriented interface
- * @export
- * @class FeedApi
- * @extends {BaseAPI}
- */
-export class FeedApi extends BaseAPI {
-    /**
-     * Get feed data with multiple sections (trending, popular, latest, nearby)
-     * @summary Get feed data
-     * @param {DtoFeedRequest} request Feed request with sections
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof FeedApi
-     */
-    public feedPost(request: DtoFeedRequest, options?: RawAxiosRequestConfig) {
-        return FeedApiFp(this.configuration).feedPost(request, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * Increment the view count for a specific place
-     * @summary Increment view count for a place
-     * @param {string} id Place ID
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof FeedApi
-     */
-    public placesIdViewPost(id: string, options?: RawAxiosRequestConfig) {
-        return FeedApiFp(this.configuration).placesIdViewPost(id, options).then((request) => request(this.axios, this.basePath));
-    }
-}
-
-
-
-/**
- * PlaceApi - axios parameter creator
- * @export
- */
-export const PlaceApiAxiosParamCreator = function (configuration?: Configuration) {
-    return {
         /**
          * Get a paginated list of places with filtering and pagination
          * @summary List places
@@ -2628,6 +5377,40 @@ export const PlaceApiAxiosParamCreator = function (configuration?: Configuration
             };
         },
         /**
+         * Increment the view count for a specific place
+         * @summary Increment view count for a place
+         * @param {string} id Place ID
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        placesIdViewPost: async (id: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('placesIdViewPost', 'id', id)
+            const localVarPath = `/places/{id}/view`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Delete a place image
          * @summary Delete place image
          * @param {string} imageId Image ID
@@ -2791,6 +5574,19 @@ export const PlaceApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = PlaceApiAxiosParamCreator(configuration)
     return {
         /**
+         * Get feed data with multiple sections (trending, popular, latest, nearby)
+         * @summary Get feed data
+         * @param {DtoFeedRequest} request Feed request with sections
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async feedPost(request: DtoFeedRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DtoFeedResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.feedPost(request, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['PlaceApi.feedPost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * Get a paginated list of places with filtering and pagination
          * @summary List places
          * @param {number} [limit] Limit
@@ -2885,6 +5681,19 @@ export const PlaceApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
+         * Increment the view count for a specific place
+         * @summary Increment view count for a place
+         * @param {string} id Place ID
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async placesIdViewPost(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.placesIdViewPost(id, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['PlaceApi.placesIdViewPost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * Delete a place image
          * @summary Delete place image
          * @param {string} imageId Image ID
@@ -2947,6 +5756,16 @@ export const PlaceApiFp = function(configuration?: Configuration) {
 export const PlaceApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = PlaceApiFp(configuration)
     return {
+        /**
+         * Get feed data with multiple sections (trending, popular, latest, nearby)
+         * @summary Get feed data
+         * @param {DtoFeedRequest} request Feed request with sections
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        feedPost(request: DtoFeedRequest, options?: RawAxiosRequestConfig): AxiosPromise<DtoFeedResponse> {
+            return localVarFp.feedPost(request, options).then((request) => request(axios, basePath));
+        },
         /**
          * Get a paginated list of places with filtering and pagination
          * @summary List places
@@ -3024,6 +5843,16 @@ export const PlaceApiFactory = function (configuration?: Configuration, basePath
             return localVarFp.placesIdPut(id, request, options).then((request) => request(axios, basePath));
         },
         /**
+         * Increment the view count for a specific place
+         * @summary Increment view count for a place
+         * @param {string} id Place ID
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        placesIdViewPost(id: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.placesIdViewPost(id, options).then((request) => request(axios, basePath));
+        },
+        /**
          * Delete a place image
          * @summary Delete place image
          * @param {string} imageId Image ID
@@ -3074,6 +5903,18 @@ export const PlaceApiFactory = function (configuration?: Configuration, basePath
  * @extends {BaseAPI}
  */
 export class PlaceApi extends BaseAPI {
+    /**
+     * Get feed data with multiple sections (trending, popular, latest, nearby)
+     * @summary Get feed data
+     * @param {DtoFeedRequest} request Feed request with sections
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PlaceApi
+     */
+    public feedPost(request: DtoFeedRequest, options?: RawAxiosRequestConfig) {
+        return PlaceApiFp(this.configuration).feedPost(request, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * Get a paginated list of places with filtering and pagination
      * @summary List places
@@ -3160,6 +6001,18 @@ export class PlaceApi extends BaseAPI {
      */
     public placesIdPut(id: string, request: DtoUpdatePlaceRequest, options?: RawAxiosRequestConfig) {
         return PlaceApiFp(this.configuration).placesIdPut(id, request, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Increment the view count for a specific place
+     * @summary Increment view count for a place
+     * @param {string} id Place ID
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PlaceApi
+     */
+    public placesIdViewPost(id: string, options?: RawAxiosRequestConfig) {
+        return PlaceApiFp(this.configuration).placesIdViewPost(id, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
