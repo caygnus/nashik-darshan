@@ -105,10 +105,14 @@ main() {
 
     cd "$PROJECT_ROOT"
     
+    # Use relative paths to avoid issues with spaces in directory names
+    RELATIVE_SPEC="${OPENAPI_SPEC#$PROJECT_ROOT/}"
+    RELATIVE_SDK_DIR="${SDK_DIR#$PROJECT_ROOT/}"
+    
     if openapi-generator-cli generate \
-        -i "$OPENAPI_SPEC" \
+        -i "$RELATIVE_SPEC" \
         -g "$GENERATOR" \
-        -o "$SDK_DIR" \
+        -o "$RELATIVE_SDK_DIR" \
         --package-name nashik_darshan_sdk 2>&1 | tee /tmp/openapi-gen-dart.log; then
         echo ""
         log_success "Dart SDK generation completed successfully"

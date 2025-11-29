@@ -103,15 +103,18 @@ main() {
     # Step 4: Generate SDK
     log_step "Step 4/4: Generating TypeScript SDK"
     log_info "This may take a few moments..."
-    log_info "Command: openapi-generator-cli generate -i $OPENAPI_SPEC -g $GENERATOR -o $SDK_DIR"
     echo ""
 
     cd "$PROJECT_ROOT"
     
+    # Use relative paths to avoid issues with spaces in directory names
+    RELATIVE_SPEC="${OPENAPI_SPEC#$PROJECT_ROOT/}"
+    RELATIVE_SDK_DIR="${SDK_DIR#$PROJECT_ROOT/}"
+    
     if openapi-generator-cli generate \
-        -i "$OPENAPI_SPEC" \
+        -i "$RELATIVE_SPEC" \
         -g "$GENERATOR" \
-        -o "$SDK_DIR" 2>&1 | tee /tmp/openapi-gen-ts.log; then
+        -o "$RELATIVE_SDK_DIR" 2>&1 | tee /tmp/openapi-gen-ts.log; then
         echo ""
         log_success "TypeScript SDK generation completed successfully"
     else
