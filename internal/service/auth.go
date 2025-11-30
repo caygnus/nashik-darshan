@@ -6,7 +6,6 @@ import (
 	"github.com/omkar273/nashikdarshan/ent"
 	"github.com/omkar273/nashikdarshan/internal/api/dto"
 	"github.com/omkar273/nashikdarshan/internal/auth"
-	"github.com/omkar273/nashikdarshan/internal/domain/user"
 )
 
 type AuthService interface {
@@ -46,28 +45,23 @@ func (s *authService) Signup(ctx context.Context, req *dto.SignupRequest) (*dto.
 		userReq := req.ToUser(ctx)
 		userReq.ID = claims.ID
 
-		var user *user.User
-		var err error
-
-		// this ensures we don't create a user if it already exists
+		// Get existing user or create if not found (idempotent behavior)
 		existingUser, err := userService.Get(ctx, claims.ID)
 		if err != nil {
 			if ent.IsNotFound(err) {
-				// create user if it doesn't exist
-				user, err = userService.Create(ctx, userReq)
+				// Create user if it doesn't exist
+				existingUser, err = userService.Create(ctx, userReq)
 				if err != nil {
 					return err
 				}
 			} else {
+				// Return other errors
 				return err
 			}
-		} else {
-			// user already exists, use the existing user
-			user = existingUser
 		}
 
 		err = onboardingService.Onboard(ctx, &dto.OnboardingRequest{
-			User: *user,
+			User: *existingUser,
 		})
 
 		if err != nil {
