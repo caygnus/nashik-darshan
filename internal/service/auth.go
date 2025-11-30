@@ -45,20 +45,23 @@ func (s *authService) Signup(ctx context.Context, req *dto.SignupRequest) (*dto.
 		userReq := req.ToUser(ctx)
 		userReq.ID = claims.ID
 
-		// this ensures we don't create a user if it already exists
-		user, err := userService.Get(ctx, claims.ID)
-		if ent.IsNotFound(err) {
-			// create user if it doesn't exist
-			user, err = userService.Create(ctx, userReq)
-			if err != nil {
+		// Get existing user or create if not found (idempotent behavior)
+		existingUser, err := userService.Get(ctx, claims.ID)
+		if err != nil {
+			if ent.IsNotFound(err) {
+				// Create user if it doesn't exist
+				existingUser, err = userService.Create(ctx, userReq)
+				if err != nil {
+					return err
+				}
+			} else {
+				// Return other errors
 				return err
 			}
-		} else if err != nil {
-			return err
 		}
 
 		err = onboardingService.Onboard(ctx, &dto.OnboardingRequest{
-			User: *user,
+			User: *existingUser,
 		})
 
 		if err != nil {
