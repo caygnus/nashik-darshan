@@ -702,7 +702,9 @@ var _ BaseQueryOptions[EventQuery] = (*EventQueryOptions)(nil)
 
 func (o EventQueryOptions) ApplyStatusFilter(query EventQuery, status string) EventQuery {
 	if status == "" {
-		return query.Where(event.StatusNotIn(string(types.StatusDeleted)))
+		// By default, exclude archived and deleted items from queries
+		// Archived can be restored, deleted is permanent
+		return query.Where(event.StatusNotIn(string(types.StatusArchived), string(types.StatusDeleted)))
 	}
 	return query.Where(event.Status(status))
 }

@@ -109,7 +109,7 @@ func (r *UserRepository) GetByEmail(ctx context.Context, email string) (*domainU
 	entUser, err := client.User.Query().
 		Where(
 			user.Email(email),
-			user.StatusNotIn(string(types.StatusDeleted)),
+			user.StatusNotIn(string(types.StatusArchived), string(types.StatusDeleted)),
 		).
 		Only(ctx)
 
@@ -292,7 +292,9 @@ var _ BaseQueryOptions[UserQuery] = (*UserQueryOptions)(nil)
 
 func (o UserQueryOptions) ApplyStatusFilter(query UserQuery, status string) UserQuery {
 	if status == "" {
-		return query.Where(user.StatusNotIn(string(types.StatusDeleted)))
+		// By default, exclude archived and deleted items from queries
+		// Archived can be restored, deleted is permanent
+		return query.Where(user.StatusNotIn(string(types.StatusArchived), string(types.StatusDeleted)))
 	}
 	return query.Where(user.Status(status))
 }
