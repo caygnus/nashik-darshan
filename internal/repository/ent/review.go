@@ -487,7 +487,9 @@ var _ BaseQueryOptions[*ent.ReviewQuery] = (*ReviewQueryOptions)(nil)
 // ApplyStatusFilter applies status filtering to review queries
 func (opts ReviewQueryOptions) ApplyStatusFilter(query *ent.ReviewQuery, status string) *ent.ReviewQuery {
 	if status == "" {
-		return query.Where(review.StatusNotIn(string(types.StatusDeleted)))
+		// By default, exclude archived and deleted items from queries
+		// Archived can be restored, deleted is permanent
+		return query.Where(review.StatusNotIn(string(types.StatusArchived), string(types.StatusDeleted)))
 	}
 	return query.Where(review.Status(status))
 }

@@ -1279,21 +1279,33 @@ field.String("id").
 
 ### Status Field Usage
 
-All entities have a status field for soft deletion:
+All entities have a status field to track their lifecycle:
 
 ```go
 const (
-    StatusActive   Status = "active"
-    StatusInactive Status = "inactive"
-    StatusDeleted  Status = "deleted"
+    StatusPublished Status = "published"  // Active, publicly visible
+    StatusDraft     Status = "draft"      // Work-in-progress, not yet public
+    StatusArchived  Status = "archived"   // Soft-deleted, can be restored
+    StatusDeleted   Status = "deleted"    // Permanently deleted, never included in queries
 )
 
-// Querying active records
-filter.Status = string(types.StatusActive)
+// Querying published records
+filter.Status = string(types.StatusPublished)
 
-// Soft delete
+// Creating draft content
+entity.Status = types.StatusDraft
+
+// Soft delete / archive (reversible)
+entity.Status = types.StatusArchived
+
+// Permanent delete (irreversible - use with caution)
 entity.Status = types.StatusDeleted
 ```
+
+**Note:** By default, queries exclude both `archived` and `deleted` items. The key difference:
+
+- **Archived**: Can be restored back to `published` status
+- **Deleted**: Permanent deletion, never included in queries under any circumstances
 
 ### Database Queries
 

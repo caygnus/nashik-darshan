@@ -539,7 +539,9 @@ var _ BaseQueryOptions[HotelQuery] = (*HotelQueryOptions)(nil)
 
 func (o HotelQueryOptions) ApplyStatusFilter(query HotelQuery, status string) HotelQuery {
 	if status == "" {
-		return query.Where(hotel.StatusNotIn(string(types.StatusDeleted)))
+		// By default, exclude archived and deleted items from queries
+		// Archived can be restored, deleted is permanent
+		return query.Where(hotel.StatusNotIn(string(types.StatusArchived), string(types.StatusDeleted)))
 	}
 	return query.Where(hotel.Status(status))
 }
