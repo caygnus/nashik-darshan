@@ -42,6 +42,11 @@ func (req *CreatePlaceRequest) Validate() error {
 		return err
 	}
 
+	// Validate place type
+	if err := req.PlaceType.Validate(); err != nil {
+		return err
+	}
+
 	return nil
 }
 

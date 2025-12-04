@@ -14,8 +14,17 @@ const (
 	PlaceTypeTemple PlaceType = "temple"
 )
 
-var PlaceTypes = []string{
-	string(PlaceTypeTemple),
+func (pt PlaceType) Validate() error {
+	allowedPlaceTypes := []string{
+		string(PlaceTypeTemple),
+	}
+	if !lo.Contains(allowedPlaceTypes, string(pt)) {
+		return ierr.NewError("invalid place type").
+			WithHint("valid place types are: temple").
+			WithReportableDetails(map[string]any{"place_type": pt}).
+			Mark(ierr.ErrValidation)
+	}
+	return nil
 }
 
 // ValidateCoordinates validates latitude and longitude values
@@ -73,11 +82,8 @@ func (f *PlaceFilter) Validate() error {
 	// Validate place types
 	if len(f.PlaceTypes) > 0 {
 		for _, pt := range f.PlaceTypes {
-			if !lo.Contains(PlaceTypes, pt) {
-				return ierr.NewError("invalid place_type").
-					WithHint("valid place types are: hotel, apartment, attraction, restaurant, experience").
-					WithReportableDetails(map[string]any{"place_type": pt}).
-					Mark(ierr.ErrValidation)
+			if err := PlaceType(pt).Validate(); err != nil {
+				return err
 			}
 		}
 	}
