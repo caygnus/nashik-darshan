@@ -61,11 +61,7 @@ func (Place) Fields() []ent.Field {
 				"postgres": "text",
 			}).
 			NotEmpty(),
-		field.Strings("categories").
-			SchemaType(map[string]string{
-				"postgres": "text[]",
-			}).
-			Optional(),
+
 		field.JSON("address", map[string]string{}).
 			SchemaType(map[string]string{
 				"postgres": "jsonb",
@@ -92,11 +88,6 @@ func (Place) Fields() []ent.Field {
 		field.String("thumbnail_url").
 			SchemaType(map[string]string{
 				"postgres": "text",
-			}).
-			Optional(),
-		field.Strings("amenities").
-			SchemaType(map[string]string{
-				"postgres": "text[]",
 			}).
 			Optional(),
 

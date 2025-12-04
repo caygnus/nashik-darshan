@@ -39,8 +39,6 @@ const (
 	FieldLongDescription = "long_description"
 	// FieldPlaceType holds the string denoting the place_type field in the database.
 	FieldPlaceType = "place_type"
-	// FieldCategories holds the string denoting the categories field in the database.
-	FieldCategories = "categories"
 	// FieldAddress holds the string denoting the address field in the database.
 	FieldAddress = "address"
 	// FieldLatitude holds the string denoting the latitude field in the database.
@@ -51,8 +49,6 @@ const (
 	FieldPrimaryImageURL = "primary_image_url"
 	// FieldThumbnailURL holds the string denoting the thumbnail_url field in the database.
 	FieldThumbnailURL = "thumbnail_url"
-	// FieldAmenities holds the string denoting the amenities field in the database.
-	FieldAmenities = "amenities"
 	// FieldViewCount holds the string denoting the view_count field in the database.
 	FieldViewCount = "view_count"
 	// FieldRatingAvg holds the string denoting the rating_avg field in the database.
@@ -91,13 +87,11 @@ var Columns = []string{
 	FieldShortDescription,
 	FieldLongDescription,
 	FieldPlaceType,
-	FieldCategories,
 	FieldAddress,
 	FieldLatitude,
 	FieldLongitude,
 	FieldPrimaryImageURL,
 	FieldThumbnailURL,
-	FieldAmenities,
 	FieldViewCount,
 	FieldRatingAvg,
 	FieldRatingCount,

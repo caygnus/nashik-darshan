@@ -19,7 +19,6 @@ type CreatePlaceRequest struct {
 	ShortDescription *string           `json:"short_description,omitempty" binding:"omitempty,max=1000"`
 	LongDescription  *string           `json:"long_description,omitempty" binding:"omitempty,max=10000"`
 	PlaceType        string            `json:"place_type" binding:"required,min=2,max=50"`
-	Categories       []string          `json:"categories,omitempty"`
 	Address          map[string]string `json:"address,omitempty"`
 	Location         types.Location    `json:"location" binding:"required"`
 	PrimaryImageURL  *string           `json:"primary_image_url,omitempty" binding:"omitempty,url,max=500"`
@@ -55,12 +54,10 @@ type UpdatePlaceRequest struct {
 	ShortDescription *string           `json:"short_description,omitempty" binding:"omitempty,max=1000"`
 	LongDescription  *string           `json:"long_description,omitempty" binding:"omitempty,max=10000"`
 	PlaceType        *string           `json:"place_type,omitempty" binding:"omitempty,min=2,max=50"`
-	Categories       []string          `json:"categories,omitempty"`
 	Address          map[string]string `json:"address,omitempty"`
 	Location         *types.Location   `json:"location,omitempty"`
 	PrimaryImageURL  *string           `json:"primary_image_url,omitempty" binding:"omitempty,url,max=500"`
 	ThumbnailURL     *string           `json:"thumbnail_url,omitempty" binding:"omitempty,url,max=500"`
-	Amenities        []string          `json:"amenities,omitempty"`
 }
 
 // Validate validates the UpdatePlaceRequest
@@ -193,12 +190,10 @@ func (req *CreatePlaceRequest) ToPlace(ctx context.Context) (*place.Place, error
 		ShortDescription: req.ShortDescription,
 		LongDescription:  req.LongDescription,
 		PlaceType:        req.PlaceType,
-		Categories:       req.Categories,
 		Address:          req.Address,
 		Location:         req.Location,
 		PrimaryImageURL:  req.PrimaryImageURL,
 		ThumbnailURL:     req.ThumbnailURL,
-		Amenities:        req.Amenities,
 		BaseModel:        baseModel,
 	}, nil
 }
@@ -223,9 +218,6 @@ func (req *UpdatePlaceRequest) ApplyToPlace(ctx context.Context, p *place.Place)
 	if req.PlaceType != nil {
 		p.PlaceType = *req.PlaceType
 	}
-	if req.Categories != nil {
-		p.Categories = req.Categories
-	}
 	if req.Address != nil {
 		p.Address = req.Address
 	}
@@ -237,9 +229,6 @@ func (req *UpdatePlaceRequest) ApplyToPlace(ctx context.Context, p *place.Place)
 	}
 	if req.ThumbnailURL != nil {
 		p.ThumbnailURL = req.ThumbnailURL
-	}
-	if req.Amenities != nil {
-		p.Amenities = req.Amenities
 	}
 	p.UpdatedBy = types.GetUserID(ctx)
 	return nil

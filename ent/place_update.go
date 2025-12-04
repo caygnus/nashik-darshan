@@ -10,7 +10,6 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/omkar273/nashikdarshan/ent/place"
 	"github.com/omkar273/nashikdarshan/ent/placeimage"
@@ -185,24 +184,6 @@ func (_u *PlaceUpdate) SetNillablePlaceType(v *string) *PlaceUpdate {
 	return _u
 }
 
-// SetCategories sets the "categories" field.
-func (_u *PlaceUpdate) SetCategories(v []string) *PlaceUpdate {
-	_u.mutation.SetCategories(v)
-	return _u
-}
-
-// AppendCategories appends value to the "categories" field.
-func (_u *PlaceUpdate) AppendCategories(v []string) *PlaceUpdate {
-	_u.mutation.AppendCategories(v)
-	return _u
-}
-
-// ClearCategories clears the value of the "categories" field.
-func (_u *PlaceUpdate) ClearCategories() *PlaceUpdate {
-	_u.mutation.ClearCategories()
-	return _u
-}
-
 // SetAddress sets the "address" field.
 func (_u *PlaceUpdate) SetAddress(v map[string]string) *PlaceUpdate {
 	_u.mutation.SetAddress(v)
@@ -280,24 +261,6 @@ func (_u *PlaceUpdate) SetNillableThumbnailURL(v *string) *PlaceUpdate {
 // ClearThumbnailURL clears the value of the "thumbnail_url" field.
 func (_u *PlaceUpdate) ClearThumbnailURL() *PlaceUpdate {
 	_u.mutation.ClearThumbnailURL()
-	return _u
-}
-
-// SetAmenities sets the "amenities" field.
-func (_u *PlaceUpdate) SetAmenities(v []string) *PlaceUpdate {
-	_u.mutation.SetAmenities(v)
-	return _u
-}
-
-// AppendAmenities appends value to the "amenities" field.
-func (_u *PlaceUpdate) AppendAmenities(v []string) *PlaceUpdate {
-	_u.mutation.AppendAmenities(v)
-	return _u
-}
-
-// ClearAmenities clears the value of the "amenities" field.
-func (_u *PlaceUpdate) ClearAmenities() *PlaceUpdate {
-	_u.mutation.ClearAmenities()
 	return _u
 }
 
@@ -558,17 +521,6 @@ func (_u *PlaceUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if value, ok := _u.mutation.PlaceType(); ok {
 		_spec.SetField(place.FieldPlaceType, field.TypeString, value)
 	}
-	if value, ok := _u.mutation.Categories(); ok {
-		_spec.SetField(place.FieldCategories, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedCategories(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, place.FieldCategories, value)
-		})
-	}
-	if _u.mutation.CategoriesCleared() {
-		_spec.ClearField(place.FieldCategories, field.TypeJSON)
-	}
 	if value, ok := _u.mutation.Address(); ok {
 		_spec.SetField(place.FieldAddress, field.TypeJSON, value)
 	}
@@ -592,17 +544,6 @@ func (_u *PlaceUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.ThumbnailURLCleared() {
 		_spec.ClearField(place.FieldThumbnailURL, field.TypeString)
-	}
-	if value, ok := _u.mutation.Amenities(); ok {
-		_spec.SetField(place.FieldAmenities, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedAmenities(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, place.FieldAmenities, value)
-		})
-	}
-	if _u.mutation.AmenitiesCleared() {
-		_spec.ClearField(place.FieldAmenities, field.TypeJSON)
 	}
 	if value, ok := _u.mutation.ViewCount(); ok {
 		_spec.SetField(place.FieldViewCount, field.TypeInt, value)
@@ -847,24 +788,6 @@ func (_u *PlaceUpdateOne) SetNillablePlaceType(v *string) *PlaceUpdateOne {
 	return _u
 }
 
-// SetCategories sets the "categories" field.
-func (_u *PlaceUpdateOne) SetCategories(v []string) *PlaceUpdateOne {
-	_u.mutation.SetCategories(v)
-	return _u
-}
-
-// AppendCategories appends value to the "categories" field.
-func (_u *PlaceUpdateOne) AppendCategories(v []string) *PlaceUpdateOne {
-	_u.mutation.AppendCategories(v)
-	return _u
-}
-
-// ClearCategories clears the value of the "categories" field.
-func (_u *PlaceUpdateOne) ClearCategories() *PlaceUpdateOne {
-	_u.mutation.ClearCategories()
-	return _u
-}
-
 // SetAddress sets the "address" field.
 func (_u *PlaceUpdateOne) SetAddress(v map[string]string) *PlaceUpdateOne {
 	_u.mutation.SetAddress(v)
@@ -942,24 +865,6 @@ func (_u *PlaceUpdateOne) SetNillableThumbnailURL(v *string) *PlaceUpdateOne {
 // ClearThumbnailURL clears the value of the "thumbnail_url" field.
 func (_u *PlaceUpdateOne) ClearThumbnailURL() *PlaceUpdateOne {
 	_u.mutation.ClearThumbnailURL()
-	return _u
-}
-
-// SetAmenities sets the "amenities" field.
-func (_u *PlaceUpdateOne) SetAmenities(v []string) *PlaceUpdateOne {
-	_u.mutation.SetAmenities(v)
-	return _u
-}
-
-// AppendAmenities appends value to the "amenities" field.
-func (_u *PlaceUpdateOne) AppendAmenities(v []string) *PlaceUpdateOne {
-	_u.mutation.AppendAmenities(v)
-	return _u
-}
-
-// ClearAmenities clears the value of the "amenities" field.
-func (_u *PlaceUpdateOne) ClearAmenities() *PlaceUpdateOne {
-	_u.mutation.ClearAmenities()
 	return _u
 }
 
@@ -1250,17 +1155,6 @@ func (_u *PlaceUpdateOne) sqlSave(ctx context.Context) (_node *Place, err error)
 	if value, ok := _u.mutation.PlaceType(); ok {
 		_spec.SetField(place.FieldPlaceType, field.TypeString, value)
 	}
-	if value, ok := _u.mutation.Categories(); ok {
-		_spec.SetField(place.FieldCategories, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedCategories(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, place.FieldCategories, value)
-		})
-	}
-	if _u.mutation.CategoriesCleared() {
-		_spec.ClearField(place.FieldCategories, field.TypeJSON)
-	}
 	if value, ok := _u.mutation.Address(); ok {
 		_spec.SetField(place.FieldAddress, field.TypeJSON, value)
 	}
@@ -1284,17 +1178,6 @@ func (_u *PlaceUpdateOne) sqlSave(ctx context.Context) (_node *Place, err error)
 	}
 	if _u.mutation.ThumbnailURLCleared() {
 		_spec.ClearField(place.FieldThumbnailURL, field.TypeString)
-	}
-	if value, ok := _u.mutation.Amenities(); ok {
-		_spec.SetField(place.FieldAmenities, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedAmenities(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, place.FieldAmenities, value)
-		})
-	}
-	if _u.mutation.AmenitiesCleared() {
-		_spec.ClearField(place.FieldAmenities, field.TypeJSON)
 	}
 	if value, ok := _u.mutation.ViewCount(); ok {
 		_spec.SetField(place.FieldViewCount, field.TypeInt, value)

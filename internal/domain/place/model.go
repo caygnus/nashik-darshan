@@ -18,12 +18,10 @@ type Place struct {
 	ShortDescription *string           `json:"short_description,omitempty" db:"short_description"`
 	LongDescription  *string           `json:"long_description,omitempty" db:"long_description"`
 	PlaceType        string            `json:"place_type" db:"place_type"`
-	Categories       []string          `json:"categories" db:"categories"`
 	Address          map[string]string `json:"address,omitempty" db:"address"`
 	Location         types.Location    `json:"location" db:"location"`
 	PrimaryImageURL  *string           `json:"primary_image_url,omitempty" db:"primary_image_url"`
 	ThumbnailURL     *string           `json:"thumbnail_url,omitempty" db:"thumbnail_url"`
-	Amenities        []string          `json:"amenities" db:"amenities"`
 
 	// Engagement fields for feed functionality
 	ViewCount       int             `json:"view_count" db:"view_count"`
@@ -58,14 +56,12 @@ func FromEnt(place *ent.Place) *Place {
 		ShortDescription: lo.ToPtr(place.ShortDescription),
 		LongDescription:  lo.ToPtr(place.LongDescription),
 		PlaceType:        place.PlaceType,
-		Categories:       place.Categories,
 		Location: types.Location{
 			Latitude:  place.Latitude,
 			Longitude: place.Longitude,
 		},
 		PrimaryImageURL: lo.ToPtr(place.PrimaryImageURL),
 		ThumbnailURL:    lo.ToPtr(place.ThumbnailURL),
-		Amenities:       place.Amenities,
 
 		// Engagement fields
 		ViewCount:       place.ViewCount,

@@ -158,12 +158,6 @@ func (_c *PlaceCreate) SetPlaceType(v string) *PlaceCreate {
 	return _c
 }
 
-// SetCategories sets the "categories" field.
-func (_c *PlaceCreate) SetCategories(v []string) *PlaceCreate {
-	_c.mutation.SetCategories(v)
-	return _c
-}
-
 // SetAddress sets the "address" field.
 func (_c *PlaceCreate) SetAddress(v map[string]string) *PlaceCreate {
 	_c.mutation.SetAddress(v)
@@ -223,12 +217,6 @@ func (_c *PlaceCreate) SetNillableThumbnailURL(v *string) *PlaceCreate {
 	if v != nil {
 		_c.SetThumbnailURL(*v)
 	}
-	return _c
-}
-
-// SetAmenities sets the "amenities" field.
-func (_c *PlaceCreate) SetAmenities(v []string) *PlaceCreate {
-	_c.mutation.SetAmenities(v)
 	return _c
 }
 
@@ -558,10 +546,6 @@ func (_c *PlaceCreate) createSpec() (*Place, *sqlgraph.CreateSpec) {
 		_spec.SetField(place.FieldPlaceType, field.TypeString, value)
 		_node.PlaceType = value
 	}
-	if value, ok := _c.mutation.Categories(); ok {
-		_spec.SetField(place.FieldCategories, field.TypeJSON, value)
-		_node.Categories = value
-	}
 	if value, ok := _c.mutation.Address(); ok {
 		_spec.SetField(place.FieldAddress, field.TypeJSON, value)
 		_node.Address = value
@@ -581,10 +565,6 @@ func (_c *PlaceCreate) createSpec() (*Place, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.ThumbnailURL(); ok {
 		_spec.SetField(place.FieldThumbnailURL, field.TypeString, value)
 		_node.ThumbnailURL = value
-	}
-	if value, ok := _c.mutation.Amenities(); ok {
-		_spec.SetField(place.FieldAmenities, field.TypeJSON, value)
-		_node.Amenities = value
 	}
 	if value, ok := _c.mutation.ViewCount(); ok {
 		_spec.SetField(place.FieldViewCount, field.TypeInt, value)
