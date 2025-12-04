@@ -856,3 +856,42 @@ func (r *PlaceRepository) UpdatePopularityScore(ctx context.Context, placeID str
 
 	return nil
 }
+
+// AssignCategories assigns categories to a place by replacing existing category relationships
+func (r *PlaceRepository) AssignCategories(ctx context.Context, placeID string, categoryIDs []string) error {
+	client := r.client.Querier(ctx)
+
+	r.log.Debugw("assigning categories to place",
+		"place_id", placeID,
+		"category_count", len(categoryIDs),
+	)
+
+	now := time.Now().UTC()
+
+	_, err := client.Place.UpdateOneID(placeID).
+		ClearCategory().
+		AddCategoryIDs(categoryIDs...).
+		SetUpdatedAt(now).
+		SetUpdatedBy(types.GetUserID(ctx)).
+		Save(ctx)
+
+	if err != nil {
+		if ent.IsNotFound(err) {
+			return ierr.WithError(err).
+				WithHintf("Place with ID %s was not found", placeID).
+				WithReportableDetails(map[string]any{
+					"place_id": placeID,
+				}).
+				Mark(ierr.ErrNotFound)
+		}
+		return ierr.WithError(err).
+			WithHint("Failed to assign categories to place").
+			WithReportableDetails(map[string]any{
+				"place_id":     placeID,
+				"category_ids": categoryIDs,
+			}).
+			Mark(ierr.ErrDatabase)
+	}
+
+	return nil
+}

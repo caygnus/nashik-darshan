@@ -159,6 +159,29 @@ func (req *UpdatePlaceImageRequest) ApplyToPlaceImage(ctx context.Context, image
 	}
 }
 
+// AssignCategoriesRequest represents a request to assign categories to a place
+type AssignCategoriesRequest struct {
+	CategoryIDs []string `json:"category_ids" binding:"required,min=0"`
+}
+
+// Validate validates the AssignCategoriesRequest
+func (req *AssignCategoriesRequest) Validate() error {
+	// Validate struct tags
+	if err := validator.ValidateRequest(req); err != nil {
+		return err
+	}
+
+	for _, id := range req.CategoryIDs {
+		if id == "" {
+			return ierr.NewError("category ID is required").
+				WithHint("Please provide a valid category ID").
+				Mark(ierr.ErrValidation)
+		}
+	}
+
+	return nil
+}
+
 // ListPlacesResponse represents a paginated list of places
 type ListPlacesResponse = types.ListResponse[*PlaceResponse]
 
