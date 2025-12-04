@@ -102,11 +102,12 @@ func FromEntList(places []*ent.Place) []*Place {
 // FromEntImage converts ent.PlaceImage to domain PlaceImage
 func FromEntImage(image *ent.PlaceImage) *PlaceImage {
 	pi := &PlaceImage{
-		ID:      image.ID,
-		PlaceID: image.PlaceID,
-		URL:     image.URL,
-		Alt:     image.Alt,
-		Pos:     image.Pos,
+		ID:       image.ID,
+		PlaceID:  image.PlaceID,
+		URL:      image.URL,
+		Alt:      image.Alt,
+		Pos:      image.Pos,
+		Metadata: types.NewMetadataFromMap(image.Metadata),
 		BaseModel: types.BaseModel{
 			Status:    types.Status(image.Status),
 			CreatedAt: image.CreatedAt,
@@ -114,13 +115,6 @@ func FromEntImage(image *ent.PlaceImage) *PlaceImage {
 			CreatedBy: image.CreatedBy,
 			UpdatedBy: image.UpdatedBy,
 		},
-	}
-
-	// Convert metadata from map[string]string to types.Metadata
-	// Note: This requires ent.PlaceImage to have Metadata field after regenerating ent code
-	// TODO: Uncomment after regenerating ent code with MetadataMixin included
-	if len(image.Metadata) > 0 {
-		pi.Metadata = types.NewMetadataFromMap(image.Metadata)
 	}
 
 	return pi
