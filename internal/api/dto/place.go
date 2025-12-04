@@ -18,7 +18,7 @@ type CreatePlaceRequest struct {
 	Subtitle         *string           `json:"subtitle,omitempty" binding:"omitempty,max=500"`
 	ShortDescription *string           `json:"short_description,omitempty" binding:"omitempty,max=1000"`
 	LongDescription  *string           `json:"long_description,omitempty" binding:"omitempty,max=10000"`
-	PlaceType        types.PlaceType   `json:"place_type" binding:"required,min=2,max=50"`
+	PlaceType        types.PlaceType   `json:"place_type" binding:"required"`
 	Address          map[string]string `json:"address,omitempty"`
 	Location         types.Location    `json:"location" binding:"required"`
 	PrimaryImageURL  *string           `json:"primary_image_url,omitempty" binding:"omitempty,url,max=500"`
@@ -57,7 +57,6 @@ type UpdatePlaceRequest struct {
 	Subtitle         *string           `json:"subtitle,omitempty" binding:"omitempty,max=500"`
 	ShortDescription *string           `json:"short_description,omitempty" binding:"omitempty,max=1000"`
 	LongDescription  *string           `json:"long_description,omitempty" binding:"omitempty,max=10000"`
-	PlaceType        *types.PlaceType  `json:"place_type,omitempty" binding:"omitempty,min=2,max=50"`
 	Address          map[string]string `json:"address,omitempty"`
 	Location         *types.Location   `json:"location,omitempty"`
 	PrimaryImageURL  *string           `json:"primary_image_url,omitempty" binding:"omitempty,url,max=500"`
@@ -84,6 +83,8 @@ func (req *UpdatePlaceRequest) Validate() error {
 			return err
 		}
 	}
+
+	// Validate place type
 
 	return nil
 }
@@ -241,9 +242,6 @@ func (req *UpdatePlaceRequest) ApplyToPlace(ctx context.Context, p *place.Place)
 	}
 	if req.LongDescription != nil {
 		p.LongDescription = req.LongDescription
-	}
-	if req.PlaceType != nil {
-		p.PlaceType = types.PlaceType(*req.PlaceType)
 	}
 	if req.Address != nil {
 		p.Address = req.Address
