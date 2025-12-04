@@ -73,9 +73,11 @@ type Place struct {
 type PlaceEdges struct {
 	// Images holds the value of the images edge.
 	Images []*PlaceImage `json:"images,omitempty"`
+	// Category holds the value of the category edge.
+	Category []*Category `json:"category,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [1]bool
+	loadedTypes [2]bool
 }
 
 // ImagesOrErr returns the Images value or an error if the edge
@@ -85,6 +87,15 @@ func (e PlaceEdges) ImagesOrErr() ([]*PlaceImage, error) {
 		return e.Images, nil
 	}
 	return nil, &NotLoadedError{edge: "images"}
+}
+
+// CategoryOrErr returns the Category value or an error if the edge
+// was not loaded in eager-loading.
+func (e PlaceEdges) CategoryOrErr() ([]*Category, error) {
+	if e.loadedTypes[1] {
+		return e.Category, nil
+	}
+	return nil, &NotLoadedError{edge: "category"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -275,6 +286,11 @@ func (_m *Place) Value(name string) (ent.Value, error) {
 // QueryImages queries the "images" edge of the Place entity.
 func (_m *Place) QueryImages() *PlaceImageQuery {
 	return NewPlaceClient(_m.config).QueryImages(_m)
+}
+
+// QueryCategory queries the "category" edge of the Place entity.
+func (_m *Place) QueryCategory() *CategoryQuery {
+	return NewPlaceClient(_m.config).QueryCategory(_m)
 }
 
 // Update returns a builder for updating this Place.
