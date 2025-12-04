@@ -92,7 +92,7 @@ func (r *PlaceRepository) Create(ctx context.Context, p *domain.Place) error {
 		SetID(p.ID).
 		SetSlug(p.Slug).
 		SetTitle(p.Title).
-		SetPlaceType(p.PlaceType).
+		SetPlaceType(string(p.PlaceType)).
 		SetLatitude(p.Location.Latitude).
 		SetLongitude(p.Location.Longitude).
 		SetStatus(string(p.Status)).
@@ -347,9 +347,7 @@ func (r *PlaceRepository) Update(ctx context.Context, p *domain.Place) error {
 	)
 
 	update := client.Place.UpdateOneID(p.ID).
-		SetSlug(p.Slug).
 		SetTitle(p.Title).
-		SetPlaceType(p.PlaceType).
 		SetLatitude(p.Location.Latitude).
 		SetLongitude(p.Location.Longitude).
 		SetStatus(string(p.Status)).
