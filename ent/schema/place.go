@@ -129,6 +129,8 @@ func (Place) Fields() []ent.Field {
 func (Place) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.To("images", PlaceImage.Type),
+		edge.From("category", Category.Type).
+			Ref("places"),
 	}
 }
 

@@ -475,6 +475,31 @@ var (
 			},
 		},
 	}
+	// CategoryPlacesColumns holds the columns for the "category_places" table.
+	CategoryPlacesColumns = []*schema.Column{
+		{Name: "category_id", Type: field.TypeString, SchemaType: map[string]string{"postgres": "varchar(255)"}},
+		{Name: "place_id", Type: field.TypeString, SchemaType: map[string]string{"postgres": "varchar(255)"}},
+	}
+	// CategoryPlacesTable holds the schema information for the "category_places" table.
+	CategoryPlacesTable = &schema.Table{
+		Name:       "category_places",
+		Columns:    CategoryPlacesColumns,
+		PrimaryKey: []*schema.Column{CategoryPlacesColumns[0], CategoryPlacesColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "category_places_category_id",
+				Columns:    []*schema.Column{CategoryPlacesColumns[0]},
+				RefColumns: []*schema.Column{CategoriesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "category_places_place_id",
+				Columns:    []*schema.Column{CategoryPlacesColumns[1]},
+				RefColumns: []*schema.Column{PlacesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
 		CategoriesTable,
@@ -485,10 +510,13 @@ var (
 		PlaceImagesTable,
 		ReviewsTable,
 		UsersTable,
+		CategoryPlacesTable,
 	}
 )
 
 func init() {
 	EventOccurrencesTable.ForeignKeys[0].RefTable = EventsTable
 	PlaceImagesTable.ForeignKeys[0].RefTable = PlacesTable
+	CategoryPlacesTable.ForeignKeys[0].RefTable = CategoriesTable
+	CategoryPlacesTable.ForeignKeys[1].RefTable = PlacesTable
 }

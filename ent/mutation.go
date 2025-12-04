@@ -58,6 +58,9 @@ type CategoryMutation struct {
 	slug          *string
 	description   *string
 	clearedFields map[string]struct{}
+	places        map[string]struct{}
+	removedplaces map[string]struct{}
+	clearedplaces bool
 	done          bool
 	oldValue      func(context.Context) (*Category, error)
 	predicates    []predicate.Category
@@ -543,6 +546,60 @@ func (m *CategoryMutation) ResetDescription() {
 	delete(m.clearedFields, category.FieldDescription)
 }
 
+// AddPlaceIDs adds the "places" edge to the Place entity by ids.
+func (m *CategoryMutation) AddPlaceIDs(ids ...string) {
+	if m.places == nil {
+		m.places = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.places[ids[i]] = struct{}{}
+	}
+}
+
+// ClearPlaces clears the "places" edge to the Place entity.
+func (m *CategoryMutation) ClearPlaces() {
+	m.clearedplaces = true
+}
+
+// PlacesCleared reports if the "places" edge to the Place entity was cleared.
+func (m *CategoryMutation) PlacesCleared() bool {
+	return m.clearedplaces
+}
+
+// RemovePlaceIDs removes the "places" edge to the Place entity by IDs.
+func (m *CategoryMutation) RemovePlaceIDs(ids ...string) {
+	if m.removedplaces == nil {
+		m.removedplaces = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.places, ids[i])
+		m.removedplaces[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedPlaces returns the removed IDs of the "places" edge to the Place entity.
+func (m *CategoryMutation) RemovedPlacesIDs() (ids []string) {
+	for id := range m.removedplaces {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// PlacesIDs returns the "places" edge IDs in the mutation.
+func (m *CategoryMutation) PlacesIDs() (ids []string) {
+	for id := range m.places {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetPlaces resets all changes to the "places" edge.
+func (m *CategoryMutation) ResetPlaces() {
+	m.places = nil
+	m.clearedplaces = false
+	m.removedplaces = nil
+}
+
 // Where appends a list predicates to the CategoryMutation builder.
 func (m *CategoryMutation) Where(ps ...predicate.Category) {
 	m.predicates = append(m.predicates, ps...)
@@ -839,49 +896,85 @@ func (m *CategoryMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *CategoryMutation) AddedEdges() []string {
-	edges := make([]string, 0, 0)
+	edges := make([]string, 0, 1)
+	if m.places != nil {
+		edges = append(edges, category.EdgePlaces)
+	}
 	return edges
 }
 
 // AddedIDs returns all IDs (to other nodes) that were added for the given edge
 // name in this mutation.
 func (m *CategoryMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case category.EdgePlaces:
+		ids := make([]ent.Value, 0, len(m.places))
+		for id := range m.places {
+			ids = append(ids, id)
+		}
+		return ids
+	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *CategoryMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 0)
+	edges := make([]string, 0, 1)
+	if m.removedplaces != nil {
+		edges = append(edges, category.EdgePlaces)
+	}
 	return edges
 }
 
 // RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
 // the given name in this mutation.
 func (m *CategoryMutation) RemovedIDs(name string) []ent.Value {
+	switch name {
+	case category.EdgePlaces:
+		ids := make([]ent.Value, 0, len(m.removedplaces))
+		for id := range m.removedplaces {
+			ids = append(ids, id)
+		}
+		return ids
+	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *CategoryMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 0)
+	edges := make([]string, 0, 1)
+	if m.clearedplaces {
+		edges = append(edges, category.EdgePlaces)
+	}
 	return edges
 }
 
 // EdgeCleared returns a boolean which indicates if the edge with the given name
 // was cleared in this mutation.
 func (m *CategoryMutation) EdgeCleared(name string) bool {
+	switch name {
+	case category.EdgePlaces:
+		return m.clearedplaces
+	}
 	return false
 }
 
 // ClearEdge clears the value of the edge with the given name. It returns an error
 // if that edge is not defined in the schema.
 func (m *CategoryMutation) ClearEdge(name string) error {
+	switch name {
+	}
 	return fmt.Errorf("unknown Category unique edge %s", name)
 }
 
 // ResetEdge resets all changes to the edge with the given name in this mutation.
 // It returns an error if the edge is not defined in the schema.
 func (m *CategoryMutation) ResetEdge(name string) error {
+	switch name {
+	case category.EdgePlaces:
+		m.ResetPlaces()
+		return nil
+	}
 	return fmt.Errorf("unknown Category edge %s", name)
 }
 
@@ -6608,6 +6701,9 @@ type PlaceMutation struct {
 	images            map[string]struct{}
 	removedimages     map[string]struct{}
 	clearedimages     bool
+	category          map[string]struct{}
+	removedcategory   map[string]struct{}
+	clearedcategory   bool
 	done              bool
 	oldValue          func(context.Context) (*Place, error)
 	predicates        []predicate.Place
@@ -7733,6 +7829,60 @@ func (m *PlaceMutation) ResetImages() {
 	m.removedimages = nil
 }
 
+// AddCategoryIDs adds the "category" edge to the Category entity by ids.
+func (m *PlaceMutation) AddCategoryIDs(ids ...string) {
+	if m.category == nil {
+		m.category = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.category[ids[i]] = struct{}{}
+	}
+}
+
+// ClearCategory clears the "category" edge to the Category entity.
+func (m *PlaceMutation) ClearCategory() {
+	m.clearedcategory = true
+}
+
+// CategoryCleared reports if the "category" edge to the Category entity was cleared.
+func (m *PlaceMutation) CategoryCleared() bool {
+	return m.clearedcategory
+}
+
+// RemoveCategoryIDs removes the "category" edge to the Category entity by IDs.
+func (m *PlaceMutation) RemoveCategoryIDs(ids ...string) {
+	if m.removedcategory == nil {
+		m.removedcategory = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.category, ids[i])
+		m.removedcategory[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedCategory returns the removed IDs of the "category" edge to the Category entity.
+func (m *PlaceMutation) RemovedCategoryIDs() (ids []string) {
+	for id := range m.removedcategory {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// CategoryIDs returns the "category" edge IDs in the mutation.
+func (m *PlaceMutation) CategoryIDs() (ids []string) {
+	for id := range m.category {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetCategory resets all changes to the "category" edge.
+func (m *PlaceMutation) ResetCategory() {
+	m.category = nil
+	m.clearedcategory = false
+	m.removedcategory = nil
+}
+
 // Where appends a list predicates to the PlaceMutation builder.
 func (m *PlaceMutation) Where(ps ...predicate.Place) {
 	m.predicates = append(m.predicates, ps...)
@@ -8313,9 +8463,12 @@ func (m *PlaceMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *PlaceMutation) AddedEdges() []string {
-	edges := make([]string, 0, 1)
+	edges := make([]string, 0, 2)
 	if m.images != nil {
 		edges = append(edges, place.EdgeImages)
+	}
+	if m.category != nil {
+		edges = append(edges, place.EdgeCategory)
 	}
 	return edges
 }
@@ -8330,15 +8483,24 @@ func (m *PlaceMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case place.EdgeCategory:
+		ids := make([]ent.Value, 0, len(m.category))
+		for id := range m.category {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *PlaceMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 1)
+	edges := make([]string, 0, 2)
 	if m.removedimages != nil {
 		edges = append(edges, place.EdgeImages)
+	}
+	if m.removedcategory != nil {
+		edges = append(edges, place.EdgeCategory)
 	}
 	return edges
 }
@@ -8353,15 +8515,24 @@ func (m *PlaceMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case place.EdgeCategory:
+		ids := make([]ent.Value, 0, len(m.removedcategory))
+		for id := range m.removedcategory {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *PlaceMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 1)
+	edges := make([]string, 0, 2)
 	if m.clearedimages {
 		edges = append(edges, place.EdgeImages)
+	}
+	if m.clearedcategory {
+		edges = append(edges, place.EdgeCategory)
 	}
 	return edges
 }
@@ -8372,6 +8543,8 @@ func (m *PlaceMutation) EdgeCleared(name string) bool {
 	switch name {
 	case place.EdgeImages:
 		return m.clearedimages
+	case place.EdgeCategory:
+		return m.clearedcategory
 	}
 	return false
 }
@@ -8390,6 +8563,9 @@ func (m *PlaceMutation) ResetEdge(name string) error {
 	switch name {
 	case place.EdgeImages:
 		m.ResetImages()
+		return nil
+	case place.EdgeCategory:
+		m.ResetCategory()
 		return nil
 	}
 	return fmt.Errorf("unknown Place edge %s", name)
