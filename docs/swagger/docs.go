@@ -3049,6 +3049,12 @@ const docTemplate = `{
                         "type": "string"
                     }
                 },
+                "amenities": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
                 "location": {
                     "$ref": "#/definitions/types.Location"
                 },
