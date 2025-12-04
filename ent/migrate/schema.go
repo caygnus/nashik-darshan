@@ -3,6 +3,7 @@
 package migrate
 
 import (
+	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/dialect/sql/schema"
 	"entgo.io/ent/schema/field"
 )
@@ -264,13 +265,11 @@ var (
 		{Name: "short_description", Type: field.TypeString, Nullable: true, SchemaType: map[string]string{"postgres": "text"}},
 		{Name: "long_description", Type: field.TypeString, Nullable: true, SchemaType: map[string]string{"postgres": "text"}},
 		{Name: "place_type", Type: field.TypeString, SchemaType: map[string]string{"postgres": "text"}},
-		{Name: "categories", Type: field.TypeJSON, Nullable: true, SchemaType: map[string]string{"postgres": "text[]"}},
 		{Name: "address", Type: field.TypeJSON, Nullable: true, SchemaType: map[string]string{"postgres": "jsonb"}},
 		{Name: "latitude", Type: field.TypeOther, SchemaType: map[string]string{"postgres": "decimal(10,8)"}},
 		{Name: "longitude", Type: field.TypeOther, SchemaType: map[string]string{"postgres": "decimal(11,8)"}},
 		{Name: "primary_image_url", Type: field.TypeString, Nullable: true, SchemaType: map[string]string{"postgres": "text"}},
 		{Name: "thumbnail_url", Type: field.TypeString, Nullable: true, SchemaType: map[string]string{"postgres": "text"}},
-		{Name: "amenities", Type: field.TypeJSON, Nullable: true, SchemaType: map[string]string{"postgres": "text[]"}},
 		{Name: "view_count", Type: field.TypeInt, Default: 0, SchemaType: map[string]string{"postgres": "integer"}},
 		{Name: "rating_avg", Type: field.TypeOther, SchemaType: map[string]string{"postgres": "decimal(3,2)"}},
 		{Name: "rating_count", Type: field.TypeInt, Default: 0, SchemaType: map[string]string{"postgres": "integer"}},
@@ -291,32 +290,32 @@ var (
 			{
 				Name:    "place_latitude_longitude",
 				Unique:  false,
-				Columns: []*schema.Column{PlacesColumns[15], PlacesColumns[16]},
+				Columns: []*schema.Column{PlacesColumns[14], PlacesColumns[15]},
 			},
 			{
 				Name:    "place_popularity_score",
 				Unique:  false,
-				Columns: []*schema.Column{PlacesColumns[24]},
+				Columns: []*schema.Column{PlacesColumns[22]},
 			},
 			{
 				Name:    "place_view_count",
 				Unique:  false,
-				Columns: []*schema.Column{PlacesColumns[20]},
+				Columns: []*schema.Column{PlacesColumns[18]},
 			},
 			{
 				Name:    "place_rating_avg",
 				Unique:  false,
-				Columns: []*schema.Column{PlacesColumns[21]},
+				Columns: []*schema.Column{PlacesColumns[19]},
 			},
 			{
 				Name:    "place_last_viewed_at",
 				Unique:  false,
-				Columns: []*schema.Column{PlacesColumns[23]},
+				Columns: []*schema.Column{PlacesColumns[21]},
 			},
 			{
 				Name:    "place_last_viewed_at_popularity_score",
 				Unique:  false,
-				Columns: []*schema.Column{PlacesColumns[23], PlacesColumns[24]},
+				Columns: []*schema.Column{PlacesColumns[21], PlacesColumns[22]},
 			},
 		},
 	}
@@ -454,11 +453,25 @@ var (
 				Name:    "user_email",
 				Unique:  true,
 				Columns: []*schema.Column{UsersColumns[8]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "email IS NOT NULL AND email != ''",
+				},
 			},
 			{
 				Name:    "user_phone",
-				Unique:  false,
+				Unique:  true,
 				Columns: []*schema.Column{UsersColumns[9]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "phone IS NOT NULL AND phone != ''",
+				},
+			},
+			{
+				Name:    "user_email_phone",
+				Unique:  true,
+				Columns: []*schema.Column{UsersColumns[8], UsersColumns[9]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "(email IS NOT NULL AND email != '') AND (phone IS NOT NULL AND phone != '')",
+				},
 			},
 		},
 	}

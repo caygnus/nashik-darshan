@@ -6592,15 +6592,11 @@ type PlaceMutation struct {
 	short_description *string
 	long_description  *string
 	place_type        *string
-	categories        *[]string
-	appendcategories  []string
 	address           *map[string]string
 	latitude          *decimal.Decimal
 	longitude         *decimal.Decimal
 	primary_image_url *string
 	thumbnail_url     *string
-	amenities         *[]string
-	appendamenities   []string
 	view_count        *int
 	addview_count     *int
 	rating_avg        *decimal.Decimal
@@ -7231,71 +7227,6 @@ func (m *PlaceMutation) ResetPlaceType() {
 	m.place_type = nil
 }
 
-// SetCategories sets the "categories" field.
-func (m *PlaceMutation) SetCategories(s []string) {
-	m.categories = &s
-	m.appendcategories = nil
-}
-
-// Categories returns the value of the "categories" field in the mutation.
-func (m *PlaceMutation) Categories() (r []string, exists bool) {
-	v := m.categories
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldCategories returns the old "categories" field's value of the Place entity.
-// If the Place object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *PlaceMutation) OldCategories(ctx context.Context) (v []string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldCategories is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldCategories requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldCategories: %w", err)
-	}
-	return oldValue.Categories, nil
-}
-
-// AppendCategories adds s to the "categories" field.
-func (m *PlaceMutation) AppendCategories(s []string) {
-	m.appendcategories = append(m.appendcategories, s...)
-}
-
-// AppendedCategories returns the list of values that were appended to the "categories" field in this mutation.
-func (m *PlaceMutation) AppendedCategories() ([]string, bool) {
-	if len(m.appendcategories) == 0 {
-		return nil, false
-	}
-	return m.appendcategories, true
-}
-
-// ClearCategories clears the value of the "categories" field.
-func (m *PlaceMutation) ClearCategories() {
-	m.categories = nil
-	m.appendcategories = nil
-	m.clearedFields[place.FieldCategories] = struct{}{}
-}
-
-// CategoriesCleared returns if the "categories" field was cleared in this mutation.
-func (m *PlaceMutation) CategoriesCleared() bool {
-	_, ok := m.clearedFields[place.FieldCategories]
-	return ok
-}
-
-// ResetCategories resets all changes to the "categories" field.
-func (m *PlaceMutation) ResetCategories() {
-	m.categories = nil
-	m.appendcategories = nil
-	delete(m.clearedFields, place.FieldCategories)
-}
-
 // SetAddress sets the "address" field.
 func (m *PlaceMutation) SetAddress(value map[string]string) {
 	m.address = &value
@@ -7513,71 +7444,6 @@ func (m *PlaceMutation) ThumbnailURLCleared() bool {
 func (m *PlaceMutation) ResetThumbnailURL() {
 	m.thumbnail_url = nil
 	delete(m.clearedFields, place.FieldThumbnailURL)
-}
-
-// SetAmenities sets the "amenities" field.
-func (m *PlaceMutation) SetAmenities(s []string) {
-	m.amenities = &s
-	m.appendamenities = nil
-}
-
-// Amenities returns the value of the "amenities" field in the mutation.
-func (m *PlaceMutation) Amenities() (r []string, exists bool) {
-	v := m.amenities
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldAmenities returns the old "amenities" field's value of the Place entity.
-// If the Place object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *PlaceMutation) OldAmenities(ctx context.Context) (v []string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldAmenities is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldAmenities requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldAmenities: %w", err)
-	}
-	return oldValue.Amenities, nil
-}
-
-// AppendAmenities adds s to the "amenities" field.
-func (m *PlaceMutation) AppendAmenities(s []string) {
-	m.appendamenities = append(m.appendamenities, s...)
-}
-
-// AppendedAmenities returns the list of values that were appended to the "amenities" field in this mutation.
-func (m *PlaceMutation) AppendedAmenities() ([]string, bool) {
-	if len(m.appendamenities) == 0 {
-		return nil, false
-	}
-	return m.appendamenities, true
-}
-
-// ClearAmenities clears the value of the "amenities" field.
-func (m *PlaceMutation) ClearAmenities() {
-	m.amenities = nil
-	m.appendamenities = nil
-	m.clearedFields[place.FieldAmenities] = struct{}{}
-}
-
-// AmenitiesCleared returns if the "amenities" field was cleared in this mutation.
-func (m *PlaceMutation) AmenitiesCleared() bool {
-	_, ok := m.clearedFields[place.FieldAmenities]
-	return ok
-}
-
-// ResetAmenities resets all changes to the "amenities" field.
-func (m *PlaceMutation) ResetAmenities() {
-	m.amenities = nil
-	m.appendamenities = nil
-	delete(m.clearedFields, place.FieldAmenities)
 }
 
 // SetViewCount sets the "view_count" field.
@@ -7901,7 +7767,7 @@ func (m *PlaceMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *PlaceMutation) Fields() []string {
-	fields := make([]string, 0, 24)
+	fields := make([]string, 0, 22)
 	if m.status != nil {
 		fields = append(fields, place.FieldStatus)
 	}
@@ -7938,9 +7804,6 @@ func (m *PlaceMutation) Fields() []string {
 	if m.place_type != nil {
 		fields = append(fields, place.FieldPlaceType)
 	}
-	if m.categories != nil {
-		fields = append(fields, place.FieldCategories)
-	}
 	if m.address != nil {
 		fields = append(fields, place.FieldAddress)
 	}
@@ -7955,9 +7818,6 @@ func (m *PlaceMutation) Fields() []string {
 	}
 	if m.thumbnail_url != nil {
 		fields = append(fields, place.FieldThumbnailURL)
-	}
-	if m.amenities != nil {
-		fields = append(fields, place.FieldAmenities)
 	}
 	if m.view_count != nil {
 		fields = append(fields, place.FieldViewCount)
@@ -8006,8 +7866,6 @@ func (m *PlaceMutation) Field(name string) (ent.Value, bool) {
 		return m.LongDescription()
 	case place.FieldPlaceType:
 		return m.PlaceType()
-	case place.FieldCategories:
-		return m.Categories()
 	case place.FieldAddress:
 		return m.Address()
 	case place.FieldLatitude:
@@ -8018,8 +7876,6 @@ func (m *PlaceMutation) Field(name string) (ent.Value, bool) {
 		return m.PrimaryImageURL()
 	case place.FieldThumbnailURL:
 		return m.ThumbnailURL()
-	case place.FieldAmenities:
-		return m.Amenities()
 	case place.FieldViewCount:
 		return m.ViewCount()
 	case place.FieldRatingAvg:
@@ -8063,8 +7919,6 @@ func (m *PlaceMutation) OldField(ctx context.Context, name string) (ent.Value, e
 		return m.OldLongDescription(ctx)
 	case place.FieldPlaceType:
 		return m.OldPlaceType(ctx)
-	case place.FieldCategories:
-		return m.OldCategories(ctx)
 	case place.FieldAddress:
 		return m.OldAddress(ctx)
 	case place.FieldLatitude:
@@ -8075,8 +7929,6 @@ func (m *PlaceMutation) OldField(ctx context.Context, name string) (ent.Value, e
 		return m.OldPrimaryImageURL(ctx)
 	case place.FieldThumbnailURL:
 		return m.OldThumbnailURL(ctx)
-	case place.FieldAmenities:
-		return m.OldAmenities(ctx)
 	case place.FieldViewCount:
 		return m.OldViewCount(ctx)
 	case place.FieldRatingAvg:
@@ -8180,13 +8032,6 @@ func (m *PlaceMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetPlaceType(v)
 		return nil
-	case place.FieldCategories:
-		v, ok := value.([]string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetCategories(v)
-		return nil
 	case place.FieldAddress:
 		v, ok := value.(map[string]string)
 		if !ok {
@@ -8221,13 +8066,6 @@ func (m *PlaceMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetThumbnailURL(v)
-		return nil
-	case place.FieldAmenities:
-		v, ok := value.([]string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetAmenities(v)
 		return nil
 	case place.FieldViewCount:
 		v, ok := value.(int)
@@ -8339,9 +8177,6 @@ func (m *PlaceMutation) ClearedFields() []string {
 	if m.FieldCleared(place.FieldLongDescription) {
 		fields = append(fields, place.FieldLongDescription)
 	}
-	if m.FieldCleared(place.FieldCategories) {
-		fields = append(fields, place.FieldCategories)
-	}
 	if m.FieldCleared(place.FieldAddress) {
 		fields = append(fields, place.FieldAddress)
 	}
@@ -8350,9 +8185,6 @@ func (m *PlaceMutation) ClearedFields() []string {
 	}
 	if m.FieldCleared(place.FieldThumbnailURL) {
 		fields = append(fields, place.FieldThumbnailURL)
-	}
-	if m.FieldCleared(place.FieldAmenities) {
-		fields = append(fields, place.FieldAmenities)
 	}
 	if m.FieldCleared(place.FieldLastViewedAt) {
 		fields = append(fields, place.FieldLastViewedAt)
@@ -8389,9 +8221,6 @@ func (m *PlaceMutation) ClearField(name string) error {
 	case place.FieldLongDescription:
 		m.ClearLongDescription()
 		return nil
-	case place.FieldCategories:
-		m.ClearCategories()
-		return nil
 	case place.FieldAddress:
 		m.ClearAddress()
 		return nil
@@ -8400,9 +8229,6 @@ func (m *PlaceMutation) ClearField(name string) error {
 		return nil
 	case place.FieldThumbnailURL:
 		m.ClearThumbnailURL()
-		return nil
-	case place.FieldAmenities:
-		m.ClearAmenities()
 		return nil
 	case place.FieldLastViewedAt:
 		m.ClearLastViewedAt()
@@ -8451,9 +8277,6 @@ func (m *PlaceMutation) ResetField(name string) error {
 	case place.FieldPlaceType:
 		m.ResetPlaceType()
 		return nil
-	case place.FieldCategories:
-		m.ResetCategories()
-		return nil
 	case place.FieldAddress:
 		m.ResetAddress()
 		return nil
@@ -8468,9 +8291,6 @@ func (m *PlaceMutation) ResetField(name string) error {
 		return nil
 	case place.FieldThumbnailURL:
 		m.ResetThumbnailURL()
-		return nil
-	case place.FieldAmenities:
-		m.ResetAmenities()
 		return nil
 	case place.FieldViewCount:
 		m.ResetViewCount()

@@ -891,16 +891,6 @@ func PlaceTypeContainsFold(v string) predicate.Place {
 	return predicate.Place(sql.FieldContainsFold(FieldPlaceType, v))
 }
 
-// CategoriesIsNil applies the IsNil predicate on the "categories" field.
-func CategoriesIsNil() predicate.Place {
-	return predicate.Place(sql.FieldIsNull(FieldCategories))
-}
-
-// CategoriesNotNil applies the NotNil predicate on the "categories" field.
-func CategoriesNotNil() predicate.Place {
-	return predicate.Place(sql.FieldNotNull(FieldCategories))
-}
-
 // AddressIsNil applies the IsNil predicate on the "address" field.
 func AddressIsNil() predicate.Place {
 	return predicate.Place(sql.FieldIsNull(FieldAddress))
@@ -1139,16 +1129,6 @@ func ThumbnailURLEqualFold(v string) predicate.Place {
 // ThumbnailURLContainsFold applies the ContainsFold predicate on the "thumbnail_url" field.
 func ThumbnailURLContainsFold(v string) predicate.Place {
 	return predicate.Place(sql.FieldContainsFold(FieldThumbnailURL, v))
-}
-
-// AmenitiesIsNil applies the IsNil predicate on the "amenities" field.
-func AmenitiesIsNil() predicate.Place {
-	return predicate.Place(sql.FieldIsNull(FieldAmenities))
-}
-
-// AmenitiesNotNil applies the NotNil predicate on the "amenities" field.
-func AmenitiesNotNil() predicate.Place {
-	return predicate.Place(sql.FieldNotNull(FieldAmenities))
 }
 
 // ViewCountEQ applies the EQ predicate on the "view_count" field.

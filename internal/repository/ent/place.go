@@ -6,12 +6,9 @@ import (
 	"sort"
 	"time"
 
-	entsql "entgo.io/ent/dialect/sql"
-	"github.com/lib/pq"
 	"github.com/omkar273/nashikdarshan/ent"
 	"github.com/omkar273/nashikdarshan/ent/place"
 	"github.com/omkar273/nashikdarshan/ent/placeimage"
-	"github.com/omkar273/nashikdarshan/ent/predicate"
 	domain "github.com/omkar273/nashikdarshan/internal/domain/place"
 	ierr "github.com/omkar273/nashikdarshan/internal/errors"
 	"github.com/omkar273/nashikdarshan/internal/logger"
@@ -113,19 +110,6 @@ func (r *PlaceRepository) Create(ctx context.Context, p *domain.Place) error {
 	if p.LongDescription != nil {
 		create = create.SetLongDescription(*p.LongDescription)
 	}
-	// Set categories - filter out empty strings to avoid issues
-	if len(p.Categories) > 0 {
-		// Filter out empty strings
-		validCategories := []string{}
-		for _, cat := range p.Categories {
-			if cat != "" {
-				validCategories = append(validCategories, cat)
-			}
-		}
-		if len(validCategories) > 0 {
-			create = create.SetCategories(validCategories)
-		}
-	}
 	if len(p.Address) > 0 {
 		create = create.SetAddress(p.Address)
 	}
@@ -134,18 +118,6 @@ func (r *PlaceRepository) Create(ctx context.Context, p *domain.Place) error {
 	}
 	if p.ThumbnailURL != nil {
 		create = create.SetThumbnailURL(*p.ThumbnailURL)
-	}
-	if len(p.Amenities) > 0 {
-		// Filter out empty strings
-		validAmenities := []string{}
-		for _, amenity := range p.Amenities {
-			if amenity != "" {
-				validAmenities = append(validAmenities, amenity)
-			}
-		}
-		if len(validAmenities) > 0 {
-			create = create.SetAmenities(validAmenities)
-		}
 	}
 
 	_, err := create.Save(ctx)
@@ -399,22 +371,6 @@ func (r *PlaceRepository) Update(ctx context.Context, p *domain.Place) error {
 	} else {
 		update = update.ClearLongDescription()
 	}
-	if len(p.Categories) > 0 {
-		// Filter out empty strings to avoid PostgreSQL array issues
-		validCategories := []string{}
-		for _, cat := range p.Categories {
-			if cat != "" {
-				validCategories = append(validCategories, cat)
-			}
-		}
-		if len(validCategories) > 0 {
-			update = update.SetCategories(validCategories)
-		} else {
-			update = update.ClearCategories()
-		}
-	} else {
-		update = update.ClearCategories()
-	}
 	if len(p.Address) > 0 {
 		update = update.SetAddress(p.Address)
 	} else {
@@ -429,22 +385,6 @@ func (r *PlaceRepository) Update(ctx context.Context, p *domain.Place) error {
 		update = update.SetThumbnailURL(*p.ThumbnailURL)
 	} else {
 		update = update.ClearThumbnailURL()
-	}
-	if len(p.Amenities) > 0 {
-		// Filter out empty strings to avoid PostgreSQL array issues
-		validAmenities := []string{}
-		for _, amenity := range p.Amenities {
-			if amenity != "" {
-				validAmenities = append(validAmenities, amenity)
-			}
-		}
-		if len(validAmenities) > 0 {
-			update = update.SetAmenities(validAmenities)
-		} else {
-			update = update.ClearAmenities()
-		}
-	} else {
-		update = update.ClearAmenities()
 	}
 
 	_, err := update.Save(ctx)
@@ -773,33 +713,6 @@ func (o PlaceQueryOptions) ApplyEntityQueryOptions(
 	if len(f.PlaceTypes) > 0 {
 		query = query.Where(place.PlaceTypeIn(f.PlaceTypes...))
 	}
-
-	// Apply categories filter if specified
-	// PostgreSQL array overlap operator: && (returns true if arrays have any elements in common)
-	if len(f.Categories) > 0 {
-		// Use raw SQL predicate for array overlap
-		// Convert categories slice to PostgreSQL array format
-		categoriesArray := pq.Array(f.Categories)
-		query = query.Where(predicate.Place(func(s *entsql.Selector) {
-			s.Where(entsql.ExprP("categories && ?", categoriesArray))
-		}))
-	}
-
-	// Apply amenities filter if specified
-	// PostgreSQL array overlap operator: && (returns true if arrays have any elements in common)
-	if len(f.Amenities) > 0 {
-		// Use raw SQL predicate for array overlap
-		// Convert amenities slice to PostgreSQL array format
-		amenitiesArray := pq.Array(f.Amenities)
-		query = query.Where(predicate.Place(func(s *entsql.Selector) {
-			s.Where(entsql.ExprP("amenities && ?", amenitiesArray))
-		}))
-	}
-
-	// Apply rating filters if specified
-	// Note: Rating is not stored in Place entity, so this would need to be handled
-	// via a join with a ratings table or calculated field
-	// For now, we'll skip this as it's not in the schema
 
 	// Apply search query if specified
 	if f.SearchQuery != nil && *f.SearchQuery != "" {

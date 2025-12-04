@@ -52,8 +52,6 @@ type PlaceFilter struct {
 	// Custom filters
 	Slug       []string `json:"slug,omitempty" form:"slug" validate:"omitempty"`
 	PlaceTypes []string `json:"place_types,omitempty" form:"place_types" validate:"omitempty"`
-	Categories []string `json:"categories,omitempty" form:"categories" validate:"omitempty"`
-	Amenities  []string `json:"amenities,omitempty" form:"amenities" validate:"omitempty"`
 
 	// Geospatial filters
 	Latitude  *decimal.Decimal `json:"latitude,omitempty" form:"latitude" validate:"omitempty"`
