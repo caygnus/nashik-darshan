@@ -156,7 +156,11 @@ func (s *itineraryService) optimizeRoute(
 	currentIdx := 0
 
 	// Visit all places (indices 1 to n)
-	for len(visited) < len(places) {
+	maxIterations := len(places) * 2 // Safety limit
+	iterations := 0
+	for len(visited) < len(places) && iterations < maxIterations {
+		iterations++
+
 		// Find nearest unvisited place
 		// Add 1 to indices because we need to skip the start location in exclusion map
 		excludedIndices := make(map[int]bool)
@@ -167,14 +171,22 @@ func (s *itineraryService) optimizeRoute(
 
 		nearestIdx, _ := matrix.FindNearestDestination(currentIdx, excludedIndices)
 
-		// If nearestIdx is 0 (start location), we've visited all places
-		if nearestIdx == 0 {
+		// If nearestIdx is -1 or 0, we can't find any more unvisited places
+		if nearestIdx <= 0 {
+			s.Logger.Warnw("No more unvisited places found", "visited_count", len(visited), "total_places", len(places))
 			break
 		}
 
 		route = append(route, nearestIdx)
 		visited[nearestIdx-1] = true // -1 because place indices start at 1
 		currentIdx = nearestIdx
+	}
+
+	if iterations >= maxIterations {
+		s.Logger.Errorw("Route optimization exceeded max iterations", "iterations", iterations, "max", maxIterations)
+		return nil, ierr.NewError("Route optimization failed - exceeded maximum iterations").
+			WithHint("This might indicate a problem with the routing algorithm").
+			Mark(ierr.ErrInternal)
 	}
 
 	s.Logger.Debugw("Route optimized", "route_length", len(route), "route", route)
