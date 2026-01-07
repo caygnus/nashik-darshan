@@ -1,15 +1,17 @@
 service: nashik-darshan-api
 
-frameworkVersion: "3"
+frameworkVersion: "4"
 
 provider:
   name: aws
   runtime: provided.al2
   region: ap-south-1
-  profile: default
+  # profile: default  # Commented out - using environment variables instead
   architecture: arm64
   memorySize: 512
   timeout: 30
+  httpApi:
+    cors: true
   environment:
     CAYGNUS_DEPLOYMENT_MODE: lambda
     # Add your other CAYGNUS_* environment variables here
@@ -25,11 +27,9 @@ functions:
       - httpApi:
           path: /{proxy+}
           method: ANY
-          cors: true
       - httpApi:
           path: /
           method: ANY
-          cors: true
 
 package:
   patterns:
