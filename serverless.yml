@@ -33,6 +33,8 @@ provider:
 functions:
   api:
     handler: bootstrap
+    # Environment variables are inherited from provider.environment
+    # All CAYGNUS_* variables from .env are automatically injected by serverless-dotenv-plugin
     events:
       - httpApi:
           path: /{proxy+}
