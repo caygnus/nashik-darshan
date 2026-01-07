@@ -10,6 +10,7 @@
 # Binaries - never commit compiled executables
 bin/
 *.exe
+bootstrap
 
 # Serverless Framework artifacts
 .serverless/

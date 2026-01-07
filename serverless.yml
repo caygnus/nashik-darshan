@@ -25,7 +25,7 @@ provider:
 
 functions:
   api:
-    handler: bin/bootstrap
+    handler: bootstrap
     events:
       - httpApi:
           path: /{proxy+}
@@ -37,7 +37,7 @@ functions:
 package:
   patterns:
     - "!**"
-    - "bin/bootstrap"
+    - "bootstrap"
     - "!node_modules/**"
     - "!.git/**"
     - "!*.md"
@@ -54,3 +54,4 @@ package:
     - "!*.yaml"
     - "!*.yml"
     - "!.env*"
+    - "!bin/**"

@@ -232,12 +232,15 @@ build-lambda:
 
 # package-lambda: Package Lambda function for deployment
 # Usage: make package-lambda
-# What it does: Builds Lambda binary and prepares it for serverless deployment
-# Command: Runs build-lambda
+# What it does: Builds Lambda binary and copies it to root as bootstrap for Lambda custom runtime
+# Command: Runs build-lambda and copies bin/bootstrap to bootstrap
 # When to use: Before deploying with serverless framework
 .PHONY: package-lambda
 package-lambda: build-lambda
-	@echo "📦 Lambda package ready for deployment"
+	@echo "📦 Preparing Lambda package..."
+	@cp bin/bootstrap bootstrap
+	@chmod +x bootstrap
+	@echo "✅ Lambda package ready for deployment"
 	@echo "✅ Run 'make deploy-lambda' to deploy"
 
 # deploy-lambda: Deploy Lambda function using Serverless Framework
@@ -254,24 +257,25 @@ deploy-lambda: package-lambda
 
 # clean: Remove all build artifacts
 # Usage: make clean
-# What it does: Removes the bin directory with all compiled binaries
-# Command: rm -rf bin
+# What it does: Removes the bin directory and root bootstrap file
+# Command: rm -rf bin && rm -f bootstrap
 # When to use: To clean up build artifacts
 .PHONY: clean
 clean:
 	@echo "🧹 Cleaning build artifacts..."
 	@rm -rf bin
+	@rm -f bootstrap
 	@echo "✅ Build artifacts cleaned"
 
 # clean-lambda: Remove Lambda deployment artifacts
 # Usage: make clean-lambda
 # What it does: Removes the .serverless directory and Lambda binaries
-# Command: rm -rf .serverless && rm -f bin/bootstrap
+# Command: rm -rf .serverless && rm -f bin/bootstrap bootstrap
 # When to use: To clean up after deployment or testing
 .PHONY: clean-lambda
 clean-lambda:
 	@echo "🧹 Cleaning Lambda artifacts..."
-	@rm -f bin/bootstrap
+	@rm -f bin/bootstrap bootstrap
 	@rm -rf .serverless
 	@echo "✅ Lambda artifacts cleaned"
 
