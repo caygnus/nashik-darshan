@@ -11,6 +11,9 @@
 bin/
 *.exe
 
+# Serverless Framework artifacts
+.serverless/
+
 # Keys and secrets - never commit these!
 keys/
 *.pem

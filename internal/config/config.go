@@ -13,11 +13,16 @@ import (
 )
 
 type Configuration struct {
-	Server   ServerConfig   `validate:"required"`
-	Logging  LoggingConfig  `validate:"required"`
-	Postgres PostgresConfig `validate:"required"`
-	Supabase SupabaseConfig `validate:"required"`
-	Secrets  SecretsConfig  `validate:"required"`
+	Server     ServerConfig     `validate:"required"`
+	Logging    LoggingConfig    `validate:"required"`
+	Postgres   PostgresConfig   `validate:"required"`
+	Supabase   SupabaseConfig   `validate:"required"`
+	Secrets    SecretsConfig    `validate:"required"`
+	Deployment DeploymentConfig `validate:"required"`
+}
+
+type DeploymentConfig struct {
+	Mode types.RunMode `mapstructure:"mode" validate:"required"`
 }
 
 type LoggingConfig struct {
@@ -100,6 +105,11 @@ func NewConfig() (*Configuration, error) {
 	var cfg Configuration
 	if err := v.Unmarshal(&cfg); err != nil {
 		return nil, fmt.Errorf("unable to decode into config struct, %v", err)
+	}
+
+	// Set default deployment mode if not provided
+	if cfg.Deployment.Mode == "" {
+		cfg.Deployment.Mode = types.ModeLocal
 	}
 
 	// Step 7: Validate the configuration

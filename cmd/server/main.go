@@ -1,22 +1,9 @@
 package main
 
 import (
-	"context"
 	"time"
 
-	"github.com/gin-gonic/gin"
 	_ "github.com/omkar273/nashikdarshan/docs/swagger"
-	"github.com/omkar273/nashikdarshan/internal/api"
-	v1 "github.com/omkar273/nashikdarshan/internal/api/v1"
-	"github.com/omkar273/nashikdarshan/internal/auth"
-	"github.com/omkar273/nashikdarshan/internal/config"
-	"github.com/omkar273/nashikdarshan/internal/logger"
-	"github.com/omkar273/nashikdarshan/internal/postgres"
-	"github.com/omkar273/nashikdarshan/internal/repository"
-	"github.com/omkar273/nashikdarshan/internal/security"
-	"github.com/omkar273/nashikdarshan/internal/service"
-	"github.com/omkar273/nashikdarshan/internal/validator"
-
 	"go.uber.org/fx"
 )
 
@@ -39,122 +26,27 @@ import (
 // @required
 
 func init() {
-	// set time to UTC
+	// Set global timezone to UTC for consistent time handling
 	time.Local = time.UTC
 }
 
 func main() {
-	var opts []fx.Option
+	app := fx.New(
+		// Infrastructure layer: config, logging, database, auth
+		provideInfrastructure(),
 
-	// load config
-	opts = append(opts,
-		fx.Provide(
-			// provide config
-			config.NewConfig,
+		// Data layer: repositories
+		provideRepositories(),
 
-			// validator
-			validator.NewValidator,
+		// Business layer: services
+		provideServices(),
 
-			// logger
-			logger.NewLogger,
+		// Presentation layer: API handlers and router
+		provideAPI(),
 
-			// postgres
-			postgres.NewEntClient,
-			postgres.NewClient,
+		// Application lifecycle: start appropriate server based on config
+		fx.Invoke(startServer),
+	)
 
-			// auth provider
-			auth.NewSupabaseProvider,
-
-			// repositories
-			repository.NewUserRepository,
-			repository.NewCategoryRepository,
-			repository.NewPlaceRepository,
-			repository.NewReviewRepository,
-			repository.NewHotelRepository,
-			repository.NewEventRepository,
-		),
-	) // services
-	opts = append(opts, fx.Provide(
-
-		// all services
-		security.NewEncryptionService,
-		service.NewAuthService,
-		service.NewUserService,
-		service.NewOnboardingService,
-		service.NewCategoryService,
-		service.NewPlaceService,
-		service.NewReviewService,
-		service.NewHotelService,
-		service.NewEventService,
-	)) // factory layer
-	opts = append(opts, fx.Provide(
-		// handlers
-		provideHandlers,
-
-		// router
-		provideRouter,
-	))
-
-	// start the application
-	opts = append(opts, fx.Invoke(
-		// start server
-		startServer,
-	))
-
-	// start server
-	app := fx.New(opts...)
 	app.Run()
-}
-
-func startServer(
-	lc fx.Lifecycle,
-	cfg *config.Configuration,
-	r *gin.Engine,
-	log *logger.Logger,
-) {
-	// start api server
-	startAPIServer(lc, r, cfg, log)
-}
-
-func provideHandlers(logger *logger.Logger, authService service.AuthService, userService service.UserService, categoryService service.CategoryService, placeService service.PlaceService, reviewService service.ReviewService, hotelService service.HotelService, eventService service.EventService) *api.Handlers {
-	return &api.Handlers{
-		Health:   v1.NewHealthHandler(logger),
-		Auth:     v1.NewAuthHandler(authService),
-		User:     v1.NewUserHandler(userService),
-		Category: v1.NewCategoryHandler(categoryService),
-		Place:    v1.NewPlaceHandler(placeService),
-		Review:   v1.NewReviewHandler(reviewService),
-		Hotel:    v1.NewHotelHandler(hotelService),
-		Event:    v1.NewEventHandler(eventService),
-	}
-}
-
-func provideRouter(handlers *api.Handlers, cfg *config.Configuration, logger *logger.Logger) *gin.Engine {
-	return api.NewRouter(handlers, cfg, logger)
-}
-
-func startAPIServer(
-	lc fx.Lifecycle,
-	r *gin.Engine,
-	cfg *config.Configuration,
-	log *logger.Logger,
-) {
-	log.Info("Registering API server start hook")
-	lc.Append(fx.Hook{
-		OnStart: func(ctx context.Context) error {
-			log.Info("Starting API server...")
-			go func() {
-				if err := r.Run(cfg.Server.Address); err != nil {
-					log.Fatalf("Failed to start server: %v", err)
-				}
-			}()
-			log.Info("Server started successfully on port %s", cfg.Server.Address)
-			log.Info("Server running at http://localhost%s", cfg.Server.Address)
-			return nil
-		},
-		OnStop: func(ctx context.Context) error {
-			log.Info("Shutting down server...")
-			return nil
-		},
-	})
 }

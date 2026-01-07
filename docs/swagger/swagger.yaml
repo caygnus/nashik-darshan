@@ -220,6 +220,10 @@ definitions:
         additionalProperties:
           type: string
         type: object
+      amenities:
+        items:
+          type: string
+        type: array
       location:
         $ref: '#/definitions/types.Location'
       long_description:
