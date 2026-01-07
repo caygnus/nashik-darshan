@@ -2,6 +2,9 @@ service: nashik-darshan-api
 
 frameworkVersion: "4"
 
+plugins:
+  - serverless-dotenv-plugin
+
 provider:
   name: aws
   runtime: provided.al2
@@ -16,12 +19,10 @@ provider:
   httpApi:
     cors: true
   environment:
+    # Deployment mode (always set to lambda for Lambda deployment)
     CAYGNUS_DEPLOYMENT_MODE: lambda
-    # Add your other CAYGNUS_* environment variables here
-    # CAYGNUS_SERVER_ENV: prod
-    # CAYGNUS_POSTGRES_HOST: ${env:POSTGRES_HOST}
-    # CAYGNUS_POSTGRES_PORT: ${env:POSTGRES_PORT}
-    # etc.
+    # All other CAYGNUS_* variables will be loaded from .env file automatically
+    # via serverless-dotenv-plugin
 
 functions:
   api:
