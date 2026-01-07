@@ -1,8 +1,11 @@
 package main
 
 import (
+	"context"
+	"os"
 	"time"
 
+	"github.com/aws/aws-lambda-go/lambda"
 	_ "github.com/omkar273/nashikdarshan/docs/swagger"
 	"go.uber.org/fx"
 )
@@ -48,5 +51,22 @@ func main() {
 		fx.Invoke(startServer),
 	)
 
-	app.Run()
+	// Check if we're running in Lambda (via environment variable)
+	// Lambda runtime sets AWS_LAMBDA_FUNCTION_NAME
+	if os.Getenv("AWS_LAMBDA_FUNCTION_NAME") != "" || os.Getenv("CAYGNUS_DEPLOYMENT_MODE") == "lambda" {
+		// For Lambda: start the app, then start the Lambda handler
+		ctx, cancel := context.WithCancel(context.Background())
+		defer cancel()
+
+		if err := app.Start(ctx); err != nil {
+			panic(err)
+		}
+		defer app.Stop(ctx)
+
+		// Start Lambda handler (this blocks)
+		lambda.Start(handleLambdaRequest)
+	} else {
+		// For local/API mode: use normal fx lifecycle
+		app.Run()
+	}
 }
