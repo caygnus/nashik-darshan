@@ -21,14 +21,7 @@
             "Sid": "LambdaAccess",
             "Effect": "Allow",
             "Action": [
-                "lambda:CreateFunction",
-                "lambda:UpdateFunctionCode",
-                "lambda:UpdateFunctionConfiguration",
-                "lambda:DeleteFunction",
-                "lambda:GetFunction",
-                "lambda:ListFunctions",
-                "lambda:AddPermission",
-                "lambda:RemovePermission"
+                "*"
             ],
             "Resource": "*"
         },
@@ -36,11 +29,7 @@
             "Sid": "ApiGatewayV2Access",
             "Effect": "Allow",
             "Action": [
-                "apigateway:GET",
-                "apigateway:POST",
-                "apigateway:PUT",
-                "apigateway:DELETE",
-                "apigateway:PATCH"
+                "apigateway:*"
             ],
             "Resource": "*"
         },
@@ -71,7 +60,9 @@
                 "iam:PutRolePolicy",
                 "iam:DeleteRolePolicy",
                 "iam:AttachRolePolicy",
-                "iam:DetachRolePolicy"
+                "iam:DetachRolePolicy",
+                "iam:TagRole",
+                "iam:UntagRole"
             ],
             "Resource": "*"
         },
@@ -81,7 +72,8 @@
             "Action": [
                 "logs:CreateLogGroup",
                 "logs:CreateLogStream",
-                "logs:PutLogEvents"
+                "logs:PutLogEvents",
+                "logs:TagResource"
             ],
             "Resource": "*"
         }
