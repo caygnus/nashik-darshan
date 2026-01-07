@@ -92,3 +92,9 @@ sdks/dart/pubspec.lock
 
 # Keep version.json for version tracking
 !sdks/version.json
+
+# Bootstrap file
+bootstrap
+
+# node js
+node_modules/
