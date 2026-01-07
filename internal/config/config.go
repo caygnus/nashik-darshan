@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"reflect"
 	"strings"
 
 	"github.com/joho/godotenv"
@@ -82,7 +83,13 @@ func NewConfig() (*Configuration, error) {
 	v.AutomaticEnv()
 
 	// Step 4: Environment variable key mapping (e.g., CAYGNUS_SUPABASE_URL)
+	// This maps config keys like "server.env" to env vars like "CAYGNUS_SERVER_ENV"
 	v.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
+
+	// Automatically bind environment variables to config keys using reflection
+	// This ensures environment variables are properly read in Lambda where .env files don't exist
+	// The function automatically discovers all fields with mapstructure tags and binds them
+	bindEnvVarsFromStruct(v, Configuration{})
 
 	// Step 5: Read the YAML file
 	configFileFound := true
@@ -164,4 +171,63 @@ func (p PostgresConfig) GetDSN() string {
 	}
 
 	return dsn
+}
+
+// bindEnvVarsFromStruct automatically binds environment variables using reflection
+// It traverses the struct and binds all fields with mapstructure tags
+// This reuses the existing struct definitions and avoids code duplication
+func bindEnvVarsFromStruct(v *viper.Viper, cfg Configuration) {
+	bindStructFields(v, reflect.TypeOf(cfg), "")
+}
+
+// bindStructFields recursively binds struct fields to environment variables
+func bindStructFields(v *viper.Viper, t reflect.Type, prefix string) {
+	if t.Kind() == reflect.Ptr {
+		t = t.Elem()
+	}
+
+	if t.Kind() != reflect.Struct {
+		return
+	}
+
+	for i := 0; i < t.NumField(); i++ {
+		field := t.Field(i)
+
+		// Skip unexported fields
+		if !field.IsExported() {
+			continue
+		}
+
+		// Get mapstructure tag
+		mapTag := field.Tag.Get("mapstructure")
+		if mapTag == "" || mapTag == "-" {
+			// If no mapstructure tag, use lowercase field name
+			mapTag = strings.ToLower(field.Name)
+		}
+
+		// Build the full config key path
+		var configKey string
+		if prefix != "" {
+			configKey = prefix + "." + mapTag
+		} else {
+			configKey = mapTag
+		}
+
+		// Build environment variable name (CAYGNUS_PREFIX_KEY)
+		envKey := "CAYGNUS_" + strings.ToUpper(strings.ReplaceAll(configKey, ".", "_"))
+
+		// Handle nested structs
+		fieldType := field.Type
+		if fieldType.Kind() == reflect.Ptr {
+			fieldType = fieldType.Elem()
+		}
+
+		if fieldType.Kind() == reflect.Struct {
+			// Recurse into nested struct
+			bindStructFields(v, fieldType, configKey)
+		} else {
+			// Bind the environment variable for leaf fields
+			v.BindEnv(configKey, envKey)
+		}
+	}
 }

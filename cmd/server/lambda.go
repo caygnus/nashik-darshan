@@ -5,7 +5,6 @@ import (
 	"sync"
 
 	"github.com/aws/aws-lambda-go/events"
-	"github.com/aws/aws-lambda-go/lambda"
 	ginadapter "github.com/awslabs/aws-lambda-go-api-proxy/gin"
 	"github.com/gin-gonic/gin"
 	"github.com/omkar273/nashikdarshan/internal/logger"
@@ -14,10 +13,12 @@ import (
 )
 
 var (
-	// ginLambda holds the Lambda adapter for the Gin router
-	ginLambda *ginadapter.GinLambda
+	// ginLambda holds the Lambda adapter for the Gin router (HTTP API v2)
+	ginLambda *ginadapter.GinLambdaV2
 	// initOnce ensures the Lambda adapter is initialized only once
 	initOnce sync.Once
+	// initMutex protects the initialization
+	initMutex sync.Mutex
 )
 
 // startLambdaServer initializes and starts the AWS Lambda handler
@@ -29,25 +30,18 @@ func startLambdaServer(
 ) {
 	log.Info("Configuring AWS Lambda handler")
 
+	// Initialize the Lambda adapter immediately (not in OnStart)
+	// This ensures it's ready before Lambda runtime calls the handler
+	initOnce.Do(func() {
+		ginLambda = ginadapter.NewV2(r)
+		log.Info("Lambda adapter initialized successfully")
+	})
+
 	lc.Append(fx.Hook{
 		OnStart: func(ctx context.Context) error {
-			log.Info("Initializing Lambda adapter...")
-
-			// Initialize the Lambda adapter once using sync.Once
-			// This ensures thread-safe initialization during cold starts
-			initOnce.Do(func() {
-				ginLambda = ginadapter.New(r)
-				log.Info("Lambda adapter initialized successfully")
-			})
-
-			// Start Lambda handler in a goroutine
-			// Lambda runtime will block here waiting for invocations
-			go func() {
-				log.Info("Starting Lambda handler (waiting for invocations)...")
-				lambda.Start(handleLambdaRequest)
-			}()
-
-			log.Info("Lambda handler ready")
+			log.Info("Lambda handler ready (HTTP API v2)")
+			// Don't start lambda.Start here - it will be called by the Lambda runtime
+			// The handler function will be invoked directly by Lambda
 			return nil
 		},
 		OnStop: func(ctx context.Context) error {
@@ -57,7 +51,19 @@ func startLambdaServer(
 	})
 }
 
-// handleLambdaRequest processes incoming API Gateway requests
-func handleLambdaRequest(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-	return ginLambda.ProxyWithContext(ctx, req)
+// handleLambdaRequest processes incoming HTTP API v2 requests
+func handleLambdaRequest(ctx context.Context, req events.APIGatewayV2HTTPRequest) (events.APIGatewayV2HTTPResponse, error) {
+	// Ensure adapter is initialized (should already be, but safety check)
+	initMutex.Lock()
+	if ginLambda == nil {
+		initMutex.Unlock()
+		return events.APIGatewayV2HTTPResponse{
+			StatusCode: 500,
+			Body:       `{"error":"Lambda adapter not initialized"}`,
+		}, nil
+	}
+	adapter := ginLambda
+	initMutex.Unlock()
+
+	return adapter.ProxyWithContext(ctx, req)
 }

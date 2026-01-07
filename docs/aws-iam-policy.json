@@ -1,0 +1,81 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "CloudFormationAccess",
+            "Effect": "Allow",
+            "Action": [
+                "cloudformation:CreateStack",
+                "cloudformation:UpdateStack",
+                "cloudformation:DeleteStack",
+                "cloudformation:DescribeStacks",
+                "cloudformation:DescribeStackEvents",
+                "cloudformation:DescribeStackResources",
+                "cloudformation:ListStackResources",
+                "cloudformation:GetTemplate",
+                "cloudformation:ValidateTemplate"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Sid": "LambdaAccess",
+            "Effect": "Allow",
+            "Action": [
+                "*"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Sid": "ApiGatewayV2Access",
+            "Effect": "Allow",
+            "Action": [
+                "apigateway:*"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Sid": "S3DeploymentBucketAccess",
+            "Effect": "Allow",
+            "Action": [
+                "s3:CreateBucket",
+                "s3:PutObject",
+                "s3:GetObject",
+                "s3:DeleteObject",
+                "s3:ListBucket",
+                "s3:GetBucketLocation"
+            ],
+            "Resource": [
+                "arn:aws:s3:::nashik-darshan-api-deployments-ap-south-1",
+                "arn:aws:s3:::nashik-darshan-api-deployments-ap-south-1/*"
+            ]
+        },
+        {
+            "Sid": "IamRoleForLambda",
+            "Effect": "Allow",
+            "Action": [
+                "iam:CreateRole",
+                "iam:DeleteRole",
+                "iam:GetRole",
+                "iam:PassRole",
+                "iam:PutRolePolicy",
+                "iam:DeleteRolePolicy",
+                "iam:AttachRolePolicy",
+                "iam:DetachRolePolicy",
+                "iam:TagRole",
+                "iam:UntagRole"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Sid": "CloudWatchLogsAccess",
+            "Effect": "Allow",
+            "Action": [
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents",
+                "logs:TagResource"
+            ],
+            "Resource": "*"
+        }
+    ]
+}

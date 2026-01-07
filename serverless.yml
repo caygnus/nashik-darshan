@@ -1,40 +1,52 @@
 service: nashik-darshan-api
 
-frameworkVersion: "3"
+frameworkVersion: "4"
+
+plugins:
+  - serverless-dotenv-plugin
+
+custom:
+  dotenv:
+    path: .env
+    # Automatically include all CAYGNUS_* variables
+    basePath: .
 
 provider:
   name: aws
   runtime: provided.al2
-  region: us-east-1
-  profile: default
+  region: ap-south-1
+  # profile: default  # Commented out - using environment variables instead
   architecture: arm64
   memorySize: 512
   timeout: 30
+  deploymentBucket:
+    name: nashik-darshan-api-deployments-ap-south-1
+    blockPublicAccess: true
+  httpApi:
+    cors: true
   environment:
+    # Deployment mode (always set to lambda for Lambda deployment)
     CAYGNUS_DEPLOYMENT_MODE: lambda
-    # Add your other CAYGNUS_* environment variables here
-    # CAYGNUS_SERVER_ENV: prod
-    # CAYGNUS_POSTGRES_HOST: ${env:POSTGRES_HOST}
-    # CAYGNUS_POSTGRES_PORT: ${env:POSTGRES_PORT}
-    # etc.
+    # serverless-dotenv-plugin automatically injects all variables from .env
+    # Access them via ${env:VAR_NAME} or they're auto-injected if plugin is configured correctly
 
 functions:
   api:
-    handler: bin/bootstrap
+    handler: bootstrap
+    # Environment variables are inherited from provider.environment
+    # All CAYGNUS_* variables from .env are automatically injected by serverless-dotenv-plugin
     events:
       - httpApi:
           path: /{proxy+}
           method: ANY
-          cors: true
       - httpApi:
           path: /
           method: ANY
-          cors: true
 
 package:
   patterns:
     - "!**"
-    - "bin/bootstrap"
+    - "bootstrap"
     - "!node_modules/**"
     - "!.git/**"
     - "!*.md"
@@ -51,3 +63,4 @@ package:
     - "!*.yaml"
     - "!*.yml"
     - "!.env*"
+    - "!bin/**"
