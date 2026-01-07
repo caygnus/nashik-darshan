@@ -14,8 +14,8 @@ import (
 )
 
 var (
-	// ginLambda holds the Lambda adapter for the Gin router
-	ginLambda *ginadapter.GinLambda
+	// ginLambda holds the Lambda adapter for the Gin router (HTTP API v2)
+	ginLambda *ginadapter.GinLambdaV2
 	// initOnce ensures the Lambda adapter is initialized only once
 	initOnce sync.Once
 )
@@ -31,12 +31,12 @@ func startLambdaServer(
 
 	lc.Append(fx.Hook{
 		OnStart: func(ctx context.Context) error {
-			log.Info("Initializing Lambda adapter...")
+			log.Info("Initializing Lambda adapter (HTTP API v2)...")
 
 			// Initialize the Lambda adapter once using sync.Once
 			// This ensures thread-safe initialization during cold starts
 			initOnce.Do(func() {
-				ginLambda = ginadapter.New(r)
+				ginLambda = ginadapter.NewV2(r)
 				log.Info("Lambda adapter initialized successfully")
 			})
 
@@ -57,7 +57,7 @@ func startLambdaServer(
 	})
 }
 
-// handleLambdaRequest processes incoming API Gateway requests
-func handleLambdaRequest(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+// handleLambdaRequest processes incoming HTTP API v2 requests
+func handleLambdaRequest(ctx context.Context, req events.APIGatewayV2HTTPRequest) (events.APIGatewayV2HTTPResponse, error) {
 	return ginLambda.ProxyWithContext(ctx, req)
 }
