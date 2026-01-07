@@ -10,6 +10,9 @@ provider:
   architecture: arm64
   memorySize: 512
   timeout: 30
+  deploymentBucket:
+    name: nashik-darshan-api-deployments-ap-south-1
+    blockPublicAccess: true
   httpApi:
     cors: true
   environment:
