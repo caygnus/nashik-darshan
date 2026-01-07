@@ -5,6 +5,12 @@ frameworkVersion: "4"
 plugins:
   - serverless-dotenv-plugin
 
+custom:
+  dotenv:
+    path: .env
+    # Automatically include all CAYGNUS_* variables
+    basePath: .
+
 provider:
   name: aws
   runtime: provided.al2
@@ -21,8 +27,8 @@ provider:
   environment:
     # Deployment mode (always set to lambda for Lambda deployment)
     CAYGNUS_DEPLOYMENT_MODE: lambda
-    # All other CAYGNUS_* variables will be loaded from .env file automatically
-    # via serverless-dotenv-plugin
+    # serverless-dotenv-plugin automatically injects all variables from .env
+    # Access them via ${env:VAR_NAME} or they're auto-injected if plugin is configured correctly
 
 functions:
   api:
