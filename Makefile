@@ -1,4 +1,18 @@
 # ============================================================================
+# Nashik Darshan API - Makefile
+# ============================================================================
+# Build outputs:
+#   bin/server     - Production server binary (native platform)
+#   bin/bootstrap  - AWS Lambda binary (Linux ARM64)
+#
+# Quick start:
+#   make run              - Run development server
+#   make build            - Build production binary
+#   make build-lambda     - Build Lambda binary
+#   make clean            - Remove all binaries
+# ============================================================================
+
+# ============================================================================
 # Database Management
 # ============================================================================
 
@@ -173,24 +187,93 @@ install-swag:
 # run: Start the development server
 # Usage: make run
 # What it does: Runs the Go server in development mode with hot reload
-# Command: go run cmd/server/main.go
+# Command: go run ./cmd/server
 # When to use: Daily development work
 .PHONY: run
 run:
 	@echo "Running development server..."
-	@go run cmd/server/main.go
+	@go run ./cmd/server
 	@echo "✅ Development server running"
 
 # build: Build production binary
 # Usage: make build
 # What it does: Compiles Go code into a production-ready binary
-# Command: go build cmd/server/main.go
+# Command: go build -o bin/server ./cmd/server
 # When to use: Before deploying to production
 .PHONY: build
 build:
-	@echo "Running production server..."
-	@go build cmd/server/main.go
-	@echo "✅ Production server running"
+	@echo "Building production server..."
+	@mkdir -p bin
+	@go build -o bin/server ./cmd/server
+	@echo "✅ Production server built: bin/server"
+	@ls -lh bin/server
+
+# ============================================================================
+# AWS Lambda Deployment
+# ============================================================================
+
+# build-lambda: Build optimized binary for AWS Lambda
+# Usage: make build-lambda
+# What it does: Compiles Go code into an optimized binary for Lambda (Linux/ARM64, stripped, minimal size)
+# Command: GOOS=linux GOARCH=arm64 go build with optimization flags
+# When to use: Before deploying to AWS Lambda
+# Optimizations: -ldflags="-s -w" (strip symbols), -trimpath (remove paths), Linux ARM64 target
+.PHONY: build-lambda
+build-lambda:
+	@echo "🔨 Building Lambda binary (Linux ARM64, optimized)..."
+	@mkdir -p bin
+	@GOOS=linux GOARCH=arm64 go build \
+		-ldflags="-s -w" \
+		-trimpath \
+		-o bin/bootstrap \
+		./cmd/server
+	@echo "✅ Lambda binary built: bin/bootstrap"
+	@ls -lh bin/bootstrap
+
+# package-lambda: Package Lambda function for deployment
+# Usage: make package-lambda
+# What it does: Builds Lambda binary and prepares it for serverless deployment
+# Command: Runs build-lambda
+# When to use: Before deploying with serverless framework
+.PHONY: package-lambda
+package-lambda: build-lambda
+	@echo "📦 Lambda package ready for deployment"
+	@echo "✅ Run 'make deploy-lambda' to deploy"
+
+# deploy-lambda: Deploy Lambda function using Serverless Framework
+# Usage: make deploy-lambda
+# What it does: Builds and deploys the Lambda function to AWS using serverless framework
+# Command: serverless deploy
+# When to use: To deploy the API to AWS Lambda
+# Prerequisites: AWS credentials configured, serverless framework installed
+.PHONY: deploy-lambda
+deploy-lambda: package-lambda
+	@echo "🚀 Deploying to AWS Lambda..."
+	@serverless deploy
+	@echo "✅ Deployment complete"
+
+# clean: Remove all build artifacts
+# Usage: make clean
+# What it does: Removes the bin directory with all compiled binaries
+# Command: rm -rf bin
+# When to use: To clean up build artifacts
+.PHONY: clean
+clean:
+	@echo "🧹 Cleaning build artifacts..."
+	@rm -rf bin
+	@echo "✅ Build artifacts cleaned"
+
+# clean-lambda: Remove Lambda deployment artifacts
+# Usage: make clean-lambda
+# What it does: Removes the .serverless directory and Lambda binaries
+# Command: rm -rf .serverless && rm -f bin/bootstrap
+# When to use: To clean up after deployment or testing
+.PHONY: clean-lambda
+clean-lambda:
+	@echo "🧹 Cleaning Lambda artifacts..."
+	@rm -f bin/bootstrap
+	@rm -rf .serverless
+	@echo "✅ Lambda artifacts cleaned"
 
 # ============================================================================
 # SDK Generation Targets

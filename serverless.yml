@@ -1,0 +1,53 @@
+service: nashik-darshan-api
+
+frameworkVersion: "3"
+
+provider:
+  name: aws
+  runtime: provided.al2
+  region: us-east-1
+  profile: default
+  architecture: arm64
+  memorySize: 512
+  timeout: 30
+  environment:
+    CAYGNUS_DEPLOYMENT_MODE: lambda
+    # Add your other CAYGNUS_* environment variables here
+    # CAYGNUS_SERVER_ENV: prod
+    # CAYGNUS_POSTGRES_HOST: ${env:POSTGRES_HOST}
+    # CAYGNUS_POSTGRES_PORT: ${env:POSTGRES_PORT}
+    # etc.
+
+functions:
+  api:
+    handler: bin/bootstrap
+    events:
+      - httpApi:
+          path: /{proxy+}
+          method: ANY
+          cors: true
+      - httpApi:
+          path: /
+          method: ANY
+          cors: true
+
+package:
+  patterns:
+    - "!**"
+    - "bin/bootstrap"
+    - "!node_modules/**"
+    - "!.git/**"
+    - "!*.md"
+    - "!Makefile"
+    - "!serverless.yml"
+    - "!go.mod"
+    - "!go.sum"
+    - "!cmd/**"
+    - "!internal/**"
+    - "!ent/**"
+    - "!docs/**"
+    - "!scripts/**"
+    - "!sdks/**"
+    - "!*.yaml"
+    - "!*.yml"
+    - "!.env*"

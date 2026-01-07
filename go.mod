@@ -4,6 +4,8 @@ go 1.24.0
 
 require (
 	entgo.io/ent v0.14.5
+	github.com/aws/aws-lambda-go v1.51.1
+	github.com/awslabs/aws-lambda-go-api-proxy v0.16.2
 	github.com/cockroachdb/errors v1.11.3
 	github.com/gin-gonic/gin v1.10.1
 	github.com/go-playground/validator/v10 v10.27.0
