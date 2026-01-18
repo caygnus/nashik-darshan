@@ -23,7 +23,7 @@ provider:
     name: nashik-darshan-api-deployments-ap-south-1
     blockPublicAccess: true
   httpApi:
-    cors: true
+    cors: false
   environment:
     # Deployment mode (always set to lambda for Lambda deployment)
     CAYGNUS_DEPLOYMENT_MODE: lambda
