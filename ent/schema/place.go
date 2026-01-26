@@ -17,6 +17,7 @@ func (Place) Mixin() []ent.Mixin {
 	return []ent.Mixin{
 		baseMixin.BaseMixin{},
 		baseMixin.MetadataMixin{},
+		baseMixin.LocationMixin{},
 	}
 }
 
@@ -75,18 +76,6 @@ func (Place) Fields() []ent.Field {
 			}).
 			Optional(),
 
-		field.Other("latitude", decimal.Decimal{}).
-			SchemaType(map[string]string{
-				"postgres": "decimal(10,8)",
-			}).
-			Default(decimal.Zero),
-
-		field.Other("longitude", decimal.Decimal{}).
-			SchemaType(map[string]string{
-				"postgres": "decimal(11,8)",
-			}).
-			Default(decimal.Zero),
-
 		field.String("primary_image_url").
 			SchemaType(map[string]string{
 				"postgres": "text",
@@ -144,6 +133,7 @@ func (Place) Edges() []ent.Edge {
 
 func (Place) Indexes() []ent.Index {
 	return []ent.Index{
-		// TODO: Add indexes
+		// Location index is added by LocationMixin (GiST index for PostGIS)
+		// Add other indexes here as needed
 	}
 }

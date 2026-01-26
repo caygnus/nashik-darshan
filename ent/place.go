@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/omkar273/nashikdarshan/ent/mixin"
 	"github.com/omkar273/nashikdarshan/ent/place"
 	"github.com/shopspring/decimal"
 )
@@ -31,6 +32,8 @@ type Place struct {
 	UpdatedBy string `json:"updated_by,omitempty"`
 	// Metadata holds the value of the "metadata" field.
 	Metadata map[string]string `json:"metadata,omitempty"`
+	// PostGIS geography point for geospatial queries
+	Location *mixin.GeoPoint `json:"location,omitempty"`
 	// Slug holds the value of the "slug" field.
 	Slug string `json:"slug,omitempty"`
 	// Title holds the value of the "title" field.
@@ -45,10 +48,6 @@ type Place struct {
 	PlaceType string `json:"place_type,omitempty"`
 	// Address holds the value of the "address" field.
 	Address map[string]string `json:"address,omitempty"`
-	// Latitude holds the value of the "latitude" field.
-	Latitude decimal.Decimal `json:"latitude,omitempty"`
-	// Longitude holds the value of the "longitude" field.
-	Longitude decimal.Decimal `json:"longitude,omitempty"`
 	// PrimaryImageURL holds the value of the "primary_image_url" field.
 	PrimaryImageURL string `json:"primary_image_url,omitempty"`
 	// ThumbnailURL holds the value of the "thumbnail_url" field.
@@ -105,8 +104,10 @@ func (*Place) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case place.FieldMetadata, place.FieldAddress:
 			values[i] = new([]byte)
-		case place.FieldLatitude, place.FieldLongitude, place.FieldRatingAvg, place.FieldPopularityScore:
+		case place.FieldRatingAvg, place.FieldPopularityScore:
 			values[i] = new(decimal.Decimal)
+		case place.FieldLocation:
+			values[i] = new(mixin.GeoPoint)
 		case place.FieldViewCount, place.FieldRatingCount:
 			values[i] = new(sql.NullInt64)
 		case place.FieldID, place.FieldStatus, place.FieldCreatedBy, place.FieldUpdatedBy, place.FieldSlug, place.FieldTitle, place.FieldSubtitle, place.FieldShortDescription, place.FieldLongDescription, place.FieldPlaceType, place.FieldPrimaryImageURL, place.FieldThumbnailURL:
@@ -172,6 +173,12 @@ func (_m *Place) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field metadata: %w", err)
 				}
 			}
+		case place.FieldLocation:
+			if value, ok := values[i].(*mixin.GeoPoint); !ok {
+				return fmt.Errorf("unexpected type %T for field location", values[i])
+			} else if value != nil {
+				_m.Location = value
+			}
 		case place.FieldSlug:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field slug", values[i])
@@ -215,18 +222,6 @@ func (_m *Place) assignValues(columns []string, values []any) error {
 				if err := json.Unmarshal(*value, &_m.Address); err != nil {
 					return fmt.Errorf("unmarshal field address: %w", err)
 				}
-			}
-		case place.FieldLatitude:
-			if value, ok := values[i].(*decimal.Decimal); !ok {
-				return fmt.Errorf("unexpected type %T for field latitude", values[i])
-			} else if value != nil {
-				_m.Latitude = *value
-			}
-		case place.FieldLongitude:
-			if value, ok := values[i].(*decimal.Decimal); !ok {
-				return fmt.Errorf("unexpected type %T for field longitude", values[i])
-			} else if value != nil {
-				_m.Longitude = *value
 			}
 		case place.FieldPrimaryImageURL:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -334,6 +329,9 @@ func (_m *Place) String() string {
 	builder.WriteString("metadata=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Metadata))
 	builder.WriteString(", ")
+	builder.WriteString("location=")
+	builder.WriteString(fmt.Sprintf("%v", _m.Location))
+	builder.WriteString(", ")
 	builder.WriteString("slug=")
 	builder.WriteString(_m.Slug)
 	builder.WriteString(", ")
@@ -354,12 +352,6 @@ func (_m *Place) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("address=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Address))
-	builder.WriteString(", ")
-	builder.WriteString("latitude=")
-	builder.WriteString(fmt.Sprintf("%v", _m.Latitude))
-	builder.WriteString(", ")
-	builder.WriteString("longitude=")
-	builder.WriteString(fmt.Sprintf("%v", _m.Longitude))
 	builder.WriteString(", ")
 	builder.WriteString("primary_image_url=")
 	builder.WriteString(_m.PrimaryImageURL)

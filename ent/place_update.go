@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/omkar273/nashikdarshan/ent/category"
+	"github.com/omkar273/nashikdarshan/ent/mixin"
 	"github.com/omkar273/nashikdarshan/ent/place"
 	"github.com/omkar273/nashikdarshan/ent/placeimage"
 	"github.com/omkar273/nashikdarshan/ent/predicate"
@@ -80,6 +81,12 @@ func (_u *PlaceUpdate) SetMetadata(v map[string]string) *PlaceUpdate {
 // ClearMetadata clears the value of the "metadata" field.
 func (_u *PlaceUpdate) ClearMetadata() *PlaceUpdate {
 	_u.mutation.ClearMetadata()
+	return _u
+}
+
+// SetLocation sets the "location" field.
+func (_u *PlaceUpdate) SetLocation(v *mixin.GeoPoint) *PlaceUpdate {
+	_u.mutation.SetLocation(v)
 	return _u
 }
 
@@ -166,34 +173,6 @@ func (_u *PlaceUpdate) SetAddress(v map[string]string) *PlaceUpdate {
 // ClearAddress clears the value of the "address" field.
 func (_u *PlaceUpdate) ClearAddress() *PlaceUpdate {
 	_u.mutation.ClearAddress()
-	return _u
-}
-
-// SetLatitude sets the "latitude" field.
-func (_u *PlaceUpdate) SetLatitude(v decimal.Decimal) *PlaceUpdate {
-	_u.mutation.SetLatitude(v)
-	return _u
-}
-
-// SetNillableLatitude sets the "latitude" field if the given value is not nil.
-func (_u *PlaceUpdate) SetNillableLatitude(v *decimal.Decimal) *PlaceUpdate {
-	if v != nil {
-		_u.SetLatitude(*v)
-	}
-	return _u
-}
-
-// SetLongitude sets the "longitude" field.
-func (_u *PlaceUpdate) SetLongitude(v decimal.Decimal) *PlaceUpdate {
-	_u.mutation.SetLongitude(v)
-	return _u
-}
-
-// SetNillableLongitude sets the "longitude" field if the given value is not nil.
-func (_u *PlaceUpdate) SetNillableLongitude(v *decimal.Decimal) *PlaceUpdate {
-	if v != nil {
-		_u.SetLongitude(*v)
-	}
 	return _u
 }
 
@@ -493,6 +472,9 @@ func (_u *PlaceUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if _u.mutation.MetadataCleared() {
 		_spec.ClearField(place.FieldMetadata, field.TypeJSON)
 	}
+	if value, ok := _u.mutation.Location(); ok {
+		_spec.SetField(place.FieldLocation, field.TypeOther, value)
+	}
 	if value, ok := _u.mutation.Title(); ok {
 		_spec.SetField(place.FieldTitle, field.TypeString, value)
 	}
@@ -519,12 +501,6 @@ func (_u *PlaceUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.AddressCleared() {
 		_spec.ClearField(place.FieldAddress, field.TypeJSON)
-	}
-	if value, ok := _u.mutation.Latitude(); ok {
-		_spec.SetField(place.FieldLatitude, field.TypeOther, value)
-	}
-	if value, ok := _u.mutation.Longitude(); ok {
-		_spec.SetField(place.FieldLongitude, field.TypeOther, value)
 	}
 	if value, ok := _u.mutation.PrimaryImageURL(); ok {
 		_spec.SetField(place.FieldPrimaryImageURL, field.TypeString, value)
@@ -724,6 +700,12 @@ func (_u *PlaceUpdateOne) ClearMetadata() *PlaceUpdateOne {
 	return _u
 }
 
+// SetLocation sets the "location" field.
+func (_u *PlaceUpdateOne) SetLocation(v *mixin.GeoPoint) *PlaceUpdateOne {
+	_u.mutation.SetLocation(v)
+	return _u
+}
+
 // SetTitle sets the "title" field.
 func (_u *PlaceUpdateOne) SetTitle(v string) *PlaceUpdateOne {
 	_u.mutation.SetTitle(v)
@@ -807,34 +789,6 @@ func (_u *PlaceUpdateOne) SetAddress(v map[string]string) *PlaceUpdateOne {
 // ClearAddress clears the value of the "address" field.
 func (_u *PlaceUpdateOne) ClearAddress() *PlaceUpdateOne {
 	_u.mutation.ClearAddress()
-	return _u
-}
-
-// SetLatitude sets the "latitude" field.
-func (_u *PlaceUpdateOne) SetLatitude(v decimal.Decimal) *PlaceUpdateOne {
-	_u.mutation.SetLatitude(v)
-	return _u
-}
-
-// SetNillableLatitude sets the "latitude" field if the given value is not nil.
-func (_u *PlaceUpdateOne) SetNillableLatitude(v *decimal.Decimal) *PlaceUpdateOne {
-	if v != nil {
-		_u.SetLatitude(*v)
-	}
-	return _u
-}
-
-// SetLongitude sets the "longitude" field.
-func (_u *PlaceUpdateOne) SetLongitude(v decimal.Decimal) *PlaceUpdateOne {
-	_u.mutation.SetLongitude(v)
-	return _u
-}
-
-// SetNillableLongitude sets the "longitude" field if the given value is not nil.
-func (_u *PlaceUpdateOne) SetNillableLongitude(v *decimal.Decimal) *PlaceUpdateOne {
-	if v != nil {
-		_u.SetLongitude(*v)
-	}
 	return _u
 }
 
@@ -1164,6 +1118,9 @@ func (_u *PlaceUpdateOne) sqlSave(ctx context.Context) (_node *Place, err error)
 	if _u.mutation.MetadataCleared() {
 		_spec.ClearField(place.FieldMetadata, field.TypeJSON)
 	}
+	if value, ok := _u.mutation.Location(); ok {
+		_spec.SetField(place.FieldLocation, field.TypeOther, value)
+	}
 	if value, ok := _u.mutation.Title(); ok {
 		_spec.SetField(place.FieldTitle, field.TypeString, value)
 	}
@@ -1190,12 +1147,6 @@ func (_u *PlaceUpdateOne) sqlSave(ctx context.Context) (_node *Place, err error)
 	}
 	if _u.mutation.AddressCleared() {
 		_spec.ClearField(place.FieldAddress, field.TypeJSON)
-	}
-	if value, ok := _u.mutation.Latitude(); ok {
-		_spec.SetField(place.FieldLatitude, field.TypeOther, value)
-	}
-	if value, ok := _u.mutation.Longitude(); ok {
-		_spec.SetField(place.FieldLongitude, field.TypeOther, value)
 	}
 	if value, ok := _u.mutation.PrimaryImageURL(); ok {
 		_spec.SetField(place.FieldPrimaryImageURL, field.TypeString, value)

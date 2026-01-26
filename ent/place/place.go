@@ -27,6 +27,8 @@ const (
 	FieldUpdatedBy = "updated_by"
 	// FieldMetadata holds the string denoting the metadata field in the database.
 	FieldMetadata = "metadata"
+	// FieldLocation holds the string denoting the location field in the database.
+	FieldLocation = "location"
 	// FieldSlug holds the string denoting the slug field in the database.
 	FieldSlug = "slug"
 	// FieldTitle holds the string denoting the title field in the database.
@@ -41,10 +43,6 @@ const (
 	FieldPlaceType = "place_type"
 	// FieldAddress holds the string denoting the address field in the database.
 	FieldAddress = "address"
-	// FieldLatitude holds the string denoting the latitude field in the database.
-	FieldLatitude = "latitude"
-	// FieldLongitude holds the string denoting the longitude field in the database.
-	FieldLongitude = "longitude"
 	// FieldPrimaryImageURL holds the string denoting the primary_image_url field in the database.
 	FieldPrimaryImageURL = "primary_image_url"
 	// FieldThumbnailURL holds the string denoting the thumbnail_url field in the database.
@@ -88,6 +86,7 @@ var Columns = []string{
 	FieldCreatedBy,
 	FieldUpdatedBy,
 	FieldMetadata,
+	FieldLocation,
 	FieldSlug,
 	FieldTitle,
 	FieldSubtitle,
@@ -95,8 +94,6 @@ var Columns = []string{
 	FieldLongDescription,
 	FieldPlaceType,
 	FieldAddress,
-	FieldLatitude,
-	FieldLongitude,
 	FieldPrimaryImageURL,
 	FieldThumbnailURL,
 	FieldViewCount,
@@ -139,10 +136,6 @@ var (
 	TitleValidator func(string) error
 	// PlaceTypeValidator is a validator for the "place_type" field. It is called by the builders before save.
 	PlaceTypeValidator func(string) error
-	// DefaultLatitude holds the default value on creation for the "latitude" field.
-	DefaultLatitude decimal.Decimal
-	// DefaultLongitude holds the default value on creation for the "longitude" field.
-	DefaultLongitude decimal.Decimal
 	// DefaultViewCount holds the default value on creation for the "view_count" field.
 	DefaultViewCount int
 	// ViewCountValidator is a validator for the "view_count" field. It is called by the builders before save.
@@ -192,6 +185,11 @@ func ByUpdatedBy(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldUpdatedBy, opts...).ToFunc()
 }
 
+// ByLocation orders the results by the location field.
+func ByLocation(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLocation, opts...).ToFunc()
+}
+
 // BySlug orders the results by the slug field.
 func BySlug(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSlug, opts...).ToFunc()
@@ -220,16 +218,6 @@ func ByLongDescription(opts ...sql.OrderTermOption) OrderOption {
 // ByPlaceType orders the results by the place_type field.
 func ByPlaceType(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPlaceType, opts...).ToFunc()
-}
-
-// ByLatitude orders the results by the latitude field.
-func ByLatitude(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldLatitude, opts...).ToFunc()
-}
-
-// ByLongitude orders the results by the longitude field.
-func ByLongitude(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldLongitude, opts...).ToFunc()
 }
 
 // ByPrimaryImageURL orders the results by the primary_image_url field.

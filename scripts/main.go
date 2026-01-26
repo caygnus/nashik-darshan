@@ -21,6 +21,11 @@ var commands = []Command{
 		Description: "Generate the Ent schema",
 		Run:         internal.GenerateEnt,
 	},
+	{
+		Name:        "onboard-user",
+		Description: "Onboard a user in Supabase and local database (takes --email, --password, --name flags)",
+		Run:         internal.OnboardUser,
+	},
 }
 
 func main() {
@@ -32,6 +37,12 @@ func main() {
 
 	flag.BoolVar(&listCommands, "list", false, "List all available commands")
 	flag.StringVar(&cmdName, "cmd", "", "Command to run")
+	
+	// Include subcommand flags so flag.Parse doesn't error on them
+	// These are parsed by the subcommands themselves from os.Args
+	_ = flag.String("email", "", "User email address (for onboard-user command)")
+	_ = flag.String("password", "", "User password (for onboard-user command)")
+	_ = flag.String("name", "", "User name (for onboard-user command)")
 
 	flag.Usage = func() {
 		fmt.Printf("Usage of %s:\n\n", "scripts")
@@ -39,11 +50,10 @@ func main() {
 		fmt.Println("\nOptions:")
 		flag.PrintDefaults()
 		fmt.Println("\nExamples:")
-		fmt.Println("  go run scripts/main.go -list                    # List all available commands")
-		fmt.Println("  go run scripts/main.go -cmd generate-ent        # Generate Ent schema")
-		fmt.Println("  go run scripts/main.go -cmd seed-ranks          # Seed rank data")
-		fmt.Println("  go run scripts/main.go -cmd clear-ranks         # Clear all ranks")
-		fmt.Println("  go run scripts/main.go -cmd validate-ranks      # Validate seeded ranks")
+		fmt.Println("  go run scripts/main.go -list                                    # List all available commands")
+		fmt.Println("  go run scripts/main.go -cmd generate-ent                        # Generate Ent schema")
+		fmt.Println("  go run scripts/main.go -cmd onboard-user --email user@example.com --password pass123")
+		fmt.Println("  go run scripts/main.go -cmd onboard-user --email user@example.com --password pass123 --name \"John Doe\"")
 		fmt.Println("\nNote: Ensure your database configuration is properly set up before running database commands.")
 	}
 

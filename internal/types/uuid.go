@@ -45,4 +45,5 @@ const (
 	UUID_PREFIX_HOTEL       = "hotel"
 	UUID_PREFIX_EVENT       = "evt"
 	UUID_PREFIX_OCCURRENCE  = "occ"
+	UUID_PREFIX_SECRET      = "secret"
 )

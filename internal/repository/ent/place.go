@@ -2,11 +2,11 @@ package ent
 
 import (
 	"context"
-	"math"
-	"sort"
 	"time"
 
+	"entgo.io/ent/dialect/sql"
 	"github.com/omkar273/nashikdarshan/ent"
+	"github.com/omkar273/nashikdarshan/ent/mixin"
 	"github.com/omkar273/nashikdarshan/ent/place"
 	"github.com/omkar273/nashikdarshan/ent/placeimage"
 	domain "github.com/omkar273/nashikdarshan/internal/domain/place"
@@ -16,52 +16,6 @@ import (
 	"github.com/omkar273/nashikdarshan/internal/types"
 	"github.com/shopspring/decimal"
 )
-
-const (
-	// Earth radius in meters (WGS84)
-	earthRadiusM = 6371000.0
-	// Meters per degree at equator
-	metersPerDegreeLat = 111320.0
-)
-
-// calculateBoundingBox calculates bounding box deltas for a given center point and radius
-// Returns: minLat, maxLat, minLng, maxLng
-func calculateBoundingBox(lat0, lng0, radiusM decimal.Decimal) (decimal.Decimal, decimal.Decimal, decimal.Decimal, decimal.Decimal) {
-	// Latitude delta (degrees) - constant regardless of location
-	deltaLat := radiusM.Div(decimal.NewFromFloat(metersPerDegreeLat))
-
-	// Longitude delta (degrees) - varies by latitude
-	lat0Rad := lat0.Mul(decimal.NewFromFloat(math.Pi / 180.0))
-	cosLat0 := decimal.NewFromFloat(math.Cos(lat0Rad.InexactFloat64()))
-	deltaLng := radiusM.Div(decimal.NewFromFloat(metersPerDegreeLat).Mul(cosLat0))
-
-	minLat := lat0.Sub(deltaLat)
-	maxLat := lat0.Add(deltaLat)
-	minLng := lng0.Sub(deltaLng)
-	maxLng := lng0.Add(deltaLng)
-
-	return minLat, maxLat, minLng, maxLng
-}
-
-// haversineDistance calculates distance between two points using Haversine formula
-// Returns distance in meters
-func haversineDistance(lat1, lng1, lat2, lng2 decimal.Decimal) float64 {
-	lat1Rad := lat1.Mul(decimal.NewFromFloat(math.Pi / 180.0)).InexactFloat64()
-	lng1Rad := lng1.Mul(decimal.NewFromFloat(math.Pi / 180.0)).InexactFloat64()
-	lat2Rad := lat2.Mul(decimal.NewFromFloat(math.Pi / 180.0)).InexactFloat64()
-	lng2Rad := lng2.Mul(decimal.NewFromFloat(math.Pi / 180.0)).InexactFloat64()
-
-	dlat := lat2Rad - lat1Rad
-	dlng := lng2Rad - lng1Rad
-
-	a := math.Sin(dlat/2)*math.Sin(dlat/2) +
-		math.Cos(lat1Rad)*math.Cos(lat2Rad)*
-			math.Sin(dlng/2)*math.Sin(dlng/2)
-
-	c := 2 * math.Atan2(math.Sqrt(a), math.Sqrt(1-a))
-
-	return earthRadiusM * c
-}
 
 type PlaceRepository struct {
 	client    postgres.IClient
@@ -88,13 +42,15 @@ func (r *PlaceRepository) Create(ctx context.Context, p *domain.Place) error {
 	)
 
 	now := time.Now().UTC()
+	// Convert domain Location to GeoPoint for PostGIS
+	geoPoint := mixin.NewGeoPoint(p.Location.Latitude, p.Location.Longitude)
+
 	create := client.Place.Create().
 		SetID(p.ID).
 		SetSlug(p.Slug).
 		SetTitle(p.Title).
 		SetPlaceType(string(p.PlaceType)).
-		SetLatitude(p.Location.Latitude).
-		SetLongitude(p.Location.Longitude).
+		SetLocation(&geoPoint).
 		SetStatus(string(p.Status)).
 		SetCreatedAt(now).
 		SetUpdatedAt(now).
@@ -237,62 +193,8 @@ func (r *PlaceRepository) List(ctx context.Context, filter *types.PlaceFilter) (
 	}
 
 	// Convert to domain models
-	domainPlaces := domain.FromEntList(places)
-
-	// If geospatial query, apply distance filtering and sorting
-	hasGeospatialQuery := filter != nil && filter.Latitude != nil && filter.Longitude != nil && filter.RadiusM != nil
-	if hasGeospatialQuery {
-		lat0 := *filter.Latitude
-		lng0 := *filter.Longitude
-		radiusM := *filter.RadiusM
-
-		// Calculate distances and filter by exact radius
-		type placeWithDistance struct {
-			place    *domain.Place
-			distance float64
-		}
-
-		placesWithDist := make([]placeWithDistance, 0, len(domainPlaces))
-		for _, p := range domainPlaces {
-			dist := haversineDistance(lat0, lng0, p.Location.Latitude, p.Location.Longitude)
-			if dist <= radiusM.InexactFloat64() {
-				placesWithDist = append(placesWithDist, placeWithDistance{
-					place:    p,
-					distance: dist,
-				})
-			}
-		}
-
-		// Sort by distance ASC, then ID ASC
-		sort.Slice(placesWithDist, func(i, j int) bool {
-			if placesWithDist[i].distance != placesWithDist[j].distance {
-				return placesWithDist[i].distance < placesWithDist[j].distance
-			}
-			return placesWithDist[i].place.ID < placesWithDist[j].place.ID
-		})
-
-		// Apply pagination (offset and limit)
-		offset := filter.GetOffset()
-		limit := filter.GetLimit()
-		start := offset
-		end := offset + limit
-		if start > len(placesWithDist) {
-			start = len(placesWithDist)
-		}
-		if end > len(placesWithDist) {
-			end = len(placesWithDist)
-		}
-
-		// Extract places
-		result := make([]*domain.Place, 0, end-start)
-		for i := start; i < end; i++ {
-			result = append(result, placesWithDist[i].place)
-		}
-
-		return result, nil
-	}
-
-	return domainPlaces, nil
+	// Note: PostGIS filtering and sorting is done at database level via ApplyEntityQueryOptions
+	return domain.FromEntList(places), nil
 }
 
 func (r *PlaceRepository) ListAll(ctx context.Context, filter *types.PlaceFilter) ([]*domain.Place, error) {
@@ -346,10 +248,12 @@ func (r *PlaceRepository) Update(ctx context.Context, p *domain.Place) error {
 		"title", p.Title,
 	)
 
+	// Convert domain Location to GeoPoint for PostGIS
+	geoPoint := mixin.NewGeoPoint(p.Location.Latitude, p.Location.Longitude)
+
 	update := client.Place.UpdateOneID(p.ID).
 		SetTitle(p.Title).
-		SetLatitude(p.Location.Latitude).
-		SetLongitude(p.Location.Longitude).
+		SetLocation(&geoPoint).
 		SetStatus(string(p.Status)).
 		SetUpdatedAt(time.Now().UTC()).
 		SetUpdatedBy(types.GetUserID(ctx))
@@ -723,27 +627,23 @@ func (o PlaceQueryOptions) ApplyEntityQueryOptions(
 		)
 	}
 
-	// Apply geospatial filters if specified
+	// Apply geospatial filters if specified using PostGIS ST_DWithin
 	if f.Latitude != nil && f.Longitude != nil && f.RadiusM != nil {
 		lat0 := *f.Latitude
 		lng0 := *f.Longitude
 		radiusM := *f.RadiusM
 
-		// Step 1: Bounding box prefilter (shrink search space)
-		minLat, maxLat, minLng, maxLng := calculateBoundingBox(lat0, lng0, radiusM)
+		// Use PostGIS ST_DWithin for efficient spatial filtering
+		// This uses the GiST index on the location column
+		query = query.Where(func(s *sql.Selector) {
+			WithinRadius("location", lng0, lat0, radiusM)(s)
+		})
 
-		// Apply bounding box filter (convert decimal to float64 for ent predicates)
-		query = query.Where(
-			place.And(
-				place.LatitudeGTE(minLat),
-				place.LatitudeLTE(maxLat),
-				place.LongitudeGTE(minLng),
-				place.LongitudeLTE(maxLng),
-			),
-		)
-
-		// Note: Exact distance filtering and sorting are handled in the List method
-		// after fetching results, since we need to calculate Haversine distances in Go
+		// Order by distance using PostGIS ST_Distance
+		// This ensures results are sorted by nearest first
+		query = query.Order(func(s *sql.Selector) {
+			OrderByDistance("location", lng0, lat0, true)(s)
+		})
 	}
 
 	// Apply time range filters if specified

@@ -10,6 +10,7 @@ const (
 	CtxUserID        ContextKey = "ctx_user_id"
 	CtxJWT           ContextKey = "ctx_jwt"
 	CtxUserEmail     ContextKey = "ctx_user_email"
+	CtxPermissions   ContextKey = "ctx_permissions"
 	CtxDBTransaction ContextKey = "ctx_db_transaction"
 
 	// Default values
@@ -42,4 +43,11 @@ func GetJWT(ctx context.Context) string {
 		return jwt
 	}
 	return ""
+}
+
+func GetPermissions(ctx context.Context) []string {
+	if permissions, ok := ctx.Value(CtxPermissions).([]string); ok {
+		return permissions
+	}
+	return nil
 }

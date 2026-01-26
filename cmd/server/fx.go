@@ -35,8 +35,7 @@ func provideRepositories() fx.Option {
 		repository.NewCategoryRepository,
 		repository.NewPlaceRepository,
 		repository.NewReviewRepository,
-		repository.NewHotelRepository,
-		repository.NewEventRepository,
+		repository.NewSecretRepository,
 	)
 }
 
@@ -50,8 +49,7 @@ func provideServices() fx.Option {
 		service.NewCategoryService,
 		service.NewPlaceService,
 		service.NewReviewService,
-		service.NewHotelService,
-		service.NewEventService,
+		service.NewSecretService,
 	)
 }
 
@@ -71,8 +69,7 @@ func provideHandlers(
 	categoryService service.CategoryService,
 	placeService service.PlaceService,
 	reviewService service.ReviewService,
-	hotelService service.HotelService,
-	eventService service.EventService,
+	secretService service.SecretService,
 ) *api.Handlers {
 	return &api.Handlers{
 		Health:   v1.NewHealthHandler(logger),
@@ -81,12 +78,11 @@ func provideHandlers(
 		Category: v1.NewCategoryHandler(categoryService),
 		Place:    v1.NewPlaceHandler(placeService),
 		Review:   v1.NewReviewHandler(reviewService),
-		Hotel:    v1.NewHotelHandler(hotelService),
-		Event:    v1.NewEventHandler(eventService),
+		Secret:   v1.NewSecretHandler(secretService),
 	}
 }
 
 // provideRouter creates the Gin router with handlers
-func provideRouter(handlers *api.Handlers, cfg *config.Configuration, logger *logger.Logger) *gin.Engine {
-	return api.NewRouter(handlers, cfg, logger)
+func provideRouter(handlers *api.Handlers, cfg *config.Configuration, logger *logger.Logger, secretService service.SecretService) *gin.Engine {
+	return api.NewRouter(handlers, cfg, logger, secretService)
 }

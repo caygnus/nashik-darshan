@@ -32,6 +32,12 @@ var (
 			ExpandStation: {ExpandStation},
 		},
 	}
+
+	// SecretExpandConfig defines the allowed expand fields for secrets
+	SecretExpandConfig = ExpandConfig{
+		AllowedFields: []ExpandableField{},
+		NestedExpands: map[ExpandableField][]ExpandableField{},
+	}
 )
 
 // Expand represents the expand parameter in API requests

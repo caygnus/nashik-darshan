@@ -35,221 +35,6 @@ var (
 			},
 		},
 	}
-	// EventsColumns holds the columns for the "events" table.
-	EventsColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeString},
-		{Name: "status", Type: field.TypeString, Default: "published", SchemaType: map[string]string{"postgres": "varchar(20)"}},
-		{Name: "created_at", Type: field.TypeTime},
-		{Name: "updated_at", Type: field.TypeTime},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "metadata", Type: field.TypeJSON, Nullable: true, SchemaType: map[string]string{"postgres": "jsonb"}},
-		{Name: "slug", Type: field.TypeString, Unique: true},
-		{Name: "type", Type: field.TypeString},
-		{Name: "title", Type: field.TypeString, Size: 255},
-		{Name: "subtitle", Type: field.TypeString, Nullable: true, Size: 500},
-		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
-		{Name: "place_id", Type: field.TypeString, Nullable: true},
-		{Name: "start_date", Type: field.TypeTime},
-		{Name: "end_date", Type: field.TypeTime, Nullable: true},
-		{Name: "cover_image_url", Type: field.TypeString, Nullable: true},
-		{Name: "images", Type: field.TypeJSON, Nullable: true},
-		{Name: "tags", Type: field.TypeJSON, Nullable: true},
-		{Name: "latitude", Type: field.TypeOther, Nullable: true, SchemaType: map[string]string{"postgres": "decimal(10,8)"}},
-		{Name: "longitude", Type: field.TypeOther, Nullable: true, SchemaType: map[string]string{"postgres": "decimal(10,8)"}},
-		{Name: "location_name", Type: field.TypeString, Nullable: true, Size: 255},
-		{Name: "view_count", Type: field.TypeInt, Default: 0},
-		{Name: "interested_count", Type: field.TypeInt, Default: 0},
-	}
-	// EventsTable holds the schema information for the "events" table.
-	EventsTable = &schema.Table{
-		Name:       "events",
-		Columns:    EventsColumns,
-		PrimaryKey: []*schema.Column{EventsColumns[0]},
-		Indexes: []*schema.Index{
-			{
-				Name:    "event_slug",
-				Unique:  true,
-				Columns: []*schema.Column{EventsColumns[7]},
-			},
-			{
-				Name:    "event_place_id_status",
-				Unique:  false,
-				Columns: []*schema.Column{EventsColumns[12], EventsColumns[1]},
-			},
-			{
-				Name:    "event_type_status",
-				Unique:  false,
-				Columns: []*schema.Column{EventsColumns[8], EventsColumns[1]},
-			},
-			{
-				Name:    "event_status_start_date",
-				Unique:  false,
-				Columns: []*schema.Column{EventsColumns[1], EventsColumns[13]},
-			},
-			{
-				Name:    "event_start_date_end_date",
-				Unique:  false,
-				Columns: []*schema.Column{EventsColumns[13], EventsColumns[14]},
-			},
-			{
-				Name:    "event_status_view_count",
-				Unique:  false,
-				Columns: []*schema.Column{EventsColumns[1], EventsColumns[21]},
-			},
-			{
-				Name:    "event_status_interested_count",
-				Unique:  false,
-				Columns: []*schema.Column{EventsColumns[1], EventsColumns[22]},
-			},
-		},
-	}
-	// EventOccurrencesColumns holds the columns for the "event_occurrences" table.
-	EventOccurrencesColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeString},
-		{Name: "status", Type: field.TypeString, Default: "published", SchemaType: map[string]string{"postgres": "varchar(20)"}},
-		{Name: "created_at", Type: field.TypeTime},
-		{Name: "updated_at", Type: field.TypeTime},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "metadata", Type: field.TypeJSON, Nullable: true, SchemaType: map[string]string{"postgres": "jsonb"}},
-		{Name: "recurrence_type", Type: field.TypeString},
-		{Name: "start_time", Type: field.TypeTime, Nullable: true},
-		{Name: "end_time", Type: field.TypeTime, Nullable: true},
-		{Name: "duration_minutes", Type: field.TypeInt, Nullable: true},
-		{Name: "day_of_week", Type: field.TypeInt, Nullable: true},
-		{Name: "day_of_month", Type: field.TypeInt, Nullable: true},
-		{Name: "month_of_year", Type: field.TypeInt, Nullable: true},
-		{Name: "exception_dates", Type: field.TypeJSON, Nullable: true},
-		{Name: "event_id", Type: field.TypeString},
-	}
-	// EventOccurrencesTable holds the schema information for the "event_occurrences" table.
-	EventOccurrencesTable = &schema.Table{
-		Name:       "event_occurrences",
-		Columns:    EventOccurrencesColumns,
-		PrimaryKey: []*schema.Column{EventOccurrencesColumns[0]},
-		ForeignKeys: []*schema.ForeignKey{
-			{
-				Symbol:     "event_occurrences_events_occurrences",
-				Columns:    []*schema.Column{EventOccurrencesColumns[15]},
-				RefColumns: []*schema.Column{EventsColumns[0]},
-				OnDelete:   schema.NoAction,
-			},
-		},
-		Indexes: []*schema.Index{
-			{
-				Name:    "eventoccurrence_event_id_status",
-				Unique:  false,
-				Columns: []*schema.Column{EventOccurrencesColumns[15], EventOccurrencesColumns[1]},
-			},
-			{
-				Name:    "eventoccurrence_recurrence_type_status",
-				Unique:  false,
-				Columns: []*schema.Column{EventOccurrencesColumns[7], EventOccurrencesColumns[1]},
-			},
-			{
-				Name:    "eventoccurrence_day_of_week_status",
-				Unique:  false,
-				Columns: []*schema.Column{EventOccurrencesColumns[11], EventOccurrencesColumns[1]},
-			},
-			{
-				Name:    "eventoccurrence_day_of_month_status",
-				Unique:  false,
-				Columns: []*schema.Column{EventOccurrencesColumns[12], EventOccurrencesColumns[1]},
-			},
-			{
-				Name:    "eventoccurrence_month_of_year_day_of_month_status",
-				Unique:  false,
-				Columns: []*schema.Column{EventOccurrencesColumns[13], EventOccurrencesColumns[12], EventOccurrencesColumns[1]},
-			},
-		},
-	}
-	// HotelsColumns holds the columns for the "hotels" table.
-	HotelsColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeString, SchemaType: map[string]string{"postgres": "varchar(255)"}},
-		{Name: "status", Type: field.TypeString, Default: "published", SchemaType: map[string]string{"postgres": "varchar(20)"}},
-		{Name: "created_at", Type: field.TypeTime},
-		{Name: "updated_at", Type: field.TypeTime},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "metadata", Type: field.TypeJSON, Nullable: true, SchemaType: map[string]string{"postgres": "jsonb"}},
-		{Name: "slug", Type: field.TypeString, SchemaType: map[string]string{"postgres": "text"}},
-		{Name: "name", Type: field.TypeString, SchemaType: map[string]string{"postgres": "text"}},
-		{Name: "description", Type: field.TypeString, Nullable: true, SchemaType: map[string]string{"postgres": "text"}},
-		{Name: "star_rating", Type: field.TypeInt, Default: 0, SchemaType: map[string]string{"postgres": "integer"}},
-		{Name: "room_count", Type: field.TypeInt, Default: 0, SchemaType: map[string]string{"postgres": "integer"}},
-		{Name: "check_in_time", Type: field.TypeTime, Nullable: true, SchemaType: map[string]string{"postgres": "time"}},
-		{Name: "check_out_time", Type: field.TypeTime, Nullable: true, SchemaType: map[string]string{"postgres": "time"}},
-		{Name: "address", Type: field.TypeJSON, Nullable: true, SchemaType: map[string]string{"postgres": "jsonb"}},
-		{Name: "latitude", Type: field.TypeOther, SchemaType: map[string]string{"postgres": "decimal(10,8)"}},
-		{Name: "longitude", Type: field.TypeOther, SchemaType: map[string]string{"postgres": "decimal(11,8)"}},
-		{Name: "phone", Type: field.TypeString, Nullable: true, SchemaType: map[string]string{"postgres": "varchar(20)"}},
-		{Name: "email", Type: field.TypeString, Nullable: true, SchemaType: map[string]string{"postgres": "varchar(255)"}},
-		{Name: "website", Type: field.TypeString, Nullable: true, SchemaType: map[string]string{"postgres": "text"}},
-		{Name: "primary_image_url", Type: field.TypeString, Nullable: true, SchemaType: map[string]string{"postgres": "text"}},
-		{Name: "thumbnail_url", Type: field.TypeString, Nullable: true, SchemaType: map[string]string{"postgres": "text"}},
-		{Name: "price_min", Type: field.TypeOther, Nullable: true, SchemaType: map[string]string{"postgres": "decimal(10,2)"}},
-		{Name: "price_max", Type: field.TypeOther, Nullable: true, SchemaType: map[string]string{"postgres": "decimal(10,2)"}},
-		{Name: "currency", Type: field.TypeString, Nullable: true, Default: "INR", SchemaType: map[string]string{"postgres": "varchar(3)"}},
-		{Name: "view_count", Type: field.TypeInt, Default: 0, SchemaType: map[string]string{"postgres": "integer"}},
-		{Name: "rating_avg", Type: field.TypeOther, SchemaType: map[string]string{"postgres": "decimal(3,2)"}},
-		{Name: "rating_count", Type: field.TypeInt, Default: 0, SchemaType: map[string]string{"postgres": "integer"}},
-		{Name: "last_viewed_at", Type: field.TypeTime, Nullable: true, SchemaType: map[string]string{"postgres": "timestamp with time zone"}},
-		{Name: "popularity_score", Type: field.TypeOther, SchemaType: map[string]string{"postgres": "decimal(10,4)"}},
-	}
-	// HotelsTable holds the schema information for the "hotels" table.
-	HotelsTable = &schema.Table{
-		Name:       "hotels",
-		Columns:    HotelsColumns,
-		PrimaryKey: []*schema.Column{HotelsColumns[0]},
-		Indexes: []*schema.Index{
-			{
-				Name:    "hotel_slug_status",
-				Unique:  true,
-				Columns: []*schema.Column{HotelsColumns[7], HotelsColumns[1]},
-			},
-			{
-				Name:    "hotel_latitude_longitude",
-				Unique:  false,
-				Columns: []*schema.Column{HotelsColumns[15], HotelsColumns[16]},
-			},
-			{
-				Name:    "hotel_star_rating",
-				Unique:  false,
-				Columns: []*schema.Column{HotelsColumns[10]},
-			},
-			{
-				Name:    "hotel_price_min_price_max",
-				Unique:  false,
-				Columns: []*schema.Column{HotelsColumns[22], HotelsColumns[23]},
-			},
-			{
-				Name:    "hotel_popularity_score",
-				Unique:  false,
-				Columns: []*schema.Column{HotelsColumns[29]},
-			},
-			{
-				Name:    "hotel_view_count",
-				Unique:  false,
-				Columns: []*schema.Column{HotelsColumns[25]},
-			},
-			{
-				Name:    "hotel_rating_avg",
-				Unique:  false,
-				Columns: []*schema.Column{HotelsColumns[26]},
-			},
-			{
-				Name:    "hotel_last_viewed_at",
-				Unique:  false,
-				Columns: []*schema.Column{HotelsColumns[28]},
-			},
-			{
-				Name:    "hotel_last_viewed_at_popularity_score",
-				Unique:  false,
-				Columns: []*schema.Column{HotelsColumns[28], HotelsColumns[29]},
-			},
-		},
-	}
 	// PlacesColumns holds the columns for the "places" table.
 	PlacesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString, SchemaType: map[string]string{"postgres": "varchar(255)"}},
@@ -259,6 +44,7 @@ var (
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "metadata", Type: field.TypeJSON, Nullable: true, SchemaType: map[string]string{"postgres": "jsonb"}},
+		{Name: "location", Type: field.TypeOther, SchemaType: map[string]string{"postgres": "geography(Point,4326)"}},
 		{Name: "slug", Type: field.TypeString, SchemaType: map[string]string{"postgres": "text"}},
 		{Name: "title", Type: field.TypeString, SchemaType: map[string]string{"postgres": "text"}},
 		{Name: "subtitle", Type: field.TypeString, Nullable: true, SchemaType: map[string]string{"postgres": "text"}},
@@ -266,8 +52,6 @@ var (
 		{Name: "long_description", Type: field.TypeString, Nullable: true, SchemaType: map[string]string{"postgres": "text"}},
 		{Name: "place_type", Type: field.TypeString, SchemaType: map[string]string{"postgres": "text"}},
 		{Name: "address", Type: field.TypeJSON, Nullable: true, SchemaType: map[string]string{"postgres": "jsonb"}},
-		{Name: "latitude", Type: field.TypeOther, SchemaType: map[string]string{"postgres": "decimal(10,8)"}},
-		{Name: "longitude", Type: field.TypeOther, SchemaType: map[string]string{"postgres": "decimal(11,8)"}},
 		{Name: "primary_image_url", Type: field.TypeString, Nullable: true, SchemaType: map[string]string{"postgres": "text"}},
 		{Name: "thumbnail_url", Type: field.TypeString, Nullable: true, SchemaType: map[string]string{"postgres": "text"}},
 		{Name: "view_count", Type: field.TypeInt, Default: 0, SchemaType: map[string]string{"postgres": "integer"}},
@@ -281,6 +65,13 @@ var (
 		Name:       "places",
 		Columns:    PlacesColumns,
 		PrimaryKey: []*schema.Column{PlacesColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "place_location",
+				Unique:  false,
+				Columns: []*schema.Column{PlacesColumns[7]},
+			},
+		},
 	}
 	// PlaceImagesColumns holds the columns for the "place_images" table.
 	PlaceImagesColumns = []*schema.Column{
@@ -392,6 +183,57 @@ var (
 			},
 		},
 	}
+	// SecretsColumns holds the columns for the "secrets" table.
+	SecretsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString, SchemaType: map[string]string{"postgres": "varchar(255)"}},
+		{Name: "status", Type: field.TypeString, Default: "published", SchemaType: map[string]string{"postgres": "varchar(20)"}},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "metadata", Type: field.TypeJSON, Nullable: true, SchemaType: map[string]string{"postgres": "jsonb"}},
+		{Name: "name", Type: field.TypeString, SchemaType: map[string]string{"postgres": "varchar(255)"}},
+		{Name: "type", Type: field.TypeString, Default: "private_key", SchemaType: map[string]string{"postgres": "varchar(50)"}},
+		{Name: "provider", Type: field.TypeString, Default: "nashikdarshan", SchemaType: map[string]string{"postgres": "varchar(50)"}},
+		{Name: "value", Type: field.TypeString, SchemaType: map[string]string{"postgres": "text"}},
+		{Name: "prefix", Type: field.TypeString, SchemaType: map[string]string{"postgres": "varchar(8)"}},
+		{Name: "permissions", Type: field.TypeJSON, Nullable: true, SchemaType: map[string]string{"postgres": "text[]"}},
+		{Name: "expires_at", Type: field.TypeTime, Nullable: true},
+		{Name: "last_used_at", Type: field.TypeTime, Nullable: true},
+	}
+	// SecretsTable holds the schema information for the "secrets" table.
+	SecretsTable = &schema.Table{
+		Name:       "secrets",
+		Columns:    SecretsColumns,
+		PrimaryKey: []*schema.Column{SecretsColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "secret_value",
+				Unique:  false,
+				Columns: []*schema.Column{SecretsColumns[10]},
+			},
+			{
+				Name:    "secret_type_provider",
+				Unique:  false,
+				Columns: []*schema.Column{SecretsColumns[8], SecretsColumns[9]},
+			},
+			{
+				Name:    "secret_status",
+				Unique:  false,
+				Columns: []*schema.Column{SecretsColumns[1]},
+			},
+			{
+				Name:    "secret_created_by",
+				Unique:  false,
+				Columns: []*schema.Column{SecretsColumns[4]},
+			},
+			{
+				Name:    "secret_created_by_type_status",
+				Unique:  false,
+				Columns: []*schema.Column{SecretsColumns[4], SecretsColumns[8], SecretsColumns[1]},
+			},
+		},
+	}
 	// UsersColumns holds the columns for the "users" table.
 	UsersColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString, SchemaType: map[string]string{"postgres": "varchar(255)"}},
@@ -466,19 +308,16 @@ var (
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
 		CategoriesTable,
-		EventsTable,
-		EventOccurrencesTable,
-		HotelsTable,
 		PlacesTable,
 		PlaceImagesTable,
 		ReviewsTable,
+		SecretsTable,
 		UsersTable,
 		CategoryPlacesTable,
 	}
 )
 
 func init() {
-	EventOccurrencesTable.ForeignKeys[0].RefTable = EventsTable
 	PlaceImagesTable.ForeignKeys[0].RefTable = PlacesTable
 	CategoryPlacesTable.ForeignKeys[0].RefTable = CategoriesTable
 	CategoryPlacesTable.ForeignKeys[1].RefTable = PlacesTable

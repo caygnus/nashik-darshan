@@ -56,10 +56,20 @@ func FromEnt(place *ent.Place) *Place {
 		ShortDescription: lo.ToPtr(place.ShortDescription),
 		LongDescription:  lo.ToPtr(place.LongDescription),
 		PlaceType:        types.PlaceType(place.PlaceType),
-		Location: types.Location{
-			Latitude:  place.Latitude,
-			Longitude: place.Longitude,
-		},
+		Location: func() types.Location {
+			// Convert GeoPoint to Location
+			// After Ent regeneration, place.Location will be *schema.GeoPoint
+			// For now, this will fail until regeneration - that's expected
+			if place.Location != nil {
+				lat, lng := place.Location.ToLocation()
+				return types.Location{
+					Latitude:  lat,
+					Longitude: lng,
+				}
+			}
+			// Fallback to zero location if nil
+			return types.Location{}
+		}(),
 		PrimaryImageURL: lo.ToPtr(place.PrimaryImageURL),
 		ThumbnailURL:    lo.ToPtr(place.ThumbnailURL),
 

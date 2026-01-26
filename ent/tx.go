@@ -14,18 +14,14 @@ type Tx struct {
 	config
 	// Category is the client for interacting with the Category builders.
 	Category *CategoryClient
-	// Event is the client for interacting with the Event builders.
-	Event *EventClient
-	// EventOccurrence is the client for interacting with the EventOccurrence builders.
-	EventOccurrence *EventOccurrenceClient
-	// Hotel is the client for interacting with the Hotel builders.
-	Hotel *HotelClient
 	// Place is the client for interacting with the Place builders.
 	Place *PlaceClient
 	// PlaceImage is the client for interacting with the PlaceImage builders.
 	PlaceImage *PlaceImageClient
 	// Review is the client for interacting with the Review builders.
 	Review *ReviewClient
+	// Secret is the client for interacting with the Secret builders.
+	Secret *SecretClient
 	// User is the client for interacting with the User builders.
 	User *UserClient
 
@@ -160,12 +156,10 @@ func (tx *Tx) Client() *Client {
 
 func (tx *Tx) init() {
 	tx.Category = NewCategoryClient(tx.config)
-	tx.Event = NewEventClient(tx.config)
-	tx.EventOccurrence = NewEventOccurrenceClient(tx.config)
-	tx.Hotel = NewHotelClient(tx.config)
 	tx.Place = NewPlaceClient(tx.config)
 	tx.PlaceImage = NewPlaceImageClient(tx.config)
 	tx.Review = NewReviewClient(tx.config)
+	tx.Secret = NewSecretClient(tx.config)
 	tx.User = NewUserClient(tx.config)
 }
 
