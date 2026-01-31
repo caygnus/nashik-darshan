@@ -39,7 +39,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.SignupRequest"
+                            "$ref": "#/definitions/dto.SignupRequest"
                         }
                     }
                 ],
@@ -47,7 +47,7 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.SignupResponse"
+                            "$ref": "#/definitions/dto.SignupResponse"
                         }
                     }
                 }
@@ -122,19 +122,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.ListCategoriesResponse"
+                            "$ref": "#/definitions/dto.ListCategoriesResponse"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                            "$ref": "#/definitions/ierr.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                            "$ref": "#/definitions/ierr.ErrorResponse"
                         }
                     }
                 }
@@ -163,7 +163,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.CreateCategoryRequest"
+                            "$ref": "#/definitions/dto.CreateCategoryRequest"
                         }
                     }
                 ],
@@ -171,25 +171,25 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.CategoryResponse"
+                            "$ref": "#/definitions/dto.CategoryResponse"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                            "$ref": "#/definitions/ierr.ErrorResponse"
                         }
                     },
                     "409": {
                         "description": "Conflict",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                            "$ref": "#/definitions/ierr.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                            "$ref": "#/definitions/ierr.ErrorResponse"
                         }
                     }
                 }
@@ -221,19 +221,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.CategoryResponse"
+                            "$ref": "#/definitions/dto.CategoryResponse"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                            "$ref": "#/definitions/ierr.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                            "$ref": "#/definitions/ierr.ErrorResponse"
                         }
                     }
                 }
@@ -265,19 +265,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.CategoryResponse"
+                            "$ref": "#/definitions/dto.CategoryResponse"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                            "$ref": "#/definitions/ierr.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                            "$ref": "#/definitions/ierr.ErrorResponse"
                         }
                     }
                 }
@@ -313,7 +313,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.UpdateCategoryRequest"
+                            "$ref": "#/definitions/dto.UpdateCategoryRequest"
                         }
                     }
                 ],
@@ -321,31 +321,31 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.CategoryResponse"
+                            "$ref": "#/definitions/dto.CategoryResponse"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                            "$ref": "#/definitions/ierr.ErrorResponse"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                            "$ref": "#/definitions/ierr.ErrorResponse"
                         }
                     },
                     "409": {
                         "description": "Conflict",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                            "$ref": "#/definitions/ierr.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                            "$ref": "#/definitions/ierr.ErrorResponse"
                         }
                     }
                 }
@@ -383,13 +383,13 @@ const docTemplate = `{
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                            "$ref": "#/definitions/ierr.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                            "$ref": "#/definitions/ierr.ErrorResponse"
                         }
                     }
                 }
@@ -410,12 +410,12 @@ const docTemplate = `{
                 "summary": "Get feed data",
                 "parameters": [
                     {
-                        "description": "Feed request with sections",
+                        "description": "dto.FeedRequest",
                         "name": "request",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.FeedRequest"
+                            "$ref": "#/definitions/dto.FeedRequest"
                         }
                     }
                 ],
@@ -423,19 +423,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.FeedResponse"
+                            "$ref": "#/definitions/dto.FeedResponse"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                            "$ref": "#/definitions/ierr.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                            "$ref": "#/definitions/ierr.ErrorResponse"
                         }
                     }
                 }
@@ -600,19 +600,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.ListPlacesResponse"
+                            "$ref": "#/definitions/dto.ListPlacesResponse"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                            "$ref": "#/definitions/ierr.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                            "$ref": "#/definitions/ierr.ErrorResponse"
                         }
                     }
                 }
@@ -636,12 +636,12 @@ const docTemplate = `{
                 "summary": "Create a new place",
                 "parameters": [
                     {
-                        "description": "Create place request",
+                        "description": "dto.CreatePlaceRequest",
                         "name": "request",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.CreatePlaceRequest"
+                            "$ref": "#/definitions/dto.CreatePlaceRequest"
                         }
                     }
                 ],
@@ -649,25 +649,25 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.PlaceResponse"
+                            "$ref": "#/definitions/dto.PlaceResponse"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                            "$ref": "#/definitions/ierr.ErrorResponse"
                         }
                     },
                     "409": {
                         "description": "Conflict",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                            "$ref": "#/definitions/ierr.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                            "$ref": "#/definitions/ierr.ErrorResponse"
                         }
                     }
                 }
@@ -700,12 +700,12 @@ const docTemplate = `{
                         "required": true
                     },
                     {
-                        "description": "Update place image request",
+                        "description": "dto.UpdatePlaceImageRequest",
                         "name": "request",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.UpdatePlaceImageRequest"
+                            "$ref": "#/definitions/dto.UpdatePlaceImageRequest"
                         }
                     }
                 ],
@@ -713,25 +713,25 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.PlaceImageResponse"
+                            "$ref": "#/definitions/dto.PlaceImageResponse"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                            "$ref": "#/definitions/ierr.ErrorResponse"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                            "$ref": "#/definitions/ierr.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                            "$ref": "#/definitions/ierr.ErrorResponse"
                         }
                     }
                 }
@@ -769,13 +769,13 @@ const docTemplate = `{
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                            "$ref": "#/definitions/ierr.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                            "$ref": "#/definitions/ierr.ErrorResponse"
                         }
                     }
                 }
@@ -812,7 +812,7 @@ const docTemplate = `{
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                            "$ref": "#/definitions/ierr.ErrorResponse"
                         }
                     }
                 }
@@ -844,19 +844,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.PlaceResponse"
+                            "$ref": "#/definitions/dto.PlaceResponse"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                            "$ref": "#/definitions/ierr.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                            "$ref": "#/definitions/ierr.ErrorResponse"
                         }
                     }
                 }
@@ -888,19 +888,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.PlaceResponse"
+                            "$ref": "#/definitions/dto.PlaceResponse"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                            "$ref": "#/definitions/ierr.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                            "$ref": "#/definitions/ierr.ErrorResponse"
                         }
                     }
                 }
@@ -931,12 +931,12 @@ const docTemplate = `{
                         "required": true
                     },
                     {
-                        "description": "Update place request",
+                        "description": "dto.UpdatePlaceRequest",
                         "name": "request",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.UpdatePlaceRequest"
+                            "$ref": "#/definitions/dto.UpdatePlaceRequest"
                         }
                     }
                 ],
@@ -944,31 +944,31 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.PlaceResponse"
+                            "$ref": "#/definitions/dto.PlaceResponse"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                            "$ref": "#/definitions/ierr.ErrorResponse"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                            "$ref": "#/definitions/ierr.ErrorResponse"
                         }
                     },
                     "409": {
                         "description": "Conflict",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                            "$ref": "#/definitions/ierr.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                            "$ref": "#/definitions/ierr.ErrorResponse"
                         }
                     }
                 }
@@ -1006,13 +1006,13 @@ const docTemplate = `{
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                            "$ref": "#/definitions/ierr.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                            "$ref": "#/definitions/ierr.ErrorResponse"
                         }
                     }
                 }
@@ -1045,12 +1045,12 @@ const docTemplate = `{
                         "required": true
                     },
                     {
-                        "description": "Assign categories request",
+                        "description": "dto.AssignCategoriesRequest",
                         "name": "request",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.AssignCategoriesRequest"
+                            "$ref": "#/definitions/dto.AssignCategoriesRequest"
                         }
                     }
                 ],
@@ -1061,19 +1061,19 @@ const docTemplate = `{
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                            "$ref": "#/definitions/ierr.ErrorResponse"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                            "$ref": "#/definitions/ierr.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                            "$ref": "#/definitions/ierr.ErrorResponse"
                         }
                     }
                 }
@@ -1107,20 +1107,20 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.PlaceImageResponse"
+                                "$ref": "#/definitions/dto.PlaceImageResponse"
                             }
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                            "$ref": "#/definitions/ierr.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                            "$ref": "#/definitions/ierr.ErrorResponse"
                         }
                     }
                 }
@@ -1151,12 +1151,12 @@ const docTemplate = `{
                         "required": true
                     },
                     {
-                        "description": "Create place image request",
+                        "description": "dto.CreatePlaceImageRequest",
                         "name": "request",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.CreatePlaceImageRequest"
+                            "$ref": "#/definitions/dto.CreatePlaceImageRequest"
                         }
                     }
                 ],
@@ -1164,25 +1164,25 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.PlaceImageResponse"
+                            "$ref": "#/definitions/dto.PlaceImageResponse"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                            "$ref": "#/definitions/ierr.ErrorResponse"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                            "$ref": "#/definitions/ierr.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                            "$ref": "#/definitions/ierr.ErrorResponse"
                         }
                     }
                 }
@@ -1217,19 +1217,19 @@ const docTemplate = `{
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                            "$ref": "#/definitions/ierr.ErrorResponse"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                            "$ref": "#/definitions/ierr.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                            "$ref": "#/definitions/ierr.ErrorResponse"
                         }
                     }
                 }
@@ -1296,19 +1296,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_types.ListResponse-github_com_omkar273_nashikdarshan_internal_api_dto_ReviewResponse"
+                            "$ref": "#/definitions/types.ListResponse-dto_ReviewResponse"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                            "$ref": "#/definitions/ierr.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                            "$ref": "#/definitions/ierr.ErrorResponse"
                         }
                     }
                 }
@@ -1337,7 +1337,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.CreateReviewRequest"
+                            "$ref": "#/definitions/dto.CreateReviewRequest"
                         }
                     }
                 ],
@@ -1345,19 +1345,19 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.ReviewResponse"
+                            "$ref": "#/definitions/dto.ReviewResponse"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                            "$ref": "#/definitions/ierr.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                            "$ref": "#/definitions/ierr.ErrorResponse"
                         }
                     }
                 }
@@ -1396,25 +1396,25 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.RatingStatsResponse"
+                            "$ref": "#/definitions/dto.RatingStatsResponse"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                            "$ref": "#/definitions/ierr.ErrorResponse"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                            "$ref": "#/definitions/ierr.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                            "$ref": "#/definitions/ierr.ErrorResponse"
                         }
                     }
                 }
@@ -1446,19 +1446,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.ReviewResponse"
+                            "$ref": "#/definitions/dto.ReviewResponse"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                            "$ref": "#/definitions/ierr.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                            "$ref": "#/definitions/ierr.ErrorResponse"
                         }
                     }
                 }
@@ -1494,7 +1494,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.UpdateReviewRequest"
+                            "$ref": "#/definitions/dto.UpdateReviewRequest"
                         }
                     }
                 ],
@@ -1502,25 +1502,25 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.ReviewResponse"
+                            "$ref": "#/definitions/dto.ReviewResponse"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                            "$ref": "#/definitions/ierr.ErrorResponse"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                            "$ref": "#/definitions/ierr.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                            "$ref": "#/definitions/ierr.ErrorResponse"
                         }
                     }
                 }
@@ -1558,13 +1558,13 @@ const docTemplate = `{
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                            "$ref": "#/definitions/ierr.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                            "$ref": "#/definitions/ierr.ErrorResponse"
                         }
                     }
                 }
@@ -1592,19 +1592,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.ListAPIKeysResponse"
+                            "$ref": "#/definitions/dto.ListAPIKeysResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                            "$ref": "#/definitions/ierr.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                            "$ref": "#/definitions/ierr.ErrorResponse"
                         }
                     }
                 }
@@ -1633,7 +1633,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.CreateAPIKeyRequest"
+                            "$ref": "#/definitions/dto.CreateAPIKeyRequest"
                         }
                     }
                 ],
@@ -1641,25 +1641,25 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.CreateAPIKeyResponse"
+                            "$ref": "#/definitions/dto.CreateAPIKeyResponse"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                            "$ref": "#/definitions/ierr.ErrorResponse"
                         }
                     },
                     "409": {
                         "description": "Conflict",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                            "$ref": "#/definitions/ierr.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                            "$ref": "#/definitions/ierr.ErrorResponse"
                         }
                     }
                 }
@@ -1696,19 +1696,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.APIKeyResponse"
+                            "$ref": "#/definitions/dto.APIKeyResponse"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                            "$ref": "#/definitions/ierr.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                            "$ref": "#/definitions/ierr.ErrorResponse"
                         }
                     }
                 }
@@ -1746,13 +1746,13 @@ const docTemplate = `{
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                            "$ref": "#/definitions/ierr.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                            "$ref": "#/definitions/ierr.ErrorResponse"
                         }
                     }
                 }
@@ -1788,7 +1788,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.UpdateAPIKeyRequest"
+                            "$ref": "#/definitions/dto.UpdateAPIKeyRequest"
                         }
                     }
                 ],
@@ -1796,25 +1796,25 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.APIKeyResponse"
+                            "$ref": "#/definitions/dto.APIKeyResponse"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                            "$ref": "#/definitions/ierr.ErrorResponse"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                            "$ref": "#/definitions/ierr.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                            "$ref": "#/definitions/ierr.ErrorResponse"
                         }
                     }
                 }
@@ -1840,7 +1840,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.UpdateUserRequest"
+                            "$ref": "#/definitions/dto.UpdateUserRequest"
                         }
                     }
                 ],
@@ -1848,19 +1848,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.MeResponse"
+                            "$ref": "#/definitions/dto.MeResponse"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                            "$ref": "#/definitions/ierr.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                            "$ref": "#/definitions/ierr.ErrorResponse"
                         }
                     }
                 }
@@ -1883,19 +1883,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.MeResponse"
+                            "$ref": "#/definitions/dto.MeResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                            "$ref": "#/definitions/ierr.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                            "$ref": "#/definitions/ierr.ErrorResponse"
                         }
                     }
                 }
@@ -1903,7 +1903,42 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "github_com_omkar273_nashikdarshan_internal_api_dto.APIKeyResponse": {
+        "category.Category": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "created_by": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "metadata": {
+                    "$ref": "#/definitions/types.Metadata"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "slug": {
+                    "type": "string"
+                },
+                "status": {
+                    "$ref": "#/definitions/types.Status"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "updated_by": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.APIKeyResponse": {
             "type": "object",
             "properties": {
                 "created_at": {
@@ -1941,7 +1976,7 @@ const docTemplate = `{
                 }
             }
         },
-        "github_com_omkar273_nashikdarshan_internal_api_dto.AssignCategoriesRequest": {
+        "dto.AssignCategoriesRequest": {
             "type": "object",
             "required": [
                 "category_ids"
@@ -1956,7 +1991,7 @@ const docTemplate = `{
                 }
             }
         },
-        "github_com_omkar273_nashikdarshan_internal_api_dto.CategoryResponse": {
+        "dto.CategoryResponse": {
             "type": "object",
             "properties": {
                 "created_at": {
@@ -1972,7 +2007,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "metadata": {
-                    "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_types.Metadata"
+                    "$ref": "#/definitions/types.Metadata"
                 },
                 "name": {
                     "type": "string"
@@ -1981,7 +2016,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "status": {
-                    "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_types.Status"
+                    "$ref": "#/definitions/types.Status"
                 },
                 "updated_at": {
                     "type": "string"
@@ -1991,7 +2026,7 @@ const docTemplate = `{
                 }
             }
         },
-        "github_com_omkar273_nashikdarshan_internal_api_dto.CreateAPIKeyRequest": {
+        "dto.CreateAPIKeyRequest": {
             "type": "object",
             "required": [
                 "name",
@@ -2018,7 +2053,7 @@ const docTemplate = `{
                 }
             }
         },
-        "github_com_omkar273_nashikdarshan_internal_api_dto.CreateAPIKeyResponse": {
+        "dto.CreateAPIKeyResponse": {
             "type": "object",
             "properties": {
                 "created_at": {
@@ -2060,7 +2095,7 @@ const docTemplate = `{
                 }
             }
         },
-        "github_com_omkar273_nashikdarshan_internal_api_dto.CreateCategoryRequest": {
+        "dto.CreateCategoryRequest": {
             "type": "object",
             "required": [
                 "name",
@@ -2072,7 +2107,7 @@ const docTemplate = `{
                     "maxLength": 2000
                 },
                 "metadata": {
-                    "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_types.Metadata"
+                    "$ref": "#/definitions/types.Metadata"
                 },
                 "name": {
                     "type": "string",
@@ -2086,7 +2121,7 @@ const docTemplate = `{
                 }
             }
         },
-        "github_com_omkar273_nashikdarshan_internal_api_dto.CreatePlaceImageRequest": {
+        "dto.CreatePlaceImageRequest": {
             "type": "object",
             "required": [
                 "url"
@@ -2097,7 +2132,7 @@ const docTemplate = `{
                     "maxLength": 255
                 },
                 "metadata": {
-                    "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_types.Metadata"
+                    "$ref": "#/definitions/types.Metadata"
                 },
                 "pos": {
                     "type": "integer",
@@ -2110,7 +2145,7 @@ const docTemplate = `{
                 }
             }
         },
-        "github_com_omkar273_nashikdarshan_internal_api_dto.CreatePlaceRequest": {
+        "dto.CreatePlaceRequest": {
             "type": "object",
             "required": [
                 "location",
@@ -2126,14 +2161,14 @@ const docTemplate = `{
                     }
                 },
                 "location": {
-                    "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_types.GeoPoint"
+                    "$ref": "#/definitions/types.GeoPoint"
                 },
                 "long_description": {
                     "type": "string",
                     "maxLength": 10000
                 },
                 "place_type": {
-                    "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_types.PlaceType"
+                    "$ref": "#/definitions/types.PlaceType"
                 },
                 "primary_image_url": {
                     "type": "string",
@@ -2163,7 +2198,7 @@ const docTemplate = `{
                 }
             }
         },
-        "github_com_omkar273_nashikdarshan_internal_api_dto.CreateReviewRequest": {
+        "dto.CreateReviewRequest": {
             "type": "object",
             "required": [
                 "entity_id",
@@ -2184,7 +2219,7 @@ const docTemplate = `{
                     "maxLength": 50,
                     "allOf": [
                         {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_types.ReviewEntityType"
+                            "$ref": "#/definitions/types.ReviewEntityType"
                         }
                     ]
                 },
@@ -2211,7 +2246,7 @@ const docTemplate = `{
                 }
             }
         },
-        "github_com_omkar273_nashikdarshan_internal_api_dto.FeedRequest": {
+        "dto.FeedRequest": {
             "type": "object",
             "required": [
                 "sections"
@@ -2252,7 +2287,7 @@ const docTemplate = `{
                     "maxItems": 10,
                     "minItems": 1,
                     "items": {
-                        "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.FeedSectionRequest"
+                        "$ref": "#/definitions/dto.FeedSectionRequest"
                     }
                 },
                 "sort": {
@@ -2262,22 +2297,22 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "status": {
-                    "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_types.Status"
+                    "$ref": "#/definitions/types.Status"
                 }
             }
         },
-        "github_com_omkar273_nashikdarshan_internal_api_dto.FeedResponse": {
+        "dto.FeedResponse": {
             "type": "object",
             "properties": {
                 "sections": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.FeedSectionResponse"
+                        "$ref": "#/definitions/dto.FeedSectionResponse"
                     }
                 }
             }
         },
-        "github_com_omkar273_nashikdarshan_internal_api_dto.FeedSectionRequest": {
+        "dto.FeedSectionRequest": {
             "type": "object",
             "required": [
                 "type"
@@ -2287,7 +2322,7 @@ const docTemplate = `{
                     "description": "Geospatial fields (for nearby section)",
                     "allOf": [
                         {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_types.GeoPoint"
+                            "$ref": "#/definitions/types.GeoPoint"
                         }
                     ]
                 },
@@ -2334,37 +2369,37 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "status": {
-                    "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_types.Status"
+                    "$ref": "#/definitions/types.Status"
                 },
                 "type": {
-                    "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_types.FeedSectionType"
+                    "$ref": "#/definitions/types.FeedSectionType"
                 }
             }
         },
-        "github_com_omkar273_nashikdarshan_internal_api_dto.FeedSectionResponse": {
+        "dto.FeedSectionResponse": {
             "type": "object",
             "properties": {
                 "items": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.PlaceResponse"
+                        "$ref": "#/definitions/dto.PlaceResponse"
                     }
                 },
                 "pagination": {
-                    "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_types.PaginationResponse"
+                    "$ref": "#/definitions/types.PaginationResponse"
                 },
                 "type": {
-                    "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_types.FeedSectionType"
+                    "$ref": "#/definitions/types.FeedSectionType"
                 }
             }
         },
-        "github_com_omkar273_nashikdarshan_internal_api_dto.ListAPIKeysResponse": {
+        "dto.ListAPIKeysResponse": {
             "type": "object",
             "properties": {
                 "items": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.APIKeyResponse"
+                        "$ref": "#/definitions/dto.APIKeyResponse"
                     }
                 },
                 "total": {
@@ -2372,35 +2407,35 @@ const docTemplate = `{
                 }
             }
         },
-        "github_com_omkar273_nashikdarshan_internal_api_dto.ListCategoriesResponse": {
+        "dto.ListCategoriesResponse": {
             "type": "object",
             "properties": {
                 "items": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.CategoryResponse"
+                        "$ref": "#/definitions/dto.CategoryResponse"
                     }
                 },
                 "pagination": {
-                    "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_types.PaginationResponse"
+                    "$ref": "#/definitions/types.PaginationResponse"
                 }
             }
         },
-        "github_com_omkar273_nashikdarshan_internal_api_dto.ListPlacesResponse": {
+        "dto.ListPlacesResponse": {
             "type": "object",
             "properties": {
                 "items": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.PlaceResponse"
+                        "$ref": "#/definitions/dto.PlaceResponse"
                     }
                 },
                 "pagination": {
-                    "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_types.PaginationResponse"
+                    "$ref": "#/definitions/types.PaginationResponse"
                 }
             }
         },
-        "github_com_omkar273_nashikdarshan_internal_api_dto.MeResponse": {
+        "dto.MeResponse": {
             "type": "object",
             "properties": {
                 "created_at": {
@@ -2416,7 +2451,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "metadata": {
-                    "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_types.Metadata"
+                    "$ref": "#/definitions/types.Metadata"
                 },
                 "name": {
                     "type": "string"
@@ -2425,10 +2460,10 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "role": {
-                    "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_types.UserRole"
+                    "$ref": "#/definitions/types.UserRole"
                 },
                 "status": {
-                    "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_types.Status"
+                    "$ref": "#/definitions/types.Status"
                 },
                 "updated_at": {
                     "type": "string"
@@ -2438,7 +2473,7 @@ const docTemplate = `{
                 }
             }
         },
-        "github_com_omkar273_nashikdarshan_internal_api_dto.PlaceImageResponse": {
+        "dto.PlaceImageResponse": {
             "type": "object",
             "properties": {
                 "alt": {
@@ -2454,7 +2489,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "metadata": {
-                    "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_types.Metadata"
+                    "$ref": "#/definitions/types.Metadata"
                 },
                 "place_id": {
                     "type": "string"
@@ -2463,7 +2498,7 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "status": {
-                    "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_types.Status"
+                    "$ref": "#/definitions/types.Status"
                 },
                 "updated_at": {
                     "type": "string"
@@ -2476,13 +2511,19 @@ const docTemplate = `{
                 }
             }
         },
-        "github_com_omkar273_nashikdarshan_internal_api_dto.PlaceResponse": {
+        "dto.PlaceResponse": {
             "type": "object",
             "properties": {
                 "address": {
                     "type": "object",
                     "additionalProperties": {
                         "type": "string"
+                    }
+                },
+                "categories": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.CategoryResponse"
                     }
                 },
                 "created_at": {
@@ -2497,17 +2538,17 @@ const docTemplate = `{
                 "images": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.PlaceImageResponse"
+                        "$ref": "#/definitions/dto.PlaceImageResponse"
                     }
                 },
                 "location": {
-                    "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_types.GeoPoint"
+                    "$ref": "#/definitions/types.GeoPoint"
                 },
                 "long_description": {
                     "type": "string"
                 },
                 "place_type": {
-                    "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_types.PlaceType"
+                    "$ref": "#/definitions/types.PlaceType"
                 },
                 "popularity_score": {
                     "type": "number"
@@ -2528,7 +2569,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "status": {
-                    "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_types.Status"
+                    "$ref": "#/definitions/types.Status"
                 },
                 "subtitle": {
                     "type": "string"
@@ -2551,7 +2592,7 @@ const docTemplate = `{
                 }
             }
         },
-        "github_com_omkar273_nashikdarshan_internal_api_dto.RatingStatsResponse": {
+        "dto.RatingStatsResponse": {
             "type": "object",
             "properties": {
                 "average_rating": {
@@ -2561,7 +2602,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "entity_type": {
-                    "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_types.ReviewEntityType"
+                    "$ref": "#/definitions/types.ReviewEntityType"
                 },
                 "five_star_count": {
                     "type": "integer"
@@ -2599,7 +2640,7 @@ const docTemplate = `{
                 }
             }
         },
-        "github_com_omkar273_nashikdarshan_internal_api_dto.ReviewResponse": {
+        "dto.ReviewResponse": {
             "type": "object",
             "properties": {
                 "content": {
@@ -2615,7 +2656,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "entity_type": {
-                    "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_types.ReviewEntityType"
+                    "$ref": "#/definitions/types.ReviewEntityType"
                 },
                 "helpful_count": {
                     "type": "integer"
@@ -2642,7 +2683,7 @@ const docTemplate = `{
                     "type": "number"
                 },
                 "status": {
-                    "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_types.Status"
+                    "$ref": "#/definitions/types.Status"
                 },
                 "tags": {
                     "type": "array",
@@ -2664,7 +2705,7 @@ const docTemplate = `{
                 }
             }
         },
-        "github_com_omkar273_nashikdarshan_internal_api_dto.SignupRequest": {
+        "dto.SignupRequest": {
             "type": "object",
             "required": [
                 "access_token",
@@ -2688,7 +2729,7 @@ const docTemplate = `{
                 }
             }
         },
-        "github_com_omkar273_nashikdarshan_internal_api_dto.SignupResponse": {
+        "dto.SignupResponse": {
             "type": "object",
             "properties": {
                 "access_token": {
@@ -2699,7 +2740,7 @@ const docTemplate = `{
                 }
             }
         },
-        "github_com_omkar273_nashikdarshan_internal_api_dto.UpdateAPIKeyRequest": {
+        "dto.UpdateAPIKeyRequest": {
             "type": "object",
             "properties": {
                 "name": {
@@ -2720,13 +2761,13 @@ const docTemplate = `{
                     ],
                     "allOf": [
                         {
-                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_types.Status"
+                            "$ref": "#/definitions/types.Status"
                         }
                     ]
                 }
             }
         },
-        "github_com_omkar273_nashikdarshan_internal_api_dto.UpdateCategoryRequest": {
+        "dto.UpdateCategoryRequest": {
             "type": "object",
             "properties": {
                 "description": {
@@ -2745,14 +2786,14 @@ const docTemplate = `{
                 }
             }
         },
-        "github_com_omkar273_nashikdarshan_internal_api_dto.UpdatePlaceImageRequest": {
+        "dto.UpdatePlaceImageRequest": {
             "type": "object",
             "properties": {
                 "alt": {
                     "type": "string"
                 },
                 "metadata": {
-                    "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_types.Metadata"
+                    "$ref": "#/definitions/types.Metadata"
                 },
                 "pos": {
                     "type": "integer",
@@ -2763,7 +2804,7 @@ const docTemplate = `{
                 }
             }
         },
-        "github_com_omkar273_nashikdarshan_internal_api_dto.UpdatePlaceRequest": {
+        "dto.UpdatePlaceRequest": {
             "type": "object",
             "properties": {
                 "address": {
@@ -2773,7 +2814,7 @@ const docTemplate = `{
                     }
                 },
                 "location": {
-                    "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_types.GeoPoint"
+                    "$ref": "#/definitions/types.GeoPoint"
                 },
                 "long_description": {
                     "type": "string",
@@ -2807,7 +2848,7 @@ const docTemplate = `{
                 }
             }
         },
-        "github_com_omkar273_nashikdarshan_internal_api_dto.UpdateReviewRequest": {
+        "dto.UpdateReviewRequest": {
             "type": "object",
             "properties": {
                 "content": {
@@ -2837,7 +2878,7 @@ const docTemplate = `{
                 }
             }
         },
-        "github_com_omkar273_nashikdarshan_internal_api_dto.UpdateUserRequest": {
+        "dto.UpdateUserRequest": {
             "type": "object",
             "properties": {
                 "name": {
@@ -2852,7 +2893,33 @@ const docTemplate = `{
                 }
             }
         },
-        "github_com_omkar273_nashikdarshan_internal_domain_place.PlaceImage": {
+        "ierr.ErrorDetail": {
+            "type": "object",
+            "properties": {
+                "details": {
+                    "type": "object",
+                    "additionalProperties": {}
+                },
+                "internal_error": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "ierr.ErrorResponse": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "$ref": "#/definitions/ierr.ErrorDetail"
+                },
+                "success": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "place.PlaceImage": {
             "type": "object",
             "properties": {
                 "alt": {
@@ -2868,7 +2935,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "metadata": {
-                    "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_types.Metadata"
+                    "$ref": "#/definitions/types.Metadata"
                 },
                 "place_id": {
                     "type": "string"
@@ -2877,7 +2944,7 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "status": {
-                    "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_types.Status"
+                    "$ref": "#/definitions/types.Status"
                 },
                 "updated_at": {
                     "type": "string"
@@ -2890,33 +2957,7 @@ const docTemplate = `{
                 }
             }
         },
-        "github_com_omkar273_nashikdarshan_internal_errors.ErrorDetail": {
-            "type": "object",
-            "properties": {
-                "details": {
-                    "type": "object",
-                    "additionalProperties": {}
-                },
-                "internal_error": {
-                    "type": "string"
-                },
-                "message": {
-                    "type": "string"
-                }
-            }
-        },
-        "github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse": {
-            "type": "object",
-            "properties": {
-                "error": {
-                    "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorDetail"
-                },
-                "success": {
-                    "type": "boolean"
-                }
-            }
-        },
-        "github_com_omkar273_nashikdarshan_internal_types.FeedSectionType": {
+        "types.FeedSectionType": {
             "type": "string",
             "enum": [
                 "latest",
@@ -2933,7 +2974,7 @@ const docTemplate = `{
                 "SectionTypeDiscover"
             ]
         },
-        "github_com_omkar273_nashikdarshan_internal_types.GeoPoint": {
+        "types.GeoPoint": {
             "type": "object",
             "properties": {
                 "latitude": {
@@ -2944,27 +2985,27 @@ const docTemplate = `{
                 }
             }
         },
-        "github_com_omkar273_nashikdarshan_internal_types.ListResponse-github_com_omkar273_nashikdarshan_internal_api_dto_ReviewResponse": {
+        "types.ListResponse-dto_ReviewResponse": {
             "type": "object",
             "properties": {
                 "items": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.ReviewResponse"
+                        "$ref": "#/definitions/dto.ReviewResponse"
                     }
                 },
                 "pagination": {
-                    "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_types.PaginationResponse"
+                    "$ref": "#/definitions/types.PaginationResponse"
                 }
             }
         },
-        "github_com_omkar273_nashikdarshan_internal_types.Metadata": {
+        "types.Metadata": {
             "type": "object",
             "additionalProperties": {
                 "type": "string"
             }
         },
-        "github_com_omkar273_nashikdarshan_internal_types.PaginationResponse": {
+        "types.PaginationResponse": {
             "type": "object",
             "properties": {
                 "limit": {
@@ -2978,7 +3019,7 @@ const docTemplate = `{
                 }
             }
         },
-        "github_com_omkar273_nashikdarshan_internal_types.PlaceType": {
+        "types.PlaceType": {
             "type": "string",
             "enum": [
                 "temple",
@@ -2995,7 +3036,7 @@ const docTemplate = `{
                 "PlaceTypeExperience"
             ]
         },
-        "github_com_omkar273_nashikdarshan_internal_types.ReviewEntityType": {
+        "types.ReviewEntityType": {
             "type": "string",
             "enum": [
                 "place",
@@ -3014,7 +3055,7 @@ const docTemplate = `{
                 "EntityTypeAttraction"
             ]
         },
-        "github_com_omkar273_nashikdarshan_internal_types.Status": {
+        "types.Status": {
             "type": "string",
             "enum": [
                 "published",
@@ -3029,7 +3070,7 @@ const docTemplate = `{
                 "StatusDeleted"
             ]
         },
-        "github_com_omkar273_nashikdarshan_internal_types.UserRole": {
+        "types.UserRole": {
             "type": "string",
             "enum": [
                 "USER",

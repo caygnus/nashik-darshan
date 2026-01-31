@@ -1,6 +1,29 @@
 basePath: /api/v1
 definitions:
-  github_com_omkar273_nashikdarshan_internal_api_dto.APIKeyResponse:
+  category.Category:
+    properties:
+      created_at:
+        type: string
+      created_by:
+        type: string
+      description:
+        type: string
+      id:
+        type: string
+      metadata:
+        $ref: '#/definitions/types.Metadata'
+      name:
+        type: string
+      slug:
+        type: string
+      status:
+        $ref: '#/definitions/types.Status'
+      updated_at:
+        type: string
+      updated_by:
+        type: string
+    type: object
+  dto.APIKeyResponse:
     properties:
       created_at:
         type: string
@@ -25,7 +48,7 @@ definitions:
       updated_at:
         type: string
     type: object
-  github_com_omkar273_nashikdarshan_internal_api_dto.AssignCategoriesRequest:
+  dto.AssignCategoriesRequest:
     properties:
       category_ids:
         items:
@@ -35,7 +58,7 @@ definitions:
     required:
     - category_ids
     type: object
-  github_com_omkar273_nashikdarshan_internal_api_dto.CategoryResponse:
+  dto.CategoryResponse:
     properties:
       created_at:
         type: string
@@ -46,19 +69,19 @@ definitions:
       id:
         type: string
       metadata:
-        $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_types.Metadata'
+        $ref: '#/definitions/types.Metadata'
       name:
         type: string
       slug:
         type: string
       status:
-        $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_types.Status'
+        $ref: '#/definitions/types.Status'
       updated_at:
         type: string
       updated_by:
         type: string
     type: object
-  github_com_omkar273_nashikdarshan_internal_api_dto.CreateAPIKeyRequest:
+  dto.CreateAPIKeyRequest:
     properties:
       name:
         maxLength: 255
@@ -77,7 +100,7 @@ definitions:
     - name
     - type
     type: object
-  github_com_omkar273_nashikdarshan_internal_api_dto.CreateAPIKeyResponse:
+  dto.CreateAPIKeyResponse:
     properties:
       created_at:
         type: string
@@ -105,13 +128,13 @@ definitions:
       updated_at:
         type: string
     type: object
-  github_com_omkar273_nashikdarshan_internal_api_dto.CreateCategoryRequest:
+  dto.CreateCategoryRequest:
     properties:
       description:
         maxLength: 2000
         type: string
       metadata:
-        $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_types.Metadata'
+        $ref: '#/definitions/types.Metadata'
       name:
         maxLength: 255
         minLength: 2
@@ -124,13 +147,13 @@ definitions:
     - name
     - slug
     type: object
-  github_com_omkar273_nashikdarshan_internal_api_dto.CreatePlaceImageRequest:
+  dto.CreatePlaceImageRequest:
     properties:
       alt:
         maxLength: 255
         type: string
       metadata:
-        $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_types.Metadata'
+        $ref: '#/definitions/types.Metadata'
       pos:
         maximum: 100
         minimum: 0
@@ -141,19 +164,19 @@ definitions:
     required:
     - url
     type: object
-  github_com_omkar273_nashikdarshan_internal_api_dto.CreatePlaceRequest:
+  dto.CreatePlaceRequest:
     properties:
       address:
         additionalProperties:
           type: string
         type: object
       location:
-        $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_types.GeoPoint'
+        $ref: '#/definitions/types.GeoPoint'
       long_description:
         maxLength: 10000
         type: string
       place_type:
-        $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_types.PlaceType'
+        $ref: '#/definitions/types.PlaceType'
       primary_image_url:
         maxLength: 500
         type: string
@@ -180,7 +203,7 @@ definitions:
     - slug
     - title
     type: object
-  github_com_omkar273_nashikdarshan_internal_api_dto.CreateReviewRequest:
+  dto.CreateReviewRequest:
     properties:
       content:
         maxLength: 3000
@@ -191,7 +214,7 @@ definitions:
         type: string
       entity_type:
         allOf:
-        - $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_types.ReviewEntityType'
+        - $ref: '#/definitions/types.ReviewEntityType'
         maxLength: 50
       images:
         items:
@@ -213,7 +236,7 @@ definitions:
     - entity_type
     - rating
     type: object
-  github_com_omkar273_nashikdarshan_internal_api_dto.FeedRequest:
+  dto.FeedRequest:
     properties:
       end_time:
         type: string
@@ -239,7 +262,7 @@ definitions:
         type: string
       sections:
         items:
-          $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.FeedSectionRequest'
+          $ref: '#/definitions/dto.FeedSectionRequest'
         maxItems: 10
         minItems: 1
         type: array
@@ -248,22 +271,22 @@ definitions:
       start_time:
         type: string
       status:
-        $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_types.Status'
+        $ref: '#/definitions/types.Status'
     required:
     - sections
     type: object
-  github_com_omkar273_nashikdarshan_internal_api_dto.FeedResponse:
+  dto.FeedResponse:
     properties:
       sections:
         items:
-          $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.FeedSectionResponse'
+          $ref: '#/definitions/dto.FeedSectionResponse'
         type: array
     type: object
-  github_com_omkar273_nashikdarshan_internal_api_dto.FeedSectionRequest:
+  dto.FeedSectionRequest:
     properties:
       center:
         allOf:
-        - $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_types.GeoPoint'
+        - $ref: '#/definitions/types.GeoPoint'
         description: Geospatial fields (for nearby section)
       end_time:
         type: string
@@ -297,51 +320,51 @@ definitions:
       start_time:
         type: string
       status:
-        $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_types.Status'
+        $ref: '#/definitions/types.Status'
       type:
-        $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_types.FeedSectionType'
+        $ref: '#/definitions/types.FeedSectionType'
     required:
     - type
     type: object
-  github_com_omkar273_nashikdarshan_internal_api_dto.FeedSectionResponse:
+  dto.FeedSectionResponse:
     properties:
       items:
         items:
-          $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.PlaceResponse'
+          $ref: '#/definitions/dto.PlaceResponse'
         type: array
       pagination:
-        $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_types.PaginationResponse'
+        $ref: '#/definitions/types.PaginationResponse'
       type:
-        $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_types.FeedSectionType'
+        $ref: '#/definitions/types.FeedSectionType'
     type: object
-  github_com_omkar273_nashikdarshan_internal_api_dto.ListAPIKeysResponse:
+  dto.ListAPIKeysResponse:
     properties:
       items:
         items:
-          $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.APIKeyResponse'
+          $ref: '#/definitions/dto.APIKeyResponse'
         type: array
       total:
         type: integer
     type: object
-  github_com_omkar273_nashikdarshan_internal_api_dto.ListCategoriesResponse:
+  dto.ListCategoriesResponse:
     properties:
       items:
         items:
-          $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.CategoryResponse'
+          $ref: '#/definitions/dto.CategoryResponse'
         type: array
       pagination:
-        $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_types.PaginationResponse'
+        $ref: '#/definitions/types.PaginationResponse'
     type: object
-  github_com_omkar273_nashikdarshan_internal_api_dto.ListPlacesResponse:
+  dto.ListPlacesResponse:
     properties:
       items:
         items:
-          $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.PlaceResponse'
+          $ref: '#/definitions/dto.PlaceResponse'
         type: array
       pagination:
-        $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_types.PaginationResponse'
+        $ref: '#/definitions/types.PaginationResponse'
     type: object
-  github_com_omkar273_nashikdarshan_internal_api_dto.MeResponse:
+  dto.MeResponse:
     properties:
       created_at:
         type: string
@@ -352,21 +375,21 @@ definitions:
       id:
         type: string
       metadata:
-        $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_types.Metadata'
+        $ref: '#/definitions/types.Metadata'
       name:
         type: string
       phone:
         type: string
       role:
-        $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_types.UserRole'
+        $ref: '#/definitions/types.UserRole'
       status:
-        $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_types.Status'
+        $ref: '#/definitions/types.Status'
       updated_at:
         type: string
       updated_by:
         type: string
     type: object
-  github_com_omkar273_nashikdarshan_internal_api_dto.PlaceImageResponse:
+  dto.PlaceImageResponse:
     properties:
       alt:
         type: string
@@ -377,13 +400,13 @@ definitions:
       id:
         type: string
       metadata:
-        $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_types.Metadata'
+        $ref: '#/definitions/types.Metadata'
       place_id:
         type: string
       pos:
         type: integer
       status:
-        $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_types.Status'
+        $ref: '#/definitions/types.Status'
       updated_at:
         type: string
       updated_by:
@@ -391,12 +414,16 @@ definitions:
       url:
         type: string
     type: object
-  github_com_omkar273_nashikdarshan_internal_api_dto.PlaceResponse:
+  dto.PlaceResponse:
     properties:
       address:
         additionalProperties:
           type: string
         type: object
+      categories:
+        items:
+          $ref: '#/definitions/dto.CategoryResponse'
+        type: array
       created_at:
         type: string
       created_by:
@@ -405,14 +432,14 @@ definitions:
         type: string
       images:
         items:
-          $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.PlaceImageResponse'
+          $ref: '#/definitions/dto.PlaceImageResponse'
         type: array
       location:
-        $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_types.GeoPoint'
+        $ref: '#/definitions/types.GeoPoint'
       long_description:
         type: string
       place_type:
-        $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_types.PlaceType'
+        $ref: '#/definitions/types.PlaceType'
       popularity_score:
         type: number
       primary_image_url:
@@ -426,7 +453,7 @@ definitions:
       slug:
         type: string
       status:
-        $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_types.Status'
+        $ref: '#/definitions/types.Status'
       subtitle:
         type: string
       thumbnail_url:
@@ -441,14 +468,14 @@ definitions:
         description: Engagement fields for feed functionality
         type: integer
     type: object
-  github_com_omkar273_nashikdarshan_internal_api_dto.RatingStatsResponse:
+  dto.RatingStatsResponse:
     properties:
       average_rating:
         type: number
       entity_id:
         type: string
       entity_type:
-        $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_types.ReviewEntityType'
+        $ref: '#/definitions/types.ReviewEntityType'
       five_star_count:
         type: integer
       four_star_count:
@@ -473,7 +500,7 @@ definitions:
       verified_reviews:
         type: integer
     type: object
-  github_com_omkar273_nashikdarshan_internal_api_dto.ReviewResponse:
+  dto.ReviewResponse:
     properties:
       content:
         type: string
@@ -484,7 +511,7 @@ definitions:
       entity_id:
         type: string
       entity_type:
-        $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_types.ReviewEntityType'
+        $ref: '#/definitions/types.ReviewEntityType'
       helpful_count:
         type: integer
       id:
@@ -502,7 +529,7 @@ definitions:
       rating:
         type: number
       status:
-        $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_types.Status'
+        $ref: '#/definitions/types.Status'
       tags:
         items:
           type: string
@@ -516,7 +543,7 @@ definitions:
       user_id:
         type: string
     type: object
-  github_com_omkar273_nashikdarshan_internal_api_dto.SignupRequest:
+  dto.SignupRequest:
     properties:
       access_token:
         description: access token
@@ -533,14 +560,14 @@ definitions:
     - email
     - name
     type: object
-  github_com_omkar273_nashikdarshan_internal_api_dto.SignupResponse:
+  dto.SignupResponse:
     properties:
       access_token:
         type: string
       id:
         type: string
     type: object
-  github_com_omkar273_nashikdarshan_internal_api_dto.UpdateAPIKeyRequest:
+  dto.UpdateAPIKeyRequest:
     properties:
       name:
         maxLength: 255
@@ -552,12 +579,12 @@ definitions:
         type: array
       status:
         allOf:
-        - $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_types.Status'
+        - $ref: '#/definitions/types.Status'
         enum:
         - published
         - archived
     type: object
-  github_com_omkar273_nashikdarshan_internal_api_dto.UpdateCategoryRequest:
+  dto.UpdateCategoryRequest:
     properties:
       description:
         maxLength: 2000
@@ -571,26 +598,26 @@ definitions:
         minLength: 3
         type: string
     type: object
-  github_com_omkar273_nashikdarshan_internal_api_dto.UpdatePlaceImageRequest:
+  dto.UpdatePlaceImageRequest:
     properties:
       alt:
         type: string
       metadata:
-        $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_types.Metadata'
+        $ref: '#/definitions/types.Metadata'
       pos:
         minimum: 0
         type: integer
       url:
         type: string
     type: object
-  github_com_omkar273_nashikdarshan_internal_api_dto.UpdatePlaceRequest:
+  dto.UpdatePlaceRequest:
     properties:
       address:
         additionalProperties:
           type: string
         type: object
       location:
-        $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_types.GeoPoint'
+        $ref: '#/definitions/types.GeoPoint'
       long_description:
         maxLength: 10000
         type: string
@@ -615,7 +642,7 @@ definitions:
         minLength: 2
         type: string
     type: object
-  github_com_omkar273_nashikdarshan_internal_api_dto.UpdateReviewRequest:
+  dto.UpdateReviewRequest:
     properties:
       content:
         maxLength: 3000
@@ -636,7 +663,7 @@ definitions:
         maxLength: 255
         type: string
     type: object
-  github_com_omkar273_nashikdarshan_internal_api_dto.UpdateUserRequest:
+  dto.UpdateUserRequest:
     properties:
       name:
         maxLength: 255
@@ -647,7 +674,24 @@ definitions:
         minLength: 10
         type: string
     type: object
-  github_com_omkar273_nashikdarshan_internal_domain_place.PlaceImage:
+  ierr.ErrorDetail:
+    properties:
+      details:
+        additionalProperties: {}
+        type: object
+      internal_error:
+        type: string
+      message:
+        type: string
+    type: object
+  ierr.ErrorResponse:
+    properties:
+      error:
+        $ref: '#/definitions/ierr.ErrorDetail'
+      success:
+        type: boolean
+    type: object
+  place.PlaceImage:
     properties:
       alt:
         type: string
@@ -658,13 +702,13 @@ definitions:
       id:
         type: string
       metadata:
-        $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_types.Metadata'
+        $ref: '#/definitions/types.Metadata'
       place_id:
         type: string
       pos:
         type: integer
       status:
-        $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_types.Status'
+        $ref: '#/definitions/types.Status'
       updated_at:
         type: string
       updated_by:
@@ -672,24 +716,7 @@ definitions:
       url:
         type: string
     type: object
-  github_com_omkar273_nashikdarshan_internal_errors.ErrorDetail:
-    properties:
-      details:
-        additionalProperties: {}
-        type: object
-      internal_error:
-        type: string
-      message:
-        type: string
-    type: object
-  github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse:
-    properties:
-      error:
-        $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorDetail'
-      success:
-        type: boolean
-    type: object
-  github_com_omkar273_nashikdarshan_internal_types.FeedSectionType:
+  types.FeedSectionType:
     enum:
     - latest
     - trending
@@ -703,27 +730,27 @@ definitions:
     - SectionTypePopular
     - SectionTypeNearby
     - SectionTypeDiscover
-  github_com_omkar273_nashikdarshan_internal_types.GeoPoint:
+  types.GeoPoint:
     properties:
       latitude:
         type: number
       longitude:
         type: number
     type: object
-  github_com_omkar273_nashikdarshan_internal_types.ListResponse-github_com_omkar273_nashikdarshan_internal_api_dto_ReviewResponse:
+  types.ListResponse-dto_ReviewResponse:
     properties:
       items:
         items:
-          $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.ReviewResponse'
+          $ref: '#/definitions/dto.ReviewResponse'
         type: array
       pagination:
-        $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_types.PaginationResponse'
+        $ref: '#/definitions/types.PaginationResponse'
     type: object
-  github_com_omkar273_nashikdarshan_internal_types.Metadata:
+  types.Metadata:
     additionalProperties:
       type: string
     type: object
-  github_com_omkar273_nashikdarshan_internal_types.PaginationResponse:
+  types.PaginationResponse:
     properties:
       limit:
         type: integer
@@ -732,7 +759,7 @@ definitions:
       total:
         type: integer
     type: object
-  github_com_omkar273_nashikdarshan_internal_types.PlaceType:
+  types.PlaceType:
     enum:
     - temple
     - restaurant
@@ -746,7 +773,7 @@ definitions:
     - PlaceTypeMuseum
     - PlaceTypePark
     - PlaceTypeExperience
-  github_com_omkar273_nashikdarshan_internal_types.ReviewEntityType:
+  types.ReviewEntityType:
     enum:
     - place
     - hotel
@@ -762,7 +789,7 @@ definitions:
     - EntityTypeEvent
     - EntityTypeExperience
     - EntityTypeAttraction
-  github_com_omkar273_nashikdarshan_internal_types.Status:
+  types.Status:
     enum:
     - published
     - draft
@@ -774,7 +801,7 @@ definitions:
     - StatusDraft
     - StatusArchived
     - StatusDeleted
-  github_com_omkar273_nashikdarshan_internal_types.UserRole:
+  types.UserRole:
     enum:
     - USER
     - ADMIN
@@ -803,14 +830,14 @@ paths:
         name: signupRequest
         required: true
         schema:
-          $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.SignupRequest'
+          $ref: '#/definitions/dto.SignupRequest'
       produces:
       - application/json
       responses:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.SignupResponse'
+            $ref: '#/definitions/dto.SignupResponse'
       summary: Signup
       tags:
       - Auth
@@ -860,15 +887,15 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.ListCategoriesResponse'
+            $ref: '#/definitions/dto.ListCategoriesResponse'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse'
+            $ref: '#/definitions/ierr.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse'
+            $ref: '#/definitions/ierr.ErrorResponse'
       summary: List categories
       tags:
       - Category
@@ -882,26 +909,26 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.CreateCategoryRequest'
+          $ref: '#/definitions/dto.CreateCategoryRequest'
       produces:
       - application/json
       responses:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.CategoryResponse'
+            $ref: '#/definitions/dto.CategoryResponse'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse'
+            $ref: '#/definitions/ierr.ErrorResponse'
         "409":
           description: Conflict
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse'
+            $ref: '#/definitions/ierr.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse'
+            $ref: '#/definitions/ierr.ErrorResponse'
       security:
       - Authorization: []
       summary: Create a new category
@@ -926,11 +953,11 @@ paths:
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse'
+            $ref: '#/definitions/ierr.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse'
+            $ref: '#/definitions/ierr.ErrorResponse'
       security:
       - Authorization: []
       summary: Delete a category
@@ -952,15 +979,15 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.CategoryResponse'
+            $ref: '#/definitions/dto.CategoryResponse'
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse'
+            $ref: '#/definitions/ierr.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse'
+            $ref: '#/definitions/ierr.ErrorResponse'
       summary: Get category by ID
       tags:
       - Category
@@ -979,30 +1006,30 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.UpdateCategoryRequest'
+          $ref: '#/definitions/dto.UpdateCategoryRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.CategoryResponse'
+            $ref: '#/definitions/dto.CategoryResponse'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse'
+            $ref: '#/definitions/ierr.ErrorResponse'
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse'
+            $ref: '#/definitions/ierr.ErrorResponse'
         "409":
           description: Conflict
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse'
+            $ref: '#/definitions/ierr.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse'
+            $ref: '#/definitions/ierr.ErrorResponse'
       security:
       - Authorization: []
       summary: Update a category
@@ -1025,15 +1052,15 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.CategoryResponse'
+            $ref: '#/definitions/dto.CategoryResponse'
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse'
+            $ref: '#/definitions/ierr.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse'
+            $ref: '#/definitions/ierr.ErrorResponse'
       summary: Get category by slug
       tags:
       - Category
@@ -1044,27 +1071,27 @@ paths:
       description: Get feed data with multiple sections (trending, popular, latest,
         nearby)
       parameters:
-      - description: Feed request with sections
+      - description: dto.FeedRequest
         in: body
         name: request
         required: true
         schema:
-          $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.FeedRequest'
+          $ref: '#/definitions/dto.FeedRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.FeedResponse'
+            $ref: '#/definitions/dto.FeedResponse'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse'
+            $ref: '#/definitions/ierr.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse'
+            $ref: '#/definitions/ierr.ErrorResponse'
       summary: Get feed data
       tags:
       - Place
@@ -1175,15 +1202,15 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.ListPlacesResponse'
+            $ref: '#/definitions/dto.ListPlacesResponse'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse'
+            $ref: '#/definitions/ierr.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse'
+            $ref: '#/definitions/ierr.ErrorResponse'
       summary: List places
       tags:
       - Place
@@ -1192,31 +1219,31 @@ paths:
       - application/json
       description: Create a new place with the provided details
       parameters:
-      - description: Create place request
+      - description: dto.CreatePlaceRequest
         in: body
         name: request
         required: true
         schema:
-          $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.CreatePlaceRequest'
+          $ref: '#/definitions/dto.CreatePlaceRequest'
       produces:
       - application/json
       responses:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.PlaceResponse'
+            $ref: '#/definitions/dto.PlaceResponse'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse'
+            $ref: '#/definitions/ierr.ErrorResponse'
         "409":
           description: Conflict
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse'
+            $ref: '#/definitions/ierr.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse'
+            $ref: '#/definitions/ierr.ErrorResponse'
       security:
       - Authorization: []
       summary: Create a new place
@@ -1241,11 +1268,11 @@ paths:
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse'
+            $ref: '#/definitions/ierr.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse'
+            $ref: '#/definitions/ierr.ErrorResponse'
       security:
       - Authorization: []
       summary: Delete a place
@@ -1267,15 +1294,15 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.PlaceResponse'
+            $ref: '#/definitions/dto.PlaceResponse'
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse'
+            $ref: '#/definitions/ierr.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse'
+            $ref: '#/definitions/ierr.ErrorResponse'
       summary: Get place by ID
       tags:
       - Place
@@ -1289,35 +1316,35 @@ paths:
         name: id
         required: true
         type: string
-      - description: Update place request
+      - description: dto.UpdatePlaceRequest
         in: body
         name: request
         required: true
         schema:
-          $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.UpdatePlaceRequest'
+          $ref: '#/definitions/dto.UpdatePlaceRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.PlaceResponse'
+            $ref: '#/definitions/dto.PlaceResponse'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse'
+            $ref: '#/definitions/ierr.ErrorResponse'
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse'
+            $ref: '#/definitions/ierr.ErrorResponse'
         "409":
           description: Conflict
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse'
+            $ref: '#/definitions/ierr.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse'
+            $ref: '#/definitions/ierr.ErrorResponse'
       security:
       - Authorization: []
       summary: Update a place
@@ -1334,12 +1361,12 @@ paths:
         name: id
         required: true
         type: string
-      - description: Assign categories request
+      - description: dto.AssignCategoriesRequest
         in: body
         name: request
         required: true
         schema:
-          $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.AssignCategoriesRequest'
+          $ref: '#/definitions/dto.AssignCategoriesRequest'
       produces:
       - application/json
       responses:
@@ -1348,15 +1375,15 @@ paths:
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse'
+            $ref: '#/definitions/ierr.ErrorResponse'
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse'
+            $ref: '#/definitions/ierr.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse'
+            $ref: '#/definitions/ierr.ErrorResponse'
       security:
       - Authorization: []
       summary: Assign categories to a place
@@ -1380,16 +1407,16 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.PlaceImageResponse'
+              $ref: '#/definitions/dto.PlaceImageResponse'
             type: array
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse'
+            $ref: '#/definitions/ierr.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse'
+            $ref: '#/definitions/ierr.ErrorResponse'
       summary: Get place images
       tags:
       - Place
@@ -1403,31 +1430,31 @@ paths:
         name: id
         required: true
         type: string
-      - description: Create place image request
+      - description: dto.CreatePlaceImageRequest
         in: body
         name: request
         required: true
         schema:
-          $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.CreatePlaceImageRequest'
+          $ref: '#/definitions/dto.CreatePlaceImageRequest'
       produces:
       - application/json
       responses:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.PlaceImageResponse'
+            $ref: '#/definitions/dto.PlaceImageResponse'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse'
+            $ref: '#/definitions/ierr.ErrorResponse'
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse'
+            $ref: '#/definitions/ierr.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse'
+            $ref: '#/definitions/ierr.ErrorResponse'
       security:
       - Authorization: []
       summary: Add image to place
@@ -1452,15 +1479,15 @@ paths:
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse'
+            $ref: '#/definitions/ierr.ErrorResponse'
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse'
+            $ref: '#/definitions/ierr.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse'
+            $ref: '#/definitions/ierr.ErrorResponse'
       summary: Increment view count for a place
       tags:
       - Place
@@ -1483,11 +1510,11 @@ paths:
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse'
+            $ref: '#/definitions/ierr.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse'
+            $ref: '#/definitions/ierr.ErrorResponse'
       security:
       - Authorization: []
       summary: Delete place image
@@ -1503,31 +1530,31 @@ paths:
         name: image_id
         required: true
         type: string
-      - description: Update place image request
+      - description: dto.UpdatePlaceImageRequest
         in: body
         name: request
         required: true
         schema:
-          $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.UpdatePlaceImageRequest'
+          $ref: '#/definitions/dto.UpdatePlaceImageRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.PlaceImageResponse'
+            $ref: '#/definitions/dto.PlaceImageResponse'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse'
+            $ref: '#/definitions/ierr.ErrorResponse'
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse'
+            $ref: '#/definitions/ierr.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse'
+            $ref: '#/definitions/ierr.ErrorResponse'
       security:
       - Authorization: []
       summary: Update place image
@@ -1551,7 +1578,7 @@ paths:
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse'
+            $ref: '#/definitions/ierr.ErrorResponse'
       security:
       - Authorization: []
       summary: Refresh place scores
@@ -1574,15 +1601,15 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.PlaceResponse'
+            $ref: '#/definitions/dto.PlaceResponse'
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse'
+            $ref: '#/definitions/ierr.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse'
+            $ref: '#/definitions/ierr.ErrorResponse'
       summary: Get place by slug
       tags:
       - Place
@@ -1626,15 +1653,15 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_types.ListResponse-github_com_omkar273_nashikdarshan_internal_api_dto_ReviewResponse'
+            $ref: '#/definitions/types.ListResponse-dto_ReviewResponse'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse'
+            $ref: '#/definitions/ierr.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse'
+            $ref: '#/definitions/ierr.ErrorResponse'
       summary: List reviews
       tags:
       - Reviews
@@ -1648,22 +1675,22 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.CreateReviewRequest'
+          $ref: '#/definitions/dto.CreateReviewRequest'
       produces:
       - application/json
       responses:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.ReviewResponse'
+            $ref: '#/definitions/dto.ReviewResponse'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse'
+            $ref: '#/definitions/ierr.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse'
+            $ref: '#/definitions/ierr.ErrorResponse'
       security:
       - Authorization: []
       summary: Create a new review
@@ -1688,11 +1715,11 @@ paths:
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse'
+            $ref: '#/definitions/ierr.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse'
+            $ref: '#/definitions/ierr.ErrorResponse'
       security:
       - Authorization: []
       summary: Delete a review
@@ -1714,15 +1741,15 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.ReviewResponse'
+            $ref: '#/definitions/dto.ReviewResponse'
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse'
+            $ref: '#/definitions/ierr.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse'
+            $ref: '#/definitions/ierr.ErrorResponse'
       summary: Get review by ID
       tags:
       - Reviews
@@ -1741,26 +1768,26 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.UpdateReviewRequest'
+          $ref: '#/definitions/dto.UpdateReviewRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.ReviewResponse'
+            $ref: '#/definitions/dto.ReviewResponse'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse'
+            $ref: '#/definitions/ierr.ErrorResponse'
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse'
+            $ref: '#/definitions/ierr.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse'
+            $ref: '#/definitions/ierr.ErrorResponse'
       security:
       - Authorization: []
       summary: Update a review
@@ -1788,19 +1815,19 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.RatingStatsResponse'
+            $ref: '#/definitions/dto.RatingStatsResponse'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse'
+            $ref: '#/definitions/ierr.ErrorResponse'
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse'
+            $ref: '#/definitions/ierr.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse'
+            $ref: '#/definitions/ierr.ErrorResponse'
       summary: Get rating statistics
       tags:
       - Reviews
@@ -1815,15 +1842,15 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.ListAPIKeysResponse'
+            $ref: '#/definitions/dto.ListAPIKeysResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse'
+            $ref: '#/definitions/ierr.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse'
+            $ref: '#/definitions/ierr.ErrorResponse'
       security:
       - Authorization: []
       summary: List API keys
@@ -1840,26 +1867,26 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.CreateAPIKeyRequest'
+          $ref: '#/definitions/dto.CreateAPIKeyRequest'
       produces:
       - application/json
       responses:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.CreateAPIKeyResponse'
+            $ref: '#/definitions/dto.CreateAPIKeyResponse'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse'
+            $ref: '#/definitions/ierr.ErrorResponse'
         "409":
           description: Conflict
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse'
+            $ref: '#/definitions/ierr.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse'
+            $ref: '#/definitions/ierr.ErrorResponse'
       security:
       - Authorization: []
       summary: Create a new API key
@@ -1884,11 +1911,11 @@ paths:
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse'
+            $ref: '#/definitions/ierr.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse'
+            $ref: '#/definitions/ierr.ErrorResponse'
       security:
       - Authorization: []
       summary: Delete API key
@@ -1910,15 +1937,15 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.APIKeyResponse'
+            $ref: '#/definitions/dto.APIKeyResponse'
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse'
+            $ref: '#/definitions/ierr.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse'
+            $ref: '#/definitions/ierr.ErrorResponse'
       security:
       - Authorization: []
       summary: Get API key by ID
@@ -1939,26 +1966,26 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.UpdateAPIKeyRequest'
+          $ref: '#/definitions/dto.UpdateAPIKeyRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.APIKeyResponse'
+            $ref: '#/definitions/dto.APIKeyResponse'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse'
+            $ref: '#/definitions/ierr.ErrorResponse'
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse'
+            $ref: '#/definitions/ierr.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse'
+            $ref: '#/definitions/ierr.ErrorResponse'
       security:
       - Authorization: []
       summary: Update API key
@@ -1975,22 +2002,22 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.UpdateUserRequest'
+          $ref: '#/definitions/dto.UpdateUserRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.MeResponse'
+            $ref: '#/definitions/dto.MeResponse'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse'
+            $ref: '#/definitions/ierr.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse'
+            $ref: '#/definitions/ierr.ErrorResponse'
       summary: Update current user
       tags:
       - User
@@ -2005,15 +2032,15 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.MeResponse'
+            $ref: '#/definitions/dto.MeResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse'
+            $ref: '#/definitions/ierr.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse'
+            $ref: '#/definitions/ierr.ErrorResponse'
       summary: Get current user
       tags:
       - User
