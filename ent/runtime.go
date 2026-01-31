@@ -90,10 +90,6 @@ func init() {
 	placeDescTitle := placeFields[2].Descriptor()
 	// place.TitleValidator is a validator for the "title" field. It is called by the builders before save.
 	place.TitleValidator = placeDescTitle.Validators[0].(func(string) error)
-	// placeDescPlaceType is the schema descriptor for place_type field.
-	placeDescPlaceType := placeFields[6].Descriptor()
-	// place.PlaceTypeValidator is a validator for the "place_type" field. It is called by the builders before save.
-	place.PlaceTypeValidator = placeDescPlaceType.Validators[0].(func(string) error)
 	// placeDescViewCount is the schema descriptor for view_count field.
 	placeDescViewCount := placeFields[10].Descriptor()
 	// place.DefaultViewCount holds the default value on creation for the view_count field.

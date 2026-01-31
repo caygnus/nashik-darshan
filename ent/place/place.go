@@ -131,8 +131,6 @@ var (
 	SlugValidator func(string) error
 	// TitleValidator is a validator for the "title" field. It is called by the builders before save.
 	TitleValidator func(string) error
-	// PlaceTypeValidator is a validator for the "place_type" field. It is called by the builders before save.
-	PlaceTypeValidator func(string) error
 	// DefaultViewCount holds the default value on creation for the "view_count" field.
 	DefaultViewCount int
 	// ViewCountValidator is a validator for the "view_count" field. It is called by the builders before save.

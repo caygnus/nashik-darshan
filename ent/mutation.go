@@ -993,7 +993,7 @@ type PlaceMutation struct {
 	subtitle          *string
 	short_description *string
 	long_description  *string
-	place_type        *string
+	place_type        *types.PlaceType
 	address           *map[string]string
 	primary_image_url *string
 	thumbnail_url     *string
@@ -1630,12 +1630,12 @@ func (m *PlaceMutation) ResetLongDescription() {
 }
 
 // SetPlaceType sets the "place_type" field.
-func (m *PlaceMutation) SetPlaceType(s string) {
-	m.place_type = &s
+func (m *PlaceMutation) SetPlaceType(tt types.PlaceType) {
+	m.place_type = &tt
 }
 
 // PlaceType returns the value of the "place_type" field in the mutation.
-func (m *PlaceMutation) PlaceType() (r string, exists bool) {
+func (m *PlaceMutation) PlaceType() (r types.PlaceType, exists bool) {
 	v := m.place_type
 	if v == nil {
 		return
@@ -1646,7 +1646,7 @@ func (m *PlaceMutation) PlaceType() (r string, exists bool) {
 // OldPlaceType returns the old "place_type" field's value of the Place entity.
 // If the Place object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *PlaceMutation) OldPlaceType(ctx context.Context) (v string, err error) {
+func (m *PlaceMutation) OldPlaceType(ctx context.Context) (v types.PlaceType, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldPlaceType is only allowed on UpdateOne operations")
 	}
@@ -2390,7 +2390,7 @@ func (m *PlaceMutation) SetField(name string, value ent.Value) error {
 		m.SetLongDescription(v)
 		return nil
 	case place.FieldPlaceType:
-		v, ok := value.(string)
+		v, ok := value.(types.PlaceType)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}

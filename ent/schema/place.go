@@ -68,7 +68,7 @@ func (Place) Fields() []ent.Field {
 				"postgres": "text",
 			}).
 			Immutable().
-			NotEmpty(),
+			GoType(types.PlaceType("")),
 
 		field.JSON("address", map[string]string{}).
 			SchemaType(map[string]string{

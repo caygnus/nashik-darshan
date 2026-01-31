@@ -31,6 +31,11 @@ var commands = []Command{
 		Description: "Create an API key (works with X-API-Key middleware). --name (default: etst key); --user-id or --email optional (default user if omitted)",
 		Run:         internal.CreateAPIKey,
 	},
+	{
+		Name:        "seed-places",
+		Description: "Create 100+ Nashik places via API. -base-url (default http://localhost:8080/v1), -api-key or API_KEY, -out (default seed_places_ids.txt)",
+		Run:         internal.SeedPlaces,
+	},
 }
 
 func main() {

@@ -278,6 +278,10 @@ type FeedSectionRequest struct {
 	// Geospatial fields (for nearby section)
 	Center   *types.GeoPoint   `json:"center,omitempty" validate:"omitempty"`
 	RadiusKm *decimal.Decimal `json:"radius_km,omitempty" validate:"omitempty,min=0.1,max=50" default:"5"`
+
+	// Optional quality gate (section-level; overrides global)
+	MinRatingCount *int             `json:"min_rating_count,omitempty" validate:"omitempty,min=0"`
+	MinRatingAvg   *decimal.Decimal `json:"min_rating_avg,omitempty" validate:"omitempty"`
 }
 
 // FeedRequest represents the main feed request
@@ -287,6 +291,10 @@ type FeedRequest struct {
 	// Global filters (applied to all sections unless overridden)
 	*types.QueryFilter     `json:",inline,omitempty"`
 	*types.TimeRangeFilter `json:",inline,omitempty"`
+
+	// Optional quality gate (global; section can override)
+	MinRatingCount *int             `json:"min_rating_count,omitempty" validate:"omitempty,min=0"`
+	MinRatingAvg   *decimal.Decimal `json:"min_rating_avg,omitempty" validate:"omitempty"`
 }
 
 // FeedSectionResponse represents a single section response in the feed
@@ -417,7 +425,17 @@ func (req *FeedSectionRequest) ToPlaceFilter(globalFilter *FeedRequest) *types.P
 				filter.QueryFilter.Order = &order
 			}
 
-		case types.SectionTypeTrending, types.SectionTypePopular:
+		case types.SectionTypeTrending:
+			// Trending: popularity_score desc, then updated_at desc (recently active among popular)
+			if filter.QueryFilter.Sort == nil {
+				sort := "trending"
+				filter.QueryFilter.Sort = &sort
+			}
+			if filter.QueryFilter.Order == nil {
+				order := "desc"
+				filter.QueryFilter.Order = &order
+			}
+		case types.SectionTypePopular:
 			if filter.QueryFilter.Sort == nil {
 				sort := "popularity_score"
 				filter.QueryFilter.Sort = &sort
@@ -437,6 +455,16 @@ func (req *FeedSectionRequest) ToPlaceFilter(globalFilter *FeedRequest) *types.P
 				order := "desc"
 				filter.QueryFilter.Order = &order
 			}
+		case types.SectionTypeDiscover:
+			// Discover: ascending popularity (rising underdogs) for exploration
+			if filter.QueryFilter.Sort == nil {
+				sort := "popularity_score"
+				filter.QueryFilter.Sort = &sort
+			}
+			if filter.QueryFilter.Order == nil {
+				order := "asc"
+				filter.QueryFilter.Order = &order
+			}
 		}
 	}
 
@@ -452,6 +480,18 @@ func (req *FeedSectionRequest) ToPlaceFilter(globalFilter *FeedRequest) *types.P
 			defaultRadiusM := decimal.NewFromInt(5000) // 5km default
 			filter.RadiusM = &defaultRadiusM
 		}
+	}
+
+	// Optional quality gate (section overrides global)
+	if req.MinRatingCount != nil {
+		filter.MinRatingCount = req.MinRatingCount
+	} else if globalFilter != nil && globalFilter.MinRatingCount != nil {
+		filter.MinRatingCount = globalFilter.MinRatingCount
+	}
+	if req.MinRatingAvg != nil {
+		filter.MinRatingAvg = req.MinRatingAvg
+	} else if globalFilter != nil && globalFilter.MinRatingAvg != nil {
+		filter.MinRatingAvg = globalFilter.MinRatingAvg
 	}
 
 	return filter

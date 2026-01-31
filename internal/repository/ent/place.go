@@ -13,6 +13,7 @@ import (
 	"github.com/omkar273/nashikdarshan/internal/logger"
 	"github.com/omkar273/nashikdarshan/internal/postgres"
 	"github.com/omkar273/nashikdarshan/internal/types"
+	"github.com/samber/lo"
 	"github.com/shopspring/decimal"
 )
 
@@ -46,7 +47,7 @@ func (r *PlaceRepository) Create(ctx context.Context, p *domain.Place) error {
 		SetID(p.ID).
 		SetSlug(p.Slug).
 		SetTitle(p.Title).
-		SetPlaceType(string(p.PlaceType)).
+		SetPlaceType(p.PlaceType).
 		SetLocation(p.Location).
 		SetStatus(string(p.Status)).
 		SetCreatedAt(now).
@@ -552,6 +553,11 @@ func (o PlaceQueryOptions) ApplySortFilter(query PlaceQuery, field string, order
 		field = "created_at"
 	}
 
+	// Trending: primary popularity_score desc, secondary updated_at desc (recently active among popular)
+	if field == "trending" {
+		return query.Order(ent.Desc(place.FieldPopularityScore, place.FieldUpdatedAt))
+	}
+
 	fieldName := o.GetFieldName(field)
 	if order == types.OrderDesc {
 		return query.Order(ent.Desc(fieldName))
@@ -586,6 +592,8 @@ func (o PlaceQueryOptions) GetFieldName(field string) string {
 		return place.FieldSlug
 	case "place_type":
 		return place.FieldPlaceType
+	case "popularity_score":
+		return place.FieldPopularityScore
 	default:
 		return field
 	}
@@ -607,7 +615,7 @@ func (o PlaceQueryOptions) ApplyEntityQueryOptions(
 
 	// Apply place types filter if specified
 	if len(f.PlaceTypes) > 0 {
-		query = query.Where(place.PlaceTypeIn(f.PlaceTypes...))
+		query = query.Where(place.PlaceTypeIn(lo.Map(f.PlaceTypes, func(pt string, _ int) types.PlaceType { return types.PlaceType(pt) })...))
 	}
 
 	// Apply search query if specified
@@ -619,6 +627,14 @@ func (o PlaceQueryOptions) ApplyEntityQueryOptions(
 				place.ShortDescriptionContainsFold(*f.SearchQuery),
 			),
 		)
+	}
+
+	// Optional quality gate (min rating count / min rating avg)
+	if f.MinRatingCount != nil {
+		query = query.Where(place.RatingCountGTE(*f.MinRatingCount))
+	}
+	if f.MinRatingAvg != nil {
+		query = query.Where(place.RatingAvgGTE(*f.MinRatingAvg))
 	}
 
 	// Apply geospatial filters if specified using PostGIS ST_DWithin

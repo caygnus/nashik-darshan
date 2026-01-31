@@ -13,14 +13,13 @@ import (
 // Returns a SQL predicate that can be used in Ent queries
 func WithinRadius(locationColumn string, lng, lat decimal.Decimal, radiusM decimal.Decimal) func(*sql.Selector) {
 	return func(s *sql.Selector) {
-		// ST_DWithin(location, ST_SetSRID(ST_MakePoint(lng, lat), 4326)::geography, radiusM)
-		// Note: locationColumn must be the actual column name in the table
-		s.Where(sql.ExprP(
-			"ST_DWithin("+locationColumn+", ST_SetSRID(ST_MakePoint(?, ?), 4326)::geography, ?)",
-			lng.InexactFloat64(),
-			lat.InexactFloat64(),
-			radiusM.InexactFloat64(),
-		))
+		lngF, latF, radiusF := lng.InexactFloat64(), lat.InexactFloat64(), radiusM.InexactFloat64()
+		col := s.C(locationColumn)
+		s.Where(sql.P(func(b *sql.Builder) {
+			b.WriteString("ST_DWithin(").WriteString(col).WriteString(", ST_SetSRID(ST_MakePoint(")
+			b.Arg(lngF).WriteString(", ").Arg(latF).WriteString("), 4326)::geography, ")
+			b.Arg(radiusF).WriteString(")")
+		}))
 	}
 }
 
@@ -36,11 +35,11 @@ func OrderByDistance(locationColumn string, lng, lat decimal.Decimal, ascending 
 		if !ascending {
 			order = "DESC"
 		}
-		// ST_Distance(location, ST_SetSRID(ST_MakePoint(lng, lat), 4326)::geography) ASC/DESC
-		s.OrderExpr(sql.ExprP(
-			"ST_Distance("+locationColumn+", ST_SetSRID(ST_MakePoint(?, ?), 4326)::geography) "+order,
-			lng.InexactFloat64(),
-			lat.InexactFloat64(),
-		))
+		lngF, latF := lng.InexactFloat64(), lat.InexactFloat64()
+		col := s.C(locationColumn)
+		s.OrderExpr(sql.ExprFunc(func(b *sql.Builder) {
+			b.WriteString("ST_Distance(").WriteString(col).WriteString(", ST_SetSRID(ST_MakePoint(")
+			b.Arg(lngF).WriteString(", ").Arg(latF).WriteString("), 4326)::geography) ").WriteString(order)
+		}))
 	}
 }

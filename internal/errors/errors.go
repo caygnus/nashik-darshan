@@ -1,6 +1,7 @@
 package ierr
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 
@@ -157,6 +158,10 @@ func HTTPStatusFromErr(err error) int {
 		if errors.Is(err, e) {
 			return status
 		}
+	}
+	// Client disconnected; don't treat as 500
+	if errors.Is(err, context.Canceled) {
+		return 499 // Client Closed Request (nginx convention)
 	}
 	return http.StatusInternalServerError
 }

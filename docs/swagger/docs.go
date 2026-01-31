@@ -39,7 +39,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/dto.SignupRequest"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.SignupRequest"
                         }
                     }
                 ],
@@ -47,7 +47,7 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/dto.SignupResponse"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.SignupResponse"
                         }
                     }
                 }
@@ -122,19 +122,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/dto.ListCategoriesResponse"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.ListCategoriesResponse"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
                         }
                     }
                 }
@@ -163,7 +163,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/dto.CreateCategoryRequest"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.CreateCategoryRequest"
                         }
                     }
                 ],
@@ -171,25 +171,25 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/dto.CategoryResponse"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.CategoryResponse"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
                         }
                     },
                     "409": {
                         "description": "Conflict",
                         "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
                         }
                     }
                 }
@@ -221,19 +221,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/dto.CategoryResponse"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.CategoryResponse"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
                         }
                     }
                 }
@@ -265,19 +265,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/dto.CategoryResponse"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.CategoryResponse"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
                         }
                     }
                 }
@@ -313,7 +313,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/dto.UpdateCategoryRequest"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.UpdateCategoryRequest"
                         }
                     }
                 ],
@@ -321,31 +321,31 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/dto.CategoryResponse"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.CategoryResponse"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
                         }
                     },
                     "409": {
                         "description": "Conflict",
                         "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
                         }
                     }
                 }
@@ -383,754 +383,13 @@ const docTemplate = `{
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/events": {
-            "get": {
-                "description": "Get a paginated list of events with filtering and pagination. Use expand=true with from_date and to_date to get expanded occurrences.",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Event"
-                ],
-                "summary": "List events",
-                "parameters": [
-                    {
-                        "type": "boolean",
-                        "description": "If true, expand occurrences in date range",
-                        "name": "expand",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "ISO date YYYY-MM-DD",
-                        "name": "from_date",
-                        "in": "query"
-                    },
-                    {
-                        "maximum": 1000,
-                        "minimum": 1,
-                        "type": "integer",
-                        "name": "limit",
-                        "in": "query"
-                    },
-                    {
-                        "minimum": 0,
-                        "type": "integer",
-                        "name": "offset",
-                        "in": "query"
-                    },
-                    {
-                        "enum": [
-                            "asc",
-                            "desc"
-                        ],
-                        "type": "string",
-                        "name": "order",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "name": "place_id",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "name": "sort",
-                        "in": "query"
-                    },
-                    {
-                        "enum": [
-                            "published",
-                            "draft",
-                            "archived",
-                            "deleted"
-                        ],
-                        "type": "string",
-                        "x-enum-varnames": [
-                            "StatusPublished",
-                            "StatusDraft",
-                            "StatusArchived",
-                            "StatusDeleted"
-                        ],
-                        "name": "status",
-                        "in": "query"
-                    },
-                    {
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        },
-                        "collectionFormat": "csv",
-                        "name": "tags",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "ISO date YYYY-MM-DD",
-                        "name": "to_date",
-                        "in": "query"
-                    },
-                    {
-                        "enum": [
-                            "AARTI",
-                            "FESTIVAL",
-                            "CULTURAL",
-                            "WORKSHOP",
-                            "SPECIAL_DARSHAN"
-                        ],
-                        "type": "string",
-                        "x-enum-varnames": [
-                            "EventTypeAarti",
-                            "EventTypeFestival",
-                            "EventTypeCultural",
-                            "EventTypeWorkshop",
-                            "EventTypeSpecialDarshan"
-                        ],
-                        "name": "type",
-                        "in": "query"
-                    },
-                    {
-                        "type": "boolean",
-                        "description": "Expand occurrences in date range",
-                        "name": "expand",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "Start date for expansion (YYYY-MM-DD)",
-                        "name": "from_date",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "End date for expansion (YYYY-MM-DD)",
-                        "name": "to_date",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/dto.ListEventsResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
-                        }
-                    }
-                }
-            },
-            "post": {
-                "security": [
-                    {
-                        "Authorization": []
-                    }
-                ],
-                "description": "Create a new event with the provided details",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Event"
-                ],
-                "summary": "Create a new event",
-                "parameters": [
-                    {
-                        "description": "Create event request",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/dto.CreateEventRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "description": "Created",
-                        "schema": {
-                            "$ref": "#/definitions/dto.EventResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
-                        }
-                    },
-                    "409": {
-                        "description": "Conflict",
-                        "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/events/occurrences": {
-            "post": {
-                "security": [
-                    {
-                        "Authorization": []
-                    }
-                ],
-                "description": "Create a new occurrence for an event",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Event"
-                ],
-                "summary": "Create event occurrence",
-                "parameters": [
-                    {
-                        "description": "Create occurrence request",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/dto.CreateOccurrenceRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "description": "Created",
-                        "schema": {
-                            "$ref": "#/definitions/dto.OccurrenceResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/events/occurrences/{id}": {
-            "get": {
-                "description": "Get an event occurrence by its ID",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Event"
-                ],
-                "summary": "Get occurrence by ID",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Occurrence ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/dto.OccurrenceResponse"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
-                        }
-                    }
-                }
-            },
-            "put": {
-                "security": [
-                    {
-                        "Authorization": []
-                    }
-                ],
-                "description": "Update an existing event occurrence",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Event"
-                ],
-                "summary": "Update occurrence",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Occurrence ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "description": "Update occurrence request",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/dto.UpdateOccurrenceRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/dto.OccurrenceResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
-                        }
-                    }
-                }
-            },
-            "delete": {
-                "security": [
-                    {
-                        "Authorization": []
-                    }
-                ],
-                "description": "Soft delete an event occurrence",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Event"
-                ],
-                "summary": "Delete occurrence",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Occurrence ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "204": {
-                        "description": "No Content"
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/events/slug/{slug}": {
-            "get": {
-                "description": "Get an event by its slug",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Event"
-                ],
-                "summary": "Get event by slug",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Event slug",
-                        "name": "slug",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/dto.EventResponse"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/events/{eventId}/occurrences": {
-            "get": {
-                "description": "Get all occurrences for a specific event",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Event"
-                ],
-                "summary": "List occurrences for event",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Event ID",
-                        "name": "eventId",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/dto.OccurrenceResponse"
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/events/{id}": {
-            "get": {
-                "description": "Get an event by its ID",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Event"
-                ],
-                "summary": "Get event by ID",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Event ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/dto.EventResponse"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
-                        }
-                    }
-                }
-            },
-            "put": {
-                "security": [
-                    {
-                        "Authorization": []
-                    }
-                ],
-                "description": "Update an existing event",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Event"
-                ],
-                "summary": "Update an event",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Event ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "description": "Update event request",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/dto.UpdateEventRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/dto.EventResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
-                        }
-                    },
-                    "409": {
-                        "description": "Conflict",
-                        "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
-                        }
-                    }
-                }
-            },
-            "delete": {
-                "security": [
-                    {
-                        "Authorization": []
-                    }
-                ],
-                "description": "Soft delete an event",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Event"
-                ],
-                "summary": "Delete an event",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Event ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "204": {
-                        "description": "No Content"
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/events/{id}/interested": {
-            "post": {
-                "description": "Increment the interested count for an event (user marked as interested)",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Event"
-                ],
-                "summary": "Increment event interested count",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Event ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "204": {
-                        "description": "No Content"
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/events/{id}/view": {
-            "post": {
-                "description": "Increment the view count for an event (analytics)",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Event"
-                ],
-                "summary": "Increment event view count",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Event ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "204": {
-                        "description": "No Content"
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
                         }
                     }
                 }
@@ -1156,7 +415,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/dto.FeedRequest"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.FeedRequest"
                         }
                     }
                 ],
@@ -1164,27 +423,32 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/dto.FeedResponse"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.FeedResponse"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
                         }
                     }
                 }
             }
         },
-        "/hotels": {
-            "get": {
-                "description": "Get a paginated list of hotels with filtering and pagination",
+        "/health": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Health check that validates API key or JWT; returns status and user_id",
                 "consumes": [
                     "application/json"
                 ],
@@ -1192,9 +456,42 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Hotel"
+                    "Health"
                 ],
-                "summary": "List hotels",
+                "summary": "Authenticated health check",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/places": {
+            "get": {
+                "description": "Get a paginated list of places with filtering and pagination",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Place"
+                ],
+                "summary": "List places",
                 "parameters": [
                     {
                         "type": "string",
@@ -1207,18 +504,6 @@ const docTemplate = `{
                         "in": "query"
                     },
                     {
-                        "type": "string",
-                        "description": "Trending filter",
-                        "name": "last_viewed_after",
-                        "in": "query"
-                    },
-                    {
-                        "type": "number",
-                        "description": "Geospatial filters",
-                        "name": "latitude",
-                        "in": "query"
-                    },
-                    {
                         "maximum": 1000,
                         "minimum": 1,
                         "type": "integer",
@@ -1227,18 +512,14 @@ const docTemplate = `{
                     },
                     {
                         "type": "number",
-                        "name": "longitude",
+                        "name": "min_rating_avg",
                         "in": "query"
                     },
                     {
-                        "type": "number",
-                        "name": "max_price",
-                        "in": "query"
-                    },
-                    {
-                        "type": "number",
-                        "description": "Price range filters",
-                        "name": "min_price",
+                        "minimum": 0,
+                        "type": "integer",
+                        "description": "Optional quality gate (e.g. min reviews / min rating to appear in feed)",
+                        "name": "min_rating_count",
                         "in": "query"
                     },
                     {
@@ -1257,8 +538,17 @@ const docTemplate = `{
                         "in": "query"
                     },
                     {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "csv",
+                        "name": "place_types",
+                        "in": "query"
+                    },
+                    {
                         "type": "number",
-                        "description": "radius in meters",
+                        "description": "radius in meters (cap: 15km for v1)",
                         "name": "radius_m",
                         "in": "query"
                     },
@@ -1281,15 +571,6 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "name": "sort",
-                        "in": "query"
-                    },
-                    {
-                        "type": "array",
-                        "items": {
-                            "type": "integer"
-                        },
-                        "collectionFormat": "csv",
-                        "name": "star_rating",
                         "in": "query"
                     },
                     {
@@ -1319,417 +600,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/dto.ListHotelsResponse"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.ListPlacesResponse"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
-                        }
-                    }
-                }
-            },
-            "post": {
-                "security": [
-                    {
-                        "Authorization": []
-                    }
-                ],
-                "description": "Create a new hotel with the provided details",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Hotel"
-                ],
-                "summary": "Create a new hotel",
-                "parameters": [
-                    {
-                        "description": "Create hotel request",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/dto.CreateHotelRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "description": "Created",
-                        "schema": {
-                            "$ref": "#/definitions/dto.HotelResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
-                        }
-                    },
-                    "409": {
-                        "description": "Conflict",
-                        "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/hotels/slug/{slug}": {
-            "get": {
-                "description": "Get a hotel by its slug",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Hotel"
-                ],
-                "summary": "Get hotel by slug",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Hotel slug",
-                        "name": "slug",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/dto.HotelResponse"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/hotels/{id}": {
-            "get": {
-                "description": "Get a hotel by its ID",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Hotel"
-                ],
-                "summary": "Get hotel by ID",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Hotel ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/dto.HotelResponse"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
-                        }
-                    }
-                }
-            },
-            "put": {
-                "security": [
-                    {
-                        "Authorization": []
-                    }
-                ],
-                "description": "Update an existing hotel",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Hotel"
-                ],
-                "summary": "Update a hotel",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Hotel ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "description": "Update hotel request",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/dto.UpdateHotelRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/dto.HotelResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
-                        }
-                    },
-                    "409": {
-                        "description": "Conflict",
-                        "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
-                        }
-                    }
-                }
-            },
-            "delete": {
-                "security": [
-                    {
-                        "Authorization": []
-                    }
-                ],
-                "description": "Soft delete a hotel",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Hotel"
-                ],
-                "summary": "Delete a hotel",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Hotel ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "204": {
-                        "description": "No Content"
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/places": {
-            "get": {
-                "description": "Get a paginated list of places with filtering and pagination",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Place"
-                ],
-                "summary": "List places",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Limit",
-                        "name": "limit",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "Offset",
-                        "name": "offset",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "Status",
-                        "name": "status",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "Sort field",
-                        "name": "sort",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "Sort order (asc/desc)",
-                        "name": "order",
-                        "in": "query"
-                    },
-                    {
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        },
-                        "collectionFormat": "csv",
-                        "description": "Filter by slugs",
-                        "name": "slug",
-                        "in": "query"
-                    },
-                    {
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        },
-                        "collectionFormat": "csv",
-                        "description": "Filter by place types",
-                        "name": "place_types",
-                        "in": "query"
-                    },
-                    {
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        },
-                        "collectionFormat": "csv",
-                        "description": "Filter by categories",
-                        "name": "categories",
-                        "in": "query"
-                    },
-                    {
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        },
-                        "collectionFormat": "csv",
-                        "description": "Filter by amenities",
-                        "name": "amenities",
-                        "in": "query"
-                    },
-                    {
-                        "type": "number",
-                        "description": "Minimum rating",
-                        "name": "min_rating",
-                        "in": "query"
-                    },
-                    {
-                        "type": "number",
-                        "description": "Maximum rating",
-                        "name": "max_rating",
-                        "in": "query"
-                    },
-                    {
-                        "type": "number",
-                        "description": "Latitude for geospatial filtering",
-                        "name": "latitude",
-                        "in": "query"
-                    },
-                    {
-                        "type": "number",
-                        "description": "Longitude for geospatial filtering",
-                        "name": "longitude",
-                        "in": "query"
-                    },
-                    {
-                        "type": "number",
-                        "description": "Radius in kilometers for geospatial filtering",
-                        "name": "radius_km",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "Search query",
-                        "name": "search_query",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/dto.ListPlacesResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
                         }
                     }
                 }
@@ -1758,7 +641,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/dto.CreatePlaceRequest"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.CreatePlaceRequest"
                         }
                     }
                 ],
@@ -1766,25 +649,25 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/dto.PlaceResponse"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.PlaceResponse"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
                         }
                     },
                     "409": {
                         "description": "Conflict",
                         "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
                         }
                     }
                 }
@@ -1822,7 +705,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/dto.UpdatePlaceImageRequest"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.UpdatePlaceImageRequest"
                         }
                     }
                 ],
@@ -1830,25 +713,25 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/dto.PlaceImageResponse"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.PlaceImageResponse"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
                         }
                     }
                 }
@@ -1886,13 +769,50 @@ const docTemplate = `{
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/places/refresh-scores": {
+            "post": {
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ],
+                "description": "Recalculates popularity_score for all places; for use by cron. Requires authentication.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Place"
+                ],
+                "summary": "Refresh place scores",
+                "responses": {
+                    "200": {
+                        "description": "e.g. {\\\"places_updated\\\": N}",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "integer"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
                         }
                     }
                 }
@@ -1924,19 +844,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/dto.PlaceResponse"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.PlaceResponse"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
                         }
                     }
                 }
@@ -1968,19 +888,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/dto.PlaceResponse"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.PlaceResponse"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
                         }
                     }
                 }
@@ -2016,7 +936,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/dto.UpdatePlaceRequest"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.UpdatePlaceRequest"
                         }
                     }
                 ],
@@ -2024,31 +944,31 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/dto.PlaceResponse"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.PlaceResponse"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
                         }
                     },
                     "409": {
                         "description": "Conflict",
                         "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
                         }
                     }
                 }
@@ -2086,13 +1006,13 @@ const docTemplate = `{
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
                         }
                     }
                 }
@@ -2130,7 +1050,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/dto.AssignCategoriesRequest"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.AssignCategoriesRequest"
                         }
                     }
                 ],
@@ -2141,19 +1061,19 @@ const docTemplate = `{
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
                         }
                     }
                 }
@@ -2187,20 +1107,20 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/dto.PlaceImageResponse"
+                                "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.PlaceImageResponse"
                             }
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
                         }
                     }
                 }
@@ -2236,7 +1156,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/dto.CreatePlaceImageRequest"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.CreatePlaceImageRequest"
                         }
                     }
                 ],
@@ -2244,25 +1164,25 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/dto.PlaceImageResponse"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.PlaceImageResponse"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
                         }
                     }
                 }
@@ -2297,19 +1217,19 @@ const docTemplate = `{
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
                         }
                     }
                 }
@@ -2376,19 +1296,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/types.ListResponse-dto_ReviewResponse"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_types.ListResponse-github_com_omkar273_nashikdarshan_internal_api_dto_ReviewResponse"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
                         }
                     }
                 }
@@ -2417,7 +1337,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/dto.CreateReviewRequest"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.CreateReviewRequest"
                         }
                     }
                 ],
@@ -2425,19 +1345,19 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/dto.ReviewResponse"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.ReviewResponse"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
                         }
                     }
                 }
@@ -2476,25 +1396,25 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/dto.RatingStatsResponse"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.RatingStatsResponse"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
                         }
                     }
                 }
@@ -2526,19 +1446,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/dto.ReviewResponse"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.ReviewResponse"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
                         }
                     }
                 }
@@ -2574,7 +1494,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/dto.UpdateReviewRequest"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.UpdateReviewRequest"
                         }
                     }
                 ],
@@ -2582,25 +1502,25 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/dto.ReviewResponse"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.ReviewResponse"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
                         }
                     }
                 }
@@ -2638,13 +1558,263 @@ const docTemplate = `{
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/secrets/api-keys": {
+            "get": {
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ],
+                "description": "List all API keys for the current user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Secrets"
+                ],
+                "summary": "List API keys",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.ListAPIKeysResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ],
+                "description": "Create a new API key (private or publishable). The raw key is returned only once.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Secrets"
+                ],
+                "summary": "Create a new API key",
+                "parameters": [
+                    {
+                        "description": "Create API key request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.CreateAPIKeyRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.CreateAPIKeyResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/secrets/api-keys/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ],
+                "description": "Get a specific API key by its ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Secrets"
+                ],
+                "summary": "Get API key by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "API Key ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.APIKeyResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ],
+                "description": "Delete (archive) an API key",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Secrets"
+                ],
+                "summary": "Delete API key",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "API Key ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ],
+                "description": "Update an API key (name, permissions, or status)",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Secrets"
+                ],
+                "summary": "Update API key",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "API Key ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Update API key request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.UpdateAPIKeyRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.APIKeyResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
                         }
                     }
                 }
@@ -2670,7 +1840,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/dto.UpdateUserRequest"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.UpdateUserRequest"
                         }
                     }
                 ],
@@ -2678,19 +1848,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/dto.MeResponse"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.MeResponse"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
                         }
                     }
                 }
@@ -2713,19 +1883,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/dto.MeResponse"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.MeResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/ierr.ErrorResponse"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse"
                         }
                     }
                 }
@@ -2733,7 +1903,45 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "dto.AssignCategoriesRequest": {
+        "github_com_omkar273_nashikdarshan_internal_api_dto.APIKeyResponse": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "expires_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "last_used_at": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "permissions": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "prefix": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "github_com_omkar273_nashikdarshan_internal_api_dto.AssignCategoriesRequest": {
             "type": "object",
             "required": [
                 "category_ids"
@@ -2748,7 +1956,7 @@ const docTemplate = `{
                 }
             }
         },
-        "dto.CategoryResponse": {
+        "github_com_omkar273_nashikdarshan_internal_api_dto.CategoryResponse": {
             "type": "object",
             "properties": {
                 "created_at": {
@@ -2764,7 +1972,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "metadata": {
-                    "$ref": "#/definitions/types.Metadata"
+                    "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_types.Metadata"
                 },
                 "name": {
                     "type": "string"
@@ -2773,7 +1981,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "status": {
-                    "$ref": "#/definitions/types.Status"
+                    "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_types.Status"
                 },
                 "updated_at": {
                     "type": "string"
@@ -2783,7 +1991,76 @@ const docTemplate = `{
                 }
             }
         },
-        "dto.CreateCategoryRequest": {
+        "github_com_omkar273_nashikdarshan_internal_api_dto.CreateAPIKeyRequest": {
+            "type": "object",
+            "required": [
+                "name",
+                "type"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "maxLength": 255,
+                    "minLength": 2
+                },
+                "permissions": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "type": {
+                    "type": "string",
+                    "enum": [
+                        "private_key",
+                        "publishable_key"
+                    ]
+                }
+            }
+        },
+        "github_com_omkar273_nashikdarshan_internal_api_dto.CreateAPIKeyResponse": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "expires_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "key": {
+                    "description": "Raw key, only returned once",
+                    "type": "string"
+                },
+                "last_used_at": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "permissions": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "prefix": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "github_com_omkar273_nashikdarshan_internal_api_dto.CreateCategoryRequest": {
             "type": "object",
             "required": [
                 "name",
@@ -2795,7 +2072,7 @@ const docTemplate = `{
                     "maxLength": 2000
                 },
                 "metadata": {
-                    "$ref": "#/definitions/types.Metadata"
+                    "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_types.Metadata"
                 },
                 "name": {
                     "type": "string",
@@ -2809,208 +2086,7 @@ const docTemplate = `{
                 }
             }
         },
-        "dto.CreateEventRequest": {
-            "type": "object",
-            "required": [
-                "slug",
-                "title",
-                "type"
-            ],
-            "properties": {
-                "cover_image_url": {
-                    "type": "string",
-                    "maxLength": 500
-                },
-                "description": {
-                    "type": "string",
-                    "maxLength": 10000
-                },
-                "end_date": {
-                    "type": "string"
-                },
-                "images": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "latitude": {
-                    "type": "number"
-                },
-                "location_name": {
-                    "type": "string",
-                    "maxLength": 255
-                },
-                "longitude": {
-                    "type": "number"
-                },
-                "metadata": {
-                    "type": "object",
-                    "additionalProperties": {
-                        "type": "string"
-                    }
-                },
-                "place_id": {
-                    "type": "string"
-                },
-                "slug": {
-                    "type": "string",
-                    "maxLength": 100,
-                    "minLength": 3
-                },
-                "start_date": {
-                    "description": "Required, defaults to now() if zero value",
-                    "type": "string"
-                },
-                "subtitle": {
-                    "type": "string",
-                    "maxLength": 500
-                },
-                "tags": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "title": {
-                    "type": "string",
-                    "maxLength": 255,
-                    "minLength": 2
-                },
-                "type": {
-                    "$ref": "#/definitions/types.EventType"
-                }
-            }
-        },
-        "dto.CreateHotelRequest": {
-            "type": "object",
-            "required": [
-                "location",
-                "name",
-                "slug",
-                "star_rating"
-            ],
-            "properties": {
-                "address": {
-                    "type": "object",
-                    "additionalProperties": {
-                        "type": "string"
-                    }
-                },
-                "check_in_time": {
-                    "type": "string"
-                },
-                "check_out_time": {
-                    "type": "string"
-                },
-                "currency": {
-                    "type": "string"
-                },
-                "description": {
-                    "type": "string",
-                    "maxLength": 5000
-                },
-                "email": {
-                    "type": "string",
-                    "maxLength": 255
-                },
-                "location": {
-                    "$ref": "#/definitions/types.GeoPoint"
-                },
-                "name": {
-                    "type": "string",
-                    "maxLength": 255,
-                    "minLength": 2
-                },
-                "phone": {
-                    "type": "string",
-                    "maxLength": 20,
-                    "minLength": 10
-                },
-                "price_max": {
-                    "type": "number"
-                },
-                "price_min": {
-                    "type": "number"
-                },
-                "primary_image_url": {
-                    "type": "string",
-                    "maxLength": 500
-                },
-                "room_count": {
-                    "type": "integer",
-                    "maximum": 10000,
-                    "minimum": 0
-                },
-                "slug": {
-                    "type": "string",
-                    "maxLength": 100,
-                    "minLength": 3
-                },
-                "star_rating": {
-                    "type": "integer",
-                    "maximum": 5,
-                    "minimum": 1
-                },
-                "thumbnail_url": {
-                    "type": "string",
-                    "maxLength": 500
-                },
-                "website": {
-                    "type": "string",
-                    "maxLength": 500
-                }
-            }
-        },
-        "dto.CreateOccurrenceRequest": {
-            "type": "object",
-            "required": [
-                "event_id",
-                "recurrence_type"
-            ],
-            "properties": {
-                "day_of_month": {
-                    "description": "1-31 for MONTHLY/YEARLY",
-                    "type": "integer"
-                },
-                "day_of_week": {
-                    "description": "0-6 for WEEKLY",
-                    "type": "integer"
-                },
-                "end_time": {
-                    "description": "ISO 8601 format, optional/nillable",
-                    "type": "string"
-                },
-                "event_id": {
-                    "type": "string"
-                },
-                "exception_dates": {
-                    "description": "[\"2025-12-25\", ...]",
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "metadata": {
-                    "type": "object",
-                    "additionalProperties": {
-                        "type": "string"
-                    }
-                },
-                "month_of_year": {
-                    "description": "1-12 for YEARLY",
-                    "type": "integer"
-                },
-                "recurrence_type": {
-                    "$ref": "#/definitions/types.RecurrenceType"
-                },
-                "start_time": {
-                    "description": "ISO 8601 format, optional/nillable",
-                    "type": "string"
-                }
-            }
-        },
-        "dto.CreatePlaceImageRequest": {
+        "github_com_omkar273_nashikdarshan_internal_api_dto.CreatePlaceImageRequest": {
             "type": "object",
             "required": [
                 "url"
@@ -3021,7 +2097,7 @@ const docTemplate = `{
                     "maxLength": 255
                 },
                 "metadata": {
-                    "$ref": "#/definitions/types.Metadata"
+                    "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_types.Metadata"
                 },
                 "pos": {
                     "type": "integer",
@@ -3034,7 +2110,7 @@ const docTemplate = `{
                 }
             }
         },
-        "dto.CreatePlaceRequest": {
+        "github_com_omkar273_nashikdarshan_internal_api_dto.CreatePlaceRequest": {
             "type": "object",
             "required": [
                 "location",
@@ -3049,27 +2125,15 @@ const docTemplate = `{
                         "type": "string"
                     }
                 },
-                "amenities": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
                 "location": {
-                    "$ref": "#/definitions/types.GeoPoint"
+                    "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_types.GeoPoint"
                 },
                 "long_description": {
                     "type": "string",
                     "maxLength": 10000
                 },
                 "place_type": {
-                    "maxLength": 50,
-                    "minLength": 2,
-                    "allOf": [
-                        {
-                            "$ref": "#/definitions/types.PlaceType"
-                        }
-                    ]
+                    "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_types.PlaceType"
                 },
                 "primary_image_url": {
                     "type": "string",
@@ -3099,7 +2163,7 @@ const docTemplate = `{
                 }
             }
         },
-        "dto.CreateReviewRequest": {
+        "github_com_omkar273_nashikdarshan_internal_api_dto.CreateReviewRequest": {
             "type": "object",
             "required": [
                 "entity_id",
@@ -3120,7 +2184,7 @@ const docTemplate = `{
                     "maxLength": 50,
                     "allOf": [
                         {
-                            "$ref": "#/definitions/types.ReviewEntityType"
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_types.ReviewEntityType"
                         }
                     ]
                 },
@@ -3147,106 +2211,7 @@ const docTemplate = `{
                 }
             }
         },
-        "dto.EventResponse": {
-            "type": "object",
-            "properties": {
-                "cover_image_url": {
-                    "description": "Media",
-                    "type": "string"
-                },
-                "created_at": {
-                    "type": "string"
-                },
-                "created_by": {
-                    "type": "string"
-                },
-                "description": {
-                    "type": "string"
-                },
-                "end_date": {
-                    "type": "string"
-                },
-                "id": {
-                    "description": "Identity",
-                    "type": "string"
-                },
-                "images": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "interested_count": {
-                    "type": "integer"
-                },
-                "latitude": {
-                    "description": "Location (for citywide)",
-                    "type": "number"
-                },
-                "location_name": {
-                    "type": "string"
-                },
-                "longitude": {
-                    "type": "number"
-                },
-                "metadata": {
-                    "$ref": "#/definitions/types.Metadata"
-                },
-                "occurrences": {
-                    "description": "Relations (populated when needed)",
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/event.EventOccurrence"
-                    }
-                },
-                "place_id": {
-                    "description": "Association",
-                    "type": "string"
-                },
-                "slug": {
-                    "type": "string"
-                },
-                "start_date": {
-                    "description": "Validity",
-                    "type": "string"
-                },
-                "status": {
-                    "$ref": "#/definitions/types.Status"
-                },
-                "subtitle": {
-                    "type": "string"
-                },
-                "tags": {
-                    "description": "Metadata",
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "title": {
-                    "type": "string"
-                },
-                "type": {
-                    "description": "Core",
-                    "allOf": [
-                        {
-                            "$ref": "#/definitions/types.EventType"
-                        }
-                    ]
-                },
-                "updated_at": {
-                    "type": "string"
-                },
-                "updated_by": {
-                    "type": "string"
-                },
-                "view_count": {
-                    "description": "Stats",
-                    "type": "integer"
-                }
-            }
-        },
-        "dto.FeedRequest": {
+        "github_com_omkar273_nashikdarshan_internal_api_dto.FeedRequest": {
             "type": "object",
             "required": [
                 "sections"
@@ -3262,6 +2227,14 @@ const docTemplate = `{
                     "type": "integer",
                     "maximum": 1000,
                     "minimum": 1
+                },
+                "min_rating_avg": {
+                    "type": "number"
+                },
+                "min_rating_count": {
+                    "description": "Optional quality gate (global; section can override)",
+                    "type": "integer",
+                    "minimum": 0
                 },
                 "offset": {
                     "type": "integer",
@@ -3279,7 +2252,7 @@ const docTemplate = `{
                     "maxItems": 10,
                     "minItems": 1,
                     "items": {
-                        "$ref": "#/definitions/dto.FeedSectionRequest"
+                        "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.FeedSectionRequest"
                     }
                 },
                 "sort": {
@@ -3289,44 +2262,53 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "status": {
-                    "$ref": "#/definitions/types.Status"
+                    "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_types.Status"
                 }
             }
         },
-        "dto.FeedResponse": {
+        "github_com_omkar273_nashikdarshan_internal_api_dto.FeedResponse": {
             "type": "object",
             "properties": {
                 "sections": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/dto.FeedSectionResponse"
+                        "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.FeedSectionResponse"
                     }
                 }
             }
         },
-        "dto.FeedSectionRequest": {
+        "github_com_omkar273_nashikdarshan_internal_api_dto.FeedSectionRequest": {
             "type": "object",
             "required": [
                 "type"
             ],
             "properties": {
+                "center": {
+                    "description": "Geospatial fields (for nearby section)",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_types.GeoPoint"
+                        }
+                    ]
+                },
                 "end_time": {
                     "type": "string"
                 },
                 "expand": {
                     "type": "string"
                 },
-                "latitude": {
-                    "description": "Geospatial fields (for nearby section)",
-                    "type": "number"
-                },
                 "limit": {
                     "type": "integer",
                     "maximum": 1000,
                     "minimum": 1
                 },
-                "longitude": {
+                "min_rating_avg": {
                     "type": "number"
+                },
+                "min_rating_count": {
+                    "description": "Optional quality gate (section-level; overrides global)",
+                    "type": "integer",
+                    "minimum": 0
                 },
                 "offset": {
                     "type": "integer",
@@ -3352,183 +2334,73 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "status": {
-                    "$ref": "#/definitions/types.Status"
+                    "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_types.Status"
                 },
                 "type": {
-                    "$ref": "#/definitions/types.FeedSectionType"
+                    "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_types.FeedSectionType"
                 }
             }
         },
-        "dto.FeedSectionResponse": {
+        "github_com_omkar273_nashikdarshan_internal_api_dto.FeedSectionResponse": {
             "type": "object",
             "properties": {
                 "items": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/dto.PlaceResponse"
+                        "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.PlaceResponse"
                     }
                 },
                 "pagination": {
-                    "$ref": "#/definitions/types.PaginationResponse"
+                    "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_types.PaginationResponse"
                 },
                 "type": {
-                    "$ref": "#/definitions/types.FeedSectionType"
+                    "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_types.FeedSectionType"
                 }
             }
         },
-        "dto.HotelResponse": {
-            "type": "object",
-            "properties": {
-                "address": {
-                    "type": "object",
-                    "additionalProperties": {
-                        "type": "string"
-                    }
-                },
-                "check_in_time": {
-                    "type": "string"
-                },
-                "check_out_time": {
-                    "type": "string"
-                },
-                "created_at": {
-                    "type": "string"
-                },
-                "created_by": {
-                    "type": "string"
-                },
-                "currency": {
-                    "type": "string"
-                },
-                "description": {
-                    "type": "string"
-                },
-                "email": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "string"
-                },
-                "last_viewed_at": {
-                    "type": "string"
-                },
-                "location": {
-                    "$ref": "#/definitions/types.GeoPoint"
-                },
-                "metadata": {
-                    "$ref": "#/definitions/types.Metadata"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "phone": {
-                    "type": "string"
-                },
-                "popularity_score": {
-                    "type": "number"
-                },
-                "price_max": {
-                    "type": "number"
-                },
-                "price_min": {
-                    "type": "number"
-                },
-                "primary_image_url": {
-                    "type": "string"
-                },
-                "rating_avg": {
-                    "type": "number"
-                },
-                "rating_count": {
-                    "type": "integer"
-                },
-                "room_count": {
-                    "type": "integer"
-                },
-                "slug": {
-                    "type": "string"
-                },
-                "star_rating": {
-                    "type": "integer"
-                },
-                "status": {
-                    "$ref": "#/definitions/types.Status"
-                },
-                "thumbnail_url": {
-                    "type": "string"
-                },
-                "updated_at": {
-                    "type": "string"
-                },
-                "updated_by": {
-                    "type": "string"
-                },
-                "view_count": {
-                    "description": "Engagement fields",
-                    "type": "integer"
-                },
-                "website": {
-                    "type": "string"
-                }
-            }
-        },
-        "dto.ListCategoriesResponse": {
+        "github_com_omkar273_nashikdarshan_internal_api_dto.ListAPIKeysResponse": {
             "type": "object",
             "properties": {
                 "items": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/dto.CategoryResponse"
+                        "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.APIKeyResponse"
                     }
                 },
-                "pagination": {
-                    "$ref": "#/definitions/types.PaginationResponse"
+                "total": {
+                    "type": "integer"
                 }
             }
         },
-        "dto.ListEventsResponse": {
+        "github_com_omkar273_nashikdarshan_internal_api_dto.ListCategoriesResponse": {
             "type": "object",
             "properties": {
                 "items": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/dto.EventResponse"
+                        "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.CategoryResponse"
                     }
                 },
                 "pagination": {
-                    "$ref": "#/definitions/types.PaginationResponse"
+                    "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_types.PaginationResponse"
                 }
             }
         },
-        "dto.ListHotelsResponse": {
+        "github_com_omkar273_nashikdarshan_internal_api_dto.ListPlacesResponse": {
             "type": "object",
             "properties": {
                 "items": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/dto.HotelResponse"
+                        "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.PlaceResponse"
                     }
                 },
                 "pagination": {
-                    "$ref": "#/definitions/types.PaginationResponse"
+                    "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_types.PaginationResponse"
                 }
             }
         },
-        "dto.ListPlacesResponse": {
-            "type": "object",
-            "properties": {
-                "items": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/dto.PlaceResponse"
-                    }
-                },
-                "pagination": {
-                    "$ref": "#/definitions/types.PaginationResponse"
-                }
-            }
-        },
-        "dto.MeResponse": {
+        "github_com_omkar273_nashikdarshan_internal_api_dto.MeResponse": {
             "type": "object",
             "properties": {
                 "created_at": {
@@ -3544,7 +2416,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "metadata": {
-                    "$ref": "#/definitions/types.Metadata"
+                    "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_types.Metadata"
                 },
                 "name": {
                     "type": "string"
@@ -3553,10 +2425,10 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "role": {
-                    "$ref": "#/definitions/types.UserRole"
+                    "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_types.UserRole"
                 },
                 "status": {
-                    "$ref": "#/definitions/types.Status"
+                    "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_types.Status"
                 },
                 "updated_at": {
                     "type": "string"
@@ -3566,79 +2438,7 @@ const docTemplate = `{
                 }
             }
         },
-        "dto.OccurrenceResponse": {
-            "type": "object",
-            "properties": {
-                "created_at": {
-                    "type": "string"
-                },
-                "created_by": {
-                    "type": "string"
-                },
-                "day_of_month": {
-                    "description": "1-31",
-                    "type": "integer"
-                },
-                "day_of_week": {
-                    "description": "Day specifics",
-                    "type": "integer"
-                },
-                "duration_minutes": {
-                    "type": "integer"
-                },
-                "end_time": {
-                    "type": "string"
-                },
-                "event_id": {
-                    "type": "string"
-                },
-                "exception_dates": {
-                    "description": "Exceptions",
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "id": {
-                    "description": "Identity",
-                    "type": "string"
-                },
-                "metadata": {
-                    "description": "Metadata",
-                    "allOf": [
-                        {
-                            "$ref": "#/definitions/types.Metadata"
-                        }
-                    ]
-                },
-                "month_of_year": {
-                    "description": "1-12 (renamed from Month)",
-                    "type": "integer"
-                },
-                "recurrence_type": {
-                    "description": "Recurrence",
-                    "allOf": [
-                        {
-                            "$ref": "#/definitions/types.RecurrenceType"
-                        }
-                    ]
-                },
-                "start_time": {
-                    "description": "Time",
-                    "type": "string"
-                },
-                "status": {
-                    "$ref": "#/definitions/types.Status"
-                },
-                "updated_at": {
-                    "type": "string"
-                },
-                "updated_by": {
-                    "type": "string"
-                }
-            }
-        },
-        "dto.PlaceImageResponse": {
+        "github_com_omkar273_nashikdarshan_internal_api_dto.PlaceImageResponse": {
             "type": "object",
             "properties": {
                 "alt": {
@@ -3654,7 +2454,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "metadata": {
-                    "$ref": "#/definitions/types.Metadata"
+                    "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_types.Metadata"
                 },
                 "place_id": {
                     "type": "string"
@@ -3663,7 +2463,7 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "status": {
-                    "$ref": "#/definitions/types.Status"
+                    "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_types.Status"
                 },
                 "updated_at": {
                     "type": "string"
@@ -3676,7 +2476,7 @@ const docTemplate = `{
                 }
             }
         },
-        "dto.PlaceResponse": {
+        "github_com_omkar273_nashikdarshan_internal_api_dto.PlaceResponse": {
             "type": "object",
             "properties": {
                 "address": {
@@ -3697,20 +2497,17 @@ const docTemplate = `{
                 "images": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/dto.PlaceImageResponse"
+                        "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.PlaceImageResponse"
                     }
                 },
-                "last_viewed_at": {
-                    "type": "string"
-                },
                 "location": {
-                    "$ref": "#/definitions/types.GeoPoint"
+                    "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_types.GeoPoint"
                 },
                 "long_description": {
                     "type": "string"
                 },
                 "place_type": {
-                    "$ref": "#/definitions/types.PlaceType"
+                    "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_types.PlaceType"
                 },
                 "popularity_score": {
                     "type": "number"
@@ -3731,7 +2528,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "status": {
-                    "$ref": "#/definitions/types.Status"
+                    "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_types.Status"
                 },
                 "subtitle": {
                     "type": "string"
@@ -3754,7 +2551,7 @@ const docTemplate = `{
                 }
             }
         },
-        "dto.RatingStatsResponse": {
+        "github_com_omkar273_nashikdarshan_internal_api_dto.RatingStatsResponse": {
             "type": "object",
             "properties": {
                 "average_rating": {
@@ -3764,7 +2561,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "entity_type": {
-                    "$ref": "#/definitions/types.ReviewEntityType"
+                    "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_types.ReviewEntityType"
                 },
                 "five_star_count": {
                     "type": "integer"
@@ -3802,7 +2599,7 @@ const docTemplate = `{
                 }
             }
         },
-        "dto.ReviewResponse": {
+        "github_com_omkar273_nashikdarshan_internal_api_dto.ReviewResponse": {
             "type": "object",
             "properties": {
                 "content": {
@@ -3818,7 +2615,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "entity_type": {
-                    "$ref": "#/definitions/types.ReviewEntityType"
+                    "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_types.ReviewEntityType"
                 },
                 "helpful_count": {
                     "type": "integer"
@@ -3845,7 +2642,7 @@ const docTemplate = `{
                     "type": "number"
                 },
                 "status": {
-                    "$ref": "#/definitions/types.Status"
+                    "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_types.Status"
                 },
                 "tags": {
                     "type": "array",
@@ -3867,7 +2664,7 @@ const docTemplate = `{
                 }
             }
         },
-        "dto.SignupRequest": {
+        "github_com_omkar273_nashikdarshan_internal_api_dto.SignupRequest": {
             "type": "object",
             "required": [
                 "access_token",
@@ -3891,7 +2688,7 @@ const docTemplate = `{
                 }
             }
         },
-        "dto.SignupResponse": {
+        "github_com_omkar273_nashikdarshan_internal_api_dto.SignupResponse": {
             "type": "object",
             "properties": {
                 "access_token": {
@@ -3902,7 +2699,34 @@ const docTemplate = `{
                 }
             }
         },
-        "dto.UpdateCategoryRequest": {
+        "github_com_omkar273_nashikdarshan_internal_api_dto.UpdateAPIKeyRequest": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "maxLength": 255,
+                    "minLength": 2
+                },
+                "permissions": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "status": {
+                    "enum": [
+                        "published",
+                        "archived"
+                    ],
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_types.Status"
+                        }
+                    ]
+                }
+            }
+        },
+        "github_com_omkar273_nashikdarshan_internal_api_dto.UpdateCategoryRequest": {
             "type": "object",
             "properties": {
                 "description": {
@@ -3921,181 +2745,14 @@ const docTemplate = `{
                 }
             }
         },
-        "dto.UpdateEventRequest": {
-            "type": "object",
-            "properties": {
-                "cover_image_url": {
-                    "type": "string"
-                },
-                "description": {
-                    "type": "string",
-                    "maxLength": 10000
-                },
-                "end_date": {
-                    "type": "string"
-                },
-                "images": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "latitude": {
-                    "type": "number"
-                },
-                "location_name": {
-                    "type": "string",
-                    "maxLength": 255
-                },
-                "longitude": {
-                    "type": "number"
-                },
-                "metadata": {
-                    "type": "object",
-                    "additionalProperties": {
-                        "type": "string"
-                    }
-                },
-                "place_id": {
-                    "type": "string"
-                },
-                "start_date": {
-                    "type": "string"
-                },
-                "subtitle": {
-                    "type": "string",
-                    "maxLength": 500
-                },
-                "tags": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "title": {
-                    "type": "string",
-                    "maxLength": 255,
-                    "minLength": 2
-                },
-                "type": {
-                    "$ref": "#/definitions/types.EventType"
-                }
-            }
-        },
-        "dto.UpdateHotelRequest": {
-            "type": "object",
-            "properties": {
-                "address": {
-                    "type": "object",
-                    "additionalProperties": {
-                        "type": "string"
-                    }
-                },
-                "check_in_time": {
-                    "type": "string"
-                },
-                "check_out_time": {
-                    "type": "string"
-                },
-                "currency": {
-                    "type": "string"
-                },
-                "description": {
-                    "type": "string",
-                    "maxLength": 5000
-                },
-                "email": {
-                    "type": "string",
-                    "maxLength": 255
-                },
-                "location": {
-                    "$ref": "#/definitions/types.GeoPoint"
-                },
-                "name": {
-                    "type": "string",
-                    "maxLength": 255,
-                    "minLength": 2
-                },
-                "phone": {
-                    "type": "string",
-                    "maxLength": 20,
-                    "minLength": 10
-                },
-                "price_max": {
-                    "type": "number"
-                },
-                "price_min": {
-                    "type": "number"
-                },
-                "primary_image_url": {
-                    "type": "string",
-                    "maxLength": 500
-                },
-                "room_count": {
-                    "type": "integer",
-                    "maximum": 10000,
-                    "minimum": 0
-                },
-                "star_rating": {
-                    "type": "integer",
-                    "maximum": 5,
-                    "minimum": 1
-                },
-                "thumbnail_url": {
-                    "type": "string",
-                    "maxLength": 500
-                },
-                "website": {
-                    "type": "string",
-                    "maxLength": 500
-                }
-            }
-        },
-        "dto.UpdateOccurrenceRequest": {
-            "type": "object",
-            "properties": {
-                "day_of_month": {
-                    "type": "integer"
-                },
-                "day_of_week": {
-                    "type": "integer"
-                },
-                "end_time": {
-                    "description": "ISO 8601 format, optional/nillable",
-                    "type": "string"
-                },
-                "exception_dates": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "metadata": {
-                    "type": "object",
-                    "additionalProperties": {
-                        "type": "string"
-                    }
-                },
-                "month_of_year": {
-                    "type": "integer"
-                },
-                "recurrence_type": {
-                    "$ref": "#/definitions/types.RecurrenceType"
-                },
-                "start_time": {
-                    "description": "ISO 8601 format, optional/nillable",
-                    "type": "string"
-                }
-            }
-        },
-        "dto.UpdatePlaceImageRequest": {
+        "github_com_omkar273_nashikdarshan_internal_api_dto.UpdatePlaceImageRequest": {
             "type": "object",
             "properties": {
                 "alt": {
                     "type": "string"
                 },
                 "metadata": {
-                    "$ref": "#/definitions/types.Metadata"
+                    "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_types.Metadata"
                 },
                 "pos": {
                     "type": "integer",
@@ -4106,7 +2763,7 @@ const docTemplate = `{
                 }
             }
         },
-        "dto.UpdatePlaceRequest": {
+        "github_com_omkar273_nashikdarshan_internal_api_dto.UpdatePlaceRequest": {
             "type": "object",
             "properties": {
                 "address": {
@@ -4116,20 +2773,11 @@ const docTemplate = `{
                     }
                 },
                 "location": {
-                    "$ref": "#/definitions/types.GeoPoint"
+                    "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_types.GeoPoint"
                 },
                 "long_description": {
                     "type": "string",
                     "maxLength": 10000
-                },
-                "place_type": {
-                    "maxLength": 50,
-                    "minLength": 2,
-                    "allOf": [
-                        {
-                            "$ref": "#/definitions/types.PlaceType"
-                        }
-                    ]
                 },
                 "primary_image_url": {
                     "type": "string",
@@ -4159,7 +2807,7 @@ const docTemplate = `{
                 }
             }
         },
-        "dto.UpdateReviewRequest": {
+        "github_com_omkar273_nashikdarshan_internal_api_dto.UpdateReviewRequest": {
             "type": "object",
             "properties": {
                 "content": {
@@ -4189,7 +2837,7 @@ const docTemplate = `{
                 }
             }
         },
-        "dto.UpdateUserRequest": {
+        "github_com_omkar273_nashikdarshan_internal_api_dto.UpdateUserRequest": {
             "type": "object",
             "properties": {
                 "name": {
@@ -4204,105 +2852,7 @@ const docTemplate = `{
                 }
             }
         },
-        "event.EventOccurrence": {
-            "type": "object",
-            "properties": {
-                "created_at": {
-                    "type": "string"
-                },
-                "created_by": {
-                    "type": "string"
-                },
-                "day_of_month": {
-                    "description": "1-31",
-                    "type": "integer"
-                },
-                "day_of_week": {
-                    "description": "Day specifics",
-                    "type": "integer"
-                },
-                "duration_minutes": {
-                    "type": "integer"
-                },
-                "end_time": {
-                    "type": "string"
-                },
-                "event_id": {
-                    "type": "string"
-                },
-                "exception_dates": {
-                    "description": "Exceptions",
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "id": {
-                    "description": "Identity",
-                    "type": "string"
-                },
-                "metadata": {
-                    "description": "Metadata",
-                    "allOf": [
-                        {
-                            "$ref": "#/definitions/types.Metadata"
-                        }
-                    ]
-                },
-                "month_of_year": {
-                    "description": "1-12 (renamed from Month)",
-                    "type": "integer"
-                },
-                "recurrence_type": {
-                    "description": "Recurrence",
-                    "allOf": [
-                        {
-                            "$ref": "#/definitions/types.RecurrenceType"
-                        }
-                    ]
-                },
-                "start_time": {
-                    "description": "Time",
-                    "type": "string"
-                },
-                "status": {
-                    "$ref": "#/definitions/types.Status"
-                },
-                "updated_at": {
-                    "type": "string"
-                },
-                "updated_by": {
-                    "type": "string"
-                }
-            }
-        },
-        "ierr.ErrorDetail": {
-            "type": "object",
-            "properties": {
-                "details": {
-                    "type": "object",
-                    "additionalProperties": {}
-                },
-                "internal_error": {
-                    "type": "string"
-                },
-                "message": {
-                    "type": "string"
-                }
-            }
-        },
-        "ierr.ErrorResponse": {
-            "type": "object",
-            "properties": {
-                "error": {
-                    "$ref": "#/definitions/ierr.ErrorDetail"
-                },
-                "success": {
-                    "type": "boolean"
-                }
-            }
-        },
-        "place.PlaceImage": {
+        "github_com_omkar273_nashikdarshan_internal_domain_place.PlaceImage": {
             "type": "object",
             "properties": {
                 "alt": {
@@ -4318,7 +2868,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "metadata": {
-                    "$ref": "#/definitions/types.Metadata"
+                    "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_types.Metadata"
                 },
                 "place_id": {
                     "type": "string"
@@ -4327,7 +2877,7 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "status": {
-                    "$ref": "#/definitions/types.Status"
+                    "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_types.Status"
                 },
                 "updated_at": {
                     "type": "string"
@@ -4340,53 +2890,50 @@ const docTemplate = `{
                 }
             }
         },
-        "types.EventType": {
-            "type": "string",
-            "enum": [
-                "AARTI",
-                "FESTIVAL",
-                "CULTURAL",
-                "WORKSHOP",
-                "SPECIAL_DARSHAN"
-            ],
-            "x-enum-varnames": [
-                "EventTypeAarti",
-                "EventTypeFestival",
-                "EventTypeCultural",
-                "EventTypeWorkshop",
-                "EventTypeSpecialDarshan"
-            ]
+        "github_com_omkar273_nashikdarshan_internal_errors.ErrorDetail": {
+            "type": "object",
+            "properties": {
+                "details": {
+                    "type": "object",
+                    "additionalProperties": {}
+                },
+                "internal_error": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
         },
-        "types.FeedSectionType": {
+        "github_com_omkar273_nashikdarshan_internal_errors.ErrorResponse": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_errors.ErrorDetail"
+                },
+                "success": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "github_com_omkar273_nashikdarshan_internal_types.FeedSectionType": {
             "type": "string",
             "enum": [
                 "latest",
                 "trending",
                 "popular",
-                "nearby"
+                "nearby",
+                "discover"
             ],
             "x-enum-varnames": [
                 "SectionTypeLatest",
                 "SectionTypeTrending",
                 "SectionTypePopular",
-                "SectionTypeNearby"
+                "SectionTypeNearby",
+                "SectionTypeDiscover"
             ]
         },
-        "types.ListResponse-dto_ReviewResponse": {
-            "type": "object",
-            "properties": {
-                "items": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/dto.ReviewResponse"
-                    }
-                },
-                "pagination": {
-                    "$ref": "#/definitions/types.PaginationResponse"
-                }
-            }
-        },
-        "types.GeoPoint": {
+        "github_com_omkar273_nashikdarshan_internal_types.GeoPoint": {
             "type": "object",
             "properties": {
                 "latitude": {
@@ -4397,13 +2944,27 @@ const docTemplate = `{
                 }
             }
         },
-        "types.Metadata": {
+        "github_com_omkar273_nashikdarshan_internal_types.ListResponse-github_com_omkar273_nashikdarshan_internal_api_dto_ReviewResponse": {
+            "type": "object",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_api_dto.ReviewResponse"
+                    }
+                },
+                "pagination": {
+                    "$ref": "#/definitions/github_com_omkar273_nashikdarshan_internal_types.PaginationResponse"
+                }
+            }
+        },
+        "github_com_omkar273_nashikdarshan_internal_types.Metadata": {
             "type": "object",
             "additionalProperties": {
                 "type": "string"
             }
         },
-        "types.PaginationResponse": {
+        "github_com_omkar273_nashikdarshan_internal_types.PaginationResponse": {
             "type": "object",
             "properties": {
                 "limit": {
@@ -4417,55 +2978,24 @@ const docTemplate = `{
                 }
             }
         },
-        "types.PlaceType": {
+        "github_com_omkar273_nashikdarshan_internal_types.PlaceType": {
             "type": "string",
             "enum": [
-                "hotel",
-                "apartment",
-                "attraction",
+                "temple",
                 "restaurant",
+                "museum",
+                "park",
                 "experience"
             ],
             "x-enum-varnames": [
-                "PlaceTypeHotel",
-                "PlaceTypeApartment",
-                "PlaceTypeAttraction",
+                "PlaceTypeTemple",
                 "PlaceTypeRestaurant",
+                "PlaceTypeMuseum",
+                "PlaceTypePark",
                 "PlaceTypeExperience"
             ]
         },
-        "types.RecurrenceType": {
-            "type": "string",
-            "enum": [
-                "NONE",
-                "DAILY",
-                "WEEKLY",
-                "MONTHLY",
-                "YEARLY"
-            ],
-            "x-enum-comments": {
-                "RecurrenceDaily": "Every day",
-                "RecurrenceMonthly": "Specific date each month",
-                "RecurrenceNone": "One-time event",
-                "RecurrenceWeekly": "Specific day each week",
-                "RecurrenceYearly": "Specific date each year"
-            },
-            "x-enum-descriptions": [
-                "One-time event",
-                "Every day",
-                "Specific day each week",
-                "Specific date each month",
-                "Specific date each year"
-            ],
-            "x-enum-varnames": [
-                "RecurrenceNone",
-                "RecurrenceDaily",
-                "RecurrenceWeekly",
-                "RecurrenceMonthly",
-                "RecurrenceYearly"
-            ]
-        },
-        "types.ReviewEntityType": {
+        "github_com_omkar273_nashikdarshan_internal_types.ReviewEntityType": {
             "type": "string",
             "enum": [
                 "place",
@@ -4484,7 +3014,7 @@ const docTemplate = `{
                 "EntityTypeAttraction"
             ]
         },
-        "types.Status": {
+        "github_com_omkar273_nashikdarshan_internal_types.Status": {
             "type": "string",
             "enum": [
                 "published",
@@ -4499,7 +3029,7 @@ const docTemplate = `{
                 "StatusDeleted"
             ]
         },
-        "types.UserRole": {
+        "github_com_omkar273_nashikdarshan_internal_types.UserRole": {
             "type": "string",
             "enum": [
                 "USER",

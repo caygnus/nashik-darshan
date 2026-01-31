@@ -77,6 +77,7 @@ func NewRouter(handlers *Handlers, cfg *config.Configuration, logger *logger.Log
 
 		v1Place.Use(middleware.AuthenticateMiddleware(cfg, logger, secretService))
 		v1Place.POST("", handlers.Place.Create)
+		v1Place.POST("/refresh-scores", handlers.Place.RefreshScores)
 		v1Place.PUT("/:id", handlers.Place.Update)
 		v1Place.DELETE("/:id", handlers.Place.Delete)
 		v1Place.POST("/:id/images", handlers.Place.AddImage)

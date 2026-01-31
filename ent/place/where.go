@@ -123,8 +123,9 @@ func LongDescription(v string) predicate.Place {
 }
 
 // PlaceType applies equality check predicate on the "place_type" field. It's identical to PlaceTypeEQ.
-func PlaceType(v string) predicate.Place {
-	return predicate.Place(sql.FieldEQ(FieldPlaceType, v))
+func PlaceType(v types.PlaceType) predicate.Place {
+	vc := string(v)
+	return predicate.Place(sql.FieldEQ(FieldPlaceType, vc))
 }
 
 // PrimaryImageURL applies equality check predicate on the "primary_image_url" field. It's identical to PrimaryImageURLEQ.
@@ -858,68 +859,87 @@ func LongDescriptionContainsFold(v string) predicate.Place {
 }
 
 // PlaceTypeEQ applies the EQ predicate on the "place_type" field.
-func PlaceTypeEQ(v string) predicate.Place {
-	return predicate.Place(sql.FieldEQ(FieldPlaceType, v))
+func PlaceTypeEQ(v types.PlaceType) predicate.Place {
+	vc := string(v)
+	return predicate.Place(sql.FieldEQ(FieldPlaceType, vc))
 }
 
 // PlaceTypeNEQ applies the NEQ predicate on the "place_type" field.
-func PlaceTypeNEQ(v string) predicate.Place {
-	return predicate.Place(sql.FieldNEQ(FieldPlaceType, v))
+func PlaceTypeNEQ(v types.PlaceType) predicate.Place {
+	vc := string(v)
+	return predicate.Place(sql.FieldNEQ(FieldPlaceType, vc))
 }
 
 // PlaceTypeIn applies the In predicate on the "place_type" field.
-func PlaceTypeIn(vs ...string) predicate.Place {
-	return predicate.Place(sql.FieldIn(FieldPlaceType, vs...))
+func PlaceTypeIn(vs ...types.PlaceType) predicate.Place {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = string(vs[i])
+	}
+	return predicate.Place(sql.FieldIn(FieldPlaceType, v...))
 }
 
 // PlaceTypeNotIn applies the NotIn predicate on the "place_type" field.
-func PlaceTypeNotIn(vs ...string) predicate.Place {
-	return predicate.Place(sql.FieldNotIn(FieldPlaceType, vs...))
+func PlaceTypeNotIn(vs ...types.PlaceType) predicate.Place {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = string(vs[i])
+	}
+	return predicate.Place(sql.FieldNotIn(FieldPlaceType, v...))
 }
 
 // PlaceTypeGT applies the GT predicate on the "place_type" field.
-func PlaceTypeGT(v string) predicate.Place {
-	return predicate.Place(sql.FieldGT(FieldPlaceType, v))
+func PlaceTypeGT(v types.PlaceType) predicate.Place {
+	vc := string(v)
+	return predicate.Place(sql.FieldGT(FieldPlaceType, vc))
 }
 
 // PlaceTypeGTE applies the GTE predicate on the "place_type" field.
-func PlaceTypeGTE(v string) predicate.Place {
-	return predicate.Place(sql.FieldGTE(FieldPlaceType, v))
+func PlaceTypeGTE(v types.PlaceType) predicate.Place {
+	vc := string(v)
+	return predicate.Place(sql.FieldGTE(FieldPlaceType, vc))
 }
 
 // PlaceTypeLT applies the LT predicate on the "place_type" field.
-func PlaceTypeLT(v string) predicate.Place {
-	return predicate.Place(sql.FieldLT(FieldPlaceType, v))
+func PlaceTypeLT(v types.PlaceType) predicate.Place {
+	vc := string(v)
+	return predicate.Place(sql.FieldLT(FieldPlaceType, vc))
 }
 
 // PlaceTypeLTE applies the LTE predicate on the "place_type" field.
-func PlaceTypeLTE(v string) predicate.Place {
-	return predicate.Place(sql.FieldLTE(FieldPlaceType, v))
+func PlaceTypeLTE(v types.PlaceType) predicate.Place {
+	vc := string(v)
+	return predicate.Place(sql.FieldLTE(FieldPlaceType, vc))
 }
 
 // PlaceTypeContains applies the Contains predicate on the "place_type" field.
-func PlaceTypeContains(v string) predicate.Place {
-	return predicate.Place(sql.FieldContains(FieldPlaceType, v))
+func PlaceTypeContains(v types.PlaceType) predicate.Place {
+	vc := string(v)
+	return predicate.Place(sql.FieldContains(FieldPlaceType, vc))
 }
 
 // PlaceTypeHasPrefix applies the HasPrefix predicate on the "place_type" field.
-func PlaceTypeHasPrefix(v string) predicate.Place {
-	return predicate.Place(sql.FieldHasPrefix(FieldPlaceType, v))
+func PlaceTypeHasPrefix(v types.PlaceType) predicate.Place {
+	vc := string(v)
+	return predicate.Place(sql.FieldHasPrefix(FieldPlaceType, vc))
 }
 
 // PlaceTypeHasSuffix applies the HasSuffix predicate on the "place_type" field.
-func PlaceTypeHasSuffix(v string) predicate.Place {
-	return predicate.Place(sql.FieldHasSuffix(FieldPlaceType, v))
+func PlaceTypeHasSuffix(v types.PlaceType) predicate.Place {
+	vc := string(v)
+	return predicate.Place(sql.FieldHasSuffix(FieldPlaceType, vc))
 }
 
 // PlaceTypeEqualFold applies the EqualFold predicate on the "place_type" field.
-func PlaceTypeEqualFold(v string) predicate.Place {
-	return predicate.Place(sql.FieldEqualFold(FieldPlaceType, v))
+func PlaceTypeEqualFold(v types.PlaceType) predicate.Place {
+	vc := string(v)
+	return predicate.Place(sql.FieldEqualFold(FieldPlaceType, vc))
 }
 
 // PlaceTypeContainsFold applies the ContainsFold predicate on the "place_type" field.
-func PlaceTypeContainsFold(v string) predicate.Place {
-	return predicate.Place(sql.FieldContainsFold(FieldPlaceType, v))
+func PlaceTypeContainsFold(v types.PlaceType) predicate.Place {
+	vc := string(v)
+	return predicate.Place(sql.FieldContainsFold(FieldPlaceType, vc))
 }
 
 // AddressIsNil applies the IsNil predicate on the "address" field.

@@ -122,12 +122,17 @@ func FromEntImageList(images []*ent.PlaceImage) []*PlaceImage {
 	})
 }
 
+// Cold-start seed so new places (0 views, 0 ratings) still get a non-zero score and can
+// appear in trending/popular; otherwise they would always sort last and never get visibility.
+const popularityScoreColdStartSeed = 1.0
+
 // CalculatePopularityScore calculates the popularity score for a place using engagement metrics
 func (p *Place) CalculatePopularityScore() decimal.Decimal {
-	// Base score: (view_count * 0.3) + (rating_avg * rating_count * 0.7)
+	// Base score: seed + (view_count * 0.3) + (rating_avg * rating_count * 0.7)
+	// Seed ensures zero-engagement places get a small score so they can appear in feed
 	viewScore := decimal.NewFromInt(int64(p.ViewCount)).Mul(decimal.NewFromFloat(0.3))
 	ratingScore := p.RatingAvg.Mul(decimal.NewFromInt(int64(p.RatingCount))).Mul(decimal.NewFromFloat(0.7))
-	baseScore := viewScore.Add(ratingScore)
+	baseScore := decimal.NewFromFloat(popularityScoreColdStartSeed).Add(viewScore).Add(ratingScore)
 
 	// Time decay factor (addresses stale content)
 	ageDays := time.Since(p.CreatedAt).Hours() / 24

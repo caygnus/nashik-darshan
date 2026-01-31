@@ -6,6 +6,7 @@ import (
 	"github.com/omkar273/nashikdarshan/internal/api/dto"
 	ierr "github.com/omkar273/nashikdarshan/internal/errors"
 	"github.com/omkar273/nashikdarshan/internal/types"
+	"github.com/samber/lo"
 )
 
 type PlaceService interface {
@@ -28,7 +29,7 @@ type PlaceService interface {
 	// Feed operations
 	GetFeed(ctx context.Context, req *dto.FeedRequest) (*dto.FeedResponse, error)
 	IncrementViewCount(ctx context.Context, placeID string) error
-	UpdatePopularityScores(ctx context.Context) error
+	UpdatePopularityScores(ctx context.Context) (int, error)
 
 	// Category operations
 	AssignCategories(ctx context.Context, placeID string, req *dto.AssignCategoriesRequest) error
@@ -240,7 +241,9 @@ func (s *placeService) DeleteImage(ctx context.Context, imageID string) error {
 	return s.PlaceRepo.DeleteImage(ctx, imageID)
 }
 
-// GetFeed retrieves feed data for multiple sections
+// GetFeed retrieves feed data for multiple sections.
+// Future work: optional user_id in request for personalization (bookmarks, view history, similar users);
+// ML ranker integration (candidate place IDs + user context → ordering).
 func (s *placeService) GetFeed(ctx context.Context, req *dto.FeedRequest) (*dto.FeedResponse, error) {
 	if err := req.Validate(); err != nil {
 		return nil, err
@@ -275,11 +278,13 @@ func (s *placeService) processSectionRequest(ctx context.Context, sectionReq dto
 	case types.SectionTypeLatest:
 		// Latest uses default sorting (by created_at desc)
 	case types.SectionTypeTrending:
-		// Trending uses default sorting (by created_at desc)
+		// Trending uses composite sort (popularity_score desc, updated_at desc) in ToPlaceFilter
 	case types.SectionTypePopular:
 		// Popular uses default sorting (by popularity_score desc)
 	case types.SectionTypeNearby:
 		// Nearby uses geospatial filtering (already handled in ToPlaceFilter)
+	case types.SectionTypeDiscover:
+		// Discover uses popularity_score asc (rising underdogs) in ToPlaceFilter
 	default:
 		return dto.FeedSectionResponse{}, ierr.NewError("unsupported section type").
 			WithHint("Please use a valid section type").
@@ -318,29 +323,50 @@ func (s *placeService) IncrementViewCount(ctx context.Context, placeID string) e
 	return s.PlaceRepo.IncrementViewCount(ctx, placeID)
 }
 
-// UpdatePopularityScores recalculates popularity scores for all places
-func (s *placeService) UpdatePopularityScores(ctx context.Context) error {
-	s.Logger.Infow("starting popularity score update")
+// Default batch size for UpdatePopularityScores (limit/offset per page)
+const popularityScoreBatchSize = 100
 
-	// Get all places (no limit)
-	filter := types.NewNoLimitPlaceFilter()
-	places, err := s.PlaceRepo.ListAll(ctx, filter)
-	if err != nil {
-		return err
-	}
+// UpdatePopularityScores recalculates popularity scores for all places in batches using limit/offset.
+// Uses stable sort (created_at asc) for deterministic paging; can be moved to a different strategy later.
+func (s *placeService) UpdatePopularityScores(ctx context.Context) (int, error) {
+	s.Logger.Infow("starting popularity score update", "batch_size", popularityScoreBatchSize)
 
-	// Calculate and update popularity score for each place
-	for _, place := range places {
-		score := place.CalculatePopularityScore()
-		err = s.PlaceRepo.UpdatePopularityScore(ctx, place.ID, score)
+	var totalUpdated int
+	offset := 0
+
+	for {
+		filter := types.NewPlaceFilter()
+		filter.QueryFilter.Limit = lo.ToPtr(popularityScoreBatchSize)
+		filter.QueryFilter.Offset = lo.ToPtr(offset)
+
+		places, err := s.PlaceRepo.List(ctx, filter)
 		if err != nil {
-			s.Logger.Errorw("failed to update popularity score", "place_id", place.ID, "error", err)
-			return err
+			return totalUpdated, err
 		}
+		if len(places) == 0 {
+			break
+		}
+
+		for _, place := range places {
+			score := place.CalculatePopularityScore()
+			err = s.PlaceRepo.UpdatePopularityScore(ctx, place.ID, score)
+			if err != nil {
+				s.Logger.Errorw("failed to update popularity score", "place_id", place.ID, "error", err)
+				return totalUpdated, err
+			}
+		}
+
+		totalUpdated += len(places)
+		s.Logger.Debugw("batch completed", "offset", offset, "batch_size", len(places), "total_updated", totalUpdated)
+
+		if len(places) < popularityScoreBatchSize {
+			break
+		}
+		offset += popularityScoreBatchSize
 	}
 
-	s.Logger.Infow("completed popularity score update", "places_updated", len(places))
-	return nil
+	s.Logger.Infow("completed popularity score update", "places_updated", totalUpdated)
+	return totalUpdated, nil
 }
 
 // AssignCategories assigns categories to a place

@@ -195,6 +195,9 @@ func (h *PlaceHandler) List(c *gin.Context) {
 		filter.TimeRangeFilter = &types.TimeRangeFilter{}
 	}
 
+	// Support flat geospatial params (latitude, longitude, radius_m or radius_km) when nested center is not bound
+	filter.ApplyFlatGeospatialParams(c.Query("latitude"), c.Query("longitude"), c.Query("radius_m"), c.Query("radius_km"))
+
 	if err := filter.Validate(); err != nil {
 		c.Error(ierr.WithError(err).
 			WithHint("Invalid filter parameters").
@@ -432,4 +435,22 @@ func (h *PlaceHandler) AssignCategories(c *gin.Context) {
 		return
 	}
 	c.Status(http.StatusNoContent)
+}
+
+// @Summary Refresh place scores
+// @Description Recalculates popularity_score for all places; for use by cron. Requires authentication.
+// @Tags Place
+// @Accept json
+// @Produce json
+// @Success 200 {object} map[string]int "e.g. {\"places_updated\": N}"
+// @Failure 500 {object} ierr.ErrorResponse
+// @Router /places/refresh-scores [post]
+// @Security Authorization
+func (h *PlaceHandler) RefreshScores(c *gin.Context) {
+	count, err := h.placeService.UpdatePopularityScores(c.Request.Context())
+	if err != nil {
+		c.Error(err)
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"places_updated": count})
 }

@@ -45,7 +45,7 @@ type Place struct {
 	// LongDescription holds the value of the "long_description" field.
 	LongDescription string `json:"long_description,omitempty"`
 	// PlaceType holds the value of the "place_type" field.
-	PlaceType string `json:"place_type,omitempty"`
+	PlaceType types.PlaceType `json:"place_type,omitempty"`
 	// Address holds the value of the "address" field.
 	Address map[string]string `json:"address,omitempty"`
 	// PrimaryImageURL holds the value of the "primary_image_url" field.
@@ -211,7 +211,7 @@ func (_m *Place) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field place_type", values[i])
 			} else if value.Valid {
-				_m.PlaceType = value.String
+				_m.PlaceType = types.PlaceType(value.String)
 			}
 		case place.FieldAddress:
 			if value, ok := values[i].(*[]byte); !ok {
@@ -340,7 +340,7 @@ func (_m *Place) String() string {
 	builder.WriteString(_m.LongDescription)
 	builder.WriteString(", ")
 	builder.WriteString("place_type=")
-	builder.WriteString(_m.PlaceType)
+	builder.WriteString(fmt.Sprintf("%v", _m.PlaceType))
 	builder.WriteString(", ")
 	builder.WriteString("address=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Address))

@@ -161,7 +161,7 @@ func (_c *PlaceCreate) SetNillableLongDescription(v *string) *PlaceCreate {
 }
 
 // SetPlaceType sets the "place_type" field.
-func (_c *PlaceCreate) SetPlaceType(v string) *PlaceCreate {
+func (_c *PlaceCreate) SetPlaceType(v types.PlaceType) *PlaceCreate {
 	_c.mutation.SetPlaceType(v)
 	return _c
 }
@@ -412,7 +412,7 @@ func (_c *PlaceCreate) check() error {
 		return &ValidationError{Name: "place_type", err: errors.New(`ent: missing required field "Place.place_type"`)}
 	}
 	if v, ok := _c.mutation.PlaceType(); ok {
-		if err := place.PlaceTypeValidator(v); err != nil {
+		if err := v.Validate(); err != nil {
 			return &ValidationError{Name: "place_type", err: fmt.Errorf(`ent: validator failed for field "Place.place_type": %w`, err)}
 		}
 	}

@@ -1,6 +1,8 @@
 package types
 
 import (
+	"strings"
+
 	ierr "github.com/omkar273/nashikdarshan/internal/errors"
 	"github.com/samber/lo"
 	"github.com/shopspring/decimal"
@@ -9,16 +11,24 @@ import (
 type PlaceType string
 
 const (
-	PlaceTypeTemple PlaceType = "temple"
+	PlaceTypeTemple     PlaceType = "temple"
+	PlaceTypeRestaurant PlaceType = "restaurant"
+	PlaceTypeMuseum     PlaceType = "museum"
+	PlaceTypePark       PlaceType = "park"
+	PlaceTypeExperience PlaceType = "experience"
 )
 
 func (pt PlaceType) Validate() error {
 	allowedPlaceTypes := []string{
 		string(PlaceTypeTemple),
+		string(PlaceTypeRestaurant),
+		string(PlaceTypeMuseum),
+		string(PlaceTypePark),
+		string(PlaceTypeExperience),
 	}
 	if !lo.Contains(allowedPlaceTypes, string(pt)) {
 		return ierr.NewError("invalid place type").
-			WithHint("valid place types are: temple").
+			WithHintf("valid place types are: %s", strings.Join(allowedPlaceTypes, ", ")).
 			WithReportableDetails(map[string]any{"place_type": pt}).
 			Mark(ierr.ErrValidation)
 	}
@@ -53,11 +63,50 @@ type PlaceFilter struct {
 	PlaceTypes []string `json:"place_types,omitempty" form:"place_types" validate:"omitempty"`
 
 	// Geospatial filters (center point + radius in meters)
-	Center  *GeoPoint         `json:"center,omitempty" form:"center"`
+	Center  *GeoPoint        `json:"center,omitempty" form:"center"`
 	RadiusM *decimal.Decimal `json:"radius_m,omitempty" form:"radius_m" validate:"omitempty"` // radius in meters (cap: 15km for v1)
 
 	// Search
 	SearchQuery *string `json:"search_query,omitempty" form:"search_query" validate:"omitempty"`
+
+	// Optional quality gate (e.g. min reviews / min rating to appear in feed)
+	MinRatingCount *int             `json:"min_rating_count,omitempty" form:"min_rating_count" validate:"omitempty,min=0"`
+	MinRatingAvg   *decimal.Decimal `json:"min_rating_avg,omitempty" form:"min_rating_avg" validate:"omitempty"`
+}
+
+// ApplyFlatGeospatialParams sets Center and RadiusM from flat query params (latitude, longitude, radius_m or radius_km)
+// when Center was not bound from nested form. Call after ShouldBindQuery. Only sets both when radius is present.
+func (f *PlaceFilter) ApplyFlatGeospatialParams(latStr, lngStr, radiusMStr, radiusKmStr string) {
+	latStr = strings.TrimSpace(latStr)
+	lngStr = strings.TrimSpace(lngStr)
+	radiusMStr = strings.TrimSpace(radiusMStr)
+	radiusKmStr = strings.TrimSpace(radiusKmStr)
+	if latStr == "" || lngStr == "" {
+		return
+	}
+	var radiusM decimal.Decimal
+	if radiusMStr != "" {
+		var err error
+		radiusM, err = decimal.NewFromString(radiusMStr)
+		if err != nil {
+			return
+		}
+	} else if radiusKmStr != "" {
+		radiusKm, err := decimal.NewFromString(radiusKmStr)
+		if err != nil {
+			return
+		}
+		radiusM = radiusKm.Mul(decimal.NewFromInt(1000))
+	} else {
+		return
+	}
+	lat, errLat := decimal.NewFromString(latStr)
+	lng, errLng := decimal.NewFromString(lngStr)
+	if errLat != nil || errLng != nil {
+		return
+	}
+	f.Center = &GeoPoint{Lat: lat, Lng: lng}
+	f.RadiusM = &radiusM
 }
 
 func (f *PlaceFilter) Validate() error {
@@ -80,6 +129,18 @@ func (f *PlaceFilter) Validate() error {
 				return err
 			}
 		}
+	}
+
+	// Optional quality gate
+	if f.MinRatingCount != nil && *f.MinRatingCount < 0 {
+		return ierr.NewError("min_rating_count must be >= 0").
+			WithHint("Please provide a non-negative min_rating_count").
+			Mark(ierr.ErrValidation)
+	}
+	if f.MinRatingAvg != nil && (f.MinRatingAvg.LessThan(decimal.Zero) || f.MinRatingAvg.GreaterThan(decimal.NewFromInt(5))) {
+		return ierr.NewError("min_rating_avg must be between 0 and 5").
+			WithHint("Please provide min_rating_avg in range [0, 5]").
+			Mark(ierr.ErrValidation)
 	}
 
 	// Validate geospatial filters
@@ -186,6 +247,7 @@ const (
 	SectionTypeTrending FeedSectionType = "trending"
 	SectionTypePopular  FeedSectionType = "popular"
 	SectionTypeNearby   FeedSectionType = "nearby"
+	SectionTypeDiscover FeedSectionType = "discover"
 )
 
 // FeedSectionTypes contains all valid feed section types
@@ -194,12 +256,13 @@ var FeedSectionTypes = []string{
 	string(SectionTypeTrending),
 	string(SectionTypePopular),
 	string(SectionTypeNearby),
+	string(SectionTypeDiscover),
 }
 
 func (f FeedSectionType) Validate() error {
 	if !lo.Contains(FeedSectionTypes, string(f)) {
 		return ierr.NewError("invalid section type").
-			WithHintf("valid types are: latest, trending, popular, nearby").
+			WithHintf("valid types are: latest, trending, popular, nearby, discover").
 			WithReportableDetails(map[string]any{"section_type": f}).
 			Mark(ierr.ErrValidation)
 	}

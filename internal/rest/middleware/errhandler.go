@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"context"
 	"encoding/json"
 	"strings"
 
@@ -16,6 +17,12 @@ func ErrorHandler() gin.HandlerFunc {
 
 		if len(c.Errors) > 0 {
 			err := c.Errors.Last().Err
+
+			// Client disconnected; skip writing response (connection is closed)
+			if errors.Is(err, context.Canceled) {
+				c.Status(499)
+				return
+			}
 
 			// Get display message from hints
 			display := getDisplayMessage(err)
