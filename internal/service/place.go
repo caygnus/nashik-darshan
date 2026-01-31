@@ -2,7 +2,6 @@ package service
 
 import (
 	"context"
-	"time"
 
 	"github.com/omkar273/nashikdarshan/internal/api/dto"
 	ierr "github.com/omkar273/nashikdarshan/internal/errors"
@@ -276,9 +275,7 @@ func (s *placeService) processSectionRequest(ctx context.Context, sectionReq dto
 	case types.SectionTypeLatest:
 		// Latest uses default sorting (by created_at desc)
 	case types.SectionTypeTrending:
-		// Add trending-specific time filter (48 hours lookback for last viewed)
-		cutoffTime := time.Now().UTC().Add(-48 * time.Hour)
-		filter.LastViewedAfter = &cutoffTime
+		// Trending uses default sorting (by created_at desc)
 	case types.SectionTypePopular:
 		// Popular uses default sorting (by popularity_score desc)
 	case types.SectionTypeNearby:

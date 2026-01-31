@@ -27,7 +27,6 @@ type Place struct {
 	ViewCount       int             `json:"view_count" db:"view_count"`
 	RatingAvg       decimal.Decimal `json:"rating_avg" db:"rating_avg"`
 	RatingCount     int             `json:"rating_count" db:"rating_count"`
-	LastViewedAt    *time.Time      `json:"last_viewed_at,omitempty" db:"last_viewed_at"`
 	PopularityScore decimal.Decimal `json:"popularity_score" db:"popularity_score"`
 
 	types.BaseModel
@@ -77,7 +76,6 @@ func FromEnt(place *ent.Place) *Place {
 		ViewCount:       place.ViewCount,
 		RatingAvg:       place.RatingAvg,
 		RatingCount:     place.RatingCount,
-		LastViewedAt:    lo.ToPtr(place.LastViewedAt),
 		PopularityScore: place.PopularityScore,
 
 		BaseModel: types.BaseModel{

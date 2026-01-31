@@ -656,11 +656,6 @@ func (o PlaceQueryOptions) ApplyEntityQueryOptions(
 		}
 	}
 
-	// Apply trending filter (last viewed after)
-	if f.LastViewedAfter != nil {
-		query = query.Where(place.LastViewedAtGTE(*f.LastViewedAfter))
-	}
-
 	return query
 }
 
@@ -675,7 +670,6 @@ func (r *PlaceRepository) IncrementViewCount(ctx context.Context, placeID string
 	now := time.Now().UTC()
 	_, err := client.Place.UpdateOneID(placeID).
 		AddViewCount(1).
-		SetLastViewedAt(now).
 		SetUpdatedAt(now).
 		SetUpdatedBy(types.GetUserID(ctx)).
 		Save(ctx)

@@ -1,8 +1,6 @@
 package types
 
 import (
-	"time"
-
 	ierr "github.com/omkar273/nashikdarshan/internal/errors"
 	"github.com/samber/lo"
 	"github.com/shopspring/decimal"
@@ -61,9 +59,6 @@ type PlaceFilter struct {
 
 	// Search
 	SearchQuery *string `json:"search_query,omitempty" form:"search_query" validate:"omitempty"`
-
-	// Trending filter
-	LastViewedAfter *time.Time `json:"last_viewed_after,omitempty" form:"last_viewed_after" validate:"omitempty"`
 }
 
 func (f *PlaceFilter) Validate() error {
