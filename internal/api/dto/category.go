@@ -13,7 +13,7 @@ type CreateCategoryRequest struct {
 	Name        string         `json:"name" binding:"required,min=2,max=255"`
 	Slug        string         `json:"slug" binding:"required,min=3,max=100"`
 	Description string         `json:"description,omitempty" binding:"omitempty,max=2000"`
-	Metdata     types.Metadata `json:"metadata,omitempty"`
+	Metadata    types.Metadata `json:"metadata,omitempty"`
 }
 
 // Validate validates the CreateCategoryRequest
@@ -73,13 +73,17 @@ func NewListCategoriesResponse(categories []*category.Category, total, limit, of
 
 func (req *CreateCategoryRequest) ToCategory(ctx context.Context) *category.Category {
 	baseModel := types.GetDefaultBaseModel(ctx)
-	return &category.Category{
+	cat := &category.Category{
 		ID:          types.GenerateUUIDWithPrefix(types.UUID_PREFIX_CATEGORY),
 		Name:        req.Name,
 		Slug:        req.Slug,
 		Description: req.Description,
 		BaseModel:   baseModel,
 	}
+	if len(req.Metadata) > 0 {
+		cat.Metadata = types.NewMetadataFromMap((&req.Metadata).ToMap())
+	}
+	return cat
 }
 
 func (req *UpdateCategoryRequest) ApplyToCategory(ctx context.Context, cat *category.Category) {

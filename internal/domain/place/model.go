@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/omkar273/nashikdarshan/ent"
+	"github.com/omkar273/nashikdarshan/internal/domain/category"
 	"github.com/omkar273/nashikdarshan/internal/types"
 	"github.com/samber/lo"
 	"github.com/shopspring/decimal"
@@ -32,7 +33,8 @@ type Place struct {
 	types.BaseModel
 
 	// Relationships
-	Images []*PlaceImage `json:"images,omitempty"`
+	Images     []*PlaceImage     `json:"images,omitempty"`
+	Categories []*category.Category `json:"categories,omitempty"`
 }
 
 type PlaceImage struct {
@@ -82,6 +84,9 @@ func FromEnt(place *ent.Place) *Place {
 	// Handle edges
 	if place.Edges.Images != nil {
 		p.Images = FromEntImageList(place.Edges.Images)
+	}
+	if place.Edges.Category != nil {
+		p.Categories = category.FromEntList(place.Edges.Category)
 	}
 
 	return p

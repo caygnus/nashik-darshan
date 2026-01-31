@@ -3,6 +3,7 @@ package dto
 import (
 	"context"
 
+	"github.com/omkar273/nashikdarshan/internal/domain/category"
 	"github.com/omkar273/nashikdarshan/internal/domain/place"
 	ierr "github.com/omkar273/nashikdarshan/internal/errors"
 	"github.com/omkar273/nashikdarshan/internal/types"
@@ -92,7 +93,8 @@ func (req *UpdatePlaceRequest) Validate() error {
 // PlaceResponse represents a place in the response
 type PlaceResponse struct {
 	*place.Place
-	Images []*PlaceImageResponse `json:"images,omitempty"`
+	Images     []*PlaceImageResponse `json:"images,omitempty"`
+	Categories []*CategoryResponse   `json:"categories,omitempty"`
 }
 
 // PlaceImageResponse represents a place image in the response
@@ -200,6 +202,12 @@ func NewPlaceResponse(p *place.Place) *PlaceResponse {
 	if len(p.Images) > 0 {
 		resp.Images = lo.Map(p.Images, func(img *place.PlaceImage, _ int) *PlaceImageResponse {
 			return &PlaceImageResponse{PlaceImage: img}
+		})
+	}
+	// Convert categories when present (e.g. from expand=categories on list)
+	if len(p.Categories) > 0 {
+		resp.Categories = lo.Map(p.Categories, func(c *category.Category, _ int) *CategoryResponse {
+			return &CategoryResponse{Category: c}
 		})
 	}
 

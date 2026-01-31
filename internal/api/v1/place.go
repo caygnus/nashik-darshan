@@ -23,7 +23,7 @@ func NewPlaceHandler(placeService service.PlaceService) *PlaceHandler {
 // @Tags Place
 // @Accept json
 // @Produce json
-// @Param request body dto.CreatePlaceRequest true "Create place request"
+// @Param request body dto.CreatePlaceRequest true "dto.CreatePlaceRequest"
 // @Success 201 {object} dto.PlaceResponse
 // @Failure 400 {object} ierr.ErrorResponse
 // @Failure 409 {object} ierr.ErrorResponse
@@ -107,7 +107,7 @@ func (h *PlaceHandler) GetBySlug(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param id path string true "Place ID"
-// @Param request body dto.UpdatePlaceRequest true "Update place request"
+// @Param request body dto.UpdatePlaceRequest true "dto.UpdatePlaceRequest"
 // @Success 200 {object} dto.PlaceResponse
 // @Failure 400 {object} ierr.ErrorResponse
 // @Failure 404 {object} ierr.ErrorResponse
@@ -173,7 +173,7 @@ func (h *PlaceHandler) Delete(c *gin.Context) {
 // @Tags Place
 // @Accept json
 // @Produce json
-// @Param filter query types.PlaceFilter false "Place filter (limit, offset, status, sort, order, slug, place_types, center, radius_m, search_query)"
+// @Param filter query types.PlaceFilter false "types.PlaceFilter"
 // @Success 200 {object} dto.ListPlacesResponse
 // @Failure 400 {object} ierr.ErrorResponse
 // @Failure 500 {object} ierr.ErrorResponse
@@ -204,6 +204,12 @@ func (h *PlaceHandler) List(c *gin.Context) {
 			Mark(ierr.ErrValidation))
 		return
 	}
+	if !filter.GetExpand().IsEmpty() {
+		if err := filter.GetExpand().Validate(types.PlaceExpandConfig); err != nil {
+			c.Error(err)
+			return
+		}
+	}
 
 	response, err := h.placeService.List(c.Request.Context(), &filter)
 	if err != nil {
@@ -219,7 +225,7 @@ func (h *PlaceHandler) List(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param id path string true "Place ID"
-// @Param request body dto.CreatePlaceImageRequest true "Create place image request"
+// @Param request body dto.CreatePlaceImageRequest true "dto.CreatePlaceImageRequest"
 // @Success 201 {object} dto.PlaceImageResponse
 // @Failure 400 {object} ierr.ErrorResponse
 // @Failure 404 {object} ierr.ErrorResponse
@@ -284,7 +290,7 @@ func (h *PlaceHandler) GetImages(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param image_id path string true "Image ID"
-// @Param request body dto.UpdatePlaceImageRequest true "Update place image request"
+// @Param request body dto.UpdatePlaceImageRequest true "dto.UpdatePlaceImageRequest"
 // @Success 200 {object} dto.PlaceImageResponse
 // @Failure 400 {object} ierr.ErrorResponse
 // @Failure 404 {object} ierr.ErrorResponse
@@ -349,7 +355,7 @@ func (h *PlaceHandler) DeleteImage(c *gin.Context) {
 // @Tags Place
 // @Accept json
 // @Produce json
-// @Param request body dto.FeedRequest true "Feed request with sections"
+// @Param request body dto.FeedRequest true "dto.FeedRequest"
 // @Success 200 {object} dto.FeedResponse
 // @Failure 400 {object} ierr.ErrorResponse
 // @Failure 500 {object} ierr.ErrorResponse
@@ -405,7 +411,7 @@ func (h *PlaceHandler) IncrementViewCount(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param id path string true "Place ID"
-// @Param request body dto.AssignCategoriesRequest true "Assign categories request"
+// @Param request body dto.AssignCategoriesRequest true "dto.AssignCategoriesRequest"
 // @Success 204
 // @Failure 400 {object} ierr.ErrorResponse
 // @Failure 404 {object} ierr.ErrorResponse

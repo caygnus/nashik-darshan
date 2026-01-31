@@ -12,7 +12,9 @@ type ExpandableField string
 
 // Common expandable fields
 const (
-	ExpandStation ExpandableField = "station"
+	ExpandStation   ExpandableField = "station"
+	ExpandImages    ExpandableField = "images"
+	ExpandCategories ExpandableField = "categories"
 )
 
 // ExpandConfig defines which fields can be expanded and their nested expansions
@@ -36,6 +38,12 @@ var (
 	// SecretExpandConfig defines the allowed expand fields for secrets
 	SecretExpandConfig = ExpandConfig{
 		AllowedFields: []ExpandableField{},
+		NestedExpands: map[ExpandableField][]ExpandableField{},
+	}
+
+	// PlaceExpandConfig defines the allowed expand fields for places (list/get)
+	PlaceExpandConfig = ExpandConfig{
+		AllowedFields: []ExpandableField{ExpandImages, ExpandCategories},
 		NestedExpands: map[ExpandableField][]ExpandableField{},
 	}
 )

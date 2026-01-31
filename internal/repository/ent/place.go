@@ -107,6 +107,7 @@ func (r *PlaceRepository) Get(ctx context.Context, id string) (*domain.Place, er
 	entPlace, err := client.Place.Query().
 		Where(place.ID(id)).
 		WithImages().
+		WithCategory().
 		Only(ctx)
 
 	if err != nil {
@@ -140,6 +141,7 @@ func (r *PlaceRepository) GetBySlug(ctx context.Context, slug string) (*domain.P
 			place.Status(string(types.StatusPublished)),
 		).
 		WithImages().
+		WithCategory().
 		Only(ctx)
 
 	if err != nil {
@@ -179,8 +181,12 @@ func (r *PlaceRepository) List(ctx context.Context, filter *types.PlaceFilter) (
 	query = ApplyQueryOptions(ctx, query, filter, r.queryOpts)
 
 	// Load images if expand includes images
-	if filter != nil && filter.GetExpand().Has("images") {
+	if filter != nil && filter.GetExpand().Has(types.ExpandImages) {
 		query = query.WithImages()
+	}
+	// Load categories if expand includes categories
+	if filter != nil && filter.GetExpand().Has(types.ExpandCategories) {
+		query = query.WithCategory()
 	}
 
 	places, err := query.All(ctx)
