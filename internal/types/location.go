@@ -1,34 +1,70 @@
 package types
 
 import (
+	"database/sql/driver"
+	"fmt"
+	"strings"
+
 	"github.com/shopspring/decimal"
 )
 
-// Location represents a geographic location with latitude and longitude (WGS84)
-type Location struct {
-	Latitude  decimal.Decimal `json:"latitude"`
-	Longitude decimal.Decimal `json:"longitude"`
+// GeoPoint represents a PostGIS geography Point (WGS84) and is the single source of truth for location.
+// JSON and form use "latitude" and "longitude" for API compatibility.
+type GeoPoint struct {
+	Lat decimal.Decimal `json:"latitude" form:"latitude"`
+	Lng decimal.Decimal `json:"longitude" form:"longitude"`
 }
 
-// NewLocation creates a new Location
-func NewLocation(lat, lng decimal.Decimal) *Location {
-	return &Location{
-		Latitude:  lat,
-		Longitude: lng,
+// Value implements driver.Valuer. Returns PostGIS WKT format: "POINT(lng lat)".
+func (p GeoPoint) Value() (driver.Value, error) {
+	if p.Lat.IsZero() && p.Lng.IsZero() {
+		return nil, nil
+	}
+	return fmt.Sprintf("POINT(%f %f)", p.Lng.InexactFloat64(), p.Lat.InexactFloat64()), nil
+}
+
+// Scan implements sql.Scanner. Handles PostGIS output (WKT, etc.).
+func (p *GeoPoint) Scan(src interface{}) error {
+	if src == nil {
+		p.Lng = decimal.Zero
+		p.Lat = decimal.Zero
+		return nil
+	}
+	switch v := src.(type) {
+	case string:
+		return p.scanWKT(v)
+	case []byte:
+		return p.scanWKT(string(v))
+	default:
+		return fmt.Errorf("unsupported type for GeoPoint: %T", src)
 	}
 }
 
-// Validate validates the Location coordinates
-func (l Location) Validate() error {
-	return ValidateCoordinates(l.Latitude, l.Longitude)
+func (p *GeoPoint) scanWKT(wkt string) error {
+	if idx := strings.Index(wkt, ";"); idx != -1 {
+		wkt = wkt[idx+1:]
+	}
+	var lng, lat float64
+	_, err := fmt.Sscanf(wkt, "POINT(%f %f)", &lng, &lat)
+	if err != nil {
+		return fmt.Errorf("failed to parse GeoPoint WKT: %w", err)
+	}
+	p.Lng = decimal.NewFromFloat(lng)
+	p.Lat = decimal.NewFromFloat(lat)
+	return nil
 }
 
-// IsValid returns true if the location has valid coordinates
-func (l Location) IsValid() bool {
-	return l.Validate() == nil
+// Validate validates the GeoPoint coordinates.
+func (p GeoPoint) Validate() error {
+	return ValidateCoordinates(p.Lat, p.Lng)
 }
 
-// IsZero returns true if both coordinates are zero
-func (l Location) IsZero() bool {
-	return l.Latitude.IsZero() && l.Longitude.IsZero()
+// IsZero returns true if both coordinates are zero.
+func (p GeoPoint) IsZero() bool {
+	return p.Lat.IsZero() && p.Lng.IsZero()
+}
+
+// NewGeoPoint creates a GeoPoint from latitude and longitude.
+func NewGeoPoint(lat, lng decimal.Decimal) GeoPoint {
+	return GeoPoint{Lat: lat, Lng: lng}
 }

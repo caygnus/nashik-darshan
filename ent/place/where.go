@@ -7,8 +7,8 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	"github.com/omkar273/nashikdarshan/ent/mixin"
 	"github.com/omkar273/nashikdarshan/ent/predicate"
+	"github.com/omkar273/nashikdarshan/internal/types"
 	"github.com/shopspring/decimal"
 )
 
@@ -93,7 +93,7 @@ func UpdatedBy(v string) predicate.Place {
 }
 
 // Location applies equality check predicate on the "location" field. It's identical to LocationEQ.
-func Location(v *mixin.GeoPoint) predicate.Place {
+func Location(v *types.GeoPoint) predicate.Place {
 	return predicate.Place(sql.FieldEQ(FieldLocation, v))
 }
 
@@ -463,42 +463,42 @@ func MetadataNotNil() predicate.Place {
 }
 
 // LocationEQ applies the EQ predicate on the "location" field.
-func LocationEQ(v *mixin.GeoPoint) predicate.Place {
+func LocationEQ(v *types.GeoPoint) predicate.Place {
 	return predicate.Place(sql.FieldEQ(FieldLocation, v))
 }
 
 // LocationNEQ applies the NEQ predicate on the "location" field.
-func LocationNEQ(v *mixin.GeoPoint) predicate.Place {
+func LocationNEQ(v *types.GeoPoint) predicate.Place {
 	return predicate.Place(sql.FieldNEQ(FieldLocation, v))
 }
 
 // LocationIn applies the In predicate on the "location" field.
-func LocationIn(vs ...*mixin.GeoPoint) predicate.Place {
+func LocationIn(vs ...*types.GeoPoint) predicate.Place {
 	return predicate.Place(sql.FieldIn(FieldLocation, vs...))
 }
 
 // LocationNotIn applies the NotIn predicate on the "location" field.
-func LocationNotIn(vs ...*mixin.GeoPoint) predicate.Place {
+func LocationNotIn(vs ...*types.GeoPoint) predicate.Place {
 	return predicate.Place(sql.FieldNotIn(FieldLocation, vs...))
 }
 
 // LocationGT applies the GT predicate on the "location" field.
-func LocationGT(v *mixin.GeoPoint) predicate.Place {
+func LocationGT(v *types.GeoPoint) predicate.Place {
 	return predicate.Place(sql.FieldGT(FieldLocation, v))
 }
 
 // LocationGTE applies the GTE predicate on the "location" field.
-func LocationGTE(v *mixin.GeoPoint) predicate.Place {
+func LocationGTE(v *types.GeoPoint) predicate.Place {
 	return predicate.Place(sql.FieldGTE(FieldLocation, v))
 }
 
 // LocationLT applies the LT predicate on the "location" field.
-func LocationLT(v *mixin.GeoPoint) predicate.Place {
+func LocationLT(v *types.GeoPoint) predicate.Place {
 	return predicate.Place(sql.FieldLT(FieldLocation, v))
 }
 
 // LocationLTE applies the LTE predicate on the "location" field.
-func LocationLTE(v *mixin.GeoPoint) predicate.Place {
+func LocationLTE(v *types.GeoPoint) predicate.Place {
 	return predicate.Place(sql.FieldLTE(FieldLocation, v))
 }
 

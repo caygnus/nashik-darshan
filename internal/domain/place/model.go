@@ -19,7 +19,7 @@ type Place struct {
 	LongDescription  *string           `json:"long_description,omitempty" db:"long_description"`
 	PlaceType        types.PlaceType   `json:"place_type" db:"place_type"`
 	Address          map[string]string `json:"address,omitempty" db:"address"`
-	Location         types.Location    `json:"location" db:"location"`
+	Location         *types.GeoPoint   `json:"location" db:"location"`
 	PrimaryImageURL  *string           `json:"primary_image_url,omitempty" db:"primary_image_url"`
 	ThumbnailURL     *string           `json:"thumbnail_url,omitempty" db:"thumbnail_url"`
 
@@ -55,22 +55,9 @@ func FromEnt(place *ent.Place) *Place {
 		ShortDescription: lo.ToPtr(place.ShortDescription),
 		LongDescription:  lo.ToPtr(place.LongDescription),
 		PlaceType:        types.PlaceType(place.PlaceType),
-		Location: func() types.Location {
-			// Convert GeoPoint to Location
-			// After Ent regeneration, place.Location will be *schema.GeoPoint
-			// For now, this will fail until regeneration - that's expected
-			if place.Location != nil {
-				lat, lng := place.Location.ToLocation()
-				return types.Location{
-					Latitude:  lat,
-					Longitude: lng,
-				}
-			}
-			// Fallback to zero location if nil
-			return types.Location{}
-		}(),
-		PrimaryImageURL: lo.ToPtr(place.PrimaryImageURL),
-		ThumbnailURL:    lo.ToPtr(place.ThumbnailURL),
+		Location:         place.Location,
+		PrimaryImageURL:  lo.ToPtr(place.PrimaryImageURL),
+		ThumbnailURL:     lo.ToPtr(place.ThumbnailURL),
 
 		// Engagement fields
 		ViewCount:       place.ViewCount,

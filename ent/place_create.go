@@ -11,9 +11,9 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/omkar273/nashikdarshan/ent/category"
-	"github.com/omkar273/nashikdarshan/ent/mixin"
 	"github.com/omkar273/nashikdarshan/ent/place"
 	"github.com/omkar273/nashikdarshan/ent/placeimage"
+	"github.com/omkar273/nashikdarshan/internal/types"
 	"github.com/shopspring/decimal"
 )
 
@@ -101,7 +101,7 @@ func (_c *PlaceCreate) SetMetadata(v map[string]string) *PlaceCreate {
 }
 
 // SetLocation sets the "location" field.
-func (_c *PlaceCreate) SetLocation(v *mixin.GeoPoint) *PlaceCreate {
+func (_c *PlaceCreate) SetLocation(v *types.GeoPoint) *PlaceCreate {
 	_c.mutation.SetLocation(v)
 	return _c
 }
@@ -386,6 +386,11 @@ func (_c *PlaceCreate) check() error {
 	}
 	if _, ok := _c.mutation.Location(); !ok {
 		return &ValidationError{Name: "location", err: errors.New(`ent: missing required field "Place.location"`)}
+	}
+	if v, ok := _c.mutation.Location(); ok {
+		if err := v.Validate(); err != nil {
+			return &ValidationError{Name: "location", err: fmt.Errorf(`ent: validator failed for field "Place.location": %w`, err)}
+		}
 	}
 	if _, ok := _c.mutation.Slug(); !ok {
 		return &ValidationError{Name: "slug", err: errors.New(`ent: missing required field "Place.slug"`)}

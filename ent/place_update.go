@@ -12,10 +12,10 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/omkar273/nashikdarshan/ent/category"
-	"github.com/omkar273/nashikdarshan/ent/mixin"
 	"github.com/omkar273/nashikdarshan/ent/place"
 	"github.com/omkar273/nashikdarshan/ent/placeimage"
 	"github.com/omkar273/nashikdarshan/ent/predicate"
+	"github.com/omkar273/nashikdarshan/internal/types"
 	"github.com/shopspring/decimal"
 )
 
@@ -85,7 +85,7 @@ func (_u *PlaceUpdate) ClearMetadata() *PlaceUpdate {
 }
 
 // SetLocation sets the "location" field.
-func (_u *PlaceUpdate) SetLocation(v *mixin.GeoPoint) *PlaceUpdate {
+func (_u *PlaceUpdate) SetLocation(v *types.GeoPoint) *PlaceUpdate {
 	_u.mutation.SetLocation(v)
 	return _u
 }
@@ -401,6 +401,11 @@ func (_u *PlaceUpdate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (_u *PlaceUpdate) check() error {
+	if v, ok := _u.mutation.Location(); ok {
+		if err := v.Validate(); err != nil {
+			return &ValidationError{Name: "location", err: fmt.Errorf(`ent: validator failed for field "Place.location": %w`, err)}
+		}
+	}
 	if v, ok := _u.mutation.Title(); ok {
 		if err := place.TitleValidator(v); err != nil {
 			return &ValidationError{Name: "title", err: fmt.Errorf(`ent: validator failed for field "Place.title": %w`, err)}
@@ -675,7 +680,7 @@ func (_u *PlaceUpdateOne) ClearMetadata() *PlaceUpdateOne {
 }
 
 // SetLocation sets the "location" field.
-func (_u *PlaceUpdateOne) SetLocation(v *mixin.GeoPoint) *PlaceUpdateOne {
+func (_u *PlaceUpdateOne) SetLocation(v *types.GeoPoint) *PlaceUpdateOne {
 	_u.mutation.SetLocation(v)
 	return _u
 }
@@ -1004,6 +1009,11 @@ func (_u *PlaceUpdateOne) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (_u *PlaceUpdateOne) check() error {
+	if v, ok := _u.mutation.Location(); ok {
+		if err := v.Validate(); err != nil {
+			return &ValidationError{Name: "location", err: fmt.Errorf(`ent: validator failed for field "Place.location": %w`, err)}
+		}
+	}
 	if v, ok := _u.mutation.Title(); ok {
 		if err := place.TitleValidator(v); err != nil {
 			return &ValidationError{Name: "title", err: fmt.Errorf(`ent: validator failed for field "Place.title": %w`, err)}

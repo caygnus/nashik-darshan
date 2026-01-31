@@ -20,7 +20,7 @@ type CreatePlaceRequest struct {
 	LongDescription  *string           `json:"long_description,omitempty" binding:"omitempty,max=10000"`
 	PlaceType        types.PlaceType   `json:"place_type" binding:"required"`
 	Address          map[string]string `json:"address,omitempty"`
-	Location         types.Location    `json:"location" binding:"required"`
+	Location         types.GeoPoint   `json:"location" binding:"required"`
 	PrimaryImageURL  *string           `json:"primary_image_url,omitempty" binding:"omitempty,url,max=500"`
 	ThumbnailURL     *string           `json:"thumbnail_url,omitempty" binding:"omitempty,url,max=500"`
 }
@@ -58,7 +58,7 @@ type UpdatePlaceRequest struct {
 	ShortDescription *string           `json:"short_description,omitempty" binding:"omitempty,max=1000"`
 	LongDescription  *string           `json:"long_description,omitempty" binding:"omitempty,max=10000"`
 	Address          map[string]string `json:"address,omitempty"`
-	Location         *types.Location   `json:"location,omitempty"`
+	Location         *types.GeoPoint   `json:"location,omitempty"`
 	PrimaryImageURL  *string           `json:"primary_image_url,omitempty" binding:"omitempty,url,max=500"`
 	ThumbnailURL     *string           `json:"thumbnail_url,omitempty" binding:"omitempty,url,max=500"`
 }
@@ -219,7 +219,7 @@ func (req *CreatePlaceRequest) ToPlace(ctx context.Context) (*place.Place, error
 		LongDescription:  req.LongDescription,
 		PlaceType:        req.PlaceType,
 		Address:          req.Address,
-		Location:         req.Location,
+		Location:         lo.ToPtr(req.Location),
 		PrimaryImageURL:  req.PrimaryImageURL,
 		ThumbnailURL:     req.ThumbnailURL,
 		BaseModel:        baseModel,
@@ -246,9 +246,7 @@ func (req *UpdatePlaceRequest) ApplyToPlace(ctx context.Context, p *place.Place)
 	if req.Address != nil {
 		p.Address = req.Address
 	}
-	if req.Location != nil {
-		p.Location = *req.Location
-	}
+	p.Location, _ = lo.Coalesce(req.Location, p.Location)
 	if req.PrimaryImageURL != nil {
 		p.PrimaryImageURL = req.PrimaryImageURL
 	}
@@ -278,9 +276,8 @@ type FeedSectionRequest struct {
 	*types.TimeRangeFilter `json:",inline,omitempty"`
 
 	// Geospatial fields (for nearby section)
-	Latitude  *decimal.Decimal `json:"latitude,omitempty" validate:"omitempty"`
-	Longitude *decimal.Decimal `json:"longitude,omitempty" validate:"omitempty"`
-	RadiusKm  *decimal.Decimal `json:"radius_km,omitempty" validate:"omitempty,min=0.1,max=50" default:"5"`
+	Center   *types.GeoPoint   `json:"center,omitempty" validate:"omitempty"`
+	RadiusKm *decimal.Decimal `json:"radius_km,omitempty" validate:"omitempty,min=0.1,max=50" default:"5"`
 }
 
 // FeedRequest represents the main feed request
@@ -348,15 +345,12 @@ func (req *FeedSectionRequest) Validate() error {
 
 	// Validate geospatial fields for nearby section
 	if req.Type == types.SectionTypeNearby {
-		if req.Latitude == nil || req.Longitude == nil {
-			return ierr.NewError("latitude and longitude are required for nearby section").
-				WithHint("Please provide both latitude and longitude for nearby section").
+		if req.Center == nil || req.Center.IsZero() {
+			return ierr.NewError("center (latitude/longitude) is required for nearby section").
+				WithHint("Please provide center with latitude and longitude for nearby section").
 				Mark(ierr.ErrValidation)
 		}
-
-		// Create location and validate coordinates
-		location := types.NewLocation(*req.Latitude, *req.Longitude)
-		if err := location.Validate(); err != nil {
+		if err := req.Center.Validate(); err != nil {
 			return err
 		}
 
@@ -447,9 +441,8 @@ func (req *FeedSectionRequest) ToPlaceFilter(globalFilter *FeedRequest) *types.P
 	}
 
 	// Handle geospatial fields for nearby section
-	if req.Type == types.SectionTypeNearby && req.Latitude != nil && req.Longitude != nil {
-		filter.Latitude = req.Latitude
-		filter.Longitude = req.Longitude
+	if req.Type == types.SectionTypeNearby && req.Center != nil && !req.Center.IsZero() {
+		filter.Center = lo.ToPtr(*req.Center)
 
 		// Set default radius if not provided (5km)
 		if req.RadiusKm != nil {

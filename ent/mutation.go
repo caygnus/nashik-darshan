@@ -12,7 +12,6 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/omkar273/nashikdarshan/ent/category"
-	"github.com/omkar273/nashikdarshan/ent/mixin"
 	"github.com/omkar273/nashikdarshan/ent/place"
 	"github.com/omkar273/nashikdarshan/ent/placeimage"
 	"github.com/omkar273/nashikdarshan/ent/predicate"
@@ -988,7 +987,7 @@ type PlaceMutation struct {
 	created_by        *string
 	updated_by        *string
 	metadata          *map[string]string
-	location          **mixin.GeoPoint
+	location          **types.GeoPoint
 	slug              *string
 	title             *string
 	subtitle          *string
@@ -1376,12 +1375,12 @@ func (m *PlaceMutation) ResetMetadata() {
 }
 
 // SetLocation sets the "location" field.
-func (m *PlaceMutation) SetLocation(mp *mixin.GeoPoint) {
-	m.location = &mp
+func (m *PlaceMutation) SetLocation(tp *types.GeoPoint) {
+	m.location = &tp
 }
 
 // Location returns the value of the "location" field in the mutation.
-func (m *PlaceMutation) Location() (r *mixin.GeoPoint, exists bool) {
+func (m *PlaceMutation) Location() (r *types.GeoPoint, exists bool) {
 	v := m.location
 	if v == nil {
 		return
@@ -1392,7 +1391,7 @@ func (m *PlaceMutation) Location() (r *mixin.GeoPoint, exists bool) {
 // OldLocation returns the old "location" field's value of the Place entity.
 // If the Place object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *PlaceMutation) OldLocation(ctx context.Context) (v *mixin.GeoPoint, err error) {
+func (m *PlaceMutation) OldLocation(ctx context.Context) (v *types.GeoPoint, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldLocation is only allowed on UpdateOne operations")
 	}
@@ -2349,7 +2348,7 @@ func (m *PlaceMutation) SetField(name string, value ent.Value) error {
 		m.SetMetadata(v)
 		return nil
 	case place.FieldLocation:
-		v, ok := value.(*mixin.GeoPoint)
+		v, ok := value.(*types.GeoPoint)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}

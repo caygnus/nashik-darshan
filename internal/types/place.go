@@ -52,10 +52,9 @@ type PlaceFilter struct {
 	Slug       []string `json:"slug,omitempty" form:"slug" validate:"omitempty"`
 	PlaceTypes []string `json:"place_types,omitempty" form:"place_types" validate:"omitempty"`
 
-	// Geospatial filters
-	Latitude  *decimal.Decimal `json:"latitude,omitempty" form:"latitude" validate:"omitempty"`
-	Longitude *decimal.Decimal `json:"longitude,omitempty" form:"longitude" validate:"omitempty"`
-	RadiusM   *decimal.Decimal `json:"radius_m,omitempty" form:"radius_m" validate:"omitempty"` // radius in meters (cap: 10-15km for v1)
+	// Geospatial filters (center point + radius in meters)
+	Center  *GeoPoint         `json:"center,omitempty" form:"center"`
+	RadiusM *decimal.Decimal `json:"radius_m,omitempty" form:"radius_m" validate:"omitempty"` // radius in meters (cap: 15km for v1)
 
 	// Search
 	SearchQuery *string `json:"search_query,omitempty" form:"search_query" validate:"omitempty"`
@@ -84,16 +83,13 @@ func (f *PlaceFilter) Validate() error {
 	}
 
 	// Validate geospatial filters
-	if f.Latitude != nil || f.Longitude != nil || f.RadiusM != nil {
-		if f.Latitude == nil || f.Longitude == nil || f.RadiusM == nil {
-			return ierr.NewError("latitude, longitude, and radius_m must all be provided for geospatial search").
-				WithHint("Please provide all three values: latitude, longitude, and radius_m").
+	if f.Center != nil || f.RadiusM != nil {
+		if f.Center == nil || f.RadiusM == nil {
+			return ierr.NewError("center and radius_m must both be provided for geospatial search").
+				WithHint("Please provide center (latitude/longitude) and radius_m").
 				Mark(ierr.ErrValidation)
 		}
-
-		// Create location and validate coordinates
-		location := NewLocation(*f.Latitude, *f.Longitude)
-		if err := location.Validate(); err != nil {
+		if err := f.Center.Validate(); err != nil {
 			return err
 		}
 		// Cap radius at 15km (15000m) for v1

@@ -2915,7 +2915,7 @@ const docTemplate = `{
                     "maxLength": 255
                 },
                 "location": {
-                    "$ref": "#/definitions/types.Location"
+                    "$ref": "#/definitions/types.GeoPoint"
                 },
                 "name": {
                     "type": "string",
@@ -3056,7 +3056,7 @@ const docTemplate = `{
                     }
                 },
                 "location": {
-                    "$ref": "#/definitions/types.Location"
+                    "$ref": "#/definitions/types.GeoPoint"
                 },
                 "long_description": {
                     "type": "string",
@@ -3413,7 +3413,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "location": {
-                    "$ref": "#/definitions/types.Location"
+                    "$ref": "#/definitions/types.GeoPoint"
                 },
                 "metadata": {
                     "$ref": "#/definitions/types.Metadata"
@@ -3704,7 +3704,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "location": {
-                    "$ref": "#/definitions/types.Location"
+                    "$ref": "#/definitions/types.GeoPoint"
                 },
                 "long_description": {
                     "type": "string"
@@ -4009,7 +4009,7 @@ const docTemplate = `{
                     "maxLength": 255
                 },
                 "location": {
-                    "$ref": "#/definitions/types.Location"
+                    "$ref": "#/definitions/types.GeoPoint"
                 },
                 "name": {
                     "type": "string",
@@ -4116,7 +4116,7 @@ const docTemplate = `{
                     }
                 },
                 "location": {
-                    "$ref": "#/definitions/types.Location"
+                    "$ref": "#/definitions/types.GeoPoint"
                 },
                 "long_description": {
                     "type": "string",
@@ -4386,7 +4386,7 @@ const docTemplate = `{
                 }
             }
         },
-        "types.Location": {
+        "types.GeoPoint": {
             "type": "object",
             "properties": {
                 "latitude": {

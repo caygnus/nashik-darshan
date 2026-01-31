@@ -123,7 +123,7 @@ definitions:
         maxLength: 255
         type: string
       location:
-        $ref: '#/definitions/types.Location'
+        $ref: '#/definitions/types.GeoPoint'
       name:
         maxLength: 255
         minLength: 2
@@ -225,7 +225,7 @@ definitions:
           type: string
         type: array
       location:
-        $ref: '#/definitions/types.Location'
+        $ref: '#/definitions/types.GeoPoint'
       long_description:
         maxLength: 10000
         type: string
@@ -475,7 +475,7 @@ definitions:
       last_viewed_at:
         type: string
       location:
-        $ref: '#/definitions/types.Location'
+        $ref: '#/definitions/types.GeoPoint'
       metadata:
         $ref: '#/definitions/types.Metadata'
       name:
@@ -666,7 +666,7 @@ definitions:
       last_viewed_at:
         type: string
       location:
-        $ref: '#/definitions/types.Location'
+        $ref: '#/definitions/types.GeoPoint'
       long_description:
         type: string
       place_type:
@@ -873,7 +873,7 @@ definitions:
         maxLength: 255
         type: string
       location:
-        $ref: '#/definitions/types.Location'
+        $ref: '#/definitions/types.GeoPoint'
       name:
         maxLength: 255
         minLength: 2
@@ -948,7 +948,7 @@ definitions:
           type: string
         type: object
       location:
-        $ref: '#/definitions/types.Location'
+        $ref: '#/definitions/types.GeoPoint'
       long_description:
         maxLength: 10000
         type: string
@@ -1134,7 +1134,7 @@ definitions:
       pagination:
         $ref: '#/definitions/types.PaginationResponse'
     type: object
-  types.Location:
+  types.GeoPoint:
     properties:
       latitude:
         type: number

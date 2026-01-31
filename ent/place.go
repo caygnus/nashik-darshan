@@ -10,8 +10,8 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/omkar273/nashikdarshan/ent/mixin"
 	"github.com/omkar273/nashikdarshan/ent/place"
+	"github.com/omkar273/nashikdarshan/internal/types"
 	"github.com/shopspring/decimal"
 )
 
@@ -33,7 +33,7 @@ type Place struct {
 	// Metadata holds the value of the "metadata" field.
 	Metadata map[string]string `json:"metadata,omitempty"`
 	// PostGIS geography point for geospatial queries
-	Location *mixin.GeoPoint `json:"location,omitempty"`
+	Location *types.GeoPoint `json:"location,omitempty"`
 	// Slug holds the value of the "slug" field.
 	Slug string `json:"slug,omitempty"`
 	// Title holds the value of the "title" field.
@@ -104,14 +104,14 @@ func (*Place) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case place.FieldRatingAvg, place.FieldPopularityScore:
 			values[i] = new(decimal.Decimal)
-		case place.FieldLocation:
-			values[i] = new(mixin.GeoPoint)
 		case place.FieldViewCount, place.FieldRatingCount:
 			values[i] = new(sql.NullInt64)
 		case place.FieldID, place.FieldStatus, place.FieldCreatedBy, place.FieldUpdatedBy, place.FieldSlug, place.FieldTitle, place.FieldSubtitle, place.FieldShortDescription, place.FieldLongDescription, place.FieldPlaceType, place.FieldPrimaryImageURL, place.FieldThumbnailURL:
 			values[i] = new(sql.NullString)
 		case place.FieldCreatedAt, place.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
+		case place.FieldLocation:
+			values[i] = new(types.GeoPoint)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -172,7 +172,7 @@ func (_m *Place) assignValues(columns []string, values []any) error {
 				}
 			}
 		case place.FieldLocation:
-			if value, ok := values[i].(*mixin.GeoPoint); !ok {
+			if value, ok := values[i].(*types.GeoPoint); !ok {
 				return fmt.Errorf("unexpected type %T for field location", values[i])
 			} else if value != nil {
 				_m.Location = value

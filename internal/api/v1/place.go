@@ -173,21 +173,7 @@ func (h *PlaceHandler) Delete(c *gin.Context) {
 // @Tags Place
 // @Accept json
 // @Produce json
-// @Param limit query int false "Limit"
-// @Param offset query int false "Offset"
-// @Param status query string false "Status"
-// @Param sort query string false "Sort field"
-// @Param order query string false "Sort order (asc/desc)"
-// @Param slug query []string false "Filter by slugs"
-// @Param place_types query []string false "Filter by place types"
-// @Param categories query []string false "Filter by categories"
-// @Param amenities query []string false "Filter by amenities"
-// @Param min_rating query number false "Minimum rating"
-// @Param max_rating query number false "Maximum rating"
-// @Param latitude query number false "Latitude for geospatial filtering"
-// @Param longitude query number false "Longitude for geospatial filtering"
-// @Param radius_km query number false "Radius in kilometers for geospatial filtering"
-// @Param search_query query string false "Search query"
+// @Param filter query types.PlaceFilter false "Place filter (limit, offset, status, sort, order, slug, place_types, center, radius_m, search_query)"
 // @Success 200 {object} dto.ListPlacesResponse
 // @Failure 400 {object} ierr.ErrorResponse
 // @Failure 500 {object} ierr.ErrorResponse

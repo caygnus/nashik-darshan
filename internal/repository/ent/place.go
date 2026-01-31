@@ -6,7 +6,6 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"github.com/omkar273/nashikdarshan/ent"
-	"github.com/omkar273/nashikdarshan/ent/mixin"
 	"github.com/omkar273/nashikdarshan/ent/place"
 	"github.com/omkar273/nashikdarshan/ent/placeimage"
 	domain "github.com/omkar273/nashikdarshan/internal/domain/place"
@@ -42,15 +41,13 @@ func (r *PlaceRepository) Create(ctx context.Context, p *domain.Place) error {
 	)
 
 	now := time.Now().UTC()
-	// Convert domain Location to GeoPoint for PostGIS
-	geoPoint := mixin.NewGeoPoint(p.Location.Latitude, p.Location.Longitude)
 
 	create := client.Place.Create().
 		SetID(p.ID).
 		SetSlug(p.Slug).
 		SetTitle(p.Title).
 		SetPlaceType(string(p.PlaceType)).
-		SetLocation(&geoPoint).
+		SetLocation(p.Location).
 		SetStatus(string(p.Status)).
 		SetCreatedAt(now).
 		SetUpdatedAt(now).
@@ -248,12 +245,9 @@ func (r *PlaceRepository) Update(ctx context.Context, p *domain.Place) error {
 		"title", p.Title,
 	)
 
-	// Convert domain Location to GeoPoint for PostGIS
-	geoPoint := mixin.NewGeoPoint(p.Location.Latitude, p.Location.Longitude)
-
 	update := client.Place.UpdateOneID(p.ID).
 		SetTitle(p.Title).
-		SetLocation(&geoPoint).
+		SetLocation(p.Location).
 		SetStatus(string(p.Status)).
 		SetUpdatedAt(time.Now().UTC()).
 		SetUpdatedBy(types.GetUserID(ctx))
@@ -628,9 +622,9 @@ func (o PlaceQueryOptions) ApplyEntityQueryOptions(
 	}
 
 	// Apply geospatial filters if specified using PostGIS ST_DWithin
-	if f.Latitude != nil && f.Longitude != nil && f.RadiusM != nil {
-		lat0 := *f.Latitude
-		lng0 := *f.Longitude
+	if f.Center != nil && f.RadiusM != nil {
+		lat0 := f.Center.Lat
+		lng0 := f.Center.Lng
 		radiusM := *f.RadiusM
 
 		// Use PostGIS ST_DWithin for efficient spatial filtering
