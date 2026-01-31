@@ -44,12 +44,15 @@ func (r *secretRepository) Create(ctx context.Context, s *domainSecret.Secret) e
 		SetProvider(s.Provider).
 		SetValue(s.Value).
 		SetPrefix(s.Prefix).
-		SetPermissions(s.Permissions).
 		SetStatus(string(s.Status)).
 		SetCreatedAt(s.CreatedAt).
 		SetUpdatedAt(s.UpdatedAt).
 		SetCreatedBy(s.CreatedBy).
 		SetUpdatedBy(s.UpdatedBy)
+	// Only set permissions when non-empty; ent serializes as JSON but column is text[], so omit to store NULL
+	if len(s.Permissions) > 0 {
+		create = create.SetPermissions(s.Permissions)
+	}
 
 	if s.ExpiresAt != nil {
 		create = create.SetExpiresAt(*s.ExpiresAt)
@@ -211,10 +214,15 @@ func (r *secretRepository) Update(ctx context.Context, s *domainSecret.Secret) e
 
 	update := client.Secret.UpdateOneID(s.ID).
 		SetName(s.Name).
-		SetPermissions(s.Permissions).
 		SetStatus(string(s.Status)).
 		SetUpdatedAt(time.Now().UTC()).
 		SetUpdatedBy(types.GetUserID(ctx))
+	// Only set permissions when non-empty; ent serializes as JSON but column is text[], so clear to store NULL when empty
+	if len(s.Permissions) > 0 {
+		update = update.SetPermissions(s.Permissions)
+	} else {
+		update = update.ClearPermissions()
+	}
 
 	// expires_at is immutable, cannot be updated
 	// last_used_at is updated separately in ValidateAPIKey

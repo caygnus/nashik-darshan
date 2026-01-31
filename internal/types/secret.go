@@ -14,6 +14,24 @@ const (
 	SecretTypePublishableKey SecretType = "publishable_key"
 )
 
+// Key prefixes for API keys (Stripe-style: sk_ = secret, pk_ = publishable)
+const (
+	KeyPrefixPrivateKey     = "sk_"
+	KeyPrefixPublishableKey = "pk_"
+)
+
+// KeyPrefix returns the API key prefix for the secret type (e.g. sk_, pk_).
+func (t SecretType) KeyPrefix() string {
+	switch t {
+	case SecretTypePrivateKey:
+		return KeyPrefixPrivateKey
+	case SecretTypePublishableKey:
+		return KeyPrefixPublishableKey
+	default:
+		return "sk_"
+	}
+}
+
 // Validate validates the SecretType
 func (t SecretType) Validate() error {
 	allowedSecretTypes := []SecretType{SecretTypePrivateKey, SecretTypePublishableKey}

@@ -32,8 +32,11 @@ func NewRouter(handlers *Handlers, cfg *config.Configuration, logger *logger.Log
 	// Swagger documentation
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
-	// Global health check
+	// Global health check (no auth)
 	router.GET("/health", handlers.Health.Health)
+
+	// POST /health requires X-API-Key or Bearer token; use to test API key
+	router.POST("/health", middleware.AuthenticateMiddleware(cfg, logger, secretService), handlers.Health.HealthPost)
 
 	v1Router := router.Group("/v1")
 

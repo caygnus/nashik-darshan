@@ -26,6 +26,11 @@ var commands = []Command{
 		Description: "Onboard a user in Supabase and local database (takes --email, --password, --name flags)",
 		Run:         internal.OnboardUser,
 	},
+	{
+		Name:        "create-api-key",
+		Description: "Create an API key (works with X-API-Key middleware). --name (default: etst key); --user-id or --email optional (default user if omitted)",
+		Run:         internal.CreateAPIKey,
+	},
 }
 
 func main() {
@@ -40,9 +45,10 @@ func main() {
 	
 	// Include subcommand flags so flag.Parse doesn't error on them
 	// These are parsed by the subcommands themselves from os.Args
-	_ = flag.String("email", "", "User email address (for onboard-user command)")
+	_ = flag.String("email", "", "User email (for onboard-user, create-api-key)")
 	_ = flag.String("password", "", "User password (for onboard-user command)")
-	_ = flag.String("name", "", "User name (for onboard-user command)")
+	_ = flag.String("name", "", "User name (onboard-user) or API key name (create-api-key)")
+	_ = flag.String("user-id", "", "User ID (for create-api-key command)")
 
 	flag.Usage = func() {
 		fmt.Printf("Usage of %s:\n\n", "scripts")
@@ -54,6 +60,8 @@ func main() {
 		fmt.Println("  go run scripts/main.go -cmd generate-ent                        # Generate Ent schema")
 		fmt.Println("  go run scripts/main.go -cmd onboard-user --email user@example.com --password pass123")
 		fmt.Println("  go run scripts/main.go -cmd onboard-user --email user@example.com --password pass123 --name \"John Doe\"")
+		fmt.Println("  go run scripts/main.go -cmd create-api-key --name \"etst key\" --email user@example.com")
+		fmt.Println("  go run scripts/main.go -cmd create-api-key --user-id <user-uuid>")
 		fmt.Println("\nNote: Ensure your database configuration is properly set up before running database commands.")
 	}
 

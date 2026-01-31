@@ -64,8 +64,8 @@ func (s *secretService) CreateAPIKey(ctx context.Context, userID, name string, k
 		}
 	}
 
-	// Generate a new API key
-	rawKey, err := s.generateAPIKey()
+	// Generate a new API key with type prefix (e.g. sk_, pk_)
+	rawKey, err := s.generateAPIKey(keyType)
 	if err != nil {
 		return nil, "", ierr.WithError(err).
 			WithHint("Failed to generate API key").
@@ -74,7 +74,7 @@ func (s *secretService) CreateAPIKey(ctx context.Context, userID, name string, k
 
 	// Hash the key for storage
 	hashedKey := s.EncryptionService.Hash(rawKey)
-	prefix := rawKey[:8] // Store first 8 chars as prefix
+	prefix := rawKey[:8] // Store first 8 chars for display (e.g. sk_abc12)
 
 	// Create the secret entity
 	now := time.Now().UTC()
@@ -204,14 +204,13 @@ func (s *secretService) DeleteAPIKey(ctx context.Context, id string) error {
 	return nil
 }
 
-// generateAPIKey generates a new random API key
-func (s *secretService) generateAPIKey() (string, error) {
+// generateAPIKey generates a new random API key with a type prefix (sk_ or pk_).
+func (s *secretService) generateAPIKey(keyType types.SecretType) (string, error) {
 	// Generate 32 random bytes
 	bytes := make([]byte, 32)
 	if _, err := rand.Read(bytes); err != nil {
 		return "", fmt.Errorf("failed to generate random bytes: %w", err)
 	}
-
-	// Convert to hex string
-	return hex.EncodeToString(bytes), nil
+	// Prepend prefix (e.g. sk_, pk_) so keys look like Stripe: sk_xxxx... or pk_xxxx...
+	return keyType.KeyPrefix() + hex.EncodeToString(bytes), nil
 }
