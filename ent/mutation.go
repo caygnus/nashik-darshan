@@ -1003,7 +1003,6 @@ type PlaceMutation struct {
 	rating_avg        *decimal.Decimal
 	rating_count      *int
 	addrating_count   *int
-	last_viewed_at    *time.Time
 	popularity_score  *decimal.Decimal
 	clearedFields     map[string]struct{}
 	images            map[string]struct{}
@@ -1962,55 +1961,6 @@ func (m *PlaceMutation) ResetRatingCount() {
 	m.addrating_count = nil
 }
 
-// SetLastViewedAt sets the "last_viewed_at" field.
-func (m *PlaceMutation) SetLastViewedAt(t time.Time) {
-	m.last_viewed_at = &t
-}
-
-// LastViewedAt returns the value of the "last_viewed_at" field in the mutation.
-func (m *PlaceMutation) LastViewedAt() (r time.Time, exists bool) {
-	v := m.last_viewed_at
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldLastViewedAt returns the old "last_viewed_at" field's value of the Place entity.
-// If the Place object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *PlaceMutation) OldLastViewedAt(ctx context.Context) (v time.Time, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldLastViewedAt is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldLastViewedAt requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldLastViewedAt: %w", err)
-	}
-	return oldValue.LastViewedAt, nil
-}
-
-// ClearLastViewedAt clears the value of the "last_viewed_at" field.
-func (m *PlaceMutation) ClearLastViewedAt() {
-	m.last_viewed_at = nil
-	m.clearedFields[place.FieldLastViewedAt] = struct{}{}
-}
-
-// LastViewedAtCleared returns if the "last_viewed_at" field was cleared in this mutation.
-func (m *PlaceMutation) LastViewedAtCleared() bool {
-	_, ok := m.clearedFields[place.FieldLastViewedAt]
-	return ok
-}
-
-// ResetLastViewedAt resets all changes to the "last_viewed_at" field.
-func (m *PlaceMutation) ResetLastViewedAt() {
-	m.last_viewed_at = nil
-	delete(m.clearedFields, place.FieldLastViewedAt)
-}
-
 // SetPopularityScore sets the "popularity_score" field.
 func (m *PlaceMutation) SetPopularityScore(d decimal.Decimal) {
 	m.popularity_score = &d
@@ -2189,7 +2139,7 @@ func (m *PlaceMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *PlaceMutation) Fields() []string {
-	fields := make([]string, 0, 21)
+	fields := make([]string, 0, 20)
 	if m.status != nil {
 		fields = append(fields, place.FieldStatus)
 	}
@@ -2247,9 +2197,6 @@ func (m *PlaceMutation) Fields() []string {
 	if m.rating_count != nil {
 		fields = append(fields, place.FieldRatingCount)
 	}
-	if m.last_viewed_at != nil {
-		fields = append(fields, place.FieldLastViewedAt)
-	}
 	if m.popularity_score != nil {
 		fields = append(fields, place.FieldPopularityScore)
 	}
@@ -2299,8 +2246,6 @@ func (m *PlaceMutation) Field(name string) (ent.Value, bool) {
 		return m.RatingAvg()
 	case place.FieldRatingCount:
 		return m.RatingCount()
-	case place.FieldLastViewedAt:
-		return m.LastViewedAt()
 	case place.FieldPopularityScore:
 		return m.PopularityScore()
 	}
@@ -2350,8 +2295,6 @@ func (m *PlaceMutation) OldField(ctx context.Context, name string) (ent.Value, e
 		return m.OldRatingAvg(ctx)
 	case place.FieldRatingCount:
 		return m.OldRatingCount(ctx)
-	case place.FieldLastViewedAt:
-		return m.OldLastViewedAt(ctx)
 	case place.FieldPopularityScore:
 		return m.OldPopularityScore(ctx)
 	}
@@ -2496,13 +2439,6 @@ func (m *PlaceMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetRatingCount(v)
 		return nil
-	case place.FieldLastViewedAt:
-		v, ok := value.(time.Time)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetLastViewedAt(v)
-		return nil
 	case place.FieldPopularityScore:
 		v, ok := value.(decimal.Decimal)
 		if !ok {
@@ -2594,9 +2530,6 @@ func (m *PlaceMutation) ClearedFields() []string {
 	if m.FieldCleared(place.FieldThumbnailURL) {
 		fields = append(fields, place.FieldThumbnailURL)
 	}
-	if m.FieldCleared(place.FieldLastViewedAt) {
-		fields = append(fields, place.FieldLastViewedAt)
-	}
 	return fields
 }
 
@@ -2637,9 +2570,6 @@ func (m *PlaceMutation) ClearField(name string) error {
 		return nil
 	case place.FieldThumbnailURL:
 		m.ClearThumbnailURL()
-		return nil
-	case place.FieldLastViewedAt:
-		m.ClearLastViewedAt()
 		return nil
 	}
 	return fmt.Errorf("unknown Place nullable field %s", name)
@@ -2705,9 +2635,6 @@ func (m *PlaceMutation) ResetField(name string) error {
 		return nil
 	case place.FieldRatingCount:
 		m.ResetRatingCount()
-		return nil
-	case place.FieldLastViewedAt:
-		m.ResetLastViewedAt()
 		return nil
 	case place.FieldPopularityScore:
 		m.ResetPopularityScore()

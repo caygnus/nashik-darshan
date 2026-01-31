@@ -109,12 +109,6 @@ func (Place) Fields() []ent.Field {
 			Default(0).
 			NonNegative(),
 
-		field.Time("last_viewed_at").
-			SchemaType(map[string]string{
-				"postgres": "timestamp with time zone",
-			}).
-			Optional(),
-
 		field.Other("popularity_score", decimal.Decimal{}).
 			SchemaType(map[string]string{
 				"postgres": "decimal(10,4)",

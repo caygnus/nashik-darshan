@@ -152,11 +152,6 @@ func RatingCount(v int) predicate.Place {
 	return predicate.Place(sql.FieldEQ(FieldRatingCount, v))
 }
 
-// LastViewedAt applies equality check predicate on the "last_viewed_at" field. It's identical to LastViewedAtEQ.
-func LastViewedAt(v time.Time) predicate.Place {
-	return predicate.Place(sql.FieldEQ(FieldLastViewedAt, v))
-}
-
 // PopularityScore applies equality check predicate on the "popularity_score" field. It's identical to PopularityScoreEQ.
 func PopularityScore(v decimal.Decimal) predicate.Place {
 	return predicate.Place(sql.FieldEQ(FieldPopularityScore, v))
@@ -1205,56 +1200,6 @@ func RatingCountLT(v int) predicate.Place {
 // RatingCountLTE applies the LTE predicate on the "rating_count" field.
 func RatingCountLTE(v int) predicate.Place {
 	return predicate.Place(sql.FieldLTE(FieldRatingCount, v))
-}
-
-// LastViewedAtEQ applies the EQ predicate on the "last_viewed_at" field.
-func LastViewedAtEQ(v time.Time) predicate.Place {
-	return predicate.Place(sql.FieldEQ(FieldLastViewedAt, v))
-}
-
-// LastViewedAtNEQ applies the NEQ predicate on the "last_viewed_at" field.
-func LastViewedAtNEQ(v time.Time) predicate.Place {
-	return predicate.Place(sql.FieldNEQ(FieldLastViewedAt, v))
-}
-
-// LastViewedAtIn applies the In predicate on the "last_viewed_at" field.
-func LastViewedAtIn(vs ...time.Time) predicate.Place {
-	return predicate.Place(sql.FieldIn(FieldLastViewedAt, vs...))
-}
-
-// LastViewedAtNotIn applies the NotIn predicate on the "last_viewed_at" field.
-func LastViewedAtNotIn(vs ...time.Time) predicate.Place {
-	return predicate.Place(sql.FieldNotIn(FieldLastViewedAt, vs...))
-}
-
-// LastViewedAtGT applies the GT predicate on the "last_viewed_at" field.
-func LastViewedAtGT(v time.Time) predicate.Place {
-	return predicate.Place(sql.FieldGT(FieldLastViewedAt, v))
-}
-
-// LastViewedAtGTE applies the GTE predicate on the "last_viewed_at" field.
-func LastViewedAtGTE(v time.Time) predicate.Place {
-	return predicate.Place(sql.FieldGTE(FieldLastViewedAt, v))
-}
-
-// LastViewedAtLT applies the LT predicate on the "last_viewed_at" field.
-func LastViewedAtLT(v time.Time) predicate.Place {
-	return predicate.Place(sql.FieldLT(FieldLastViewedAt, v))
-}
-
-// LastViewedAtLTE applies the LTE predicate on the "last_viewed_at" field.
-func LastViewedAtLTE(v time.Time) predicate.Place {
-	return predicate.Place(sql.FieldLTE(FieldLastViewedAt, v))
-}
-
-// LastViewedAtIsNil applies the IsNil predicate on the "last_viewed_at" field.
-func LastViewedAtIsNil() predicate.Place {
-	return predicate.Place(sql.FieldIsNull(FieldLastViewedAt))
-}
-
-// LastViewedAtNotNil applies the NotNil predicate on the "last_viewed_at" field.
-func LastViewedAtNotNil() predicate.Place {
-	return predicate.Place(sql.FieldNotNull(FieldLastViewedAt))
 }
 
 // PopularityScoreEQ applies the EQ predicate on the "popularity_score" field.

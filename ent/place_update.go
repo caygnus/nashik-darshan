@@ -272,26 +272,6 @@ func (_u *PlaceUpdate) AddRatingCount(v int) *PlaceUpdate {
 	return _u
 }
 
-// SetLastViewedAt sets the "last_viewed_at" field.
-func (_u *PlaceUpdate) SetLastViewedAt(v time.Time) *PlaceUpdate {
-	_u.mutation.SetLastViewedAt(v)
-	return _u
-}
-
-// SetNillableLastViewedAt sets the "last_viewed_at" field if the given value is not nil.
-func (_u *PlaceUpdate) SetNillableLastViewedAt(v *time.Time) *PlaceUpdate {
-	if v != nil {
-		_u.SetLastViewedAt(*v)
-	}
-	return _u
-}
-
-// ClearLastViewedAt clears the value of the "last_viewed_at" field.
-func (_u *PlaceUpdate) ClearLastViewedAt() *PlaceUpdate {
-	_u.mutation.ClearLastViewedAt()
-	return _u
-}
-
 // SetPopularityScore sets the "popularity_score" field.
 func (_u *PlaceUpdate) SetPopularityScore(v decimal.Decimal) *PlaceUpdate {
 	_u.mutation.SetPopularityScore(v)
@@ -528,12 +508,6 @@ func (_u *PlaceUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if value, ok := _u.mutation.AddedRatingCount(); ok {
 		_spec.AddField(place.FieldRatingCount, field.TypeInt, value)
-	}
-	if value, ok := _u.mutation.LastViewedAt(); ok {
-		_spec.SetField(place.FieldLastViewedAt, field.TypeTime, value)
-	}
-	if _u.mutation.LastViewedAtCleared() {
-		_spec.ClearField(place.FieldLastViewedAt, field.TypeTime)
 	}
 	if value, ok := _u.mutation.PopularityScore(); ok {
 		_spec.SetField(place.FieldPopularityScore, field.TypeOther, value)
@@ -888,26 +862,6 @@ func (_u *PlaceUpdateOne) AddRatingCount(v int) *PlaceUpdateOne {
 	return _u
 }
 
-// SetLastViewedAt sets the "last_viewed_at" field.
-func (_u *PlaceUpdateOne) SetLastViewedAt(v time.Time) *PlaceUpdateOne {
-	_u.mutation.SetLastViewedAt(v)
-	return _u
-}
-
-// SetNillableLastViewedAt sets the "last_viewed_at" field if the given value is not nil.
-func (_u *PlaceUpdateOne) SetNillableLastViewedAt(v *time.Time) *PlaceUpdateOne {
-	if v != nil {
-		_u.SetLastViewedAt(*v)
-	}
-	return _u
-}
-
-// ClearLastViewedAt clears the value of the "last_viewed_at" field.
-func (_u *PlaceUpdateOne) ClearLastViewedAt() *PlaceUpdateOne {
-	_u.mutation.ClearLastViewedAt()
-	return _u
-}
-
 // SetPopularityScore sets the "popularity_score" field.
 func (_u *PlaceUpdateOne) SetPopularityScore(v decimal.Decimal) *PlaceUpdateOne {
 	_u.mutation.SetPopularityScore(v)
@@ -1174,12 +1128,6 @@ func (_u *PlaceUpdateOne) sqlSave(ctx context.Context) (_node *Place, err error)
 	}
 	if value, ok := _u.mutation.AddedRatingCount(); ok {
 		_spec.AddField(place.FieldRatingCount, field.TypeInt, value)
-	}
-	if value, ok := _u.mutation.LastViewedAt(); ok {
-		_spec.SetField(place.FieldLastViewedAt, field.TypeTime, value)
-	}
-	if _u.mutation.LastViewedAtCleared() {
-		_spec.ClearField(place.FieldLastViewedAt, field.TypeTime)
 	}
 	if value, ok := _u.mutation.PopularityScore(); ok {
 		_spec.SetField(place.FieldPopularityScore, field.TypeOther, value)

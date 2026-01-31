@@ -242,20 +242,6 @@ func (_c *PlaceCreate) SetNillableRatingCount(v *int) *PlaceCreate {
 	return _c
 }
 
-// SetLastViewedAt sets the "last_viewed_at" field.
-func (_c *PlaceCreate) SetLastViewedAt(v time.Time) *PlaceCreate {
-	_c.mutation.SetLastViewedAt(v)
-	return _c
-}
-
-// SetNillableLastViewedAt sets the "last_viewed_at" field if the given value is not nil.
-func (_c *PlaceCreate) SetNillableLastViewedAt(v *time.Time) *PlaceCreate {
-	if v != nil {
-		_c.SetLastViewedAt(*v)
-	}
-	return _c
-}
-
 // SetPopularityScore sets the "popularity_score" field.
 func (_c *PlaceCreate) SetPopularityScore(v decimal.Decimal) *PlaceCreate {
 	_c.mutation.SetPopularityScore(v)
@@ -557,10 +543,6 @@ func (_c *PlaceCreate) createSpec() (*Place, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.RatingCount(); ok {
 		_spec.SetField(place.FieldRatingCount, field.TypeInt, value)
 		_node.RatingCount = value
-	}
-	if value, ok := _c.mutation.LastViewedAt(); ok {
-		_spec.SetField(place.FieldLastViewedAt, field.TypeTime, value)
-		_node.LastViewedAt = value
 	}
 	if value, ok := _c.mutation.PopularityScore(); ok {
 		_spec.SetField(place.FieldPopularityScore, field.TypeOther, value)

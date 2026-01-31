@@ -53,8 +53,6 @@ const (
 	FieldRatingAvg = "rating_avg"
 	// FieldRatingCount holds the string denoting the rating_count field in the database.
 	FieldRatingCount = "rating_count"
-	// FieldLastViewedAt holds the string denoting the last_viewed_at field in the database.
-	FieldLastViewedAt = "last_viewed_at"
 	// FieldPopularityScore holds the string denoting the popularity_score field in the database.
 	FieldPopularityScore = "popularity_score"
 	// EdgeImages holds the string denoting the images edge name in mutations.
@@ -99,7 +97,6 @@ var Columns = []string{
 	FieldViewCount,
 	FieldRatingAvg,
 	FieldRatingCount,
-	FieldLastViewedAt,
 	FieldPopularityScore,
 }
 
@@ -243,11 +240,6 @@ func ByRatingAvg(opts ...sql.OrderTermOption) OrderOption {
 // ByRatingCount orders the results by the rating_count field.
 func ByRatingCount(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldRatingCount, opts...).ToFunc()
-}
-
-// ByLastViewedAt orders the results by the last_viewed_at field.
-func ByLastViewedAt(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldLastViewedAt, opts...).ToFunc()
 }
 
 // ByPopularityScore orders the results by the popularity_score field.

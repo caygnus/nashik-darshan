@@ -58,8 +58,6 @@ type Place struct {
 	RatingAvg decimal.Decimal `json:"rating_avg,omitempty"`
 	// RatingCount holds the value of the "rating_count" field.
 	RatingCount int `json:"rating_count,omitempty"`
-	// LastViewedAt holds the value of the "last_viewed_at" field.
-	LastViewedAt time.Time `json:"last_viewed_at,omitempty"`
 	// PopularityScore holds the value of the "popularity_score" field.
 	PopularityScore decimal.Decimal `json:"popularity_score,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
@@ -112,7 +110,7 @@ func (*Place) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullInt64)
 		case place.FieldID, place.FieldStatus, place.FieldCreatedBy, place.FieldUpdatedBy, place.FieldSlug, place.FieldTitle, place.FieldSubtitle, place.FieldShortDescription, place.FieldLongDescription, place.FieldPlaceType, place.FieldPrimaryImageURL, place.FieldThumbnailURL:
 			values[i] = new(sql.NullString)
-		case place.FieldCreatedAt, place.FieldUpdatedAt, place.FieldLastViewedAt:
+		case place.FieldCreatedAt, place.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -253,12 +251,6 @@ func (_m *Place) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.RatingCount = int(value.Int64)
 			}
-		case place.FieldLastViewedAt:
-			if value, ok := values[i].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field last_viewed_at", values[i])
-			} else if value.Valid {
-				_m.LastViewedAt = value.Time
-			}
 		case place.FieldPopularityScore:
 			if value, ok := values[i].(*decimal.Decimal); !ok {
 				return fmt.Errorf("unexpected type %T for field popularity_score", values[i])
@@ -367,9 +359,6 @@ func (_m *Place) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("rating_count=")
 	builder.WriteString(fmt.Sprintf("%v", _m.RatingCount))
-	builder.WriteString(", ")
-	builder.WriteString("last_viewed_at=")
-	builder.WriteString(_m.LastViewedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("popularity_score=")
 	builder.WriteString(fmt.Sprintf("%v", _m.PopularityScore))

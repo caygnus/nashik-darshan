@@ -57,7 +57,6 @@ var (
 		{Name: "view_count", Type: field.TypeInt, Default: 0, SchemaType: map[string]string{"postgres": "integer"}},
 		{Name: "rating_avg", Type: field.TypeOther, SchemaType: map[string]string{"postgres": "decimal(3,2)"}},
 		{Name: "rating_count", Type: field.TypeInt, Default: 0, SchemaType: map[string]string{"postgres": "integer"}},
-		{Name: "last_viewed_at", Type: field.TypeTime, Nullable: true, SchemaType: map[string]string{"postgres": "timestamp with time zone"}},
 		{Name: "popularity_score", Type: field.TypeOther, SchemaType: map[string]string{"postgres": "decimal(10,4)"}},
 	}
 	// PlacesTable holds the schema information for the "places" table.
