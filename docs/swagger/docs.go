@@ -3162,7 +3162,7 @@ const docTemplate = `{
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
 	Host:             "5p9ubi66hh.execute-api.ap-south-1.amazonaws.com",
-	BasePath:         "/api/v1",
+	BasePath:         "/v1",
 	Schemes:          []string{"https"},
 	Title:            "Nashik Darshan API",
 	Description:      "API for Nashik Darshan",

@@ -14,7 +14,7 @@
         "version": "1.0"
     },
     "host": "5p9ubi66hh.execute-api.ap-south-1.amazonaws.com",
-    "basePath": "/api/v1",
+    "basePath": "/v1",
     "paths": {
         "/auth/signup": {
             "post": {
