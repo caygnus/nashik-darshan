@@ -1,4 +1,7 @@
 {
+    "schemes": [
+        "https"
+    ],
     "swagger": "2.0",
     "info": {
         "description": "API for Nashik Darshan",
@@ -10,7 +13,7 @@
         },
         "version": "1.0"
     },
-    "host": "localhost:8080",
+    "host": "5p9ubi66hh.execute-api.ap-south-1.amazonaws.com",
     "basePath": "/api/v1",
     "paths": {
         "/auth/signup": {
@@ -137,6 +140,9 @@
                 "security": [
                     {
                         "Authorization": []
+                    },
+                    {
+                        "ApiKeyAuth": []
                     }
                 ],
                 "description": "Create a new category with the provided details",
@@ -280,6 +286,9 @@
                 "security": [
                     {
                         "Authorization": []
+                    },
+                    {
+                        "ApiKeyAuth": []
                     }
                 ],
                 "description": "Update an existing category",
@@ -348,6 +357,9 @@
                 "security": [
                     {
                         "Authorization": []
+                    },
+                    {
+                        "ApiKeyAuth": []
                     }
                 ],
                 "description": "Soft delete a category",
@@ -438,6 +450,9 @@
         "/health": {
             "post": {
                 "security": [
+                    {
+                        "Authorization": []
+                    },
                     {
                         "ApiKeyAuth": []
                     }
@@ -615,6 +630,9 @@
                 "security": [
                     {
                         "Authorization": []
+                    },
+                    {
+                        "ApiKeyAuth": []
                     }
                 ],
                 "description": "Create a new place with the provided details",
@@ -672,6 +690,9 @@
                 "security": [
                     {
                         "Authorization": []
+                    },
+                    {
+                        "ApiKeyAuth": []
                     }
                 ],
                 "description": "Update an existing place image",
@@ -734,6 +755,9 @@
                 "security": [
                     {
                         "Authorization": []
+                    },
+                    {
+                        "ApiKeyAuth": []
                     }
                 ],
                 "description": "Delete a place image",
@@ -780,6 +804,9 @@
                 "security": [
                     {
                         "Authorization": []
+                    },
+                    {
+                        "ApiKeyAuth": []
                     }
                 ],
                 "description": "Recalculates popularity_score for all places; for use by cron. Requires authentication.",
@@ -903,6 +930,9 @@
                 "security": [
                     {
                         "Authorization": []
+                    },
+                    {
+                        "ApiKeyAuth": []
                     }
                 ],
                 "description": "Update an existing place",
@@ -971,6 +1001,9 @@
                 "security": [
                     {
                         "Authorization": []
+                    },
+                    {
+                        "ApiKeyAuth": []
                     }
                 ],
                 "description": "Soft delete a place",
@@ -1017,6 +1050,9 @@
                 "security": [
                     {
                         "Authorization": []
+                    },
+                    {
+                        "ApiKeyAuth": []
                     }
                 ],
                 "description": "Assign categories to a place by replacing existing category relationships",
@@ -1123,6 +1159,9 @@
                 "security": [
                     {
                         "Authorization": []
+                    },
+                    {
+                        "ApiKeyAuth": []
                     }
                 ],
                 "description": "Add an image to a place",
@@ -1311,6 +1350,9 @@
                 "security": [
                     {
                         "Authorization": []
+                    },
+                    {
+                        "ApiKeyAuth": []
                     }
                 ],
                 "description": "Create a new review for a place or other entity",
@@ -1461,6 +1503,9 @@
                 "security": [
                     {
                         "Authorization": []
+                    },
+                    {
+                        "ApiKeyAuth": []
                     }
                 ],
                 "description": "Update an existing review",
@@ -1523,6 +1568,9 @@
                 "security": [
                     {
                         "Authorization": []
+                    },
+                    {
+                        "ApiKeyAuth": []
                     }
                 ],
                 "description": "Delete a review",
@@ -1569,6 +1617,9 @@
                 "security": [
                     {
                         "Authorization": []
+                    },
+                    {
+                        "ApiKeyAuth": []
                     }
                 ],
                 "description": "List all API keys for the current user",
@@ -1607,6 +1658,9 @@
                 "security": [
                     {
                         "Authorization": []
+                    },
+                    {
+                        "ApiKeyAuth": []
                     }
                 ],
                 "description": "Create a new API key (private or publishable). The raw key is returned only once.",
@@ -1664,6 +1718,9 @@
                 "security": [
                     {
                         "Authorization": []
+                    },
+                    {
+                        "ApiKeyAuth": []
                     }
                 ],
                 "description": "Get a specific API key by its ID",
@@ -1711,6 +1768,9 @@
                 "security": [
                     {
                         "Authorization": []
+                    },
+                    {
+                        "ApiKeyAuth": []
                     }
                 ],
                 "description": "Delete (archive) an API key",
@@ -1755,6 +1815,9 @@
                 "security": [
                     {
                         "Authorization": []
+                    },
+                    {
+                        "ApiKeyAuth": []
                     }
                 ],
                 "description": "Update an API key (name, permissions, or status)",
@@ -3065,8 +3128,14 @@
         }
     },
     "securityDefinitions": {
+        "ApiKeyAuth": {
+            "description": "API key for server-to-server or script access. Use X-API-Key header (alternative to Bearer).",
+            "type": "apiKey",
+            "name": "X-API-Key",
+            "in": "header"
+        },
         "Authorization": {
-            "description": "Enter the token with the `Bearer ` prefix, e.g. `Bearer \u003ctoken\u003e`.",
+            "description": "JWT Bearer token, e.g. `Bearer \u003ctoken\u003e`.",
             "type": "apiKey",
             "name": "Authorization",
             "in": "header"

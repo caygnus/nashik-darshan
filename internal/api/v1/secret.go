@@ -30,6 +30,7 @@ func NewSecretHandler(secretService service.SecretService) *SecretHandler {
 // @Failure 500 {object} ierr.ErrorResponse
 // @Router /secrets/api-keys [post]
 // @Security Authorization
+// @Security ApiKeyAuth
 func (h *SecretHandler) CreateAPIKey(c *gin.Context) {
 	var req dto.CreateAPIKeyRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -82,6 +83,7 @@ func (h *SecretHandler) CreateAPIKey(c *gin.Context) {
 // @Failure 500 {object} ierr.ErrorResponse
 // @Router /secrets/api-keys [get]
 // @Security Authorization
+// @Security ApiKeyAuth
 func (h *SecretHandler) ListAPIKeys(c *gin.Context) {
 	userID := types.GetUserID(c.Request.Context())
 	if userID == "" {
@@ -112,6 +114,7 @@ func (h *SecretHandler) ListAPIKeys(c *gin.Context) {
 // @Failure 500 {object} ierr.ErrorResponse
 // @Router /secrets/api-keys/{id} [get]
 // @Security Authorization
+// @Security ApiKeyAuth
 func (h *SecretHandler) GetAPIKey(c *gin.Context) {
 	id := c.Param("id")
 	if id == "" {
@@ -153,6 +156,7 @@ func (h *SecretHandler) GetAPIKey(c *gin.Context) {
 // @Failure 500 {object} ierr.ErrorResponse
 // @Router /secrets/api-keys/{id} [patch]
 // @Security Authorization
+// @Security ApiKeyAuth
 func (h *SecretHandler) UpdateAPIKey(c *gin.Context) {
 	id := c.Param("id")
 	if id == "" {
@@ -236,6 +240,7 @@ func (h *SecretHandler) UpdateAPIKey(c *gin.Context) {
 // @Failure 500 {object} ierr.ErrorResponse
 // @Router /secrets/api-keys/{id} [delete]
 // @Security Authorization
+// @Security ApiKeyAuth
 func (h *SecretHandler) DeleteAPIKey(c *gin.Context) {
 	id := c.Param("id")
 	if id == "" {

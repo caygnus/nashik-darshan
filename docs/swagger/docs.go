@@ -143,6 +143,9 @@ const docTemplate = `{
                 "security": [
                     {
                         "Authorization": []
+                    },
+                    {
+                        "ApiKeyAuth": []
                     }
                 ],
                 "description": "Create a new category with the provided details",
@@ -286,6 +289,9 @@ const docTemplate = `{
                 "security": [
                     {
                         "Authorization": []
+                    },
+                    {
+                        "ApiKeyAuth": []
                     }
                 ],
                 "description": "Update an existing category",
@@ -354,6 +360,9 @@ const docTemplate = `{
                 "security": [
                     {
                         "Authorization": []
+                    },
+                    {
+                        "ApiKeyAuth": []
                     }
                 ],
                 "description": "Soft delete a category",
@@ -444,6 +453,9 @@ const docTemplate = `{
         "/health": {
             "post": {
                 "security": [
+                    {
+                        "Authorization": []
+                    },
                     {
                         "ApiKeyAuth": []
                     }
@@ -621,6 +633,9 @@ const docTemplate = `{
                 "security": [
                     {
                         "Authorization": []
+                    },
+                    {
+                        "ApiKeyAuth": []
                     }
                 ],
                 "description": "Create a new place with the provided details",
@@ -678,6 +693,9 @@ const docTemplate = `{
                 "security": [
                     {
                         "Authorization": []
+                    },
+                    {
+                        "ApiKeyAuth": []
                     }
                 ],
                 "description": "Update an existing place image",
@@ -740,6 +758,9 @@ const docTemplate = `{
                 "security": [
                     {
                         "Authorization": []
+                    },
+                    {
+                        "ApiKeyAuth": []
                     }
                 ],
                 "description": "Delete a place image",
@@ -786,6 +807,9 @@ const docTemplate = `{
                 "security": [
                     {
                         "Authorization": []
+                    },
+                    {
+                        "ApiKeyAuth": []
                     }
                 ],
                 "description": "Recalculates popularity_score for all places; for use by cron. Requires authentication.",
@@ -909,6 +933,9 @@ const docTemplate = `{
                 "security": [
                     {
                         "Authorization": []
+                    },
+                    {
+                        "ApiKeyAuth": []
                     }
                 ],
                 "description": "Update an existing place",
@@ -977,6 +1004,9 @@ const docTemplate = `{
                 "security": [
                     {
                         "Authorization": []
+                    },
+                    {
+                        "ApiKeyAuth": []
                     }
                 ],
                 "description": "Soft delete a place",
@@ -1023,6 +1053,9 @@ const docTemplate = `{
                 "security": [
                     {
                         "Authorization": []
+                    },
+                    {
+                        "ApiKeyAuth": []
                     }
                 ],
                 "description": "Assign categories to a place by replacing existing category relationships",
@@ -1129,6 +1162,9 @@ const docTemplate = `{
                 "security": [
                     {
                         "Authorization": []
+                    },
+                    {
+                        "ApiKeyAuth": []
                     }
                 ],
                 "description": "Add an image to a place",
@@ -1317,6 +1353,9 @@ const docTemplate = `{
                 "security": [
                     {
                         "Authorization": []
+                    },
+                    {
+                        "ApiKeyAuth": []
                     }
                 ],
                 "description": "Create a new review for a place or other entity",
@@ -1467,6 +1506,9 @@ const docTemplate = `{
                 "security": [
                     {
                         "Authorization": []
+                    },
+                    {
+                        "ApiKeyAuth": []
                     }
                 ],
                 "description": "Update an existing review",
@@ -1529,6 +1571,9 @@ const docTemplate = `{
                 "security": [
                     {
                         "Authorization": []
+                    },
+                    {
+                        "ApiKeyAuth": []
                     }
                 ],
                 "description": "Delete a review",
@@ -1575,6 +1620,9 @@ const docTemplate = `{
                 "security": [
                     {
                         "Authorization": []
+                    },
+                    {
+                        "ApiKeyAuth": []
                     }
                 ],
                 "description": "List all API keys for the current user",
@@ -1613,6 +1661,9 @@ const docTemplate = `{
                 "security": [
                     {
                         "Authorization": []
+                    },
+                    {
+                        "ApiKeyAuth": []
                     }
                 ],
                 "description": "Create a new API key (private or publishable). The raw key is returned only once.",
@@ -1670,6 +1721,9 @@ const docTemplate = `{
                 "security": [
                     {
                         "Authorization": []
+                    },
+                    {
+                        "ApiKeyAuth": []
                     }
                 ],
                 "description": "Get a specific API key by its ID",
@@ -1717,6 +1771,9 @@ const docTemplate = `{
                 "security": [
                     {
                         "Authorization": []
+                    },
+                    {
+                        "ApiKeyAuth": []
                     }
                 ],
                 "description": "Delete (archive) an API key",
@@ -1761,6 +1818,9 @@ const docTemplate = `{
                 "security": [
                     {
                         "Authorization": []
+                    },
+                    {
+                        "ApiKeyAuth": []
                     }
                 ],
                 "description": "Update an API key (name, permissions, or status)",
@@ -3083,8 +3143,14 @@ const docTemplate = `{
         }
     },
     "securityDefinitions": {
+        "ApiKeyAuth": {
+            "description": "API key for server-to-server or script access. Use X-API-Key header (alternative to Bearer).",
+            "type": "apiKey",
+            "name": "X-API-Key",
+            "in": "header"
+        },
         "Authorization": {
-            "description": "Enter the token with the ` + "`" + `Bearer ` + "`" + ` prefix, e.g. ` + "`" + `Bearer \u003ctoken\u003e` + "`" + `.",
+            "description": "JWT Bearer token, e.g. ` + "`" + `Bearer \u003ctoken\u003e` + "`" + `.",
             "type": "apiKey",
             "name": "Authorization",
             "in": "header"
@@ -3095,9 +3161,9 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
-	Host:             "localhost:8080",
+	Host:             "5p9ubi66hh.execute-api.ap-south-1.amazonaws.com",
 	BasePath:         "/api/v1",
-	Schemes:          []string{},
+	Schemes:          []string{"https"},
 	Title:            "Nashik Darshan API",
 	Description:      "API for Nashik Darshan",
 	InfoInstanceName: "swagger",

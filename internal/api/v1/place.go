@@ -30,6 +30,7 @@ func NewPlaceHandler(placeService service.PlaceService) *PlaceHandler {
 // @Failure 500 {object} ierr.ErrorResponse
 // @Router /places [post]
 // @Security Authorization
+// @Security ApiKeyAuth
 func (h *PlaceHandler) Create(c *gin.Context) {
 	var req dto.CreatePlaceRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -115,6 +116,7 @@ func (h *PlaceHandler) GetBySlug(c *gin.Context) {
 // @Failure 500 {object} ierr.ErrorResponse
 // @Router /places/{id} [put]
 // @Security Authorization
+// @Security ApiKeyAuth
 func (h *PlaceHandler) Update(c *gin.Context) {
 	id := c.Param("id")
 	if id == "" {
@@ -151,6 +153,7 @@ func (h *PlaceHandler) Update(c *gin.Context) {
 // @Failure 500 {object} ierr.ErrorResponse
 // @Router /places/{id} [delete]
 // @Security Authorization
+// @Security ApiKeyAuth
 func (h *PlaceHandler) Delete(c *gin.Context) {
 	id := c.Param("id")
 	if id == "" {
@@ -232,6 +235,7 @@ func (h *PlaceHandler) List(c *gin.Context) {
 // @Failure 500 {object} ierr.ErrorResponse
 // @Router /places/{id}/images [post]
 // @Security Authorization
+// @Security ApiKeyAuth
 func (h *PlaceHandler) AddImage(c *gin.Context) {
 	placeID := c.Param("id")
 	if placeID == "" {
@@ -297,6 +301,7 @@ func (h *PlaceHandler) GetImages(c *gin.Context) {
 // @Failure 500 {object} ierr.ErrorResponse
 // @Router /places/images/{image_id} [put]
 // @Security Authorization
+// @Security ApiKeyAuth
 func (h *PlaceHandler) UpdateImage(c *gin.Context) {
 	imageID := c.Param("image_id")
 	if imageID == "" {
@@ -333,6 +338,7 @@ func (h *PlaceHandler) UpdateImage(c *gin.Context) {
 // @Failure 500 {object} ierr.ErrorResponse
 // @Router /places/images/{image_id} [delete]
 // @Security Authorization
+// @Security ApiKeyAuth
 func (h *PlaceHandler) DeleteImage(c *gin.Context) {
 	imageID := c.Param("image_id")
 	if imageID == "" {
@@ -418,6 +424,7 @@ func (h *PlaceHandler) IncrementViewCount(c *gin.Context) {
 // @Failure 500 {object} ierr.ErrorResponse
 // @Router /places/{id}/categories [put]
 // @Security Authorization
+// @Security ApiKeyAuth
 func (h *PlaceHandler) AssignCategories(c *gin.Context) {
 	placeID := c.Param("id")
 	if placeID == "" {
@@ -452,6 +459,7 @@ func (h *PlaceHandler) AssignCategories(c *gin.Context) {
 // @Failure 500 {object} ierr.ErrorResponse
 // @Router /places/refresh-scores [post]
 // @Security Authorization
+// @Security ApiKeyAuth
 func (h *PlaceHandler) RefreshScores(c *gin.Context) {
 	count, err := h.placeService.UpdatePopularityScores(c.Request.Context())
 	if err != nil {

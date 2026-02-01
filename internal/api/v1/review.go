@@ -30,6 +30,7 @@ func NewReviewHandler(reviewService service.ReviewService) *ReviewHandler {
 // @Failure 500 {object} ierr.ErrorResponse
 // @Router /reviews [post]
 // @Security Authorization
+// @Security ApiKeyAuth
 func (h *ReviewHandler) CreateReview(c *gin.Context) {
 	var req dto.CreateReviewRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -87,6 +88,7 @@ func (h *ReviewHandler) GetReview(c *gin.Context) {
 // @Failure 500 {object} ierr.ErrorResponse
 // @Router /reviews/{id} [put]
 // @Security Authorization
+// @Security ApiKeyAuth
 func (h *ReviewHandler) UpdateReview(c *gin.Context) {
 	id := c.Param("id")
 	if id == "" {
@@ -123,6 +125,7 @@ func (h *ReviewHandler) UpdateReview(c *gin.Context) {
 // @Failure 500 {object} ierr.ErrorResponse
 // @Router /reviews/{id} [delete]
 // @Security Authorization
+// @Security ApiKeyAuth
 func (h *ReviewHandler) DeleteReview(c *gin.Context) {
 	id := c.Param("id")
 	if id == "" {

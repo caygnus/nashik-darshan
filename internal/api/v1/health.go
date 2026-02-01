@@ -43,6 +43,7 @@ func (h *HealthHandler) Health(c *gin.Context) {
 // @Summary Authenticated health check
 // @Description Health check that validates API key or JWT; returns status and user_id
 // @Tags Health
+// @Security Authorization
 // @Security ApiKeyAuth
 // @Accept json
 // @Produce json

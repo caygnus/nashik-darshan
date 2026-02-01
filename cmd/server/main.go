@@ -18,15 +18,19 @@ import (
 // @contact.name   API Support
 // @contact.email  support@nashikdarshan.com
 
-// @host      localhost:8080
+// @host      5p9ubi66hh.execute-api.ap-south-1.amazonaws.com
 // @BasePath  /api/v1
+// @schemes   https
 
 // @securityDefinitions.apikey Authorization
 // @in header
 // @name Authorization
-// @description Enter the token with the `Bearer ` prefix, e.g. `Bearer <token>`.
-// @type apiKey
-// @required
+// @description JWT Bearer token, e.g. `Bearer <token>`.
+
+// @securityDefinitions.apikey ApiKeyAuth
+// @in header
+// @name X-API-Key
+// @description API key for server-to-server or script access. Use X-API-Key header (alternative to Bearer).
 
 func init() {
 	// Set global timezone to UTC for consistent time handling

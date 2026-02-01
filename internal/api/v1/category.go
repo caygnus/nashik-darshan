@@ -30,6 +30,7 @@ func NewCategoryHandler(categoryService service.CategoryService) *CategoryHandle
 // @Failure 500 {object} ierr.ErrorResponse
 // @Router /categories [post]
 // @Security Authorization
+// @Security ApiKeyAuth
 func (h *CategoryHandler) Create(c *gin.Context) {
 	var req dto.CreateCategoryRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -115,6 +116,7 @@ func (h *CategoryHandler) GetBySlug(c *gin.Context) {
 // @Failure 500 {object} ierr.ErrorResponse
 // @Router /categories/{id} [put]
 // @Security Authorization
+// @Security ApiKeyAuth
 func (h *CategoryHandler) Update(c *gin.Context) {
 	id := c.Param("id")
 	if id == "" {
@@ -151,6 +153,7 @@ func (h *CategoryHandler) Update(c *gin.Context) {
 // @Failure 500 {object} ierr.ErrorResponse
 // @Router /categories/{id} [delete]
 // @Security Authorization
+// @Security ApiKeyAuth
 func (h *CategoryHandler) Delete(c *gin.Context) {
 	id := c.Param("id")
 	if id == "" {
