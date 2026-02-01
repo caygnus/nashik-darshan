@@ -19,7 +19,7 @@ import (
 // @contact.email  support@nashikdarshan.com
 
 // @host      5p9ubi66hh.execute-api.ap-south-1.amazonaws.com
-// @BasePath  /api/v1
+// @BasePath  /v1
 // @schemes   https
 
 // @securityDefinitions.apikey Authorization
