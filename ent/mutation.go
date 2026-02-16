@@ -54,6 +54,7 @@ type CategoryMutation struct {
 	name          *string
 	slug          *string
 	description   *string
+	image_url     *string
 	clearedFields map[string]struct{}
 	places        map[string]struct{}
 	removedplaces map[string]struct{}
@@ -543,6 +544,42 @@ func (m *CategoryMutation) ResetDescription() {
 	delete(m.clearedFields, category.FieldDescription)
 }
 
+// SetImageURL sets the "image_url" field.
+func (m *CategoryMutation) SetImageURL(s string) {
+	m.image_url = &s
+}
+
+// ImageURL returns the value of the "image_url" field in the mutation.
+func (m *CategoryMutation) ImageURL() (r string, exists bool) {
+	v := m.image_url
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldImageURL returns the old "image_url" field's value of the Category entity.
+// If the Category object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CategoryMutation) OldImageURL(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldImageURL is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldImageURL requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldImageURL: %w", err)
+	}
+	return oldValue.ImageURL, nil
+}
+
+// ResetImageURL resets all changes to the "image_url" field.
+func (m *CategoryMutation) ResetImageURL() {
+	m.image_url = nil
+}
+
 // AddPlaceIDs adds the "places" edge to the Place entity by ids.
 func (m *CategoryMutation) AddPlaceIDs(ids ...string) {
 	if m.places == nil {
@@ -631,7 +668,7 @@ func (m *CategoryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *CategoryMutation) Fields() []string {
-	fields := make([]string, 0, 9)
+	fields := make([]string, 0, 10)
 	if m.status != nil {
 		fields = append(fields, category.FieldStatus)
 	}
@@ -659,6 +696,9 @@ func (m *CategoryMutation) Fields() []string {
 	if m.description != nil {
 		fields = append(fields, category.FieldDescription)
 	}
+	if m.image_url != nil {
+		fields = append(fields, category.FieldImageURL)
+	}
 	return fields
 }
 
@@ -685,6 +725,8 @@ func (m *CategoryMutation) Field(name string) (ent.Value, bool) {
 		return m.Slug()
 	case category.FieldDescription:
 		return m.Description()
+	case category.FieldImageURL:
+		return m.ImageURL()
 	}
 	return nil, false
 }
@@ -712,6 +754,8 @@ func (m *CategoryMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldSlug(ctx)
 	case category.FieldDescription:
 		return m.OldDescription(ctx)
+	case category.FieldImageURL:
+		return m.OldImageURL(ctx)
 	}
 	return nil, fmt.Errorf("unknown Category field %s", name)
 }
@@ -783,6 +827,13 @@ func (m *CategoryMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetDescription(v)
+		return nil
+	case category.FieldImageURL:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetImageURL(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Category field %s", name)
@@ -886,6 +937,9 @@ func (m *CategoryMutation) ResetField(name string) error {
 		return nil
 	case category.FieldDescription:
 		m.ResetDescription()
+		return nil
+	case category.FieldImageURL:
+		m.ResetImageURL()
 		return nil
 	}
 	return fmt.Errorf("unknown Category field %s", name)

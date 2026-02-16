@@ -13,6 +13,7 @@ type CreateCategoryRequest struct {
 	Name        string         `json:"name" binding:"required,min=2,max=255"`
 	Slug        string         `json:"slug" binding:"required,min=3,max=100"`
 	Description string         `json:"description,omitempty" binding:"omitempty,max=2000"`
+	ImageURL    string         `json:"image_url" binding:"required,url"`
 	Metadata    types.Metadata `json:"metadata,omitempty"`
 }
 
@@ -35,6 +36,7 @@ type UpdateCategoryRequest struct {
 	Name        *string `json:"name,omitempty" binding:"omitempty,min=2,max=255"`
 	Slug        *string `json:"slug,omitempty" binding:"omitempty,min=3,max=100"`
 	Description *string `json:"description,omitempty" binding:"omitempty,max=2000"`
+	ImageURL    *string `json:"image_url,omitempty" binding:"omitempty,url"`
 }
 
 // Validate validates the UpdateCategoryRequest
@@ -78,6 +80,7 @@ func (req *CreateCategoryRequest) ToCategory(ctx context.Context) *category.Cate
 		Name:        req.Name,
 		Slug:        req.Slug,
 		Description: req.Description,
+		ImageURL:    req.ImageURL,
 		BaseModel:   baseModel,
 	}
 	if len(req.Metadata) > 0 {
@@ -95,6 +98,9 @@ func (req *UpdateCategoryRequest) ApplyToCategory(ctx context.Context, cat *cate
 	}
 	if req.Description != nil {
 		cat.Description = *req.Description
+	}
+	if req.ImageURL != nil {
+		cat.ImageURL = *req.ImageURL
 	}
 	cat.UpdatedBy = types.GetUserID(ctx)
 }

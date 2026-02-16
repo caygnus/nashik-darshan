@@ -36,6 +36,8 @@ type Category struct {
 	Slug string `json:"slug,omitempty"`
 	// Description holds the value of the "description" field.
 	Description string `json:"description,omitempty"`
+	// ImageURL holds the value of the "image_url" field.
+	ImageURL string `json:"image_url,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the CategoryQuery when eager-loading is set.
 	Edges        CategoryEdges `json:"edges"`
@@ -67,7 +69,7 @@ func (*Category) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case category.FieldMetadata:
 			values[i] = new([]byte)
-		case category.FieldID, category.FieldStatus, category.FieldCreatedBy, category.FieldUpdatedBy, category.FieldName, category.FieldSlug, category.FieldDescription:
+		case category.FieldID, category.FieldStatus, category.FieldCreatedBy, category.FieldUpdatedBy, category.FieldName, category.FieldSlug, category.FieldDescription, category.FieldImageURL:
 			values[i] = new(sql.NullString)
 		case category.FieldCreatedAt, category.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -148,6 +150,12 @@ func (_m *Category) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.Description = value.String
 			}
+		case category.FieldImageURL:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field image_url", values[i])
+			} else if value.Valid {
+				_m.ImageURL = value.String
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -215,6 +223,9 @@ func (_m *Category) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("description=")
 	builder.WriteString(_m.Description)
+	builder.WriteString(", ")
+	builder.WriteString("image_url=")
+	builder.WriteString(_m.ImageURL)
 	builder.WriteByte(')')
 	return builder.String()
 }

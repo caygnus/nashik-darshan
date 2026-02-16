@@ -123,6 +123,12 @@ func (_c *CategoryCreate) SetNillableDescription(v *string) *CategoryCreate {
 	return _c
 }
 
+// SetImageURL sets the "image_url" field.
+func (_c *CategoryCreate) SetImageURL(v string) *CategoryCreate {
+	_c.mutation.SetImageURL(v)
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *CategoryCreate) SetID(v string) *CategoryCreate {
 	_c.mutation.SetID(v)
@@ -224,6 +230,14 @@ func (_c *CategoryCreate) check() error {
 			return &ValidationError{Name: "slug", err: fmt.Errorf(`ent: validator failed for field "Category.slug": %w`, err)}
 		}
 	}
+	if _, ok := _c.mutation.ImageURL(); !ok {
+		return &ValidationError{Name: "image_url", err: errors.New(`ent: missing required field "Category.image_url"`)}
+	}
+	if v, ok := _c.mutation.ImageURL(); ok {
+		if err := category.ImageURLValidator(v); err != nil {
+			return &ValidationError{Name: "image_url", err: fmt.Errorf(`ent: validator failed for field "Category.image_url": %w`, err)}
+		}
+	}
 	if v, ok := _c.mutation.ID(); ok {
 		if err := category.IDValidator(v); err != nil {
 			return &ValidationError{Name: "id", err: fmt.Errorf(`ent: validator failed for field "Category.id": %w`, err)}
@@ -299,6 +313,10 @@ func (_c *CategoryCreate) createSpec() (*Category, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.Description(); ok {
 		_spec.SetField(category.FieldDescription, field.TypeString, value)
 		_node.Description = value
+	}
+	if value, ok := _c.mutation.ImageURL(); ok {
+		_spec.SetField(category.FieldImageURL, field.TypeString, value)
+		_node.ImageURL = value
 	}
 	if nodes := _c.mutation.PlacesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

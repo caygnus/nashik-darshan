@@ -42,6 +42,7 @@ func (r *CategoryRepository) Create(ctx context.Context, c *domain.Category) err
 		SetSlug(c.Slug).
 		SetStatus(string(c.Status)).
 		SetDescription(c.Description).
+		SetImageURL(c.ImageURL).
 		SetCreatedAt(c.CreatedAt).
 		SetUpdatedAt(c.UpdatedAt).
 		SetCreatedBy(c.CreatedBy).
@@ -219,6 +220,7 @@ func (r *CategoryRepository) Update(ctx context.Context, c *domain.Category) err
 		SetName(c.Name).
 		SetSlug(c.Slug).
 		SetDescription(c.Description).
+		SetImageURL(c.ImageURL).
 		SetStatus(string(c.Status)).
 		SetUpdatedAt(time.Now().UTC()).
 		SetUpdatedBy(types.GetUserID(ctx))

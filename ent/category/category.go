@@ -32,6 +32,8 @@ const (
 	FieldSlug = "slug"
 	// FieldDescription holds the string denoting the description field in the database.
 	FieldDescription = "description"
+	// FieldImageURL holds the string denoting the image_url field in the database.
+	FieldImageURL = "image_url"
 	// EdgePlaces holds the string denoting the places edge name in mutations.
 	EdgePlaces = "places"
 	// Table holds the table name of the category in the database.
@@ -55,6 +57,7 @@ var Columns = []string{
 	FieldName,
 	FieldSlug,
 	FieldDescription,
+	FieldImageURL,
 }
 
 var (
@@ -88,6 +91,8 @@ var (
 	NameValidator func(string) error
 	// SlugValidator is a validator for the "slug" field. It is called by the builders before save.
 	SlugValidator func(string) error
+	// ImageURLValidator is a validator for the "image_url" field. It is called by the builders before save.
+	ImageURLValidator func(string) error
 	// IDValidator is a validator for the "id" field. It is called by the builders before save.
 	IDValidator func(string) error
 )
@@ -138,6 +143,11 @@ func BySlug(opts ...sql.OrderTermOption) OrderOption {
 // ByDescription orders the results by the description field.
 func ByDescription(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDescription, opts...).ToFunc()
+}
+
+// ByImageURL orders the results by the image_url field.
+func ByImageURL(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldImageURL, opts...).ToFunc()
 }
 
 // ByPlacesCount orders the results by places count.

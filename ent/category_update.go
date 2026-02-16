@@ -129,6 +129,20 @@ func (_u *CategoryUpdate) ClearDescription() *CategoryUpdate {
 	return _u
 }
 
+// SetImageURL sets the "image_url" field.
+func (_u *CategoryUpdate) SetImageURL(v string) *CategoryUpdate {
+	_u.mutation.SetImageURL(v)
+	return _u
+}
+
+// SetNillableImageURL sets the "image_url" field if the given value is not nil.
+func (_u *CategoryUpdate) SetNillableImageURL(v *string) *CategoryUpdate {
+	if v != nil {
+		_u.SetImageURL(*v)
+	}
+	return _u
+}
+
 // AddPlaceIDs adds the "places" edge to the Place entity by IDs.
 func (_u *CategoryUpdate) AddPlaceIDs(ids ...string) *CategoryUpdate {
 	_u.mutation.AddPlaceIDs(ids...)
@@ -218,6 +232,11 @@ func (_u *CategoryUpdate) check() error {
 			return &ValidationError{Name: "slug", err: fmt.Errorf(`ent: validator failed for field "Category.slug": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.ImageURL(); ok {
+		if err := category.ImageURLValidator(v); err != nil {
+			return &ValidationError{Name: "image_url", err: fmt.Errorf(`ent: validator failed for field "Category.image_url": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -265,6 +284,9 @@ func (_u *CategoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(category.FieldDescription, field.TypeString)
+	}
+	if value, ok := _u.mutation.ImageURL(); ok {
+		_spec.SetField(category.FieldImageURL, field.TypeString, value)
 	}
 	if _u.mutation.PlacesCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -431,6 +453,20 @@ func (_u *CategoryUpdateOne) ClearDescription() *CategoryUpdateOne {
 	return _u
 }
 
+// SetImageURL sets the "image_url" field.
+func (_u *CategoryUpdateOne) SetImageURL(v string) *CategoryUpdateOne {
+	_u.mutation.SetImageURL(v)
+	return _u
+}
+
+// SetNillableImageURL sets the "image_url" field if the given value is not nil.
+func (_u *CategoryUpdateOne) SetNillableImageURL(v *string) *CategoryUpdateOne {
+	if v != nil {
+		_u.SetImageURL(*v)
+	}
+	return _u
+}
+
 // AddPlaceIDs adds the "places" edge to the Place entity by IDs.
 func (_u *CategoryUpdateOne) AddPlaceIDs(ids ...string) *CategoryUpdateOne {
 	_u.mutation.AddPlaceIDs(ids...)
@@ -533,6 +569,11 @@ func (_u *CategoryUpdateOne) check() error {
 			return &ValidationError{Name: "slug", err: fmt.Errorf(`ent: validator failed for field "Category.slug": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.ImageURL(); ok {
+		if err := category.ImageURLValidator(v); err != nil {
+			return &ValidationError{Name: "image_url", err: fmt.Errorf(`ent: validator failed for field "Category.image_url": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -597,6 +638,9 @@ func (_u *CategoryUpdateOne) sqlSave(ctx context.Context) (_node *Category, err 
 	}
 	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(category.FieldDescription, field.TypeString)
+	}
+	if value, ok := _u.mutation.ImageURL(); ok {
+		_spec.SetField(category.FieldImageURL, field.TypeString, value)
 	}
 	if _u.mutation.PlacesCleared() {
 		edge := &sqlgraph.EdgeSpec{

@@ -11,6 +11,7 @@ type Category struct {
 	Name        string          `json:"name" db:"name"`
 	Slug        string          `json:"slug" db:"slug"`
 	Description string          `json:"description,omitempty" db:"description"`
+	ImageURL    string          `json:"image_url" db:"image_url"`
 	Metadata    *types.Metadata `json:"metadata,omitempty" db:"metadata"`
 	types.BaseModel
 }
@@ -23,6 +24,7 @@ func FromEnt(category *ent.Category) *Category {
 		Name:        category.Name,
 		Slug:        category.Slug,
 		Description: category.Description,
+		ImageURL:    category.ImageURL,
 		Metadata:    metadata,
 		BaseModel: types.BaseModel{
 			Status:    types.Status(category.Status),
