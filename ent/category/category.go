@@ -34,6 +34,8 @@ const (
 	FieldDescription = "description"
 	// FieldImageURL holds the string denoting the image_url field in the database.
 	FieldImageURL = "image_url"
+	// FieldIcon holds the string denoting the icon field in the database.
+	FieldIcon = "icon"
 	// EdgePlaces holds the string denoting the places edge name in mutations.
 	EdgePlaces = "places"
 	// Table holds the table name of the category in the database.
@@ -58,6 +60,7 @@ var Columns = []string{
 	FieldSlug,
 	FieldDescription,
 	FieldImageURL,
+	FieldIcon,
 }
 
 var (
@@ -148,6 +151,11 @@ func ByDescription(opts ...sql.OrderTermOption) OrderOption {
 // ByImageURL orders the results by the image_url field.
 func ByImageURL(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldImageURL, opts...).ToFunc()
+}
+
+// ByIcon orders the results by the icon field.
+func ByIcon(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIcon, opts...).ToFunc()
 }
 
 // ByPlacesCount orders the results by places count.

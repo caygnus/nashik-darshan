@@ -47,6 +47,11 @@ func (Category) Fields() []ent.Field {
 				"postgres": "text",
 			}).
 			NotEmpty(),
+		field.String("icon").
+			SchemaType(map[string]string{
+				"postgres": "text",
+			}).
+			NotEmpty(),
 	}
 }
 

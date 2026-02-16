@@ -143,6 +143,26 @@ func (_u *CategoryUpdate) SetNillableImageURL(v *string) *CategoryUpdate {
 	return _u
 }
 
+// SetIcon sets the "icon" field.
+func (_u *CategoryUpdate) SetIcon(v string) *CategoryUpdate {
+	_u.mutation.SetIcon(v)
+	return _u
+}
+
+// SetNillableIcon sets the "icon" field if the given value is not nil.
+func (_u *CategoryUpdate) SetNillableIcon(v *string) *CategoryUpdate {
+	if v != nil {
+		_u.SetIcon(*v)
+	}
+	return _u
+}
+
+// ClearIcon clears the value of the "icon" field.
+func (_u *CategoryUpdate) ClearIcon() *CategoryUpdate {
+	_u.mutation.ClearIcon()
+	return _u
+}
+
 // AddPlaceIDs adds the "places" edge to the Place entity by IDs.
 func (_u *CategoryUpdate) AddPlaceIDs(ids ...string) *CategoryUpdate {
 	_u.mutation.AddPlaceIDs(ids...)
@@ -287,6 +307,12 @@ func (_u *CategoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if value, ok := _u.mutation.ImageURL(); ok {
 		_spec.SetField(category.FieldImageURL, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.Icon(); ok {
+		_spec.SetField(category.FieldIcon, field.TypeString, value)
+	}
+	if _u.mutation.IconCleared() {
+		_spec.ClearField(category.FieldIcon, field.TypeString)
 	}
 	if _u.mutation.PlacesCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -467,6 +493,26 @@ func (_u *CategoryUpdateOne) SetNillableImageURL(v *string) *CategoryUpdateOne {
 	return _u
 }
 
+// SetIcon sets the "icon" field.
+func (_u *CategoryUpdateOne) SetIcon(v string) *CategoryUpdateOne {
+	_u.mutation.SetIcon(v)
+	return _u
+}
+
+// SetNillableIcon sets the "icon" field if the given value is not nil.
+func (_u *CategoryUpdateOne) SetNillableIcon(v *string) *CategoryUpdateOne {
+	if v != nil {
+		_u.SetIcon(*v)
+	}
+	return _u
+}
+
+// ClearIcon clears the value of the "icon" field.
+func (_u *CategoryUpdateOne) ClearIcon() *CategoryUpdateOne {
+	_u.mutation.ClearIcon()
+	return _u
+}
+
 // AddPlaceIDs adds the "places" edge to the Place entity by IDs.
 func (_u *CategoryUpdateOne) AddPlaceIDs(ids ...string) *CategoryUpdateOne {
 	_u.mutation.AddPlaceIDs(ids...)
@@ -641,6 +687,12 @@ func (_u *CategoryUpdateOne) sqlSave(ctx context.Context) (_node *Category, err 
 	}
 	if value, ok := _u.mutation.ImageURL(); ok {
 		_spec.SetField(category.FieldImageURL, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.Icon(); ok {
+		_spec.SetField(category.FieldIcon, field.TypeString, value)
+	}
+	if _u.mutation.IconCleared() {
+		_spec.ClearField(category.FieldIcon, field.TypeString)
 	}
 	if _u.mutation.PlacesCleared() {
 		edge := &sqlgraph.EdgeSpec{

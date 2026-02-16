@@ -129,6 +129,20 @@ func (_c *CategoryCreate) SetImageURL(v string) *CategoryCreate {
 	return _c
 }
 
+// SetIcon sets the "icon" field.
+func (_c *CategoryCreate) SetIcon(v string) *CategoryCreate {
+	_c.mutation.SetIcon(v)
+	return _c
+}
+
+// SetNillableIcon sets the "icon" field if the given value is not nil.
+func (_c *CategoryCreate) SetNillableIcon(v *string) *CategoryCreate {
+	if v != nil {
+		_c.SetIcon(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *CategoryCreate) SetID(v string) *CategoryCreate {
 	_c.mutation.SetID(v)
@@ -317,6 +331,10 @@ func (_c *CategoryCreate) createSpec() (*Category, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.ImageURL(); ok {
 		_spec.SetField(category.FieldImageURL, field.TypeString, value)
 		_node.ImageURL = value
+	}
+	if value, ok := _c.mutation.Icon(); ok {
+		_spec.SetField(category.FieldIcon, field.TypeString, value)
+		_node.Icon = value
 	}
 	if nodes := _c.mutation.PlacesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

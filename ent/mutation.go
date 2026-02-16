@@ -55,6 +55,7 @@ type CategoryMutation struct {
 	slug          *string
 	description   *string
 	image_url     *string
+	icon          *string
 	clearedFields map[string]struct{}
 	places        map[string]struct{}
 	removedplaces map[string]struct{}
@@ -580,6 +581,55 @@ func (m *CategoryMutation) ResetImageURL() {
 	m.image_url = nil
 }
 
+// SetIcon sets the "icon" field.
+func (m *CategoryMutation) SetIcon(s string) {
+	m.icon = &s
+}
+
+// Icon returns the value of the "icon" field in the mutation.
+func (m *CategoryMutation) Icon() (r string, exists bool) {
+	v := m.icon
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIcon returns the old "icon" field's value of the Category entity.
+// If the Category object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CategoryMutation) OldIcon(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldIcon is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldIcon requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIcon: %w", err)
+	}
+	return oldValue.Icon, nil
+}
+
+// ClearIcon clears the value of the "icon" field.
+func (m *CategoryMutation) ClearIcon() {
+	m.icon = nil
+	m.clearedFields[category.FieldIcon] = struct{}{}
+}
+
+// IconCleared returns if the "icon" field was cleared in this mutation.
+func (m *CategoryMutation) IconCleared() bool {
+	_, ok := m.clearedFields[category.FieldIcon]
+	return ok
+}
+
+// ResetIcon resets all changes to the "icon" field.
+func (m *CategoryMutation) ResetIcon() {
+	m.icon = nil
+	delete(m.clearedFields, category.FieldIcon)
+}
+
 // AddPlaceIDs adds the "places" edge to the Place entity by ids.
 func (m *CategoryMutation) AddPlaceIDs(ids ...string) {
 	if m.places == nil {
@@ -668,7 +718,7 @@ func (m *CategoryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *CategoryMutation) Fields() []string {
-	fields := make([]string, 0, 10)
+	fields := make([]string, 0, 11)
 	if m.status != nil {
 		fields = append(fields, category.FieldStatus)
 	}
@@ -699,6 +749,9 @@ func (m *CategoryMutation) Fields() []string {
 	if m.image_url != nil {
 		fields = append(fields, category.FieldImageURL)
 	}
+	if m.icon != nil {
+		fields = append(fields, category.FieldIcon)
+	}
 	return fields
 }
 
@@ -727,6 +780,8 @@ func (m *CategoryMutation) Field(name string) (ent.Value, bool) {
 		return m.Description()
 	case category.FieldImageURL:
 		return m.ImageURL()
+	case category.FieldIcon:
+		return m.Icon()
 	}
 	return nil, false
 }
@@ -756,6 +811,8 @@ func (m *CategoryMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldDescription(ctx)
 	case category.FieldImageURL:
 		return m.OldImageURL(ctx)
+	case category.FieldIcon:
+		return m.OldIcon(ctx)
 	}
 	return nil, fmt.Errorf("unknown Category field %s", name)
 }
@@ -835,6 +892,13 @@ func (m *CategoryMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetImageURL(v)
 		return nil
+	case category.FieldIcon:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIcon(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Category field %s", name)
 }
@@ -877,6 +941,9 @@ func (m *CategoryMutation) ClearedFields() []string {
 	if m.FieldCleared(category.FieldDescription) {
 		fields = append(fields, category.FieldDescription)
 	}
+	if m.FieldCleared(category.FieldIcon) {
+		fields = append(fields, category.FieldIcon)
+	}
 	return fields
 }
 
@@ -902,6 +969,9 @@ func (m *CategoryMutation) ClearField(name string) error {
 		return nil
 	case category.FieldDescription:
 		m.ClearDescription()
+		return nil
+	case category.FieldIcon:
+		m.ClearIcon()
 		return nil
 	}
 	return fmt.Errorf("unknown Category nullable field %s", name)
@@ -940,6 +1010,9 @@ func (m *CategoryMutation) ResetField(name string) error {
 		return nil
 	case category.FieldImageURL:
 		m.ResetImageURL()
+		return nil
+	case category.FieldIcon:
+		m.ResetIcon()
 		return nil
 	}
 	return fmt.Errorf("unknown Category field %s", name)
