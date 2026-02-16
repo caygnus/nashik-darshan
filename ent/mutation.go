@@ -42,27 +42,31 @@ const (
 // CategoryMutation represents an operation that mutates the Category nodes in the graph.
 type CategoryMutation struct {
 	config
-	op            Op
-	typ           string
-	id            *string
-	status        *string
-	created_at    *time.Time
-	updated_at    *time.Time
-	created_by    *string
-	updated_by    *string
-	metadata      *map[string]string
-	name          *string
-	slug          *string
-	description   *string
-	image_url     *string
-	icon          *string
-	clearedFields map[string]struct{}
-	places        map[string]struct{}
-	removedplaces map[string]struct{}
-	clearedplaces bool
-	done          bool
-	oldValue      func(context.Context) (*Category, error)
-	predicates    []predicate.Category
+	op                Op
+	typ               string
+	id                *string
+	status            *string
+	created_at        *time.Time
+	updated_at        *time.Time
+	created_by        *string
+	updated_by        *string
+	metadata          *map[string]string
+	name              *string
+	subtitle          *string
+	short_description *string
+	slug              *string
+	description       *string
+	image_url         *string
+	icon              *string
+	tags              *[]string
+	appendtags        []string
+	clearedFields     map[string]struct{}
+	places            map[string]struct{}
+	removedplaces     map[string]struct{}
+	clearedplaces     bool
+	done              bool
+	oldValue          func(context.Context) (*Category, error)
+	predicates        []predicate.Category
 }
 
 var _ ent.Mutation = (*CategoryMutation)(nil)
@@ -460,6 +464,104 @@ func (m *CategoryMutation) ResetName() {
 	m.name = nil
 }
 
+// SetSubtitle sets the "subtitle" field.
+func (m *CategoryMutation) SetSubtitle(s string) {
+	m.subtitle = &s
+}
+
+// Subtitle returns the value of the "subtitle" field in the mutation.
+func (m *CategoryMutation) Subtitle() (r string, exists bool) {
+	v := m.subtitle
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSubtitle returns the old "subtitle" field's value of the Category entity.
+// If the Category object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CategoryMutation) OldSubtitle(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSubtitle is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSubtitle requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSubtitle: %w", err)
+	}
+	return oldValue.Subtitle, nil
+}
+
+// ClearSubtitle clears the value of the "subtitle" field.
+func (m *CategoryMutation) ClearSubtitle() {
+	m.subtitle = nil
+	m.clearedFields[category.FieldSubtitle] = struct{}{}
+}
+
+// SubtitleCleared returns if the "subtitle" field was cleared in this mutation.
+func (m *CategoryMutation) SubtitleCleared() bool {
+	_, ok := m.clearedFields[category.FieldSubtitle]
+	return ok
+}
+
+// ResetSubtitle resets all changes to the "subtitle" field.
+func (m *CategoryMutation) ResetSubtitle() {
+	m.subtitle = nil
+	delete(m.clearedFields, category.FieldSubtitle)
+}
+
+// SetShortDescription sets the "short_description" field.
+func (m *CategoryMutation) SetShortDescription(s string) {
+	m.short_description = &s
+}
+
+// ShortDescription returns the value of the "short_description" field in the mutation.
+func (m *CategoryMutation) ShortDescription() (r string, exists bool) {
+	v := m.short_description
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldShortDescription returns the old "short_description" field's value of the Category entity.
+// If the Category object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CategoryMutation) OldShortDescription(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldShortDescription is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldShortDescription requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldShortDescription: %w", err)
+	}
+	return oldValue.ShortDescription, nil
+}
+
+// ClearShortDescription clears the value of the "short_description" field.
+func (m *CategoryMutation) ClearShortDescription() {
+	m.short_description = nil
+	m.clearedFields[category.FieldShortDescription] = struct{}{}
+}
+
+// ShortDescriptionCleared returns if the "short_description" field was cleared in this mutation.
+func (m *CategoryMutation) ShortDescriptionCleared() bool {
+	_, ok := m.clearedFields[category.FieldShortDescription]
+	return ok
+}
+
+// ResetShortDescription resets all changes to the "short_description" field.
+func (m *CategoryMutation) ResetShortDescription() {
+	m.short_description = nil
+	delete(m.clearedFields, category.FieldShortDescription)
+}
+
 // SetSlug sets the "slug" field.
 func (m *CategoryMutation) SetSlug(s string) {
 	m.slug = &s
@@ -612,22 +714,74 @@ func (m *CategoryMutation) OldIcon(ctx context.Context) (v string, err error) {
 	return oldValue.Icon, nil
 }
 
-// ClearIcon clears the value of the "icon" field.
-func (m *CategoryMutation) ClearIcon() {
-	m.icon = nil
-	m.clearedFields[category.FieldIcon] = struct{}{}
-}
-
-// IconCleared returns if the "icon" field was cleared in this mutation.
-func (m *CategoryMutation) IconCleared() bool {
-	_, ok := m.clearedFields[category.FieldIcon]
-	return ok
-}
-
 // ResetIcon resets all changes to the "icon" field.
 func (m *CategoryMutation) ResetIcon() {
 	m.icon = nil
-	delete(m.clearedFields, category.FieldIcon)
+}
+
+// SetTags sets the "tags" field.
+func (m *CategoryMutation) SetTags(s []string) {
+	m.tags = &s
+	m.appendtags = nil
+}
+
+// Tags returns the value of the "tags" field in the mutation.
+func (m *CategoryMutation) Tags() (r []string, exists bool) {
+	v := m.tags
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTags returns the old "tags" field's value of the Category entity.
+// If the Category object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CategoryMutation) OldTags(ctx context.Context) (v []string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTags is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTags requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTags: %w", err)
+	}
+	return oldValue.Tags, nil
+}
+
+// AppendTags adds s to the "tags" field.
+func (m *CategoryMutation) AppendTags(s []string) {
+	m.appendtags = append(m.appendtags, s...)
+}
+
+// AppendedTags returns the list of values that were appended to the "tags" field in this mutation.
+func (m *CategoryMutation) AppendedTags() ([]string, bool) {
+	if len(m.appendtags) == 0 {
+		return nil, false
+	}
+	return m.appendtags, true
+}
+
+// ClearTags clears the value of the "tags" field.
+func (m *CategoryMutation) ClearTags() {
+	m.tags = nil
+	m.appendtags = nil
+	m.clearedFields[category.FieldTags] = struct{}{}
+}
+
+// TagsCleared returns if the "tags" field was cleared in this mutation.
+func (m *CategoryMutation) TagsCleared() bool {
+	_, ok := m.clearedFields[category.FieldTags]
+	return ok
+}
+
+// ResetTags resets all changes to the "tags" field.
+func (m *CategoryMutation) ResetTags() {
+	m.tags = nil
+	m.appendtags = nil
+	delete(m.clearedFields, category.FieldTags)
 }
 
 // AddPlaceIDs adds the "places" edge to the Place entity by ids.
@@ -718,7 +872,7 @@ func (m *CategoryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *CategoryMutation) Fields() []string {
-	fields := make([]string, 0, 11)
+	fields := make([]string, 0, 14)
 	if m.status != nil {
 		fields = append(fields, category.FieldStatus)
 	}
@@ -740,6 +894,12 @@ func (m *CategoryMutation) Fields() []string {
 	if m.name != nil {
 		fields = append(fields, category.FieldName)
 	}
+	if m.subtitle != nil {
+		fields = append(fields, category.FieldSubtitle)
+	}
+	if m.short_description != nil {
+		fields = append(fields, category.FieldShortDescription)
+	}
 	if m.slug != nil {
 		fields = append(fields, category.FieldSlug)
 	}
@@ -751,6 +911,9 @@ func (m *CategoryMutation) Fields() []string {
 	}
 	if m.icon != nil {
 		fields = append(fields, category.FieldIcon)
+	}
+	if m.tags != nil {
+		fields = append(fields, category.FieldTags)
 	}
 	return fields
 }
@@ -774,6 +937,10 @@ func (m *CategoryMutation) Field(name string) (ent.Value, bool) {
 		return m.Metadata()
 	case category.FieldName:
 		return m.Name()
+	case category.FieldSubtitle:
+		return m.Subtitle()
+	case category.FieldShortDescription:
+		return m.ShortDescription()
 	case category.FieldSlug:
 		return m.Slug()
 	case category.FieldDescription:
@@ -782,6 +949,8 @@ func (m *CategoryMutation) Field(name string) (ent.Value, bool) {
 		return m.ImageURL()
 	case category.FieldIcon:
 		return m.Icon()
+	case category.FieldTags:
+		return m.Tags()
 	}
 	return nil, false
 }
@@ -805,6 +974,10 @@ func (m *CategoryMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldMetadata(ctx)
 	case category.FieldName:
 		return m.OldName(ctx)
+	case category.FieldSubtitle:
+		return m.OldSubtitle(ctx)
+	case category.FieldShortDescription:
+		return m.OldShortDescription(ctx)
 	case category.FieldSlug:
 		return m.OldSlug(ctx)
 	case category.FieldDescription:
@@ -813,6 +986,8 @@ func (m *CategoryMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldImageURL(ctx)
 	case category.FieldIcon:
 		return m.OldIcon(ctx)
+	case category.FieldTags:
+		return m.OldTags(ctx)
 	}
 	return nil, fmt.Errorf("unknown Category field %s", name)
 }
@@ -871,6 +1046,20 @@ func (m *CategoryMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetName(v)
 		return nil
+	case category.FieldSubtitle:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSubtitle(v)
+		return nil
+	case category.FieldShortDescription:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetShortDescription(v)
+		return nil
 	case category.FieldSlug:
 		v, ok := value.(string)
 		if !ok {
@@ -898,6 +1087,13 @@ func (m *CategoryMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetIcon(v)
+		return nil
+	case category.FieldTags:
+		v, ok := value.([]string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTags(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Category field %s", name)
@@ -938,11 +1134,17 @@ func (m *CategoryMutation) ClearedFields() []string {
 	if m.FieldCleared(category.FieldMetadata) {
 		fields = append(fields, category.FieldMetadata)
 	}
+	if m.FieldCleared(category.FieldSubtitle) {
+		fields = append(fields, category.FieldSubtitle)
+	}
+	if m.FieldCleared(category.FieldShortDescription) {
+		fields = append(fields, category.FieldShortDescription)
+	}
 	if m.FieldCleared(category.FieldDescription) {
 		fields = append(fields, category.FieldDescription)
 	}
-	if m.FieldCleared(category.FieldIcon) {
-		fields = append(fields, category.FieldIcon)
+	if m.FieldCleared(category.FieldTags) {
+		fields = append(fields, category.FieldTags)
 	}
 	return fields
 }
@@ -967,11 +1169,17 @@ func (m *CategoryMutation) ClearField(name string) error {
 	case category.FieldMetadata:
 		m.ClearMetadata()
 		return nil
+	case category.FieldSubtitle:
+		m.ClearSubtitle()
+		return nil
+	case category.FieldShortDescription:
+		m.ClearShortDescription()
+		return nil
 	case category.FieldDescription:
 		m.ClearDescription()
 		return nil
-	case category.FieldIcon:
-		m.ClearIcon()
+	case category.FieldTags:
+		m.ClearTags()
 		return nil
 	}
 	return fmt.Errorf("unknown Category nullable field %s", name)
@@ -1002,6 +1210,12 @@ func (m *CategoryMutation) ResetField(name string) error {
 	case category.FieldName:
 		m.ResetName()
 		return nil
+	case category.FieldSubtitle:
+		m.ResetSubtitle()
+		return nil
+	case category.FieldShortDescription:
+		m.ResetShortDescription()
+		return nil
 	case category.FieldSlug:
 		m.ResetSlug()
 		return nil
@@ -1013,6 +1227,9 @@ func (m *CategoryMutation) ResetField(name string) error {
 		return nil
 	case category.FieldIcon:
 		m.ResetIcon()
+		return nil
+	case category.FieldTags:
+		m.ResetTags()
 		return nil
 	}
 	return fmt.Errorf("unknown Category field %s", name)

@@ -95,6 +95,16 @@ func Name(v string) predicate.Category {
 	return predicate.Category(sql.FieldEQ(FieldName, v))
 }
 
+// Subtitle applies equality check predicate on the "subtitle" field. It's identical to SubtitleEQ.
+func Subtitle(v string) predicate.Category {
+	return predicate.Category(sql.FieldEQ(FieldSubtitle, v))
+}
+
+// ShortDescription applies equality check predicate on the "short_description" field. It's identical to ShortDescriptionEQ.
+func ShortDescription(v string) predicate.Category {
+	return predicate.Category(sql.FieldEQ(FieldShortDescription, v))
+}
+
 // Slug applies equality check predicate on the "slug" field. It's identical to SlugEQ.
 func Slug(v string) predicate.Category {
 	return predicate.Category(sql.FieldEQ(FieldSlug, v))
@@ -485,6 +495,156 @@ func NameContainsFold(v string) predicate.Category {
 	return predicate.Category(sql.FieldContainsFold(FieldName, v))
 }
 
+// SubtitleEQ applies the EQ predicate on the "subtitle" field.
+func SubtitleEQ(v string) predicate.Category {
+	return predicate.Category(sql.FieldEQ(FieldSubtitle, v))
+}
+
+// SubtitleNEQ applies the NEQ predicate on the "subtitle" field.
+func SubtitleNEQ(v string) predicate.Category {
+	return predicate.Category(sql.FieldNEQ(FieldSubtitle, v))
+}
+
+// SubtitleIn applies the In predicate on the "subtitle" field.
+func SubtitleIn(vs ...string) predicate.Category {
+	return predicate.Category(sql.FieldIn(FieldSubtitle, vs...))
+}
+
+// SubtitleNotIn applies the NotIn predicate on the "subtitle" field.
+func SubtitleNotIn(vs ...string) predicate.Category {
+	return predicate.Category(sql.FieldNotIn(FieldSubtitle, vs...))
+}
+
+// SubtitleGT applies the GT predicate on the "subtitle" field.
+func SubtitleGT(v string) predicate.Category {
+	return predicate.Category(sql.FieldGT(FieldSubtitle, v))
+}
+
+// SubtitleGTE applies the GTE predicate on the "subtitle" field.
+func SubtitleGTE(v string) predicate.Category {
+	return predicate.Category(sql.FieldGTE(FieldSubtitle, v))
+}
+
+// SubtitleLT applies the LT predicate on the "subtitle" field.
+func SubtitleLT(v string) predicate.Category {
+	return predicate.Category(sql.FieldLT(FieldSubtitle, v))
+}
+
+// SubtitleLTE applies the LTE predicate on the "subtitle" field.
+func SubtitleLTE(v string) predicate.Category {
+	return predicate.Category(sql.FieldLTE(FieldSubtitle, v))
+}
+
+// SubtitleContains applies the Contains predicate on the "subtitle" field.
+func SubtitleContains(v string) predicate.Category {
+	return predicate.Category(sql.FieldContains(FieldSubtitle, v))
+}
+
+// SubtitleHasPrefix applies the HasPrefix predicate on the "subtitle" field.
+func SubtitleHasPrefix(v string) predicate.Category {
+	return predicate.Category(sql.FieldHasPrefix(FieldSubtitle, v))
+}
+
+// SubtitleHasSuffix applies the HasSuffix predicate on the "subtitle" field.
+func SubtitleHasSuffix(v string) predicate.Category {
+	return predicate.Category(sql.FieldHasSuffix(FieldSubtitle, v))
+}
+
+// SubtitleIsNil applies the IsNil predicate on the "subtitle" field.
+func SubtitleIsNil() predicate.Category {
+	return predicate.Category(sql.FieldIsNull(FieldSubtitle))
+}
+
+// SubtitleNotNil applies the NotNil predicate on the "subtitle" field.
+func SubtitleNotNil() predicate.Category {
+	return predicate.Category(sql.FieldNotNull(FieldSubtitle))
+}
+
+// SubtitleEqualFold applies the EqualFold predicate on the "subtitle" field.
+func SubtitleEqualFold(v string) predicate.Category {
+	return predicate.Category(sql.FieldEqualFold(FieldSubtitle, v))
+}
+
+// SubtitleContainsFold applies the ContainsFold predicate on the "subtitle" field.
+func SubtitleContainsFold(v string) predicate.Category {
+	return predicate.Category(sql.FieldContainsFold(FieldSubtitle, v))
+}
+
+// ShortDescriptionEQ applies the EQ predicate on the "short_description" field.
+func ShortDescriptionEQ(v string) predicate.Category {
+	return predicate.Category(sql.FieldEQ(FieldShortDescription, v))
+}
+
+// ShortDescriptionNEQ applies the NEQ predicate on the "short_description" field.
+func ShortDescriptionNEQ(v string) predicate.Category {
+	return predicate.Category(sql.FieldNEQ(FieldShortDescription, v))
+}
+
+// ShortDescriptionIn applies the In predicate on the "short_description" field.
+func ShortDescriptionIn(vs ...string) predicate.Category {
+	return predicate.Category(sql.FieldIn(FieldShortDescription, vs...))
+}
+
+// ShortDescriptionNotIn applies the NotIn predicate on the "short_description" field.
+func ShortDescriptionNotIn(vs ...string) predicate.Category {
+	return predicate.Category(sql.FieldNotIn(FieldShortDescription, vs...))
+}
+
+// ShortDescriptionGT applies the GT predicate on the "short_description" field.
+func ShortDescriptionGT(v string) predicate.Category {
+	return predicate.Category(sql.FieldGT(FieldShortDescription, v))
+}
+
+// ShortDescriptionGTE applies the GTE predicate on the "short_description" field.
+func ShortDescriptionGTE(v string) predicate.Category {
+	return predicate.Category(sql.FieldGTE(FieldShortDescription, v))
+}
+
+// ShortDescriptionLT applies the LT predicate on the "short_description" field.
+func ShortDescriptionLT(v string) predicate.Category {
+	return predicate.Category(sql.FieldLT(FieldShortDescription, v))
+}
+
+// ShortDescriptionLTE applies the LTE predicate on the "short_description" field.
+func ShortDescriptionLTE(v string) predicate.Category {
+	return predicate.Category(sql.FieldLTE(FieldShortDescription, v))
+}
+
+// ShortDescriptionContains applies the Contains predicate on the "short_description" field.
+func ShortDescriptionContains(v string) predicate.Category {
+	return predicate.Category(sql.FieldContains(FieldShortDescription, v))
+}
+
+// ShortDescriptionHasPrefix applies the HasPrefix predicate on the "short_description" field.
+func ShortDescriptionHasPrefix(v string) predicate.Category {
+	return predicate.Category(sql.FieldHasPrefix(FieldShortDescription, v))
+}
+
+// ShortDescriptionHasSuffix applies the HasSuffix predicate on the "short_description" field.
+func ShortDescriptionHasSuffix(v string) predicate.Category {
+	return predicate.Category(sql.FieldHasSuffix(FieldShortDescription, v))
+}
+
+// ShortDescriptionIsNil applies the IsNil predicate on the "short_description" field.
+func ShortDescriptionIsNil() predicate.Category {
+	return predicate.Category(sql.FieldIsNull(FieldShortDescription))
+}
+
+// ShortDescriptionNotNil applies the NotNil predicate on the "short_description" field.
+func ShortDescriptionNotNil() predicate.Category {
+	return predicate.Category(sql.FieldNotNull(FieldShortDescription))
+}
+
+// ShortDescriptionEqualFold applies the EqualFold predicate on the "short_description" field.
+func ShortDescriptionEqualFold(v string) predicate.Category {
+	return predicate.Category(sql.FieldEqualFold(FieldShortDescription, v))
+}
+
+// ShortDescriptionContainsFold applies the ContainsFold predicate on the "short_description" field.
+func ShortDescriptionContainsFold(v string) predicate.Category {
+	return predicate.Category(sql.FieldContainsFold(FieldShortDescription, v))
+}
+
 // SlugEQ applies the EQ predicate on the "slug" field.
 func SlugEQ(v string) predicate.Category {
 	return predicate.Category(sql.FieldEQ(FieldSlug, v))
@@ -745,16 +905,6 @@ func IconHasSuffix(v string) predicate.Category {
 	return predicate.Category(sql.FieldHasSuffix(FieldIcon, v))
 }
 
-// IconIsNil applies the IsNil predicate on the "icon" field.
-func IconIsNil() predicate.Category {
-	return predicate.Category(sql.FieldIsNull(FieldIcon))
-}
-
-// IconNotNil applies the NotNil predicate on the "icon" field.
-func IconNotNil() predicate.Category {
-	return predicate.Category(sql.FieldNotNull(FieldIcon))
-}
-
 // IconEqualFold applies the EqualFold predicate on the "icon" field.
 func IconEqualFold(v string) predicate.Category {
 	return predicate.Category(sql.FieldEqualFold(FieldIcon, v))
@@ -763,6 +913,16 @@ func IconEqualFold(v string) predicate.Category {
 // IconContainsFold applies the ContainsFold predicate on the "icon" field.
 func IconContainsFold(v string) predicate.Category {
 	return predicate.Category(sql.FieldContainsFold(FieldIcon, v))
+}
+
+// TagsIsNil applies the IsNil predicate on the "tags" field.
+func TagsIsNil() predicate.Category {
+	return predicate.Category(sql.FieldIsNull(FieldTags))
+}
+
+// TagsNotNil applies the NotNil predicate on the "tags" field.
+func TagsNotNil() predicate.Category {
+	return predicate.Category(sql.FieldNotNull(FieldTags))
 }
 
 // HasPlaces applies the HasEdge predicate on the "places" edge.

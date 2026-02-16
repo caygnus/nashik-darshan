@@ -103,6 +103,34 @@ func (_c *CategoryCreate) SetName(v string) *CategoryCreate {
 	return _c
 }
 
+// SetSubtitle sets the "subtitle" field.
+func (_c *CategoryCreate) SetSubtitle(v string) *CategoryCreate {
+	_c.mutation.SetSubtitle(v)
+	return _c
+}
+
+// SetNillableSubtitle sets the "subtitle" field if the given value is not nil.
+func (_c *CategoryCreate) SetNillableSubtitle(v *string) *CategoryCreate {
+	if v != nil {
+		_c.SetSubtitle(*v)
+	}
+	return _c
+}
+
+// SetShortDescription sets the "short_description" field.
+func (_c *CategoryCreate) SetShortDescription(v string) *CategoryCreate {
+	_c.mutation.SetShortDescription(v)
+	return _c
+}
+
+// SetNillableShortDescription sets the "short_description" field if the given value is not nil.
+func (_c *CategoryCreate) SetNillableShortDescription(v *string) *CategoryCreate {
+	if v != nil {
+		_c.SetShortDescription(*v)
+	}
+	return _c
+}
+
 // SetSlug sets the "slug" field.
 func (_c *CategoryCreate) SetSlug(v string) *CategoryCreate {
 	_c.mutation.SetSlug(v)
@@ -135,11 +163,9 @@ func (_c *CategoryCreate) SetIcon(v string) *CategoryCreate {
 	return _c
 }
 
-// SetNillableIcon sets the "icon" field if the given value is not nil.
-func (_c *CategoryCreate) SetNillableIcon(v *string) *CategoryCreate {
-	if v != nil {
-		_c.SetIcon(*v)
-	}
+// SetTags sets the "tags" field.
+func (_c *CategoryCreate) SetTags(v []string) *CategoryCreate {
+	_c.mutation.SetTags(v)
 	return _c
 }
 
@@ -252,6 +278,14 @@ func (_c *CategoryCreate) check() error {
 			return &ValidationError{Name: "image_url", err: fmt.Errorf(`ent: validator failed for field "Category.image_url": %w`, err)}
 		}
 	}
+	if _, ok := _c.mutation.Icon(); !ok {
+		return &ValidationError{Name: "icon", err: errors.New(`ent: missing required field "Category.icon"`)}
+	}
+	if v, ok := _c.mutation.Icon(); ok {
+		if err := category.IconValidator(v); err != nil {
+			return &ValidationError{Name: "icon", err: fmt.Errorf(`ent: validator failed for field "Category.icon": %w`, err)}
+		}
+	}
 	if v, ok := _c.mutation.ID(); ok {
 		if err := category.IDValidator(v); err != nil {
 			return &ValidationError{Name: "id", err: fmt.Errorf(`ent: validator failed for field "Category.id": %w`, err)}
@@ -320,6 +354,14 @@ func (_c *CategoryCreate) createSpec() (*Category, *sqlgraph.CreateSpec) {
 		_spec.SetField(category.FieldName, field.TypeString, value)
 		_node.Name = value
 	}
+	if value, ok := _c.mutation.Subtitle(); ok {
+		_spec.SetField(category.FieldSubtitle, field.TypeString, value)
+		_node.Subtitle = value
+	}
+	if value, ok := _c.mutation.ShortDescription(); ok {
+		_spec.SetField(category.FieldShortDescription, field.TypeString, value)
+		_node.ShortDescription = value
+	}
 	if value, ok := _c.mutation.Slug(); ok {
 		_spec.SetField(category.FieldSlug, field.TypeString, value)
 		_node.Slug = value
@@ -335,6 +377,10 @@ func (_c *CategoryCreate) createSpec() (*Category, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.Icon(); ok {
 		_spec.SetField(category.FieldIcon, field.TypeString, value)
 		_node.Icon = value
+	}
+	if value, ok := _c.mutation.Tags(); ok {
+		_spec.SetField(category.FieldTags, field.TypeJSON, value)
+		_node.Tags = value
 	}
 	if nodes := _c.mutation.PlacesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

@@ -19,10 +19,13 @@ var (
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "metadata", Type: field.TypeJSON, Nullable: true, SchemaType: map[string]string{"postgres": "jsonb"}},
 		{Name: "name", Type: field.TypeString, SchemaType: map[string]string{"postgres": "varchar(255)"}},
+		{Name: "subtitle", Type: field.TypeString, Nullable: true, SchemaType: map[string]string{"postgres": "text"}},
+		{Name: "short_description", Type: field.TypeString, Nullable: true, SchemaType: map[string]string{"postgres": "text"}},
 		{Name: "slug", Type: field.TypeString, SchemaType: map[string]string{"postgres": "text"}},
 		{Name: "description", Type: field.TypeString, Nullable: true, SchemaType: map[string]string{"postgres": "text"}},
 		{Name: "image_url", Type: field.TypeString, SchemaType: map[string]string{"postgres": "text"}},
-		{Name: "icon", Type: field.TypeString, Nullable: true, SchemaType: map[string]string{"postgres": "text"}},
+		{Name: "icon", Type: field.TypeString, SchemaType: map[string]string{"postgres": "text"}},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true, SchemaType: map[string]string{"postgres": "varchar(255)[]"}},
 	}
 	// CategoriesTable holds the schema information for the "categories" table.
 	CategoriesTable = &schema.Table{
@@ -33,7 +36,7 @@ var (
 			{
 				Name:    "category_slug",
 				Unique:  true,
-				Columns: []*schema.Column{CategoriesColumns[8]},
+				Columns: []*schema.Column{CategoriesColumns[10]},
 			},
 		},
 	}

@@ -50,13 +50,17 @@ func init() {
 	// category.NameValidator is a validator for the "name" field. It is called by the builders before save.
 	category.NameValidator = categoryDescName.Validators[0].(func(string) error)
 	// categoryDescSlug is the schema descriptor for slug field.
-	categoryDescSlug := categoryFields[2].Descriptor()
+	categoryDescSlug := categoryFields[4].Descriptor()
 	// category.SlugValidator is a validator for the "slug" field. It is called by the builders before save.
 	category.SlugValidator = categoryDescSlug.Validators[0].(func(string) error)
 	// categoryDescImageURL is the schema descriptor for image_url field.
-	categoryDescImageURL := categoryFields[4].Descriptor()
+	categoryDescImageURL := categoryFields[6].Descriptor()
 	// category.ImageURLValidator is a validator for the "image_url" field. It is called by the builders before save.
 	category.ImageURLValidator = categoryDescImageURL.Validators[0].(func(string) error)
+	// categoryDescIcon is the schema descriptor for icon field.
+	categoryDescIcon := categoryFields[7].Descriptor()
+	// category.IconValidator is a validator for the "icon" field. It is called by the builders before save.
+	category.IconValidator = categoryDescIcon.Validators[0].(func(string) error)
 	// categoryDescID is the schema descriptor for id field.
 	categoryDescID := categoryFields[0].Descriptor()
 	// category.IDValidator is a validator for the "id" field. It is called by the builders before save.

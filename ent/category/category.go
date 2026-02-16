@@ -28,6 +28,10 @@ const (
 	FieldMetadata = "metadata"
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
+	// FieldSubtitle holds the string denoting the subtitle field in the database.
+	FieldSubtitle = "subtitle"
+	// FieldShortDescription holds the string denoting the short_description field in the database.
+	FieldShortDescription = "short_description"
 	// FieldSlug holds the string denoting the slug field in the database.
 	FieldSlug = "slug"
 	// FieldDescription holds the string denoting the description field in the database.
@@ -36,6 +40,8 @@ const (
 	FieldImageURL = "image_url"
 	// FieldIcon holds the string denoting the icon field in the database.
 	FieldIcon = "icon"
+	// FieldTags holds the string denoting the tags field in the database.
+	FieldTags = "tags"
 	// EdgePlaces holds the string denoting the places edge name in mutations.
 	EdgePlaces = "places"
 	// Table holds the table name of the category in the database.
@@ -57,10 +63,13 @@ var Columns = []string{
 	FieldUpdatedBy,
 	FieldMetadata,
 	FieldName,
+	FieldSubtitle,
+	FieldShortDescription,
 	FieldSlug,
 	FieldDescription,
 	FieldImageURL,
 	FieldIcon,
+	FieldTags,
 }
 
 var (
@@ -96,6 +105,8 @@ var (
 	SlugValidator func(string) error
 	// ImageURLValidator is a validator for the "image_url" field. It is called by the builders before save.
 	ImageURLValidator func(string) error
+	// IconValidator is a validator for the "icon" field. It is called by the builders before save.
+	IconValidator func(string) error
 	// IDValidator is a validator for the "id" field. It is called by the builders before save.
 	IDValidator func(string) error
 )
@@ -136,6 +147,16 @@ func ByUpdatedBy(opts ...sql.OrderTermOption) OrderOption {
 // ByName orders the results by the name field.
 func ByName(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldName, opts...).ToFunc()
+}
+
+// BySubtitle orders the results by the subtitle field.
+func BySubtitle(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSubtitle, opts...).ToFunc()
+}
+
+// ByShortDescription orders the results by the short_description field.
+func ByShortDescription(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldShortDescription, opts...).ToFunc()
 }
 
 // BySlug orders the results by the slug field.

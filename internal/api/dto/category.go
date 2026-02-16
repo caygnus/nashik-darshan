@@ -10,11 +10,15 @@ import (
 )
 
 type CreateCategoryRequest struct {
-	Name        string         `json:"name" binding:"required,min=2,max=255"`
-	Slug        string         `json:"slug" binding:"required,min=3,max=100"`
-	Description string         `json:"description,omitempty" binding:"omitempty,max=2000"`
-	ImageURL    string         `json:"image_url" binding:"required,url"`
-	Metadata    types.Metadata `json:"metadata,omitempty"`
+	Name             string         `json:"name" binding:"required,min=2,max=255"`
+	Slug             string         `json:"slug" binding:"required,min=3,max=100"`
+	Subtitle         string         `json:"subtitle,omitempty" binding:"omitempty,max=500"`
+	ShortDescription string         `json:"short_description,omitempty" binding:"omitempty,max=2000"`
+	Description      string         `json:"description,omitempty" binding:"omitempty,max=2000"`
+	ImageURL         string         `json:"image_url" binding:"required,url"`
+	Icon             string         `json:"icon" binding:"required"`
+	Tags             []string       `json:"tags,omitempty" binding:"omitempty,dive,max=100"`
+	Metadata         types.Metadata `json:"metadata,omitempty"`
 }
 
 // Validate validates the CreateCategoryRequest
@@ -33,10 +37,14 @@ func (req *CreateCategoryRequest) Validate() error {
 }
 
 type UpdateCategoryRequest struct {
-	Name        *string `json:"name,omitempty" binding:"omitempty,min=2,max=255"`
-	Slug        *string `json:"slug,omitempty" binding:"omitempty,min=3,max=100"`
-	Description *string `json:"description,omitempty" binding:"omitempty,max=2000"`
-	ImageURL    *string `json:"image_url,omitempty" binding:"omitempty,url"`
+	Name             *string  `json:"name,omitempty" binding:"omitempty,min=2,max=255"`
+	Slug             *string  `json:"slug,omitempty" binding:"omitempty,min=3,max=100"`
+	Subtitle         *string  `json:"subtitle,omitempty" binding:"omitempty,max=500"`
+	ShortDescription *string  `json:"short_description,omitempty" binding:"omitempty,max=2000"`
+	Description      *string  `json:"description,omitempty" binding:"omitempty,max=2000"`
+	ImageURL         *string  `json:"image_url,omitempty" binding:"omitempty,url"`
+	Icon             *string  `json:"icon,omitempty" binding:"omitempty,max=500"`
+	Tags             []string `json:"tags,omitempty" binding:"omitempty,dive,max=100"`
 }
 
 // Validate validates the UpdateCategoryRequest
@@ -76,12 +84,16 @@ func NewListCategoriesResponse(categories []*category.Category, total, limit, of
 func (req *CreateCategoryRequest) ToCategory(ctx context.Context) *category.Category {
 	baseModel := types.GetDefaultBaseModel(ctx)
 	cat := &category.Category{
-		ID:          types.GenerateUUIDWithPrefix(types.UUID_PREFIX_CATEGORY),
-		Name:        req.Name,
-		Slug:        req.Slug,
-		Description: req.Description,
-		ImageURL:    req.ImageURL,
-		BaseModel:   baseModel,
+		ID:               types.GenerateUUIDWithPrefix(types.UUID_PREFIX_CATEGORY),
+		Name:             req.Name,
+		Slug:             req.Slug,
+		Subtitle:         req.Subtitle,
+		ShortDescription: req.ShortDescription,
+		Description:      req.Description,
+		ImageURL:         req.ImageURL,
+		Icon:             req.Icon,
+		Tags:             req.Tags,
+		BaseModel:        baseModel,
 	}
 	if len(req.Metadata) > 0 {
 		cat.Metadata = types.NewMetadataFromMap((&req.Metadata).ToMap())
@@ -101,6 +113,18 @@ func (req *UpdateCategoryRequest) ApplyToCategory(ctx context.Context, cat *cate
 	}
 	if req.ImageURL != nil {
 		cat.ImageURL = *req.ImageURL
+	}
+	if req.Subtitle != nil {
+		cat.Subtitle = *req.Subtitle
+	}
+	if req.ShortDescription != nil {
+		cat.ShortDescription = *req.ShortDescription
+	}
+	if req.Icon != nil {
+		cat.Icon = *req.Icon
+	}
+	if req.Tags != nil {
+		cat.Tags = req.Tags
 	}
 	cat.UpdatedBy = types.GetUserID(ctx)
 }

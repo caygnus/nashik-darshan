@@ -41,8 +41,12 @@ func (r *CategoryRepository) Create(ctx context.Context, c *domain.Category) err
 		SetName(c.Name).
 		SetSlug(c.Slug).
 		SetStatus(string(c.Status)).
+		SetSubtitle(c.Subtitle).
+		SetShortDescription(c.ShortDescription).
 		SetDescription(c.Description).
 		SetImageURL(c.ImageURL).
+		SetIcon(c.Icon).
+		SetTags(c.Tags).
 		SetCreatedAt(c.CreatedAt).
 		SetUpdatedAt(c.UpdatedAt).
 		SetCreatedBy(c.CreatedBy).
@@ -219,8 +223,12 @@ func (r *CategoryRepository) Update(ctx context.Context, c *domain.Category) err
 	update := client.Category.UpdateOneID(c.ID).
 		SetName(c.Name).
 		SetSlug(c.Slug).
+		SetSubtitle(c.Subtitle).
+		SetShortDescription(c.ShortDescription).
 		SetDescription(c.Description).
 		SetImageURL(c.ImageURL).
+		SetIcon(c.Icon).
+		SetTags(c.Tags).
 		SetStatus(string(c.Status)).
 		SetUpdatedAt(time.Now().UTC()).
 		SetUpdatedBy(types.GetUserID(ctx))

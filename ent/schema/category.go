@@ -32,6 +32,16 @@ func (Category) Fields() []ent.Field {
 				"postgres": "varchar(255)",
 			}).
 			NotEmpty(),
+		field.String("subtitle").
+			SchemaType(map[string]string{
+				"postgres": "text",
+			}).
+			Optional(),
+		field.String("short_description").
+			SchemaType(map[string]string{
+				"postgres": "text",
+			}).
+			Optional(),
 		field.String("slug").
 			SchemaType(map[string]string{
 				"postgres": "text",
@@ -52,6 +62,11 @@ func (Category) Fields() []ent.Field {
 				"postgres": "text",
 			}).
 			NotEmpty(),
+		field.Strings("tags").
+			SchemaType(map[string]string{
+				"postgres": "varchar(255)[]",
+			}).
+			Optional(),
 	}
 }
 

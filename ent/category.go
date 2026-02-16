@@ -32,6 +32,10 @@ type Category struct {
 	Metadata map[string]string `json:"metadata,omitempty"`
 	// Name holds the value of the "name" field.
 	Name string `json:"name,omitempty"`
+	// Subtitle holds the value of the "subtitle" field.
+	Subtitle string `json:"subtitle,omitempty"`
+	// ShortDescription holds the value of the "short_description" field.
+	ShortDescription string `json:"short_description,omitempty"`
 	// Slug holds the value of the "slug" field.
 	Slug string `json:"slug,omitempty"`
 	// Description holds the value of the "description" field.
@@ -40,6 +44,8 @@ type Category struct {
 	ImageURL string `json:"image_url,omitempty"`
 	// Icon holds the value of the "icon" field.
 	Icon string `json:"icon,omitempty"`
+	// Tags holds the value of the "tags" field.
+	Tags []string `json:"tags,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the CategoryQuery when eager-loading is set.
 	Edges        CategoryEdges `json:"edges"`
@@ -69,9 +75,9 @@ func (*Category) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case category.FieldMetadata:
+		case category.FieldMetadata, category.FieldTags:
 			values[i] = new([]byte)
-		case category.FieldID, category.FieldStatus, category.FieldCreatedBy, category.FieldUpdatedBy, category.FieldName, category.FieldSlug, category.FieldDescription, category.FieldImageURL, category.FieldIcon:
+		case category.FieldID, category.FieldStatus, category.FieldCreatedBy, category.FieldUpdatedBy, category.FieldName, category.FieldSubtitle, category.FieldShortDescription, category.FieldSlug, category.FieldDescription, category.FieldImageURL, category.FieldIcon:
 			values[i] = new(sql.NullString)
 		case category.FieldCreatedAt, category.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -140,6 +146,18 @@ func (_m *Category) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.Name = value.String
 			}
+		case category.FieldSubtitle:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field subtitle", values[i])
+			} else if value.Valid {
+				_m.Subtitle = value.String
+			}
+		case category.FieldShortDescription:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field short_description", values[i])
+			} else if value.Valid {
+				_m.ShortDescription = value.String
+			}
 		case category.FieldSlug:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field slug", values[i])
@@ -163,6 +181,14 @@ func (_m *Category) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field icon", values[i])
 			} else if value.Valid {
 				_m.Icon = value.String
+			}
+		case category.FieldTags:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field tags", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.Tags); err != nil {
+					return fmt.Errorf("unmarshal field tags: %w", err)
+				}
 			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
@@ -226,6 +252,12 @@ func (_m *Category) String() string {
 	builder.WriteString("name=")
 	builder.WriteString(_m.Name)
 	builder.WriteString(", ")
+	builder.WriteString("subtitle=")
+	builder.WriteString(_m.Subtitle)
+	builder.WriteString(", ")
+	builder.WriteString("short_description=")
+	builder.WriteString(_m.ShortDescription)
+	builder.WriteString(", ")
 	builder.WriteString("slug=")
 	builder.WriteString(_m.Slug)
 	builder.WriteString(", ")
@@ -237,6 +269,9 @@ func (_m *Category) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("icon=")
 	builder.WriteString(_m.Icon)
+	builder.WriteString(", ")
+	builder.WriteString("tags=")
+	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
 	builder.WriteByte(')')
 	return builder.String()
 }

@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/omkar273/nashikdarshan/ent/category"
 	"github.com/omkar273/nashikdarshan/ent/place"
@@ -95,6 +96,46 @@ func (_u *CategoryUpdate) SetNillableName(v *string) *CategoryUpdate {
 	return _u
 }
 
+// SetSubtitle sets the "subtitle" field.
+func (_u *CategoryUpdate) SetSubtitle(v string) *CategoryUpdate {
+	_u.mutation.SetSubtitle(v)
+	return _u
+}
+
+// SetNillableSubtitle sets the "subtitle" field if the given value is not nil.
+func (_u *CategoryUpdate) SetNillableSubtitle(v *string) *CategoryUpdate {
+	if v != nil {
+		_u.SetSubtitle(*v)
+	}
+	return _u
+}
+
+// ClearSubtitle clears the value of the "subtitle" field.
+func (_u *CategoryUpdate) ClearSubtitle() *CategoryUpdate {
+	_u.mutation.ClearSubtitle()
+	return _u
+}
+
+// SetShortDescription sets the "short_description" field.
+func (_u *CategoryUpdate) SetShortDescription(v string) *CategoryUpdate {
+	_u.mutation.SetShortDescription(v)
+	return _u
+}
+
+// SetNillableShortDescription sets the "short_description" field if the given value is not nil.
+func (_u *CategoryUpdate) SetNillableShortDescription(v *string) *CategoryUpdate {
+	if v != nil {
+		_u.SetShortDescription(*v)
+	}
+	return _u
+}
+
+// ClearShortDescription clears the value of the "short_description" field.
+func (_u *CategoryUpdate) ClearShortDescription() *CategoryUpdate {
+	_u.mutation.ClearShortDescription()
+	return _u
+}
+
 // SetSlug sets the "slug" field.
 func (_u *CategoryUpdate) SetSlug(v string) *CategoryUpdate {
 	_u.mutation.SetSlug(v)
@@ -157,9 +198,21 @@ func (_u *CategoryUpdate) SetNillableIcon(v *string) *CategoryUpdate {
 	return _u
 }
 
-// ClearIcon clears the value of the "icon" field.
-func (_u *CategoryUpdate) ClearIcon() *CategoryUpdate {
-	_u.mutation.ClearIcon()
+// SetTags sets the "tags" field.
+func (_u *CategoryUpdate) SetTags(v []string) *CategoryUpdate {
+	_u.mutation.SetTags(v)
+	return _u
+}
+
+// AppendTags appends value to the "tags" field.
+func (_u *CategoryUpdate) AppendTags(v []string) *CategoryUpdate {
+	_u.mutation.AppendTags(v)
+	return _u
+}
+
+// ClearTags clears the value of the "tags" field.
+func (_u *CategoryUpdate) ClearTags() *CategoryUpdate {
+	_u.mutation.ClearTags()
 	return _u
 }
 
@@ -257,6 +310,11 @@ func (_u *CategoryUpdate) check() error {
 			return &ValidationError{Name: "image_url", err: fmt.Errorf(`ent: validator failed for field "Category.image_url": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.Icon(); ok {
+		if err := category.IconValidator(v); err != nil {
+			return &ValidationError{Name: "icon", err: fmt.Errorf(`ent: validator failed for field "Category.icon": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -296,6 +354,18 @@ func (_u *CategoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(category.FieldName, field.TypeString, value)
 	}
+	if value, ok := _u.mutation.Subtitle(); ok {
+		_spec.SetField(category.FieldSubtitle, field.TypeString, value)
+	}
+	if _u.mutation.SubtitleCleared() {
+		_spec.ClearField(category.FieldSubtitle, field.TypeString)
+	}
+	if value, ok := _u.mutation.ShortDescription(); ok {
+		_spec.SetField(category.FieldShortDescription, field.TypeString, value)
+	}
+	if _u.mutation.ShortDescriptionCleared() {
+		_spec.ClearField(category.FieldShortDescription, field.TypeString)
+	}
 	if value, ok := _u.mutation.Slug(); ok {
 		_spec.SetField(category.FieldSlug, field.TypeString, value)
 	}
@@ -311,8 +381,16 @@ func (_u *CategoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if value, ok := _u.mutation.Icon(); ok {
 		_spec.SetField(category.FieldIcon, field.TypeString, value)
 	}
-	if _u.mutation.IconCleared() {
-		_spec.ClearField(category.FieldIcon, field.TypeString)
+	if value, ok := _u.mutation.Tags(); ok {
+		_spec.SetField(category.FieldTags, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedTags(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, category.FieldTags, value)
+		})
+	}
+	if _u.mutation.TagsCleared() {
+		_spec.ClearField(category.FieldTags, field.TypeJSON)
 	}
 	if _u.mutation.PlacesCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -445,6 +523,46 @@ func (_u *CategoryUpdateOne) SetNillableName(v *string) *CategoryUpdateOne {
 	return _u
 }
 
+// SetSubtitle sets the "subtitle" field.
+func (_u *CategoryUpdateOne) SetSubtitle(v string) *CategoryUpdateOne {
+	_u.mutation.SetSubtitle(v)
+	return _u
+}
+
+// SetNillableSubtitle sets the "subtitle" field if the given value is not nil.
+func (_u *CategoryUpdateOne) SetNillableSubtitle(v *string) *CategoryUpdateOne {
+	if v != nil {
+		_u.SetSubtitle(*v)
+	}
+	return _u
+}
+
+// ClearSubtitle clears the value of the "subtitle" field.
+func (_u *CategoryUpdateOne) ClearSubtitle() *CategoryUpdateOne {
+	_u.mutation.ClearSubtitle()
+	return _u
+}
+
+// SetShortDescription sets the "short_description" field.
+func (_u *CategoryUpdateOne) SetShortDescription(v string) *CategoryUpdateOne {
+	_u.mutation.SetShortDescription(v)
+	return _u
+}
+
+// SetNillableShortDescription sets the "short_description" field if the given value is not nil.
+func (_u *CategoryUpdateOne) SetNillableShortDescription(v *string) *CategoryUpdateOne {
+	if v != nil {
+		_u.SetShortDescription(*v)
+	}
+	return _u
+}
+
+// ClearShortDescription clears the value of the "short_description" field.
+func (_u *CategoryUpdateOne) ClearShortDescription() *CategoryUpdateOne {
+	_u.mutation.ClearShortDescription()
+	return _u
+}
+
 // SetSlug sets the "slug" field.
 func (_u *CategoryUpdateOne) SetSlug(v string) *CategoryUpdateOne {
 	_u.mutation.SetSlug(v)
@@ -507,9 +625,21 @@ func (_u *CategoryUpdateOne) SetNillableIcon(v *string) *CategoryUpdateOne {
 	return _u
 }
 
-// ClearIcon clears the value of the "icon" field.
-func (_u *CategoryUpdateOne) ClearIcon() *CategoryUpdateOne {
-	_u.mutation.ClearIcon()
+// SetTags sets the "tags" field.
+func (_u *CategoryUpdateOne) SetTags(v []string) *CategoryUpdateOne {
+	_u.mutation.SetTags(v)
+	return _u
+}
+
+// AppendTags appends value to the "tags" field.
+func (_u *CategoryUpdateOne) AppendTags(v []string) *CategoryUpdateOne {
+	_u.mutation.AppendTags(v)
+	return _u
+}
+
+// ClearTags clears the value of the "tags" field.
+func (_u *CategoryUpdateOne) ClearTags() *CategoryUpdateOne {
+	_u.mutation.ClearTags()
 	return _u
 }
 
@@ -620,6 +750,11 @@ func (_u *CategoryUpdateOne) check() error {
 			return &ValidationError{Name: "image_url", err: fmt.Errorf(`ent: validator failed for field "Category.image_url": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.Icon(); ok {
+		if err := category.IconValidator(v); err != nil {
+			return &ValidationError{Name: "icon", err: fmt.Errorf(`ent: validator failed for field "Category.icon": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -676,6 +811,18 @@ func (_u *CategoryUpdateOne) sqlSave(ctx context.Context) (_node *Category, err 
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(category.FieldName, field.TypeString, value)
 	}
+	if value, ok := _u.mutation.Subtitle(); ok {
+		_spec.SetField(category.FieldSubtitle, field.TypeString, value)
+	}
+	if _u.mutation.SubtitleCleared() {
+		_spec.ClearField(category.FieldSubtitle, field.TypeString)
+	}
+	if value, ok := _u.mutation.ShortDescription(); ok {
+		_spec.SetField(category.FieldShortDescription, field.TypeString, value)
+	}
+	if _u.mutation.ShortDescriptionCleared() {
+		_spec.ClearField(category.FieldShortDescription, field.TypeString)
+	}
 	if value, ok := _u.mutation.Slug(); ok {
 		_spec.SetField(category.FieldSlug, field.TypeString, value)
 	}
@@ -691,8 +838,16 @@ func (_u *CategoryUpdateOne) sqlSave(ctx context.Context) (_node *Category, err 
 	if value, ok := _u.mutation.Icon(); ok {
 		_spec.SetField(category.FieldIcon, field.TypeString, value)
 	}
-	if _u.mutation.IconCleared() {
-		_spec.ClearField(category.FieldIcon, field.TypeString)
+	if value, ok := _u.mutation.Tags(); ok {
+		_spec.SetField(category.FieldTags, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedTags(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, category.FieldTags, value)
+		})
+	}
+	if _u.mutation.TagsCleared() {
+		_spec.ClearField(category.FieldTags, field.TypeJSON)
 	}
 	if _u.mutation.PlacesCleared() {
 		edge := &sqlgraph.EdgeSpec{
