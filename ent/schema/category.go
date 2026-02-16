@@ -63,9 +63,6 @@ func (Category) Fields() []ent.Field {
 			}).
 			NotEmpty(),
 		field.Strings("tags").
-			SchemaType(map[string]string{
-				"postgres": "varchar(255)[]",
-			}).
 			Optional(),
 	}
 }

@@ -25,7 +25,7 @@ var (
 		{Name: "description", Type: field.TypeString, Nullable: true, SchemaType: map[string]string{"postgres": "text"}},
 		{Name: "image_url", Type: field.TypeString, SchemaType: map[string]string{"postgres": "text"}},
 		{Name: "icon", Type: field.TypeString, SchemaType: map[string]string{"postgres": "text"}},
-		{Name: "tags", Type: field.TypeJSON, Nullable: true, SchemaType: map[string]string{"postgres": "varchar(255)[]"}},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 	}
 	// CategoriesTable holds the schema information for the "categories" table.
 	CategoriesTable = &schema.Table{
