@@ -57,6 +57,8 @@ const (
 	FieldPopularityScore = "popularity_score"
 	// EdgeImages holds the string denoting the images edge name in mutations.
 	EdgeImages = "images"
+	// EdgeEvents holds the string denoting the events edge name in mutations.
+	EdgeEvents = "events"
 	// EdgeCategory holds the string denoting the category edge name in mutations.
 	EdgeCategory = "category"
 	// Table holds the table name of the place in the database.
@@ -68,6 +70,13 @@ const (
 	ImagesInverseTable = "place_images"
 	// ImagesColumn is the table column denoting the images relation/edge.
 	ImagesColumn = "place_id"
+	// EventsTable is the table that holds the events relation/edge.
+	EventsTable = "events"
+	// EventsInverseTable is the table name for the Event entity.
+	// It exists in this package in order to avoid circular dependency with the "event" package.
+	EventsInverseTable = "events"
+	// EventsColumn is the table column denoting the events relation/edge.
+	EventsColumn = "place_id"
 	// CategoryTable is the table that holds the category relation/edge. The primary key declared below.
 	CategoryTable = "category_places"
 	// CategoryInverseTable is the table name for the Category entity.
@@ -259,6 +268,20 @@ func ByImages(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByEventsCount orders the results by events count.
+func ByEventsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newEventsStep(), opts...)
+	}
+}
+
+// ByEvents orders the results by events terms.
+func ByEvents(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newEventsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByCategoryCount orders the results by category count.
 func ByCategoryCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -277,6 +300,13 @@ func newImagesStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ImagesInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, ImagesTable, ImagesColumn),
+	)
+}
+func newEventsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(EventsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, EventsTable, EventsColumn),
 	)
 }
 func newCategoryStep() *sqlgraph.Step {

@@ -16,6 +16,9 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/omkar273/nashikdarshan/ent/category"
+	"github.com/omkar273/nashikdarshan/ent/event"
+	"github.com/omkar273/nashikdarshan/ent/eventexception"
+	"github.com/omkar273/nashikdarshan/ent/eventoverride"
 	"github.com/omkar273/nashikdarshan/ent/place"
 	"github.com/omkar273/nashikdarshan/ent/placeimage"
 	"github.com/omkar273/nashikdarshan/ent/review"
@@ -30,6 +33,12 @@ type Client struct {
 	Schema *migrate.Schema
 	// Category is the client for interacting with the Category builders.
 	Category *CategoryClient
+	// Event is the client for interacting with the Event builders.
+	Event *EventClient
+	// EventException is the client for interacting with the EventException builders.
+	EventException *EventExceptionClient
+	// EventOverride is the client for interacting with the EventOverride builders.
+	EventOverride *EventOverrideClient
 	// Place is the client for interacting with the Place builders.
 	Place *PlaceClient
 	// PlaceImage is the client for interacting with the PlaceImage builders.
@@ -52,6 +61,9 @@ func NewClient(opts ...Option) *Client {
 func (c *Client) init() {
 	c.Schema = migrate.NewSchema(c.driver)
 	c.Category = NewCategoryClient(c.config)
+	c.Event = NewEventClient(c.config)
+	c.EventException = NewEventExceptionClient(c.config)
+	c.EventOverride = NewEventOverrideClient(c.config)
 	c.Place = NewPlaceClient(c.config)
 	c.PlaceImage = NewPlaceImageClient(c.config)
 	c.Review = NewReviewClient(c.config)
@@ -147,14 +159,17 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 	cfg := c.config
 	cfg.driver = tx
 	return &Tx{
-		ctx:        ctx,
-		config:     cfg,
-		Category:   NewCategoryClient(cfg),
-		Place:      NewPlaceClient(cfg),
-		PlaceImage: NewPlaceImageClient(cfg),
-		Review:     NewReviewClient(cfg),
-		Secret:     NewSecretClient(cfg),
-		User:       NewUserClient(cfg),
+		ctx:            ctx,
+		config:         cfg,
+		Category:       NewCategoryClient(cfg),
+		Event:          NewEventClient(cfg),
+		EventException: NewEventExceptionClient(cfg),
+		EventOverride:  NewEventOverrideClient(cfg),
+		Place:          NewPlaceClient(cfg),
+		PlaceImage:     NewPlaceImageClient(cfg),
+		Review:         NewReviewClient(cfg),
+		Secret:         NewSecretClient(cfg),
+		User:           NewUserClient(cfg),
 	}, nil
 }
 
@@ -172,14 +187,17 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 	cfg := c.config
 	cfg.driver = &txDriver{tx: tx, drv: c.driver}
 	return &Tx{
-		ctx:        ctx,
-		config:     cfg,
-		Category:   NewCategoryClient(cfg),
-		Place:      NewPlaceClient(cfg),
-		PlaceImage: NewPlaceImageClient(cfg),
-		Review:     NewReviewClient(cfg),
-		Secret:     NewSecretClient(cfg),
-		User:       NewUserClient(cfg),
+		ctx:            ctx,
+		config:         cfg,
+		Category:       NewCategoryClient(cfg),
+		Event:          NewEventClient(cfg),
+		EventException: NewEventExceptionClient(cfg),
+		EventOverride:  NewEventOverrideClient(cfg),
+		Place:          NewPlaceClient(cfg),
+		PlaceImage:     NewPlaceImageClient(cfg),
+		Review:         NewReviewClient(cfg),
+		Secret:         NewSecretClient(cfg),
+		User:           NewUserClient(cfg),
 	}, nil
 }
 
@@ -209,7 +227,8 @@ func (c *Client) Close() error {
 // In order to add hooks to a specific client, call: `client.Node.Use(...)`.
 func (c *Client) Use(hooks ...Hook) {
 	for _, n := range []interface{ Use(...Hook) }{
-		c.Category, c.Place, c.PlaceImage, c.Review, c.Secret, c.User,
+		c.Category, c.Event, c.EventException, c.EventOverride, c.Place, c.PlaceImage,
+		c.Review, c.Secret, c.User,
 	} {
 		n.Use(hooks...)
 	}
@@ -219,7 +238,8 @@ func (c *Client) Use(hooks ...Hook) {
 // In order to add interceptors to a specific client, call: `client.Node.Intercept(...)`.
 func (c *Client) Intercept(interceptors ...Interceptor) {
 	for _, n := range []interface{ Intercept(...Interceptor) }{
-		c.Category, c.Place, c.PlaceImage, c.Review, c.Secret, c.User,
+		c.Category, c.Event, c.EventException, c.EventOverride, c.Place, c.PlaceImage,
+		c.Review, c.Secret, c.User,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -230,6 +250,12 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 	switch m := m.(type) {
 	case *CategoryMutation:
 		return c.Category.mutate(ctx, m)
+	case *EventMutation:
+		return c.Event.mutate(ctx, m)
+	case *EventExceptionMutation:
+		return c.EventException.mutate(ctx, m)
+	case *EventOverrideMutation:
+		return c.EventOverride.mutate(ctx, m)
 	case *PlaceMutation:
 		return c.Place.mutate(ctx, m)
 	case *PlaceImageMutation:
@@ -394,6 +420,485 @@ func (c *CategoryClient) mutate(ctx context.Context, m *CategoryMutation) (Value
 	}
 }
 
+// EventClient is a client for the Event schema.
+type EventClient struct {
+	config
+}
+
+// NewEventClient returns a client for the Event from the given config.
+func NewEventClient(c config) *EventClient {
+	return &EventClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `event.Hooks(f(g(h())))`.
+func (c *EventClient) Use(hooks ...Hook) {
+	c.hooks.Event = append(c.hooks.Event, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `event.Intercept(f(g(h())))`.
+func (c *EventClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Event = append(c.inters.Event, interceptors...)
+}
+
+// Create returns a builder for creating a Event entity.
+func (c *EventClient) Create() *EventCreate {
+	mutation := newEventMutation(c.config, OpCreate)
+	return &EventCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Event entities.
+func (c *EventClient) CreateBulk(builders ...*EventCreate) *EventCreateBulk {
+	return &EventCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *EventClient) MapCreateBulk(slice any, setFunc func(*EventCreate, int)) *EventCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &EventCreateBulk{err: fmt.Errorf("calling to EventClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*EventCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &EventCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Event.
+func (c *EventClient) Update() *EventUpdate {
+	mutation := newEventMutation(c.config, OpUpdate)
+	return &EventUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *EventClient) UpdateOne(_m *Event) *EventUpdateOne {
+	mutation := newEventMutation(c.config, OpUpdateOne, withEvent(_m))
+	return &EventUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *EventClient) UpdateOneID(id string) *EventUpdateOne {
+	mutation := newEventMutation(c.config, OpUpdateOne, withEventID(id))
+	return &EventUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Event.
+func (c *EventClient) Delete() *EventDelete {
+	mutation := newEventMutation(c.config, OpDelete)
+	return &EventDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *EventClient) DeleteOne(_m *Event) *EventDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *EventClient) DeleteOneID(id string) *EventDeleteOne {
+	builder := c.Delete().Where(event.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &EventDeleteOne{builder}
+}
+
+// Query returns a query builder for Event.
+func (c *EventClient) Query() *EventQuery {
+	return &EventQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeEvent},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Event entity by its id.
+func (c *EventClient) Get(ctx context.Context, id string) (*Event, error) {
+	return c.Query().Where(event.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *EventClient) GetX(ctx context.Context, id string) *Event {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryPlace queries the place edge of a Event.
+func (c *EventClient) QueryPlace(_m *Event) *PlaceQuery {
+	query := (&PlaceClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(event.Table, event.FieldID, id),
+			sqlgraph.To(place.Table, place.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, event.PlaceTable, event.PlaceColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryOverrides queries the overrides edge of a Event.
+func (c *EventClient) QueryOverrides(_m *Event) *EventOverrideQuery {
+	query := (&EventOverrideClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(event.Table, event.FieldID, id),
+			sqlgraph.To(eventoverride.Table, eventoverride.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, event.OverridesTable, event.OverridesColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryExceptions queries the exceptions edge of a Event.
+func (c *EventClient) QueryExceptions(_m *Event) *EventExceptionQuery {
+	query := (&EventExceptionClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(event.Table, event.FieldID, id),
+			sqlgraph.To(eventexception.Table, eventexception.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, event.ExceptionsTable, event.ExceptionsColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *EventClient) Hooks() []Hook {
+	return c.hooks.Event
+}
+
+// Interceptors returns the client interceptors.
+func (c *EventClient) Interceptors() []Interceptor {
+	return c.inters.Event
+}
+
+func (c *EventClient) mutate(ctx context.Context, m *EventMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&EventCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&EventUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&EventUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&EventDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown Event mutation op: %q", m.Op())
+	}
+}
+
+// EventExceptionClient is a client for the EventException schema.
+type EventExceptionClient struct {
+	config
+}
+
+// NewEventExceptionClient returns a client for the EventException from the given config.
+func NewEventExceptionClient(c config) *EventExceptionClient {
+	return &EventExceptionClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `eventexception.Hooks(f(g(h())))`.
+func (c *EventExceptionClient) Use(hooks ...Hook) {
+	c.hooks.EventException = append(c.hooks.EventException, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `eventexception.Intercept(f(g(h())))`.
+func (c *EventExceptionClient) Intercept(interceptors ...Interceptor) {
+	c.inters.EventException = append(c.inters.EventException, interceptors...)
+}
+
+// Create returns a builder for creating a EventException entity.
+func (c *EventExceptionClient) Create() *EventExceptionCreate {
+	mutation := newEventExceptionMutation(c.config, OpCreate)
+	return &EventExceptionCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of EventException entities.
+func (c *EventExceptionClient) CreateBulk(builders ...*EventExceptionCreate) *EventExceptionCreateBulk {
+	return &EventExceptionCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *EventExceptionClient) MapCreateBulk(slice any, setFunc func(*EventExceptionCreate, int)) *EventExceptionCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &EventExceptionCreateBulk{err: fmt.Errorf("calling to EventExceptionClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*EventExceptionCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &EventExceptionCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for EventException.
+func (c *EventExceptionClient) Update() *EventExceptionUpdate {
+	mutation := newEventExceptionMutation(c.config, OpUpdate)
+	return &EventExceptionUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *EventExceptionClient) UpdateOne(_m *EventException) *EventExceptionUpdateOne {
+	mutation := newEventExceptionMutation(c.config, OpUpdateOne, withEventException(_m))
+	return &EventExceptionUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *EventExceptionClient) UpdateOneID(id string) *EventExceptionUpdateOne {
+	mutation := newEventExceptionMutation(c.config, OpUpdateOne, withEventExceptionID(id))
+	return &EventExceptionUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for EventException.
+func (c *EventExceptionClient) Delete() *EventExceptionDelete {
+	mutation := newEventExceptionMutation(c.config, OpDelete)
+	return &EventExceptionDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *EventExceptionClient) DeleteOne(_m *EventException) *EventExceptionDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *EventExceptionClient) DeleteOneID(id string) *EventExceptionDeleteOne {
+	builder := c.Delete().Where(eventexception.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &EventExceptionDeleteOne{builder}
+}
+
+// Query returns a query builder for EventException.
+func (c *EventExceptionClient) Query() *EventExceptionQuery {
+	return &EventExceptionQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeEventException},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a EventException entity by its id.
+func (c *EventExceptionClient) Get(ctx context.Context, id string) (*EventException, error) {
+	return c.Query().Where(eventexception.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *EventExceptionClient) GetX(ctx context.Context, id string) *EventException {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryEvent queries the event edge of a EventException.
+func (c *EventExceptionClient) QueryEvent(_m *EventException) *EventQuery {
+	query := (&EventClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(eventexception.Table, eventexception.FieldID, id),
+			sqlgraph.To(event.Table, event.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, eventexception.EventTable, eventexception.EventColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *EventExceptionClient) Hooks() []Hook {
+	return c.hooks.EventException
+}
+
+// Interceptors returns the client interceptors.
+func (c *EventExceptionClient) Interceptors() []Interceptor {
+	return c.inters.EventException
+}
+
+func (c *EventExceptionClient) mutate(ctx context.Context, m *EventExceptionMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&EventExceptionCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&EventExceptionUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&EventExceptionUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&EventExceptionDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown EventException mutation op: %q", m.Op())
+	}
+}
+
+// EventOverrideClient is a client for the EventOverride schema.
+type EventOverrideClient struct {
+	config
+}
+
+// NewEventOverrideClient returns a client for the EventOverride from the given config.
+func NewEventOverrideClient(c config) *EventOverrideClient {
+	return &EventOverrideClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `eventoverride.Hooks(f(g(h())))`.
+func (c *EventOverrideClient) Use(hooks ...Hook) {
+	c.hooks.EventOverride = append(c.hooks.EventOverride, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `eventoverride.Intercept(f(g(h())))`.
+func (c *EventOverrideClient) Intercept(interceptors ...Interceptor) {
+	c.inters.EventOverride = append(c.inters.EventOverride, interceptors...)
+}
+
+// Create returns a builder for creating a EventOverride entity.
+func (c *EventOverrideClient) Create() *EventOverrideCreate {
+	mutation := newEventOverrideMutation(c.config, OpCreate)
+	return &EventOverrideCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of EventOverride entities.
+func (c *EventOverrideClient) CreateBulk(builders ...*EventOverrideCreate) *EventOverrideCreateBulk {
+	return &EventOverrideCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *EventOverrideClient) MapCreateBulk(slice any, setFunc func(*EventOverrideCreate, int)) *EventOverrideCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &EventOverrideCreateBulk{err: fmt.Errorf("calling to EventOverrideClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*EventOverrideCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &EventOverrideCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for EventOverride.
+func (c *EventOverrideClient) Update() *EventOverrideUpdate {
+	mutation := newEventOverrideMutation(c.config, OpUpdate)
+	return &EventOverrideUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *EventOverrideClient) UpdateOne(_m *EventOverride) *EventOverrideUpdateOne {
+	mutation := newEventOverrideMutation(c.config, OpUpdateOne, withEventOverride(_m))
+	return &EventOverrideUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *EventOverrideClient) UpdateOneID(id string) *EventOverrideUpdateOne {
+	mutation := newEventOverrideMutation(c.config, OpUpdateOne, withEventOverrideID(id))
+	return &EventOverrideUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for EventOverride.
+func (c *EventOverrideClient) Delete() *EventOverrideDelete {
+	mutation := newEventOverrideMutation(c.config, OpDelete)
+	return &EventOverrideDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *EventOverrideClient) DeleteOne(_m *EventOverride) *EventOverrideDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *EventOverrideClient) DeleteOneID(id string) *EventOverrideDeleteOne {
+	builder := c.Delete().Where(eventoverride.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &EventOverrideDeleteOne{builder}
+}
+
+// Query returns a query builder for EventOverride.
+func (c *EventOverrideClient) Query() *EventOverrideQuery {
+	return &EventOverrideQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeEventOverride},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a EventOverride entity by its id.
+func (c *EventOverrideClient) Get(ctx context.Context, id string) (*EventOverride, error) {
+	return c.Query().Where(eventoverride.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *EventOverrideClient) GetX(ctx context.Context, id string) *EventOverride {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryEvent queries the event edge of a EventOverride.
+func (c *EventOverrideClient) QueryEvent(_m *EventOverride) *EventQuery {
+	query := (&EventClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(eventoverride.Table, eventoverride.FieldID, id),
+			sqlgraph.To(event.Table, event.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, eventoverride.EventTable, eventoverride.EventColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *EventOverrideClient) Hooks() []Hook {
+	return c.hooks.EventOverride
+}
+
+// Interceptors returns the client interceptors.
+func (c *EventOverrideClient) Interceptors() []Interceptor {
+	return c.inters.EventOverride
+}
+
+func (c *EventOverrideClient) mutate(ctx context.Context, m *EventOverrideMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&EventOverrideCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&EventOverrideUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&EventOverrideUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&EventOverrideDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown EventOverride mutation op: %q", m.Op())
+	}
+}
+
 // PlaceClient is a client for the Place schema.
 type PlaceClient struct {
 	config
@@ -511,6 +1016,22 @@ func (c *PlaceClient) QueryImages(_m *Place) *PlaceImageQuery {
 			sqlgraph.From(place.Table, place.FieldID, id),
 			sqlgraph.To(placeimage.Table, placeimage.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, place.ImagesTable, place.ImagesColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEvents queries the events edge of a Place.
+func (c *PlaceClient) QueryEvents(_m *Place) *EventQuery {
+	query := (&EventClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(place.Table, place.FieldID, id),
+			sqlgraph.To(event.Table, event.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, place.EventsTable, place.EventsColumn),
 		)
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
@@ -1110,9 +1631,11 @@ func (c *UserClient) mutate(ctx context.Context, m *UserMutation) (Value, error)
 // hooks and interceptors per client, for fast access.
 type (
 	hooks struct {
-		Category, Place, PlaceImage, Review, Secret, User []ent.Hook
+		Category, Event, EventException, EventOverride, Place, PlaceImage, Review,
+		Secret, User []ent.Hook
 	}
 	inters struct {
-		Category, Place, PlaceImage, Review, Secret, User []ent.Interceptor
+		Category, Event, EventException, EventOverride, Place, PlaceImage, Review,
+		Secret, User []ent.Interceptor
 	}
 )

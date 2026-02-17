@@ -21,6 +21,42 @@ func (f CategoryFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, er
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.CategoryMutation", m)
 }
 
+// The EventFunc type is an adapter to allow the use of ordinary
+// function as Event mutator.
+type EventFunc func(context.Context, *ent.EventMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f EventFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.EventMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.EventMutation", m)
+}
+
+// The EventExceptionFunc type is an adapter to allow the use of ordinary
+// function as EventException mutator.
+type EventExceptionFunc func(context.Context, *ent.EventExceptionMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f EventExceptionFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.EventExceptionMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.EventExceptionMutation", m)
+}
+
+// The EventOverrideFunc type is an adapter to allow the use of ordinary
+// function as EventOverride mutator.
+type EventOverrideFunc func(context.Context, *ent.EventOverrideMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f EventOverrideFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.EventOverrideMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.EventOverrideMutation", m)
+}
+
 // The PlaceFunc type is an adapter to allow the use of ordinary
 // function as Place mutator.
 type PlaceFunc func(context.Context, *ent.PlaceMutation) (ent.Value, error)

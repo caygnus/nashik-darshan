@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/omkar273/nashikdarshan/ent/category"
+	"github.com/omkar273/nashikdarshan/ent/event"
 	"github.com/omkar273/nashikdarshan/ent/place"
 	"github.com/omkar273/nashikdarshan/ent/placeimage"
 	"github.com/omkar273/nashikdarshan/ent/predicate"
@@ -26,6 +27,7 @@ type PlaceQuery struct {
 	inters       []Interceptor
 	predicates   []predicate.Place
 	withImages   *PlaceImageQuery
+	withEvents   *EventQuery
 	withCategory *CategoryQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
@@ -78,6 +80,28 @@ func (_q *PlaceQuery) QueryImages() *PlaceImageQuery {
 			sqlgraph.From(place.Table, place.FieldID, selector),
 			sqlgraph.To(placeimage.Table, placeimage.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, place.ImagesTable, place.ImagesColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryEvents chains the current query on the "events" edge.
+func (_q *PlaceQuery) QueryEvents() *EventQuery {
+	query := (&EventClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(place.Table, place.FieldID, selector),
+			sqlgraph.To(event.Table, event.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, place.EventsTable, place.EventsColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
@@ -300,6 +324,7 @@ func (_q *PlaceQuery) Clone() *PlaceQuery {
 		inters:       append([]Interceptor{}, _q.inters...),
 		predicates:   append([]predicate.Place{}, _q.predicates...),
 		withImages:   _q.withImages.Clone(),
+		withEvents:   _q.withEvents.Clone(),
 		withCategory: _q.withCategory.Clone(),
 		// clone intermediate query.
 		sql:  _q.sql.Clone(),
@@ -315,6 +340,17 @@ func (_q *PlaceQuery) WithImages(opts ...func(*PlaceImageQuery)) *PlaceQuery {
 		opt(query)
 	}
 	_q.withImages = query
+	return _q
+}
+
+// WithEvents tells the query-builder to eager-load the nodes that are connected to
+// the "events" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *PlaceQuery) WithEvents(opts ...func(*EventQuery)) *PlaceQuery {
+	query := (&EventClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withEvents = query
 	return _q
 }
 
@@ -407,8 +443,9 @@ func (_q *PlaceQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Place,
 	var (
 		nodes       = []*Place{}
 		_spec       = _q.querySpec()
-		loadedTypes = [2]bool{
+		loadedTypes = [3]bool{
 			_q.withImages != nil,
+			_q.withEvents != nil,
 			_q.withCategory != nil,
 		}
 	)
@@ -434,6 +471,13 @@ func (_q *PlaceQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Place,
 		if err := _q.loadImages(ctx, query, nodes,
 			func(n *Place) { n.Edges.Images = []*PlaceImage{} },
 			func(n *Place, e *PlaceImage) { n.Edges.Images = append(n.Edges.Images, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withEvents; query != nil {
+		if err := _q.loadEvents(ctx, query, nodes,
+			func(n *Place) { n.Edges.Events = []*Event{} },
+			func(n *Place, e *Event) { n.Edges.Events = append(n.Edges.Events, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -472,6 +516,39 @@ func (_q *PlaceQuery) loadImages(ctx context.Context, query *PlaceImageQuery, no
 		node, ok := nodeids[fk]
 		if !ok {
 			return fmt.Errorf(`unexpected referenced foreign-key "place_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *PlaceQuery) loadEvents(ctx context.Context, query *EventQuery, nodes []*Place, init func(*Place), assign func(*Place, *Event)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Place)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(event.FieldPlaceID)
+	}
+	query.Where(predicate.Event(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(place.EventsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.PlaceID
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "place_id" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "place_id" returned %v for node %v`, *fk, n.ID)
 		}
 		assign(node, n)
 	}

@@ -40,6 +40,119 @@ var (
 			},
 		},
 	}
+	// EventsColumns holds the columns for the "events" table.
+	EventsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString, SchemaType: map[string]string{"postgres": "varchar(255)"}},
+		{Name: "status", Type: field.TypeString, Default: "published", SchemaType: map[string]string{"postgres": "varchar(20)"}},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "metadata", Type: field.TypeJSON, Nullable: true, SchemaType: map[string]string{"postgres": "jsonb"}},
+		{Name: "title", Type: field.TypeString, SchemaType: map[string]string{"postgres": "text"}},
+		{Name: "subtitle", Type: field.TypeString, Nullable: true, SchemaType: map[string]string{"postgres": "text"}},
+		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "start_at", Type: field.TypeTime},
+		{Name: "end_at", Type: field.TypeTime},
+		{Name: "rrule", Type: field.TypeString, Nullable: true, SchemaType: map[string]string{"postgres": "text"}},
+		{Name: "rrule_until", Type: field.TypeTime, Nullable: true},
+		{Name: "rrule_count", Type: field.TypeInt, Nullable: true},
+		{Name: "type", Type: field.TypeString, SchemaType: map[string]string{"postgres": "text"}},
+		{Name: "cover_image_url", Type: field.TypeString, Nullable: true, SchemaType: map[string]string{"postgres": "text"}},
+		{Name: "place_id", Type: field.TypeString, Nullable: true, SchemaType: map[string]string{"postgres": "varchar(255)"}},
+	}
+	// EventsTable holds the schema information for the "events" table.
+	EventsTable = &schema.Table{
+		Name:       "events",
+		Columns:    EventsColumns,
+		PrimaryKey: []*schema.Column{EventsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "events_places_events",
+				Columns:    []*schema.Column{EventsColumns[17]},
+				RefColumns: []*schema.Column{PlacesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "event_place_id_status",
+				Unique:  false,
+				Columns: []*schema.Column{EventsColumns[17], EventsColumns[1]},
+			},
+			{
+				Name:    "event_type_status",
+				Unique:  false,
+				Columns: []*schema.Column{EventsColumns[15], EventsColumns[1]},
+			},
+			{
+				Name:    "event_start_at_end_at",
+				Unique:  false,
+				Columns: []*schema.Column{EventsColumns[10], EventsColumns[11]},
+			},
+			{
+				Name:    "event_status_start_at",
+				Unique:  false,
+				Columns: []*schema.Column{EventsColumns[1], EventsColumns[10]},
+			},
+		},
+	}
+	// EventExceptionsColumns holds the columns for the "event_exceptions" table.
+	EventExceptionsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString, SchemaType: map[string]string{"postgres": "varchar(255)"}},
+		{Name: "occurrence_start_at", Type: field.TypeTime},
+		{Name: "event_id", Type: field.TypeString, SchemaType: map[string]string{"postgres": "varchar(255)"}},
+	}
+	// EventExceptionsTable holds the schema information for the "event_exceptions" table.
+	EventExceptionsTable = &schema.Table{
+		Name:       "event_exceptions",
+		Columns:    EventExceptionsColumns,
+		PrimaryKey: []*schema.Column{EventExceptionsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "event_exceptions_events_exceptions",
+				Columns:    []*schema.Column{EventExceptionsColumns[2]},
+				RefColumns: []*schema.Column{EventsColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "eventexception_event_id_occurrence_start_at",
+				Unique:  true,
+				Columns: []*schema.Column{EventExceptionsColumns[2], EventExceptionsColumns[1]},
+			},
+		},
+	}
+	// EventOverridesColumns holds the columns for the "event_overrides" table.
+	EventOverridesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString, SchemaType: map[string]string{"postgres": "varchar(255)"}},
+		{Name: "original_start_at", Type: field.TypeTime},
+		{Name: "new_start_at", Type: field.TypeTime},
+		{Name: "new_end_at", Type: field.TypeTime},
+		{Name: "event_id", Type: field.TypeString, SchemaType: map[string]string{"postgres": "varchar(255)"}},
+	}
+	// EventOverridesTable holds the schema information for the "event_overrides" table.
+	EventOverridesTable = &schema.Table{
+		Name:       "event_overrides",
+		Columns:    EventOverridesColumns,
+		PrimaryKey: []*schema.Column{EventOverridesColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "event_overrides_events_overrides",
+				Columns:    []*schema.Column{EventOverridesColumns[4]},
+				RefColumns: []*schema.Column{EventsColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "eventoverride_event_id_original_start_at",
+				Unique:  true,
+				Columns: []*schema.Column{EventOverridesColumns[4], EventOverridesColumns[1]},
+			},
+		},
+	}
 	// PlacesColumns holds the columns for the "places" table.
 	PlacesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString, SchemaType: map[string]string{"postgres": "varchar(255)"}},
@@ -312,6 +425,9 @@ var (
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
 		CategoriesTable,
+		EventsTable,
+		EventExceptionsTable,
+		EventOverridesTable,
 		PlacesTable,
 		PlaceImagesTable,
 		ReviewsTable,
@@ -322,6 +438,9 @@ var (
 )
 
 func init() {
+	EventsTable.ForeignKeys[0].RefTable = PlacesTable
+	EventExceptionsTable.ForeignKeys[0].RefTable = EventsTable
+	EventOverridesTable.ForeignKeys[0].RefTable = EventsTable
 	PlaceImagesTable.ForeignKeys[0].RefTable = PlacesTable
 	CategoryPlacesTable.ForeignKeys[0].RefTable = CategoriesTable
 	CategoryPlacesTable.ForeignKeys[1].RefTable = PlacesTable

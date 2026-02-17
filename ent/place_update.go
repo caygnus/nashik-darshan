@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/omkar273/nashikdarshan/ent/category"
+	"github.com/omkar273/nashikdarshan/ent/event"
 	"github.com/omkar273/nashikdarshan/ent/place"
 	"github.com/omkar273/nashikdarshan/ent/placeimage"
 	"github.com/omkar273/nashikdarshan/ent/predicate"
@@ -301,6 +302,21 @@ func (_u *PlaceUpdate) AddImages(v ...*PlaceImage) *PlaceUpdate {
 	return _u.AddImageIDs(ids...)
 }
 
+// AddEventIDs adds the "events" edge to the Event entity by IDs.
+func (_u *PlaceUpdate) AddEventIDs(ids ...string) *PlaceUpdate {
+	_u.mutation.AddEventIDs(ids...)
+	return _u
+}
+
+// AddEvents adds the "events" edges to the Event entity.
+func (_u *PlaceUpdate) AddEvents(v ...*Event) *PlaceUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddEventIDs(ids...)
+}
+
 // AddCategoryIDs adds the "category" edge to the Category entity by IDs.
 func (_u *PlaceUpdate) AddCategoryIDs(ids ...string) *PlaceUpdate {
 	_u.mutation.AddCategoryIDs(ids...)
@@ -340,6 +356,27 @@ func (_u *PlaceUpdate) RemoveImages(v ...*PlaceImage) *PlaceUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveImageIDs(ids...)
+}
+
+// ClearEvents clears all "events" edges to the Event entity.
+func (_u *PlaceUpdate) ClearEvents() *PlaceUpdate {
+	_u.mutation.ClearEvents()
+	return _u
+}
+
+// RemoveEventIDs removes the "events" edge to Event entities by IDs.
+func (_u *PlaceUpdate) RemoveEventIDs(ids ...string) *PlaceUpdate {
+	_u.mutation.RemoveEventIDs(ids...)
+	return _u
+}
+
+// RemoveEvents removes "events" edges to Event entities.
+func (_u *PlaceUpdate) RemoveEvents(v ...*Event) *PlaceUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveEventIDs(ids...)
 }
 
 // ClearCategory clears all "category" edges to the Category entity.
@@ -555,6 +592,51 @@ func (_u *PlaceUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(placeimage.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.EventsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   place.EventsTable,
+			Columns: []string{place.EventsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedEventsIDs(); len(nodes) > 0 && !_u.mutation.EventsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   place.EventsTable,
+			Columns: []string{place.EventsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.EventsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   place.EventsTable,
+			Columns: []string{place.EventsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
@@ -896,6 +978,21 @@ func (_u *PlaceUpdateOne) AddImages(v ...*PlaceImage) *PlaceUpdateOne {
 	return _u.AddImageIDs(ids...)
 }
 
+// AddEventIDs adds the "events" edge to the Event entity by IDs.
+func (_u *PlaceUpdateOne) AddEventIDs(ids ...string) *PlaceUpdateOne {
+	_u.mutation.AddEventIDs(ids...)
+	return _u
+}
+
+// AddEvents adds the "events" edges to the Event entity.
+func (_u *PlaceUpdateOne) AddEvents(v ...*Event) *PlaceUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddEventIDs(ids...)
+}
+
 // AddCategoryIDs adds the "category" edge to the Category entity by IDs.
 func (_u *PlaceUpdateOne) AddCategoryIDs(ids ...string) *PlaceUpdateOne {
 	_u.mutation.AddCategoryIDs(ids...)
@@ -935,6 +1032,27 @@ func (_u *PlaceUpdateOne) RemoveImages(v ...*PlaceImage) *PlaceUpdateOne {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveImageIDs(ids...)
+}
+
+// ClearEvents clears all "events" edges to the Event entity.
+func (_u *PlaceUpdateOne) ClearEvents() *PlaceUpdateOne {
+	_u.mutation.ClearEvents()
+	return _u
+}
+
+// RemoveEventIDs removes the "events" edge to Event entities by IDs.
+func (_u *PlaceUpdateOne) RemoveEventIDs(ids ...string) *PlaceUpdateOne {
+	_u.mutation.RemoveEventIDs(ids...)
+	return _u
+}
+
+// RemoveEvents removes "events" edges to Event entities.
+func (_u *PlaceUpdateOne) RemoveEvents(v ...*Event) *PlaceUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveEventIDs(ids...)
 }
 
 // ClearCategory clears all "category" edges to the Category entity.
@@ -1180,6 +1298,51 @@ func (_u *PlaceUpdateOne) sqlSave(ctx context.Context) (_node *Place, err error)
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(placeimage.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.EventsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   place.EventsTable,
+			Columns: []string{place.EventsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedEventsIDs(); len(nodes) > 0 && !_u.mutation.EventsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   place.EventsTable,
+			Columns: []string{place.EventsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.EventsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   place.EventsTable,
+			Columns: []string{place.EventsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {

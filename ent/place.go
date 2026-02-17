@@ -70,11 +70,13 @@ type Place struct {
 type PlaceEdges struct {
 	// Images holds the value of the images edge.
 	Images []*PlaceImage `json:"images,omitempty"`
+	// Events holds the value of the events edge.
+	Events []*Event `json:"events,omitempty"`
 	// Category holds the value of the category edge.
 	Category []*Category `json:"category,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [2]bool
+	loadedTypes [3]bool
 }
 
 // ImagesOrErr returns the Images value or an error if the edge
@@ -86,10 +88,19 @@ func (e PlaceEdges) ImagesOrErr() ([]*PlaceImage, error) {
 	return nil, &NotLoadedError{edge: "images"}
 }
 
+// EventsOrErr returns the Events value or an error if the edge
+// was not loaded in eager-loading.
+func (e PlaceEdges) EventsOrErr() ([]*Event, error) {
+	if e.loadedTypes[1] {
+		return e.Events, nil
+	}
+	return nil, &NotLoadedError{edge: "events"}
+}
+
 // CategoryOrErr returns the Category value or an error if the edge
 // was not loaded in eager-loading.
 func (e PlaceEdges) CategoryOrErr() ([]*Category, error) {
-	if e.loadedTypes[1] {
+	if e.loadedTypes[2] {
 		return e.Category, nil
 	}
 	return nil, &NotLoadedError{edge: "category"}
@@ -273,6 +284,11 @@ func (_m *Place) Value(name string) (ent.Value, error) {
 // QueryImages queries the "images" edge of the Place entity.
 func (_m *Place) QueryImages() *PlaceImageQuery {
 	return NewPlaceClient(_m.config).QueryImages(_m)
+}
+
+// QueryEvents queries the "events" edge of the Place entity.
+func (_m *Place) QueryEvents() *EventQuery {
+	return NewPlaceClient(_m.config).QueryEvents(_m)
 }
 
 // QueryCategory queries the "category" edge of the Place entity.

@@ -6,6 +6,9 @@ import (
 	"time"
 
 	"github.com/omkar273/nashikdarshan/ent/category"
+	"github.com/omkar273/nashikdarshan/ent/event"
+	"github.com/omkar273/nashikdarshan/ent/eventexception"
+	"github.com/omkar273/nashikdarshan/ent/eventoverride"
 	"github.com/omkar273/nashikdarshan/ent/place"
 	"github.com/omkar273/nashikdarshan/ent/placeimage"
 	"github.com/omkar273/nashikdarshan/ent/review"
@@ -65,6 +68,59 @@ func init() {
 	categoryDescID := categoryFields[0].Descriptor()
 	// category.IDValidator is a validator for the "id" field. It is called by the builders before save.
 	category.IDValidator = categoryDescID.Validators[0].(func(string) error)
+	eventMixin := schema.Event{}.Mixin()
+	eventMixinFields0 := eventMixin[0].Fields()
+	_ = eventMixinFields0
+	eventMixinFields1 := eventMixin[1].Fields()
+	_ = eventMixinFields1
+	eventFields := schema.Event{}.Fields()
+	_ = eventFields
+	// eventDescStatus is the schema descriptor for status field.
+	eventDescStatus := eventMixinFields0[0].Descriptor()
+	// event.DefaultStatus holds the default value on creation for the status field.
+	event.DefaultStatus = eventDescStatus.Default.(string)
+	// eventDescCreatedAt is the schema descriptor for created_at field.
+	eventDescCreatedAt := eventMixinFields0[1].Descriptor()
+	// event.DefaultCreatedAt holds the default value on creation for the created_at field.
+	event.DefaultCreatedAt = eventDescCreatedAt.Default.(func() time.Time)
+	// eventDescUpdatedAt is the schema descriptor for updated_at field.
+	eventDescUpdatedAt := eventMixinFields0[2].Descriptor()
+	// event.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	event.DefaultUpdatedAt = eventDescUpdatedAt.Default.(func() time.Time)
+	// event.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	event.UpdateDefaultUpdatedAt = eventDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// eventDescMetadata is the schema descriptor for metadata field.
+	eventDescMetadata := eventMixinFields1[0].Descriptor()
+	// event.DefaultMetadata holds the default value on creation for the metadata field.
+	event.DefaultMetadata = eventDescMetadata.Default.(map[string]string)
+	// eventDescTitle is the schema descriptor for title field.
+	eventDescTitle := eventFields[2].Descriptor()
+	// event.TitleValidator is a validator for the "title" field. It is called by the builders before save.
+	event.TitleValidator = eventDescTitle.Validators[0].(func(string) error)
+	// eventDescID is the schema descriptor for id field.
+	eventDescID := eventFields[0].Descriptor()
+	// event.DefaultID holds the default value on creation for the id field.
+	event.DefaultID = eventDescID.Default.(func() string)
+	eventexceptionFields := schema.EventException{}.Fields()
+	_ = eventexceptionFields
+	// eventexceptionDescEventID is the schema descriptor for event_id field.
+	eventexceptionDescEventID := eventexceptionFields[1].Descriptor()
+	// eventexception.EventIDValidator is a validator for the "event_id" field. It is called by the builders before save.
+	eventexception.EventIDValidator = eventexceptionDescEventID.Validators[0].(func(string) error)
+	// eventexceptionDescID is the schema descriptor for id field.
+	eventexceptionDescID := eventexceptionFields[0].Descriptor()
+	// eventexception.DefaultID holds the default value on creation for the id field.
+	eventexception.DefaultID = eventexceptionDescID.Default.(func() string)
+	eventoverrideFields := schema.EventOverride{}.Fields()
+	_ = eventoverrideFields
+	// eventoverrideDescEventID is the schema descriptor for event_id field.
+	eventoverrideDescEventID := eventoverrideFields[1].Descriptor()
+	// eventoverride.EventIDValidator is a validator for the "event_id" field. It is called by the builders before save.
+	eventoverride.EventIDValidator = eventoverrideDescEventID.Validators[0].(func(string) error)
+	// eventoverrideDescID is the schema descriptor for id field.
+	eventoverrideDescID := eventoverrideFields[0].Descriptor()
+	// eventoverride.DefaultID holds the default value on creation for the id field.
+	eventoverride.DefaultID = eventoverrideDescID.Default.(func() string)
 	placeMixin := schema.Place{}.Mixin()
 	placeMixinFields0 := placeMixin[0].Fields()
 	_ = placeMixinFields0

@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/omkar273/nashikdarshan/ent/category"
+	"github.com/omkar273/nashikdarshan/ent/event"
 	"github.com/omkar273/nashikdarshan/ent/place"
 	"github.com/omkar273/nashikdarshan/ent/placeimage"
 	"github.com/omkar273/nashikdarshan/internal/types"
@@ -283,6 +284,21 @@ func (_c *PlaceCreate) AddImages(v ...*PlaceImage) *PlaceCreate {
 		ids[i] = v[i].ID
 	}
 	return _c.AddImageIDs(ids...)
+}
+
+// AddEventIDs adds the "events" edge to the Event entity by IDs.
+func (_c *PlaceCreate) AddEventIDs(ids ...string) *PlaceCreate {
+	_c.mutation.AddEventIDs(ids...)
+	return _c
+}
+
+// AddEvents adds the "events" edges to the Event entity.
+func (_c *PlaceCreate) AddEvents(v ...*Event) *PlaceCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddEventIDs(ids...)
 }
 
 // AddCategoryIDs adds the "category" edge to the Category entity by IDs.
@@ -562,6 +578,22 @@ func (_c *PlaceCreate) createSpec() (*Place, *sqlgraph.CreateSpec) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(placeimage.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.EventsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   place.EventsTable,
+			Columns: []string{place.EventsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
