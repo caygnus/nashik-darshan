@@ -2979,6 +2979,11 @@ type EventExceptionMutation struct {
 	op                  Op
 	typ                 string
 	id                  *string
+	status              *string
+	created_at          *time.Time
+	updated_at          *time.Time
+	created_by          *string
+	updated_by          *string
 	occurrence_start_at *time.Time
 	clearedFields       map[string]struct{}
 	event               *string
@@ -3090,6 +3095,212 @@ func (m *EventExceptionMutation) IDs(ctx context.Context) ([]string, error) {
 	default:
 		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
 	}
+}
+
+// SetStatus sets the "status" field.
+func (m *EventExceptionMutation) SetStatus(s string) {
+	m.status = &s
+}
+
+// Status returns the value of the "status" field in the mutation.
+func (m *EventExceptionMutation) Status() (r string, exists bool) {
+	v := m.status
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldStatus returns the old "status" field's value of the EventException entity.
+// If the EventException object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EventExceptionMutation) OldStatus(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldStatus is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldStatus requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldStatus: %w", err)
+	}
+	return oldValue.Status, nil
+}
+
+// ResetStatus resets all changes to the "status" field.
+func (m *EventExceptionMutation) ResetStatus() {
+	m.status = nil
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (m *EventExceptionMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *EventExceptionMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the EventException entity.
+// If the EventException object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EventExceptionMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *EventExceptionMutation) ResetCreatedAt() {
+	m.created_at = nil
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *EventExceptionMutation) SetUpdatedAt(t time.Time) {
+	m.updated_at = &t
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *EventExceptionMutation) UpdatedAt() (r time.Time, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the EventException entity.
+// If the EventException object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EventExceptionMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *EventExceptionMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (m *EventExceptionMutation) SetCreatedBy(s string) {
+	m.created_by = &s
+}
+
+// CreatedBy returns the value of the "created_by" field in the mutation.
+func (m *EventExceptionMutation) CreatedBy() (r string, exists bool) {
+	v := m.created_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedBy returns the old "created_by" field's value of the EventException entity.
+// If the EventException object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EventExceptionMutation) OldCreatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedBy: %w", err)
+	}
+	return oldValue.CreatedBy, nil
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (m *EventExceptionMutation) ClearCreatedBy() {
+	m.created_by = nil
+	m.clearedFields[eventexception.FieldCreatedBy] = struct{}{}
+}
+
+// CreatedByCleared returns if the "created_by" field was cleared in this mutation.
+func (m *EventExceptionMutation) CreatedByCleared() bool {
+	_, ok := m.clearedFields[eventexception.FieldCreatedBy]
+	return ok
+}
+
+// ResetCreatedBy resets all changes to the "created_by" field.
+func (m *EventExceptionMutation) ResetCreatedBy() {
+	m.created_by = nil
+	delete(m.clearedFields, eventexception.FieldCreatedBy)
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (m *EventExceptionMutation) SetUpdatedBy(s string) {
+	m.updated_by = &s
+}
+
+// UpdatedBy returns the value of the "updated_by" field in the mutation.
+func (m *EventExceptionMutation) UpdatedBy() (r string, exists bool) {
+	v := m.updated_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedBy returns the old "updated_by" field's value of the EventException entity.
+// If the EventException object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EventExceptionMutation) OldUpdatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedBy: %w", err)
+	}
+	return oldValue.UpdatedBy, nil
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (m *EventExceptionMutation) ClearUpdatedBy() {
+	m.updated_by = nil
+	m.clearedFields[eventexception.FieldUpdatedBy] = struct{}{}
+}
+
+// UpdatedByCleared returns if the "updated_by" field was cleared in this mutation.
+func (m *EventExceptionMutation) UpdatedByCleared() bool {
+	_, ok := m.clearedFields[eventexception.FieldUpdatedBy]
+	return ok
+}
+
+// ResetUpdatedBy resets all changes to the "updated_by" field.
+func (m *EventExceptionMutation) ResetUpdatedBy() {
+	m.updated_by = nil
+	delete(m.clearedFields, eventexception.FieldUpdatedBy)
 }
 
 // SetEventID sets the "event_id" field.
@@ -3225,7 +3436,22 @@ func (m *EventExceptionMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *EventExceptionMutation) Fields() []string {
-	fields := make([]string, 0, 2)
+	fields := make([]string, 0, 7)
+	if m.status != nil {
+		fields = append(fields, eventexception.FieldStatus)
+	}
+	if m.created_at != nil {
+		fields = append(fields, eventexception.FieldCreatedAt)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, eventexception.FieldUpdatedAt)
+	}
+	if m.created_by != nil {
+		fields = append(fields, eventexception.FieldCreatedBy)
+	}
+	if m.updated_by != nil {
+		fields = append(fields, eventexception.FieldUpdatedBy)
+	}
 	if m.event != nil {
 		fields = append(fields, eventexception.FieldEventID)
 	}
@@ -3240,6 +3466,16 @@ func (m *EventExceptionMutation) Fields() []string {
 // schema.
 func (m *EventExceptionMutation) Field(name string) (ent.Value, bool) {
 	switch name {
+	case eventexception.FieldStatus:
+		return m.Status()
+	case eventexception.FieldCreatedAt:
+		return m.CreatedAt()
+	case eventexception.FieldUpdatedAt:
+		return m.UpdatedAt()
+	case eventexception.FieldCreatedBy:
+		return m.CreatedBy()
+	case eventexception.FieldUpdatedBy:
+		return m.UpdatedBy()
 	case eventexception.FieldEventID:
 		return m.EventID()
 	case eventexception.FieldOccurrenceStartAt:
@@ -3253,6 +3489,16 @@ func (m *EventExceptionMutation) Field(name string) (ent.Value, bool) {
 // database failed.
 func (m *EventExceptionMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
 	switch name {
+	case eventexception.FieldStatus:
+		return m.OldStatus(ctx)
+	case eventexception.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case eventexception.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	case eventexception.FieldCreatedBy:
+		return m.OldCreatedBy(ctx)
+	case eventexception.FieldUpdatedBy:
+		return m.OldUpdatedBy(ctx)
 	case eventexception.FieldEventID:
 		return m.OldEventID(ctx)
 	case eventexception.FieldOccurrenceStartAt:
@@ -3266,6 +3512,41 @@ func (m *EventExceptionMutation) OldField(ctx context.Context, name string) (ent
 // type.
 func (m *EventExceptionMutation) SetField(name string, value ent.Value) error {
 	switch name {
+	case eventexception.FieldStatus:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetStatus(v)
+		return nil
+	case eventexception.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case eventexception.FieldUpdatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
+	case eventexception.FieldCreatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedBy(v)
+		return nil
+	case eventexception.FieldUpdatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedBy(v)
+		return nil
 	case eventexception.FieldEventID:
 		v, ok := value.(string)
 		if !ok {
@@ -3309,7 +3590,14 @@ func (m *EventExceptionMutation) AddField(name string, value ent.Value) error {
 // ClearedFields returns all nullable fields that were cleared during this
 // mutation.
 func (m *EventExceptionMutation) ClearedFields() []string {
-	return nil
+	var fields []string
+	if m.FieldCleared(eventexception.FieldCreatedBy) {
+		fields = append(fields, eventexception.FieldCreatedBy)
+	}
+	if m.FieldCleared(eventexception.FieldUpdatedBy) {
+		fields = append(fields, eventexception.FieldUpdatedBy)
+	}
+	return fields
 }
 
 // FieldCleared returns a boolean indicating if a field with the given name was
@@ -3322,6 +3610,14 @@ func (m *EventExceptionMutation) FieldCleared(name string) bool {
 // ClearField clears the value of the field with the given name. It returns an
 // error if the field is not defined in the schema.
 func (m *EventExceptionMutation) ClearField(name string) error {
+	switch name {
+	case eventexception.FieldCreatedBy:
+		m.ClearCreatedBy()
+		return nil
+	case eventexception.FieldUpdatedBy:
+		m.ClearUpdatedBy()
+		return nil
+	}
 	return fmt.Errorf("unknown EventException nullable field %s", name)
 }
 
@@ -3329,6 +3625,21 @@ func (m *EventExceptionMutation) ClearField(name string) error {
 // It returns an error if the field is not defined in the schema.
 func (m *EventExceptionMutation) ResetField(name string) error {
 	switch name {
+	case eventexception.FieldStatus:
+		m.ResetStatus()
+		return nil
+	case eventexception.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case eventexception.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	case eventexception.FieldCreatedBy:
+		m.ResetCreatedBy()
+		return nil
+	case eventexception.FieldUpdatedBy:
+		m.ResetUpdatedBy()
+		return nil
 	case eventexception.FieldEventID:
 		m.ResetEventID()
 		return nil
@@ -3419,6 +3730,11 @@ type EventOverrideMutation struct {
 	op                Op
 	typ               string
 	id                *string
+	status            *string
+	created_at        *time.Time
+	updated_at        *time.Time
+	created_by        *string
+	updated_by        *string
 	original_start_at *time.Time
 	new_start_at      *time.Time
 	new_end_at        *time.Time
@@ -3532,6 +3848,212 @@ func (m *EventOverrideMutation) IDs(ctx context.Context) ([]string, error) {
 	default:
 		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
 	}
+}
+
+// SetStatus sets the "status" field.
+func (m *EventOverrideMutation) SetStatus(s string) {
+	m.status = &s
+}
+
+// Status returns the value of the "status" field in the mutation.
+func (m *EventOverrideMutation) Status() (r string, exists bool) {
+	v := m.status
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldStatus returns the old "status" field's value of the EventOverride entity.
+// If the EventOverride object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EventOverrideMutation) OldStatus(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldStatus is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldStatus requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldStatus: %w", err)
+	}
+	return oldValue.Status, nil
+}
+
+// ResetStatus resets all changes to the "status" field.
+func (m *EventOverrideMutation) ResetStatus() {
+	m.status = nil
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (m *EventOverrideMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *EventOverrideMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the EventOverride entity.
+// If the EventOverride object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EventOverrideMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *EventOverrideMutation) ResetCreatedAt() {
+	m.created_at = nil
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *EventOverrideMutation) SetUpdatedAt(t time.Time) {
+	m.updated_at = &t
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *EventOverrideMutation) UpdatedAt() (r time.Time, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the EventOverride entity.
+// If the EventOverride object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EventOverrideMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *EventOverrideMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (m *EventOverrideMutation) SetCreatedBy(s string) {
+	m.created_by = &s
+}
+
+// CreatedBy returns the value of the "created_by" field in the mutation.
+func (m *EventOverrideMutation) CreatedBy() (r string, exists bool) {
+	v := m.created_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedBy returns the old "created_by" field's value of the EventOverride entity.
+// If the EventOverride object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EventOverrideMutation) OldCreatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedBy: %w", err)
+	}
+	return oldValue.CreatedBy, nil
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (m *EventOverrideMutation) ClearCreatedBy() {
+	m.created_by = nil
+	m.clearedFields[eventoverride.FieldCreatedBy] = struct{}{}
+}
+
+// CreatedByCleared returns if the "created_by" field was cleared in this mutation.
+func (m *EventOverrideMutation) CreatedByCleared() bool {
+	_, ok := m.clearedFields[eventoverride.FieldCreatedBy]
+	return ok
+}
+
+// ResetCreatedBy resets all changes to the "created_by" field.
+func (m *EventOverrideMutation) ResetCreatedBy() {
+	m.created_by = nil
+	delete(m.clearedFields, eventoverride.FieldCreatedBy)
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (m *EventOverrideMutation) SetUpdatedBy(s string) {
+	m.updated_by = &s
+}
+
+// UpdatedBy returns the value of the "updated_by" field in the mutation.
+func (m *EventOverrideMutation) UpdatedBy() (r string, exists bool) {
+	v := m.updated_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedBy returns the old "updated_by" field's value of the EventOverride entity.
+// If the EventOverride object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EventOverrideMutation) OldUpdatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedBy: %w", err)
+	}
+	return oldValue.UpdatedBy, nil
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (m *EventOverrideMutation) ClearUpdatedBy() {
+	m.updated_by = nil
+	m.clearedFields[eventoverride.FieldUpdatedBy] = struct{}{}
+}
+
+// UpdatedByCleared returns if the "updated_by" field was cleared in this mutation.
+func (m *EventOverrideMutation) UpdatedByCleared() bool {
+	_, ok := m.clearedFields[eventoverride.FieldUpdatedBy]
+	return ok
+}
+
+// ResetUpdatedBy resets all changes to the "updated_by" field.
+func (m *EventOverrideMutation) ResetUpdatedBy() {
+	m.updated_by = nil
+	delete(m.clearedFields, eventoverride.FieldUpdatedBy)
 }
 
 // SetEventID sets the "event_id" field.
@@ -3739,7 +4261,22 @@ func (m *EventOverrideMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *EventOverrideMutation) Fields() []string {
-	fields := make([]string, 0, 4)
+	fields := make([]string, 0, 9)
+	if m.status != nil {
+		fields = append(fields, eventoverride.FieldStatus)
+	}
+	if m.created_at != nil {
+		fields = append(fields, eventoverride.FieldCreatedAt)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, eventoverride.FieldUpdatedAt)
+	}
+	if m.created_by != nil {
+		fields = append(fields, eventoverride.FieldCreatedBy)
+	}
+	if m.updated_by != nil {
+		fields = append(fields, eventoverride.FieldUpdatedBy)
+	}
 	if m.event != nil {
 		fields = append(fields, eventoverride.FieldEventID)
 	}
@@ -3760,6 +4297,16 @@ func (m *EventOverrideMutation) Fields() []string {
 // schema.
 func (m *EventOverrideMutation) Field(name string) (ent.Value, bool) {
 	switch name {
+	case eventoverride.FieldStatus:
+		return m.Status()
+	case eventoverride.FieldCreatedAt:
+		return m.CreatedAt()
+	case eventoverride.FieldUpdatedAt:
+		return m.UpdatedAt()
+	case eventoverride.FieldCreatedBy:
+		return m.CreatedBy()
+	case eventoverride.FieldUpdatedBy:
+		return m.UpdatedBy()
 	case eventoverride.FieldEventID:
 		return m.EventID()
 	case eventoverride.FieldOriginalStartAt:
@@ -3777,6 +4324,16 @@ func (m *EventOverrideMutation) Field(name string) (ent.Value, bool) {
 // database failed.
 func (m *EventOverrideMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
 	switch name {
+	case eventoverride.FieldStatus:
+		return m.OldStatus(ctx)
+	case eventoverride.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case eventoverride.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	case eventoverride.FieldCreatedBy:
+		return m.OldCreatedBy(ctx)
+	case eventoverride.FieldUpdatedBy:
+		return m.OldUpdatedBy(ctx)
 	case eventoverride.FieldEventID:
 		return m.OldEventID(ctx)
 	case eventoverride.FieldOriginalStartAt:
@@ -3794,6 +4351,41 @@ func (m *EventOverrideMutation) OldField(ctx context.Context, name string) (ent.
 // type.
 func (m *EventOverrideMutation) SetField(name string, value ent.Value) error {
 	switch name {
+	case eventoverride.FieldStatus:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetStatus(v)
+		return nil
+	case eventoverride.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case eventoverride.FieldUpdatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
+	case eventoverride.FieldCreatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedBy(v)
+		return nil
+	case eventoverride.FieldUpdatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedBy(v)
+		return nil
 	case eventoverride.FieldEventID:
 		v, ok := value.(string)
 		if !ok {
@@ -3851,7 +4443,14 @@ func (m *EventOverrideMutation) AddField(name string, value ent.Value) error {
 // ClearedFields returns all nullable fields that were cleared during this
 // mutation.
 func (m *EventOverrideMutation) ClearedFields() []string {
-	return nil
+	var fields []string
+	if m.FieldCleared(eventoverride.FieldCreatedBy) {
+		fields = append(fields, eventoverride.FieldCreatedBy)
+	}
+	if m.FieldCleared(eventoverride.FieldUpdatedBy) {
+		fields = append(fields, eventoverride.FieldUpdatedBy)
+	}
+	return fields
 }
 
 // FieldCleared returns a boolean indicating if a field with the given name was
@@ -3864,6 +4463,14 @@ func (m *EventOverrideMutation) FieldCleared(name string) bool {
 // ClearField clears the value of the field with the given name. It returns an
 // error if the field is not defined in the schema.
 func (m *EventOverrideMutation) ClearField(name string) error {
+	switch name {
+	case eventoverride.FieldCreatedBy:
+		m.ClearCreatedBy()
+		return nil
+	case eventoverride.FieldUpdatedBy:
+		m.ClearUpdatedBy()
+		return nil
+	}
 	return fmt.Errorf("unknown EventOverride nullable field %s", name)
 }
 
@@ -3871,6 +4478,21 @@ func (m *EventOverrideMutation) ClearField(name string) error {
 // It returns an error if the field is not defined in the schema.
 func (m *EventOverrideMutation) ResetField(name string) error {
 	switch name {
+	case eventoverride.FieldStatus:
+		m.ResetStatus()
+		return nil
+	case eventoverride.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case eventoverride.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	case eventoverride.FieldCreatedBy:
+		m.ResetCreatedBy()
+		return nil
+	case eventoverride.FieldUpdatedBy:
+		m.ResetUpdatedBy()
+		return nil
 	case eventoverride.FieldEventID:
 		m.ResetEventID()
 		return nil

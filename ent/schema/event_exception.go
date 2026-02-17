@@ -5,12 +5,19 @@ import (
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
+	baseMixin "github.com/omkar273/nashikdarshan/ent/mixin"
 	"github.com/omkar273/nashikdarshan/internal/types"
 )
 
 // EventException cancels a single occurrence.
 type EventException struct {
 	ent.Schema
+}
+
+func (EventException) Mixin() []ent.Mixin {
+	return []ent.Mixin{
+		baseMixin.BaseMixin{},
+	}
 }
 
 func (EventException) Fields() []ent.Field {

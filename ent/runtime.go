@@ -101,8 +101,25 @@ func init() {
 	eventDescID := eventFields[0].Descriptor()
 	// event.DefaultID holds the default value on creation for the id field.
 	event.DefaultID = eventDescID.Default.(func() string)
+	eventexceptionMixin := schema.EventException{}.Mixin()
+	eventexceptionMixinFields0 := eventexceptionMixin[0].Fields()
+	_ = eventexceptionMixinFields0
 	eventexceptionFields := schema.EventException{}.Fields()
 	_ = eventexceptionFields
+	// eventexceptionDescStatus is the schema descriptor for status field.
+	eventexceptionDescStatus := eventexceptionMixinFields0[0].Descriptor()
+	// eventexception.DefaultStatus holds the default value on creation for the status field.
+	eventexception.DefaultStatus = eventexceptionDescStatus.Default.(string)
+	// eventexceptionDescCreatedAt is the schema descriptor for created_at field.
+	eventexceptionDescCreatedAt := eventexceptionMixinFields0[1].Descriptor()
+	// eventexception.DefaultCreatedAt holds the default value on creation for the created_at field.
+	eventexception.DefaultCreatedAt = eventexceptionDescCreatedAt.Default.(func() time.Time)
+	// eventexceptionDescUpdatedAt is the schema descriptor for updated_at field.
+	eventexceptionDescUpdatedAt := eventexceptionMixinFields0[2].Descriptor()
+	// eventexception.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	eventexception.DefaultUpdatedAt = eventexceptionDescUpdatedAt.Default.(func() time.Time)
+	// eventexception.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	eventexception.UpdateDefaultUpdatedAt = eventexceptionDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// eventexceptionDescEventID is the schema descriptor for event_id field.
 	eventexceptionDescEventID := eventexceptionFields[1].Descriptor()
 	// eventexception.EventIDValidator is a validator for the "event_id" field. It is called by the builders before save.
@@ -111,8 +128,25 @@ func init() {
 	eventexceptionDescID := eventexceptionFields[0].Descriptor()
 	// eventexception.DefaultID holds the default value on creation for the id field.
 	eventexception.DefaultID = eventexceptionDescID.Default.(func() string)
+	eventoverrideMixin := schema.EventOverride{}.Mixin()
+	eventoverrideMixinFields0 := eventoverrideMixin[0].Fields()
+	_ = eventoverrideMixinFields0
 	eventoverrideFields := schema.EventOverride{}.Fields()
 	_ = eventoverrideFields
+	// eventoverrideDescStatus is the schema descriptor for status field.
+	eventoverrideDescStatus := eventoverrideMixinFields0[0].Descriptor()
+	// eventoverride.DefaultStatus holds the default value on creation for the status field.
+	eventoverride.DefaultStatus = eventoverrideDescStatus.Default.(string)
+	// eventoverrideDescCreatedAt is the schema descriptor for created_at field.
+	eventoverrideDescCreatedAt := eventoverrideMixinFields0[1].Descriptor()
+	// eventoverride.DefaultCreatedAt holds the default value on creation for the created_at field.
+	eventoverride.DefaultCreatedAt = eventoverrideDescCreatedAt.Default.(func() time.Time)
+	// eventoverrideDescUpdatedAt is the schema descriptor for updated_at field.
+	eventoverrideDescUpdatedAt := eventoverrideMixinFields0[2].Descriptor()
+	// eventoverride.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	eventoverride.DefaultUpdatedAt = eventoverrideDescUpdatedAt.Default.(func() time.Time)
+	// eventoverride.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	eventoverride.UpdateDefaultUpdatedAt = eventoverrideDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// eventoverrideDescEventID is the schema descriptor for event_id field.
 	eventoverrideDescEventID := eventoverrideFields[1].Descriptor()
 	// eventoverride.EventIDValidator is a validator for the "event_id" field. It is called by the builders before save.

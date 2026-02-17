@@ -29,6 +29,46 @@ func (_u *EventOverrideUpdate) Where(ps ...predicate.EventOverride) *EventOverri
 	return _u
 }
 
+// SetStatus sets the "status" field.
+func (_u *EventOverrideUpdate) SetStatus(v string) *EventOverrideUpdate {
+	_u.mutation.SetStatus(v)
+	return _u
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (_u *EventOverrideUpdate) SetNillableStatus(v *string) *EventOverrideUpdate {
+	if v != nil {
+		_u.SetStatus(*v)
+	}
+	return _u
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (_u *EventOverrideUpdate) SetUpdatedAt(v time.Time) *EventOverrideUpdate {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (_u *EventOverrideUpdate) SetUpdatedBy(v string) *EventOverrideUpdate {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (_u *EventOverrideUpdate) SetNillableUpdatedBy(v *string) *EventOverrideUpdate {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (_u *EventOverrideUpdate) ClearUpdatedBy() *EventOverrideUpdate {
+	_u.mutation.ClearUpdatedBy()
+	return _u
+}
+
 // SetEventID sets the "event_id" field.
 func (_u *EventOverrideUpdate) SetEventID(v string) *EventOverrideUpdate {
 	_u.mutation.SetEventID(v)
@@ -103,6 +143,7 @@ func (_u *EventOverrideUpdate) ClearEvent() *EventOverrideUpdate {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (_u *EventOverrideUpdate) Save(ctx context.Context) (int, error) {
+	_u.defaults()
 	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
@@ -125,6 +166,14 @@ func (_u *EventOverrideUpdate) Exec(ctx context.Context) error {
 func (_u *EventOverrideUpdate) ExecX(ctx context.Context) {
 	if err := _u.Exec(ctx); err != nil {
 		panic(err)
+	}
+}
+
+// defaults sets the default values of the builder before save.
+func (_u *EventOverrideUpdate) defaults() {
+	if _, ok := _u.mutation.UpdatedAt(); !ok {
+		v := eventoverride.UpdateDefaultUpdatedAt()
+		_u.mutation.SetUpdatedAt(v)
 	}
 }
 
@@ -152,6 +201,21 @@ func (_u *EventOverrideUpdate) sqlSave(ctx context.Context) (_node int, err erro
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := _u.mutation.Status(); ok {
+		_spec.SetField(eventoverride.FieldStatus, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.UpdatedAt(); ok {
+		_spec.SetField(eventoverride.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if _u.mutation.CreatedByCleared() {
+		_spec.ClearField(eventoverride.FieldCreatedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.UpdatedBy(); ok {
+		_spec.SetField(eventoverride.FieldUpdatedBy, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByCleared() {
+		_spec.ClearField(eventoverride.FieldUpdatedBy, field.TypeString)
 	}
 	if value, ok := _u.mutation.OriginalStartAt(); ok {
 		_spec.SetField(eventoverride.FieldOriginalStartAt, field.TypeTime, value)
@@ -209,6 +273,46 @@ type EventOverrideUpdateOne struct {
 	fields   []string
 	hooks    []Hook
 	mutation *EventOverrideMutation
+}
+
+// SetStatus sets the "status" field.
+func (_u *EventOverrideUpdateOne) SetStatus(v string) *EventOverrideUpdateOne {
+	_u.mutation.SetStatus(v)
+	return _u
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (_u *EventOverrideUpdateOne) SetNillableStatus(v *string) *EventOverrideUpdateOne {
+	if v != nil {
+		_u.SetStatus(*v)
+	}
+	return _u
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (_u *EventOverrideUpdateOne) SetUpdatedAt(v time.Time) *EventOverrideUpdateOne {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (_u *EventOverrideUpdateOne) SetUpdatedBy(v string) *EventOverrideUpdateOne {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (_u *EventOverrideUpdateOne) SetNillableUpdatedBy(v *string) *EventOverrideUpdateOne {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (_u *EventOverrideUpdateOne) ClearUpdatedBy() *EventOverrideUpdateOne {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetEventID sets the "event_id" field.
@@ -298,6 +402,7 @@ func (_u *EventOverrideUpdateOne) Select(field string, fields ...string) *EventO
 
 // Save executes the query and returns the updated EventOverride entity.
 func (_u *EventOverrideUpdateOne) Save(ctx context.Context) (*EventOverride, error) {
+	_u.defaults()
 	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
@@ -320,6 +425,14 @@ func (_u *EventOverrideUpdateOne) Exec(ctx context.Context) error {
 func (_u *EventOverrideUpdateOne) ExecX(ctx context.Context) {
 	if err := _u.Exec(ctx); err != nil {
 		panic(err)
+	}
+}
+
+// defaults sets the default values of the builder before save.
+func (_u *EventOverrideUpdateOne) defaults() {
+	if _, ok := _u.mutation.UpdatedAt(); !ok {
+		v := eventoverride.UpdateDefaultUpdatedAt()
+		_u.mutation.SetUpdatedAt(v)
 	}
 }
 
@@ -364,6 +477,21 @@ func (_u *EventOverrideUpdateOne) sqlSave(ctx context.Context) (_node *EventOver
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := _u.mutation.Status(); ok {
+		_spec.SetField(eventoverride.FieldStatus, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.UpdatedAt(); ok {
+		_spec.SetField(eventoverride.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if _u.mutation.CreatedByCleared() {
+		_spec.ClearField(eventoverride.FieldCreatedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.UpdatedBy(); ok {
+		_spec.SetField(eventoverride.FieldUpdatedBy, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByCleared() {
+		_spec.ClearField(eventoverride.FieldUpdatedBy, field.TypeString)
 	}
 	if value, ok := _u.mutation.OriginalStartAt(); ok {
 		_spec.SetField(eventoverride.FieldOriginalStartAt, field.TypeTime, value)

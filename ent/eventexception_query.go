@@ -298,12 +298,12 @@ func (_q *EventExceptionQuery) WithEvent(opts ...func(*EventQuery)) *EventExcept
 // Example:
 //
 //	var v []struct {
-//		EventID string `json:"event_id,omitempty"`
+//		Status string `json:"status,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
 //	client.EventException.Query().
-//		GroupBy(eventexception.FieldEventID).
+//		GroupBy(eventexception.FieldStatus).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
 func (_q *EventExceptionQuery) GroupBy(field string, fields ...string) *EventExceptionGroupBy {
@@ -321,11 +321,11 @@ func (_q *EventExceptionQuery) GroupBy(field string, fields ...string) *EventExc
 // Example:
 //
 //	var v []struct {
-//		EventID string `json:"event_id,omitempty"`
+//		Status string `json:"status,omitempty"`
 //	}
 //
 //	client.EventException.Query().
-//		Select(eventexception.FieldEventID).
+//		Select(eventexception.FieldStatus).
 //		Scan(ctx, &v)
 func (_q *EventExceptionQuery) Select(fields ...string) *EventExceptionSelect {
 	_q.ctx.Fields = append(_q.ctx.Fields, fields...)

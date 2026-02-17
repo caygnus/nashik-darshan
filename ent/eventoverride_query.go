@@ -298,12 +298,12 @@ func (_q *EventOverrideQuery) WithEvent(opts ...func(*EventQuery)) *EventOverrid
 // Example:
 //
 //	var v []struct {
-//		EventID string `json:"event_id,omitempty"`
+//		Status string `json:"status,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
 //	client.EventOverride.Query().
-//		GroupBy(eventoverride.FieldEventID).
+//		GroupBy(eventoverride.FieldStatus).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
 func (_q *EventOverrideQuery) GroupBy(field string, fields ...string) *EventOverrideGroupBy {
@@ -321,11 +321,11 @@ func (_q *EventOverrideQuery) GroupBy(field string, fields ...string) *EventOver
 // Example:
 //
 //	var v []struct {
-//		EventID string `json:"event_id,omitempty"`
+//		Status string `json:"status,omitempty"`
 //	}
 //
 //	client.EventOverride.Query().
-//		Select(eventoverride.FieldEventID).
+//		Select(eventoverride.FieldStatus).
 //		Scan(ctx, &v)
 func (_q *EventOverrideQuery) Select(fields ...string) *EventOverrideSelect {
 	_q.ctx.Fields = append(_q.ctx.Fields, fields...)

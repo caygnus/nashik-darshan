@@ -100,6 +100,11 @@ var (
 	// EventExceptionsColumns holds the columns for the "event_exceptions" table.
 	EventExceptionsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString, SchemaType: map[string]string{"postgres": "varchar(255)"}},
+		{Name: "status", Type: field.TypeString, Default: "published", SchemaType: map[string]string{"postgres": "varchar(20)"}},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "occurrence_start_at", Type: field.TypeTime},
 		{Name: "event_id", Type: field.TypeString, SchemaType: map[string]string{"postgres": "varchar(255)"}},
 	}
@@ -111,7 +116,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "event_exceptions_events_exceptions",
-				Columns:    []*schema.Column{EventExceptionsColumns[2]},
+				Columns:    []*schema.Column{EventExceptionsColumns[7]},
 				RefColumns: []*schema.Column{EventsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
@@ -120,13 +125,18 @@ var (
 			{
 				Name:    "eventexception_event_id_occurrence_start_at",
 				Unique:  true,
-				Columns: []*schema.Column{EventExceptionsColumns[2], EventExceptionsColumns[1]},
+				Columns: []*schema.Column{EventExceptionsColumns[7], EventExceptionsColumns[6]},
 			},
 		},
 	}
 	// EventOverridesColumns holds the columns for the "event_overrides" table.
 	EventOverridesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString, SchemaType: map[string]string{"postgres": "varchar(255)"}},
+		{Name: "status", Type: field.TypeString, Default: "published", SchemaType: map[string]string{"postgres": "varchar(20)"}},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "original_start_at", Type: field.TypeTime},
 		{Name: "new_start_at", Type: field.TypeTime},
 		{Name: "new_end_at", Type: field.TypeTime},
@@ -140,7 +150,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "event_overrides_events_overrides",
-				Columns:    []*schema.Column{EventOverridesColumns[4]},
+				Columns:    []*schema.Column{EventOverridesColumns[9]},
 				RefColumns: []*schema.Column{EventsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
@@ -149,7 +159,7 @@ var (
 			{
 				Name:    "eventoverride_event_id_original_start_at",
 				Unique:  true,
-				Columns: []*schema.Column{EventOverridesColumns[4], EventOverridesColumns[1]},
+				Columns: []*schema.Column{EventOverridesColumns[9], EventOverridesColumns[6]},
 			},
 		},
 	}

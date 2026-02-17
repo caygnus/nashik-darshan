@@ -21,6 +21,76 @@ type EventExceptionCreate struct {
 	hooks    []Hook
 }
 
+// SetStatus sets the "status" field.
+func (_c *EventExceptionCreate) SetStatus(v string) *EventExceptionCreate {
+	_c.mutation.SetStatus(v)
+	return _c
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (_c *EventExceptionCreate) SetNillableStatus(v *string) *EventExceptionCreate {
+	if v != nil {
+		_c.SetStatus(*v)
+	}
+	return _c
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (_c *EventExceptionCreate) SetCreatedAt(v time.Time) *EventExceptionCreate {
+	_c.mutation.SetCreatedAt(v)
+	return _c
+}
+
+// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
+func (_c *EventExceptionCreate) SetNillableCreatedAt(v *time.Time) *EventExceptionCreate {
+	if v != nil {
+		_c.SetCreatedAt(*v)
+	}
+	return _c
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (_c *EventExceptionCreate) SetUpdatedAt(v time.Time) *EventExceptionCreate {
+	_c.mutation.SetUpdatedAt(v)
+	return _c
+}
+
+// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
+func (_c *EventExceptionCreate) SetNillableUpdatedAt(v *time.Time) *EventExceptionCreate {
+	if v != nil {
+		_c.SetUpdatedAt(*v)
+	}
+	return _c
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (_c *EventExceptionCreate) SetCreatedBy(v string) *EventExceptionCreate {
+	_c.mutation.SetCreatedBy(v)
+	return _c
+}
+
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (_c *EventExceptionCreate) SetNillableCreatedBy(v *string) *EventExceptionCreate {
+	if v != nil {
+		_c.SetCreatedBy(*v)
+	}
+	return _c
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (_c *EventExceptionCreate) SetUpdatedBy(v string) *EventExceptionCreate {
+	_c.mutation.SetUpdatedBy(v)
+	return _c
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (_c *EventExceptionCreate) SetNillableUpdatedBy(v *string) *EventExceptionCreate {
+	if v != nil {
+		_c.SetUpdatedBy(*v)
+	}
+	return _c
+}
+
 // SetEventID sets the "event_id" field.
 func (_c *EventExceptionCreate) SetEventID(v string) *EventExceptionCreate {
 	_c.mutation.SetEventID(v)
@@ -87,6 +157,18 @@ func (_c *EventExceptionCreate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (_c *EventExceptionCreate) defaults() {
+	if _, ok := _c.mutation.Status(); !ok {
+		v := eventexception.DefaultStatus
+		_c.mutation.SetStatus(v)
+	}
+	if _, ok := _c.mutation.CreatedAt(); !ok {
+		v := eventexception.DefaultCreatedAt()
+		_c.mutation.SetCreatedAt(v)
+	}
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
+		v := eventexception.DefaultUpdatedAt()
+		_c.mutation.SetUpdatedAt(v)
+	}
 	if _, ok := _c.mutation.ID(); !ok {
 		v := eventexception.DefaultID()
 		_c.mutation.SetID(v)
@@ -95,6 +177,15 @@ func (_c *EventExceptionCreate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (_c *EventExceptionCreate) check() error {
+	if _, ok := _c.mutation.Status(); !ok {
+		return &ValidationError{Name: "status", err: errors.New(`ent: missing required field "EventException.status"`)}
+	}
+	if _, ok := _c.mutation.CreatedAt(); !ok {
+		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "EventException.created_at"`)}
+	}
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
+		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "EventException.updated_at"`)}
+	}
 	if _, ok := _c.mutation.EventID(); !ok {
 		return &ValidationError{Name: "event_id", err: errors.New(`ent: missing required field "EventException.event_id"`)}
 	}
@@ -143,6 +234,26 @@ func (_c *EventExceptionCreate) createSpec() (*EventException, *sqlgraph.CreateS
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
+	}
+	if value, ok := _c.mutation.Status(); ok {
+		_spec.SetField(eventexception.FieldStatus, field.TypeString, value)
+		_node.Status = value
+	}
+	if value, ok := _c.mutation.CreatedAt(); ok {
+		_spec.SetField(eventexception.FieldCreatedAt, field.TypeTime, value)
+		_node.CreatedAt = value
+	}
+	if value, ok := _c.mutation.UpdatedAt(); ok {
+		_spec.SetField(eventexception.FieldUpdatedAt, field.TypeTime, value)
+		_node.UpdatedAt = value
+	}
+	if value, ok := _c.mutation.CreatedBy(); ok {
+		_spec.SetField(eventexception.FieldCreatedBy, field.TypeString, value)
+		_node.CreatedBy = value
+	}
+	if value, ok := _c.mutation.UpdatedBy(); ok {
+		_spec.SetField(eventexception.FieldUpdatedBy, field.TypeString, value)
+		_node.UpdatedBy = value
 	}
 	if value, ok := _c.mutation.OccurrenceStartAt(); ok {
 		_spec.SetField(eventexception.FieldOccurrenceStartAt, field.TypeTime, value)

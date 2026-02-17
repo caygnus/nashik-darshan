@@ -5,12 +5,19 @@ import (
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
+	baseMixin "github.com/omkar273/nashikdarshan/ent/mixin"
 	"github.com/omkar273/nashikdarshan/internal/types"
 )
 
 // EventOverride moves a single occurrence to new start/end (patch one instance).
 type EventOverride struct {
 	ent.Schema
+}
+
+func (EventOverride) Mixin() []ent.Mixin {
+	return []ent.Mixin{
+		baseMixin.BaseMixin{},
+	}
 }
 
 func (EventOverride) Fields() []ent.Field {
